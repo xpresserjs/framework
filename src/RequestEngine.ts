@@ -1,18 +1,24 @@
 import ejs from "ejs";
 import fs from "fs";
-import requestHelpers from "./functions/request.fn.js";
+import {Xjs} from "../global";
+import {XjsHttp} from "../types/http";
+import requestHelpers from "./functions/request.fn";
 import ObjectCollection from "./helpers/ObjectCollection";
 
-class RequestEngine {
-    public req = null;
-    public res = null;
-    public next = null;
-    public params = {};
-    public locals = {};
+declare let _: any;
+declare let $: Xjs;
 
-    public bothData = {};
-    public session = {};
-    public fn = {};
+class RequestEngine {
+    public req: XjsHttp.Request;
+    public res: XjsHttp.Response;
+    public next: () => void;
+    public params: any;
+    public locals: ObjectCollection;
+
+    public bothData: any;
+    public session: any;
+    public fn: XjsHelpers.FN;
+    public customRenderer: () => string;
 
     /**
      *
@@ -20,12 +26,16 @@ class RequestEngine {
      * @param {*} res
      * @param {*} next
      */
-    constructor(req, res, next = null) {
+    constructor(req: XjsHttp.Request, res: XjsHttp.Response, next?: () => void) {
         this.res = res;
         this.req = req;
 
-        if (req.params) { this.params = req.params; }
-        if (next !== null) { this.next = next; }
+        if (req.params) {
+            this.params = req.params;
+        }
+        if (next !== undefined) {
+            this.next = next;
+        }
 
         this.session = req.session;
         this.bothData = this.all();
@@ -37,7 +47,9 @@ class RequestEngine {
     public async auth() {
         const x = this;
 
-        if (!x.isLogged()) { return null; }
+        if (!x.isLogged()) {
+            return null;
+        }
 
         const User = $.backendPath("models/User.js", true);
         const email = $.base64.decode(x.session.email);
@@ -95,19 +107,18 @@ class RequestEngine {
      * @param items
      * @returns {*}
      */
-    public pluck(items = []) {
+    public pluck(items: any[] = []) {
         return this.all(items);
     }
 
     /**
      * To API format
-     * @param {{}} data
+     * @param {*} data
      * @param {boolean} proceed
      * @param {number} status
      */
-    public toApi(data = {}, proceed = true, status = 200) {
-        const d = {};
-        d.proceed = proceed;
+    public toApi(data: any = {}, proceed = true, status = 200) {
+        const d = {proceed} as any;
 
         if (data.hasOwnProperty("__say")) {
             d.__say = data.__say;
@@ -125,7 +136,7 @@ class RequestEngine {
      * @param {object} data
      * @param {number} status
      */
-    public toApiFalse(data = {}, status = 200) {
+    public toApiFalse(data: object = {}, status: number = 200) {
         return this.toApi(data, false, status);
     }
 
@@ -176,10 +187,18 @@ class RequestEngine {
         this.res.locals.__currentView = file;
         this.res.locals.__flash = this.req.flash();
 
-        if (all || localsConfig.__stackedScripts) { this.res.locals.__stackedScripts = []; }
-        if (all || localsConfig.__session) { this.res.locals.__session = this.session; }
-        if (all || localsConfig.__get) { this.res.locals.__get = this.req.query; }
-        if (all || localsConfig.__post) { this.res.locals.__post = this.req.body; }
+        if (all || localsConfig.__stackedScripts) {
+            this.res.locals.__stackedScripts = [];
+        }
+        if (all || localsConfig.__session) {
+            this.res.locals.__session = this.session;
+        }
+        if (all || localsConfig.__get) {
+            this.res.locals.__get = this.req.query;
+        }
+        if (all || localsConfig.__post) {
+            this.res.locals.__post = this.req.body;
+        }
 
         return _.extend({}, this.fn, data);
     }
@@ -192,12 +211,12 @@ class RequestEngine {
      * @param useEjs
      * @returns {*}
      */
-    public view(file, data = {}, fullPath = false, useEjs = false) {
+    public view(file, data = {}, fullPath: boolean = false, useEjs = false) {
         const Render = typeof this.customRenderer === "function" ? this.customRenderer : this.res.render;
 
         const path = file + "." + (useEjs ? "ejs" : $.config.template.extension);
 
-        data = this.viewData(file, data, fullPath, useEjs);
+        data = this.viewData(file, data);
 
         if (typeof fullPath === "function") {
             return Render(path, data, fullPath);
@@ -222,6 +241,7 @@ class RequestEngine {
      * @alias
      */
     public renderView(...args) {
+        // @ts-ignore
         return this.view(...args);
     }
 
@@ -232,6 +252,7 @@ class RequestEngine {
      * @alias
      */
     public render(...args) {
+        // @ts-ignore
         return this.view(...args);
     }
 

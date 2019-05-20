@@ -3,17 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 const knex_1 = __importDefault(require("knex"));
-let Database;
-try {
-    Database = require($.basePath("config.js"));
-}
-catch (e) {
-    $.logErrorAndExit(e.message);
-}
-console.log(Database);
 class DB {
     constructor() {
-        const database = Database[$.config.env];
+        if (!$.$config.has("database.config")) {
+            return;
+        }
+        const database = $.config.database.config;
         const databaseConfigIsValid = $.ovp.validate(database, {
             client: { must: true },
             connection: { checkDbConfig: true },
@@ -22,7 +17,7 @@ class DB {
             process.exit();
         }
         try {
-            this.knex = knex_1.default(Database[$.config.env]);
+            this.knex = knex_1.default($.config.database.config);
         }
         catch (e) {
             $.logAndExit(e);

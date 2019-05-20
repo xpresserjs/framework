@@ -122,7 +122,9 @@ const helpers = {
      * @param {number} length - length of string.
      */
     randomStr(length = 10) {
-        let i, possible, text;
+        let i;
+        let possible;
+        let text;
         text = "";
         possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         i = 0;

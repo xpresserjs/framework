@@ -28,5 +28,5 @@ $.bcrypt = bcrypt_1.default;
 $.helpers = require("./helpers");
 // $.helpers.
 // Assign Functions to $.fn
-$.fn = require("./functions/x.fn.js");
+$.fn = require("./functions/x.fn");
 //# sourceMappingURL=global.js.map

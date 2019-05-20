@@ -2,6 +2,7 @@
 import Bcrypt from "bcrypt";
 import moment from "moment";
 import Base64 from "./helpers/Base64";
+declare let $: any;
 
 global.moment = moment;
 
@@ -29,4 +30,4 @@ $.helpers = require("./helpers");
 // $.helpers.
 
 // Assign Functions to $.fn
-$.fn = require("./functions/x.fn.js");
+$.fn = require("./functions/x.fn");

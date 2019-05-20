@@ -1,5 +1,8 @@
 import Validator from "object-validator-pro";
+import {Xjs} from "../../global";
 const ovp = new Validator();
+
+declare let $: Xjs;
 
 ovp.setEventHandler({
     onEachError: (param, msg) => {

@@ -1,14 +1,13 @@
-module.exports = {
+export = {
     extArrayRegex($array) {
         let regex = "\\.+(";
         const  regexEnd = ")";
 
-        if(!$array.length) return regex+regexEnd;
+        if (!$array.length) { return regex + regexEnd; }
 
         for (let i = 0; i < $array.length; i++) {
             regex = regex + $array[i] + "|";
         }
-
 
         regex = regex.substr(0, regex.length - 1);
         regex = regex + regexEnd;
@@ -16,8 +15,8 @@ module.exports = {
         return new RegExp(regex, "g");
     },
 
-    findWordsInString($string, $keywords){
-        if(!$keywords.length) return null;
+    findWordsInString($string, $keywords) {
+        if (!$keywords.length) { return null; }
 
         let regex = "";
 
@@ -31,13 +30,13 @@ module.exports = {
     },
 
     isPromise($promise) {
-        return $promise!== undefined && typeof $promise === 'object' && typeof $promise.then === 'function';
+        return $promise !== undefined && typeof $promise === "object" && typeof $promise.then === "function";
     },
 
     randomStr(length = 10) {
         let i, possible, text;
-        text = '';
-        possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        text = "";
+        possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         i = 0;
         while (i < length) {
             text += possible.charAt(Math.floor(Math.random() * possible.length));

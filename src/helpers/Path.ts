@@ -1,4 +1,6 @@
 import Path from "path";
+import {Xjs} from "../../global";
+declare let $: Xjs;
 
 const pathHelpers = {
     base: "base://",

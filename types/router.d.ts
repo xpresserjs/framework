@@ -18,7 +18,7 @@ declare interface XpresserRoute {
      * @param controller
      * @param [actionsAsName=false]
      */
-    controller(controller: () => void | string, actionsAsName?: boolean): this;
+    controller(controller:string, actionsAsName?: boolean): this;
 
     /**
      * Set name of this route using method name

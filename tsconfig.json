@@ -14,7 +14,8 @@
     "./node.d.ts",
     "./global.d.ts",
     "./types/helpers.d.ts",
-    "./types/router.d.ts"
+    "./types/router.d.ts",
+    "./types/http.d.ts"
   ],
   "include": ["./**/*"]
 }

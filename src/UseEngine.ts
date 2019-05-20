@@ -6,8 +6,12 @@
  */
 
 import fs from "fs";
+import {JsonSettings} from "../global";
 import PathHelper from "./helpers/Path";
 import StringHelper from "./helpers/String";
+
+declare let $: any;
+
 
 let Use = {} as JsonSettings.Use;
 

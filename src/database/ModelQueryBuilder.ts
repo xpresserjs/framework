@@ -1,20 +1,23 @@
-// @ts-check
-const {Model, QueryBuilder} = require('objection');
-const excludeAttrFromCount = ['order', 'columns', 'limit', 'offset'];
+import {Model, QueryBuilder} from "objection";
+
+const excludeAttrFromCount = ["order", "columns", "limit", "offset"];
+
+declare let _: any;
+declare let $: any;
 
 
 if ($.config.database.startOnBoot) {
     Model.knex($.db.knex);
 }
 
+class ModelQueryBuilder extends QueryBuilder<Model> {
 
-class ModelQueryBuilder extends QueryBuilder {
     /**
      * CountRows
      * @param count
      * @return {Promise<number>}
      */
-    async countRows(count = '*') {
+    public async countRows(count: string = "*") {
         return (await this.count(count))[0][`count(${count})`];
     }
 
@@ -24,7 +27,7 @@ class ModelQueryBuilder extends QueryBuilder {
      * @param perPage - Number of items per Page
      * @return {*}
      */
-    forPage(page = 1, perPage = 20) {
+    public forPage(page: number = 1, perPage: number = 20) {
         const offset = page === 1 ? 0 : perPage * (page - 1);
         return this.offset(offset).limit(perPage);
     }
@@ -38,7 +41,7 @@ class ModelQueryBuilder extends QueryBuilder {
      * @param  {Number} perPage - Number of items per Page
      * @return {Object} @multiple([data=Array, page=Number, perPage=Number, total=Number, lastPage=Number])
      */
-    async paginate(page = 1, perPage = 20) {
+    public async paginate(page: number = 1, perPage: number = 20) {
         const countByQuery = this.clone();
 
         /**
@@ -46,6 +49,7 @@ class ModelQueryBuilder extends QueryBuilder {
          * that build uses the extended query builder methods on the
          * cloned query too
          */
+        // @ts-ignore
         countByQuery.subQuery = this.subQuery;
 
         /**
@@ -58,45 +62,23 @@ class ModelQueryBuilder extends QueryBuilder {
          * Remove statements that will make things bad with count
          * query, for example `orderBy`
          */
+        // @ts-ignore
         countByQuery._statements = _.filter(countByQuery._statements, (statement) => {
-            return excludeAttrFromCount.indexOf(statement.grouping) < 0
+            return excludeAttrFromCount.indexOf(statement.grouping) < 0;
         });
 
-        const counts = await countByQuery.count('* as total');
-        const total = _.get(counts, '0.total', 0);
+        const counts = await countByQuery.count("* as total");
+        const total = _.get(counts, "0.total", 0);
         const data = total === 0 ? [] : await this.forPage(page, perPage);
 
         return {
-            total: total,
-            perPage: perPage,
-            page: page,
+            total,
+            perPage,
+            page,
             lastPage: Math.ceil(total / perPage),
-            data: data
-        }
+            data,
+        };
     }
 }
 
-class ModelEngine extends Model {
-    static get QueryBuilder() {
-        return ModelQueryBuilder;
-    }
-
-    $formatJson(json) {
-        return _.omit(json, this.$hidden);
-    };
-
-    $beforeInsert() {
-        const timestamp = moment(new Date().toISOString()).format($.config.database.timestampFormat);
-        this.created_at = timestamp;
-        this.updated_at = timestamp;
-    }
-
-    $beforeUpdate() {
-        this.updated_at = moment(new Date().toISOString()).format($.config.database.timestampFormat);
-    }
-}
-
-
-ModelEngine.prototype.$hidden = [];
-
-module.exports = ModelEngine;
+export = ModelQueryBuilder;

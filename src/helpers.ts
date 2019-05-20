@@ -3,6 +3,7 @@ import fs from "fs";
 import moment = require("moment");
 
 declare let _;
+declare let $: any;
 
 /* HELPER FUNCTIONS */
 const helpers = {
@@ -12,7 +13,7 @@ const helpers = {
      * @param {string} $path
      * @param {object} $query
      */
-    url($path = "", $query = {}) {
+    url($path: string = "", $query: any = {}) {
         let url = "";
         const server = $.config.server;
 
@@ -142,10 +143,14 @@ const helpers = {
      * @param {number} length - length of string.
      */
     randomStr(length = 10) {
-        let i, possible, text;
+        let i: number;
+        let possible: string;
+        let text: string;
+
         text = "";
         possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         i = 0;
+
         while (i < length) {
             text += possible.charAt(Math.floor(Math.random() * possible.length));
             i++;

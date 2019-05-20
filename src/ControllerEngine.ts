@@ -1,7 +1,11 @@
-const RequestEngine = require("./RequestEngine.js");
-const ErrorEngine = require("./ErrorEngine");
-const MiddleWareEngine = require("./MiddlewareEngine");
-const express = require("express");
+import express from "express";
+import {XjsHttp} from "../types/http";
+import ErrorEngine = require("./ErrorEngine");
+import MiddleWareEngine = require("./MiddlewareEngine");
+import RequestEngine = require("./RequestEngine");
+
+declare let _: any;
+declare let $: any;
 
 // @ts-check
 class ControllerEngine {
@@ -11,7 +15,7 @@ class ControllerEngine {
      * @param {string} method
      * @param {object} route
      */
-    public static addMiddlewares($middleware, method, route) {
+    public static addMiddlewares($middleware: object, method: string, route: any) {
 
         const middlewareKeys = Object.keys($middleware);
 
@@ -37,8 +41,13 @@ class ControllerEngine {
                 }
             }
 
-            if (middlewareMethod === "*" || middlewareMethod === method || (Array.isArray(middlewareMethod) && middlewareMethod.indexOf(method) >= 0)) {
-                let path = route.Path;
+            if (
+                middlewareMethod === "*"
+                || middlewareMethod === method
+                || (Array.isArray(middlewareMethod)
+                && middlewareMethod.indexOf(method) >= 0)
+            ) {
+                let path = route.path;
 
                 if (path.trim() === "/") {
                     path = new RegExp("^\/$");
@@ -53,11 +62,14 @@ class ControllerEngine {
             }
         }
     }
+
+    public controller: () => void;
+
     /**
      * @param {function} controller
      * @param {string} method
      */
-    constructor(controller, method) {
+    public constructor(controller: () => void, method: string) {
         return this.processController(controller, method);
     }
 
@@ -79,7 +91,7 @@ class ControllerEngine {
             }
         }
 
-        return async function(req, res) {
+        return async (req: XjsHttp.Request, res: XjsHttp.Response) => {
             // Log Time if `DebugControllerAction` is true
             const timeLogKey = req.method.toUpperCase() + " - " + req.url;
 
@@ -124,12 +136,15 @@ class ControllerEngine {
                         $return = await $return;
                     }
 
-                    if (DebugControllerAction) { console.timeEnd(timeLogKey); }
+                    if (DebugControllerAction) {
+                        console.timeEnd(timeLogKey);
+                    }
 
                     return $return;
                 } catch (e) {
                     return error.view({
                         error: {
+                            // tslint:disable-next-line:max-line-length
                             message: `Error in Controller:  <code>${controllerName}</code>, Method: <code>${method}</code>`,
                             log: e.stack,
                         },
@@ -142,14 +157,11 @@ class ControllerEngine {
     }
 }
 
-ControllerEngine.prototype.controller = function() {
-};
-
 /**
  * @param {string | Object | Function} controller
  * @param {string |null} method
  */
-const controller = function(controller, method = null) {
+const controller = (controller, method = null) => {
     let route = undefined;
     let controllerPath = null;
     if (typeof controller === "object" && controller.hasOwnProperty("controller")) {
@@ -183,4 +195,4 @@ const controller = function(controller, method = null) {
     return new ControllerEngine(controller, method);
 };
 
-module.exports = controller;
+export = controller;

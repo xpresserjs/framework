@@ -1,20 +1,15 @@
 import knex from "knex";
+declare let $: any;
 
-let Database: object;
-
-try {
-    Database = require($.basePath("config.js"));
-} catch (e) {
-    $.logErrorAndExit(e.message);
-}
-
-console.log(Database);
 
 class DB {
     public knex: knex;
 
     constructor() {
-        const database = Database[$.config.env];
+        if (!$.$config.has("database.config")) {
+            return;
+        }
+        const database = $.config.database.config;
 
         const databaseConfigIsValid = $.ovp.validate(database, {
             client: {must: true},
@@ -26,7 +21,7 @@ class DB {
         }
 
         try {
-            this.knex = knex(Database[$.config.env]);
+            this.knex = knex($.config.database.config);
         } catch (e) {
             $.logAndExit(e);
         }

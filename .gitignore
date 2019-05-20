@@ -1,3 +1,5 @@
 node_modules
 .idea
 .env
+test.ts
+dist/test.js

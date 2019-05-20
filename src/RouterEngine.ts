@@ -1,7 +1,11 @@
 import fs from "fs";
+import {Xjs} from "../global";
 
 const Controller = require("./ControllerEngine");
 const AllRoutesKey = "RouterEngine:allRoutes";
+
+declare let _: any;
+declare let $: Xjs;
 
 const NameToRoute = {};
 const ProcessedRoutes = [];
@@ -28,7 +32,7 @@ class RouterEngine {
 
                 const routeArray = [
                     processedRoute.method.toUpperCase(),
-                    processedRoute.Path,
+                    processedRoute.path,
                     processedRoute.name || null,
                 ];
 
@@ -53,7 +57,7 @@ class RouterEngine {
                 const name = names[i];
                 const route = NameToRoute[name];
 
-                newFormat[route.method + " " + route.Path] = "{" + route.name + "} ===> " + route.controller;
+                newFormat[route.method + " " + route.path] = "{" + route.name + "} ===> " + route.controller;
 
             }
 
@@ -72,11 +76,11 @@ class RouterEngine {
      * @param returnKey
      * @return {Object}
      */
-    public static nameToPath(returnKey = "Path.ts") {
+    public static nameToPath(returnKey = "path") {
         const localVariableName = "RouterEngine:nameToPath";
 
         if ($.engineData.has(localVariableName)) {
-            return $.engineData.get([localVariableName]);
+            return $.engineData.get(localVariableName);
         }
 
         const names = Object.keys(NameToRoute);
@@ -87,7 +91,9 @@ class RouterEngine {
             newRoutes[name] = NameToRoute[name][returnKey];
         }
 
-        if (returnKey !== "Path.ts") { return newRoutes; }
+        if (returnKey !== "Path.ts") {
+            return newRoutes;
+        }
 
         $.engineData.set(localVariableName, newRoutes);
         return newRoutes;
@@ -101,7 +107,7 @@ class RouterEngine {
         const localVariableName = "RouterEngine:nameToUrl";
 
         if ($.engineData.has(localVariableName)) {
-            return $.engineData.get([localVariableName]);
+            return $.engineData.get(localVariableName);
         }
 
         const routes = RouterEngine.nameToPath();
@@ -122,7 +128,7 @@ class RouterEngine {
      * @param routes
      * @param parent
      */
-    public static processRoutes(routes = null, parent = {}) {
+    public static processRoutes(routes = null, parent: any = {}) {
         if (!Array.isArray(routes)) {
             routes = RouterEngine.allRoutes();
         }
@@ -154,6 +160,7 @@ class RouterEngine {
             if (typeof route.children !== "undefined" && Array.isArray(route.children)) {
 
                 if (parent.children !== "undefined") {
+                    // tslint:disable-next-line:max-line-length
                     if (typeof route.as === "string" && typeof parent.as === "string" && route.as.substr(0, 1) === ".") {
                         route.as = parent.as + route.as;
                     }
@@ -188,13 +195,13 @@ class RouterEngine {
                 route.controller = parent.controller + "@" + route.controller;
             }
 
-            if (parent.Path) {
+            if (parent.path) {
 
-                if (route.path.length && parent.Path.substr(-1) !== "/" && route.path.substr(0, 1) !== "/") {
+                if (route.path.length && parent.path.substr(-1) !== "/" && route.path.substr(0, 1) !== "/") {
                     route.path = "/" + route.path;
                 }
 
-                route.path = parent.Path + route.path;
+                route.path = parent.path + route.path;
             }
 
             if (route.path.substr(0, 2) === "//") {
@@ -236,7 +243,7 @@ class RouterEngine {
                 // Add To All Routes
                 ProcessedRoutes.push(route);
 
-                if ($.app && (!$.isTinker && !$.isConsole)) {
+                if ($.app && (!$.$options.isTinker && !$.$options.isConsole)) {
                     $.app[route.method](route.path, Controller(route));
                 }
             }
@@ -244,4 +251,4 @@ class RouterEngine {
     }
 }
 
-module.exports = RouterEngine;
+export = RouterEngine;

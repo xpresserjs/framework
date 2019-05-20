@@ -1,9 +1,9 @@
-import fs from "fs";
 import ObjectCollection from "./helpers/ObjectCollection";
-import PathHelper from  "./helpers/Path";
+import PathHelper from "./helpers/Path";
+declare let $: any;
 
-let plugins = [];
-const pluginRoutes = [];
+let plugins = [] as any[];
+const pluginRoutes = [] as any[];
 
 try {
 
@@ -28,6 +28,7 @@ class PluginEngine {
                     PluginEngine.usePlugin($plugin, $pluginPath, $data);
 
                     $.logInfo(`Using Plugin --> ${$data.namespace}`);
+
                 } catch (e) {
 
                     $.logPerLine([

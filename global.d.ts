@@ -1,8 +1,12 @@
-type ObjectCollection = import("./src/helpers/ObjectCollection");
-type Base64 = import("./src/helpers/Base64");
-type ObjectValidator = import("object-validator-pro");
+import express = require("express");
+import ObjectValidator from "object-validator-pro";
+import Controller = require("./src/classes/Controller");
+import ObjectCollection from "./src/helpers/ObjectCollection";
+import ModelEngine from "./src/ModelEngine";
+import RouterEngine = require("./src/RouterEngine");
+import UseEngine = require("./src/UseEngine");
+
 type DB = import("./src/database/Db");
-type UseEngine = import("./src/UseEngine");
 type Bcrypt = import("bcrypt");
 
 declare namespace JsonSettings {
@@ -20,7 +24,7 @@ declare interface Xjs {
     engineData: ObjectCollection;
 
     // Base64 Encoder
-    base64: Base64;
+    base64: XjsHelpers.Base64;
 
     // Object validator
     ovp: ObjectValidator;
@@ -29,16 +33,31 @@ declare interface Xjs {
     db: DB;
 
     // Use Engine
-    use: UseEngine;
+    use: typeof UseEngine;
 
     // Bcrypt
     bcrypt: Bcrypt;
 
-    // Set Helpers
-    helpers: Helpers.Main;
+    // Set XjsHelpers
+    helpers: XjsHelpers.Main;
 
     // Router Helper
     router: XpresserRouter;
+
+    // Register Functions
+    fn: XjsHelpers.FN;
+
+    // Express App
+    app: express.Application;
+
+    // Model Engine
+    model: typeof ModelEngine;
+
+    // Router Engine
+    routerEngine: typeof RouterEngine;
+
+    // Controller
+    controller: Controller;
 
     /**
      * .Env File Reader Helper
@@ -101,4 +120,9 @@ declare interface Xjs {
      * Get path in storage folder
      */
     storagePath(path?: string, returnRequire?: boolean): string | any;
+
+    /**
+     * Get path in Framework src folder
+     */
+    engine(path?: string, returnRequire?: boolean): string | any;
 }
