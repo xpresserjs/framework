@@ -1,0 +1,29 @@
+<%- include('../partials/header') %>
+<% if (typeof error === "undefined") error = {}; %>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card bg-dark shadow">
+            <div class="card-body">
+                <h3 class="text-muted"><%-error.title || 'Ops!'%></h3>
+                <hr class="mt-0">
+
+                <% if(error.message) { %>
+                    <div style="color: antiquewhite; font-size: large" class="mb-3">
+                        <%- error.message %>
+                    </div>
+                    <hr class="mt-0">
+                <% } %>
+
+                <div class="mt-3 text-danger">
+                    <code style="font-size: large">
+                        <%- error.log %>
+                    </code>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

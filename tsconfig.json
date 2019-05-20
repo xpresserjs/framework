@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "es6",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "dist"
+  },
+  "lib": [
+    "es2016"
+  ],
+  "files": [
+    "./node.d.ts",
+    "./global.d.ts",
+    "./types/helpers.d.ts",
+    "./types/router.d.ts"
+  ],
+  "include": ["./**/*"]
+}
