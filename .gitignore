@@ -4,3 +4,4 @@ node_modules
 test.ts
 test
 dist/test.js
+storage
