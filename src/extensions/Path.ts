@@ -15,6 +15,7 @@ if (typeof paths.engine === "string") {
     EnginePath = Path.resolve(paths.engine) + "/";
 } else {
     const nodeModulesEngine = baseFiles + "node_modules/" + packageName + "/src";
+
     if (FS.existsSync(nodeModulesEngine)) {
         EnginePath = nodeModulesEngine + "/";
     }
