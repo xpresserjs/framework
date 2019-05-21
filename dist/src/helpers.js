@@ -105,7 +105,7 @@ const helpers = {
             mix = $.engineData.get(localVariableName);
         }
         else {
-            const mixFile = $.basePath("public/mix-manifest.json");
+            const mixFile = $.path.base("public/mix-manifest.json");
             if (fs_1.default.existsSync(mixFile)) {
                 mix = require(mixFile);
                 $.engineData.set(localVariableName, mix);

@@ -17,7 +17,7 @@ const Config = {
     name: "Xjs",
     env: "development",
     debug: {
-        enabled: false,
+        enabled: true,
         controllerAction: true,
         routerLiveView: false,
     },
@@ -38,13 +38,15 @@ const Config = {
         public: "public",
         storage: "storage",
         xjs: "xjs",
+        // Other Paths
+        routesFile: "backend://routes.js",
+        controllers: "backend://controllers",
+        views: "backend://views",
     },
     template: {
         use: false,
         engine: "ejs",
         extension: "ejs",
-        // Relative to backend path
-        viewsFolder: "views",
         locals: {
             all: true,
             __get: false,

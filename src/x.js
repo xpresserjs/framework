@@ -91,7 +91,7 @@ if (!FS.existsSync(EnginePath)) {
  * @param {string} path
  * @param {boolean} returnRequire
  */
-$.basePath = function (path = '', returnRequire = false) {
+$.path.base = function (path = '', returnRequire = false) {
     if (path[0] === '/') path = path.substr(1);
     const base = baseFiles + path;
     return returnRequire ? require(base) : base;
@@ -102,7 +102,7 @@ $.basePath = function (path = '', returnRequire = false) {
  * @param {string} path
  * @param {boolean} returnRequire
  */
-$.backendPath = function (path = '', returnRequire = false) {
+$.path.backend = function (path = '', returnRequire = false) {
     if (path[0] === '/') path = path.substr(1);
     const backend = backendFiles + path;
     return returnRequire ? require(backend) : backend;
@@ -112,16 +112,16 @@ $.backendPath = function (path = '', returnRequire = false) {
  * Get path in storage folder.
  * @param {string} path
  */
-$.storagePath = function (path = '') {
+$.path.storage = function (path = '') {
     if (path[0] === '/') path = path.substr(1);
-    return $.basePath($.config.paths.storage + '/' + path);
+    return $.path.base($.config.paths.storage + '/' + path);
 };
 
 /**
  * @param {string} path
  * @param {boolean} returnRequire
  */
-$.engine = function (path = '', returnRequire = false) {
+$.path.engine = function (path = '', returnRequire = false) {
     if (path[0] === '/') path = path.substr(1);
     const engine = EnginePath + path;
     return returnRequire ? require(engine) : engine;
@@ -146,7 +146,7 @@ if ($.isConsole) {
 
     $.routerEngine = require("./RouterEngine.js");
 
-    $.backendPath("routers/router", true);
+    $.path.backend("routers/router", true);
     $.routerEngine.processRoutes();
 
 } else {
@@ -196,7 +196,7 @@ if ($.isConsole) {
     const knexSessionConfig = {
         client: "sqlite3",
         connection: {
-            filename: $.basePath($.config.paths.storage + "/app/db/sessions.sqlite")
+            filename: $.path.base($.config.paths.storage + "/app/db/sessions.sqlite")
         },
         useNullAsDefault: true
     };
@@ -282,7 +282,7 @@ if ($.isConsole) {
         }
     }
 
-    app.set("views", $.backendPath(template.viewsFolder));
+    app.set("views", $.path.backend(template.viewsFolder));
 
 
     // Not Tinker? Require Controllers
@@ -296,7 +296,7 @@ if ($.isConsole) {
     /**
      * Include xjs/cycles/beforeRoutes.js if exists
      * */
-    const beforeRoutesPath = $.basePath($.config.paths.xjs + '/cycles/beforeRoutes.js');
+    const beforeRoutesPath = $.path.base($.config.paths.xjs + '/cycles/beforeRoutes.js');
 
     if (FS.existsSync(beforeRoutesPath)) {
         require(beforeRoutesPath);
@@ -306,7 +306,7 @@ if ($.isConsole) {
 
 
     // Require Routes
-    $.backendPath("routers/router", true);
+    $.path.backend("routers/router", true);
     // Process Routes
     $.routerEngine.processRoutes($.router.routes);
 
@@ -328,7 +328,7 @@ if ($.isConsole) {
     /**
      * Include xjs/cycles/afterRoutes.js if exists
      * */
-    const afterRoutesPath = $.basePath($.config.paths.xjs + '/cycles/afterRoutes.js');
+    const afterRoutesPath = $.path.base($.config.paths.xjs + '/cycles/afterRoutes.js');
 
     if (FS.existsSync(afterRoutesPath)) {
         require(afterRoutesPath);

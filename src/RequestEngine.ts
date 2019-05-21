@@ -51,7 +51,7 @@ class RequestEngine {
             return null;
         }
 
-        const User = $.backendPath("models/User.js", true);
+        const User = $.path.backend("models/User.js", true);
         const email = $.base64.decode(x.session.email);
 
         return await User.query().where("email", email).first();
@@ -186,6 +186,7 @@ class RequestEngine {
 
         this.res.locals.__currentView = file;
         this.res.locals.__flash = this.req.flash();
+        this.res.locals.__currentUrl = this.req.url;
 
         if (all || localsConfig.__stackedScripts) {
             this.res.locals.__stackedScripts = [];
@@ -264,7 +265,7 @@ class RequestEngine {
      */
     public renderViewFromEngine(file, data) {
 
-        const view = $.engine("backend/views/" + file);
+        const view = $.path.engine("backend/views/" + file);
         return this.renderView(view, data, true, true);
 
     }

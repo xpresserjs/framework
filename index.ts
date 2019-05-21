@@ -8,7 +8,7 @@ import ObjectCollection = require("./src/helpers/ObjectCollection");
 
 const {Config, Options} = Configurations;
 
-const Xpresser = (AppConfig: object | string, AppOptions?: XpresserOptions) => {
+const Xpresser = (AppConfig: object | string, AppOptions?: XpresserOptions): Xjs => {
 
     if (AppConfig === undefined) {
         AppConfig = {};
@@ -64,6 +64,8 @@ const Xpresser = (AppConfig: object | string, AppOptions?: XpresserOptions) => {
     } else {
         require("./src/StartHttp");
     }
+
+    return $;
 };
 
 export = Xpresser;

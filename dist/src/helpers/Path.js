@@ -13,9 +13,15 @@ const pathHelpers = {
 };
 module.exports = {
     _path($path) {
-        return $.basePath("_/" + $path);
+        return $.path.base("_/" + $path);
     },
     resolve($path, $resolve = true) {
+        if (Array.isArray($path)) {
+            $path = $path.join("/");
+        }
+        if ($path.substr(-1) === "/") {
+            $path = $path.substr(0, $path.length - 1);
+        }
         if ($path.indexOf("://") > 0) {
             const pathHelperKeys = Object.keys(pathHelpers);
             for (let i = 0; i < pathHelperKeys.length; i++) {
@@ -30,14 +36,14 @@ module.exports = {
     helperToPath($path, $helper) {
         $path = $path.substr($helper.length);
         if ($helper === pathHelpers.base) {
-            return $.basePath($path);
+            return $.path.base($path);
         }
         else if ($helper === pathHelpers.npm) {
-            return $.basePath(`node_modules/${$path}`);
+            return $.path.base(`node_modules/${$path}`);
         }
         else {
             $helper = $helper.replace("://", "");
-            return $.basePath(`${$helper}/${$path}`);
+            return $.path.base(`${$helper}/${$path}`);
         }
     },
     /**
@@ -50,7 +56,7 @@ module.exports = {
         if (path[0] === "/") {
             path = path.substr(1);
         }
-        return $.storagePath("framework/" + path);
+        return $.path.storage("framework/" + path);
     },
 };
 //# sourceMappingURL=Path.js.map

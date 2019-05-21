@@ -1,5 +1,6 @@
 import Path from "path";
 import {Xjs} from "../../global";
+
 declare let $: Xjs;
 
 const pathHelpers = {
@@ -14,10 +15,18 @@ const pathHelpers = {
 export = {
 
     _path($path: string): string {
-        return $.basePath("_/" + $path);
+        return $.path.base("_/" + $path);
     },
 
-    resolve($path: string, $resolve: boolean = true): string {
+    resolve($path: string | string[], $resolve: boolean = true): string {
+
+        if (Array.isArray($path)) {
+            $path = $path.join("/");
+        }
+
+        if ($path.substr(-1) === "/") {
+            $path = $path.substr(0, $path.length - 1);
+        }
 
         if ($path.indexOf("://") > 0) {
             const pathHelperKeys = Object.keys(pathHelpers);
@@ -44,14 +53,14 @@ export = {
         $path = $path.substr($helper.length);
 
         if ($helper === pathHelpers.base) {
-            return $.basePath($path);
+            return $.path.base($path);
         } else if ($helper === pathHelpers.npm) {
-            return $.basePath(`node_modules/${$path}`);
+            return $.path.base(`node_modules/${$path}`);
         } else {
 
             $helper = $helper.replace("://", "");
 
-            return $.basePath(`${$helper}/${$path}`);
+            return $.path.base(`${$helper}/${$path}`);
         }
     },
 
@@ -66,6 +75,6 @@ export = {
         if (path[0] === "/") {
             path = path.substr(1);
         }
-        return $.storagePath("framework/" + path);
+        return $.path.storage("framework/" + path);
     },
 };

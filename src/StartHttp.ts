@@ -56,7 +56,7 @@ const KnexSessionStore = connect_session_knex(session);
 const knexSessionConfig = {
     client: "sqlite3",
     connection: {
-        filename: $.basePath($.config.paths.storage + "/app/db/sessions.sqlite"),
+        filename: $.path.base($.config.paths.storage + "/app/db/sessions.sqlite"),
     },
     useNullAsDefault: true,
 };
@@ -143,7 +143,14 @@ if (typeof template.engine === "function") {
     }
 }
 
-app.set("views", $.backendPath(template.viewsFolder));
+const viewsPath = $.path.views();
+
+if (!(FS.existsSync(viewsPath) && FS.lstatSync(viewsPath).isDirectory())) {
+    $.logError("View path does not exists");
+    $.logErrorAndExit(viewsPath);
+}
+
+app.set("views", viewsPath);
 
 // Not Tinker? Require Controllers
 if (!$.$options.isTinker) {
@@ -156,19 +163,22 @@ import ModelEngine = require("./ModelEngine");
 $.model = ModelEngine;
 
 // Include xjs/cycles/beforeRoutes.js if exists
-const beforeRoutesPath = $.basePath($.config.paths.xjs + "/cycles/beforeRoutes.js");
+const beforeRoutesPath = $.path.base($.config.paths.xjs + "/cycles/beforeRoutes.js");
 
 if (FS.existsSync(beforeRoutesPath)) {
     require(beforeRoutesPath);
 }
 
+import Path = require("./helpers/Path");
 import RouterEngine = require("./RouterEngine");
 
 $.routerEngine = RouterEngine;
 
+const RouteFile = Path.resolve($.config.paths.routesFile);
+
 // Require Routes
 try {
-    $.backendPath("routers/router", true);
+    require(RouteFile);
 } catch (e) {
     $.logErrorAndExit("Routes File Missing.");
 }
@@ -190,7 +200,7 @@ app.use((req: XjsHttp.Request, res: XjsHttp.Response, next: () => void) => {
 });
 
 // Include xjs/cycles/afterRoutes.js if exists
-const afterRoutesPath = $.basePath($.config.paths.xjs + "/cycles/afterRoutes.js");
+const afterRoutesPath = $.path.base($.config.paths.xjs + "/cycles/afterRoutes.js");
 
 if (FS.existsSync(afterRoutesPath)) {
     require(afterRoutesPath);
@@ -217,7 +227,6 @@ if (!$.$options.isTinker && $.config.server.startOnBoot) {
         if (!$.$config.has("server.ssl.files")) {
             $.logErrorAndExit("Ssl enabled but has no {server.ssl.files} config found.");
         }
-
 
         const files = $.$config.get("server.ssl.files");
 

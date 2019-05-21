@@ -122,7 +122,7 @@ const helpers = {
         if ($.engineData.has(localVariableName)) {
             mix = $.engineData.get(localVariableName);
         } else {
-            const mixFile = $.basePath("public/mix-manifest.json");
+            const mixFile = $.path.base("public/mix-manifest.json");
             if (fs.existsSync(mixFile)) {
                 mix = require(mixFile);
                 $.engineData.set(localVariableName, mix);

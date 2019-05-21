@@ -7,5 +7,5 @@ $.model = ModelEngine;
 
 $.routerEngine = RouterEngine;
 
-$.backendPath("routers/router", true);
+$.path.backend("routers/router", true);
 $.routerEngine.processRoutes();

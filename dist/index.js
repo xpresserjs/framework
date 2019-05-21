@@ -53,6 +53,7 @@ const Xpresser = (AppConfig, AppOptions) => {
     else {
         require("./src/StartHttp");
     }
+    return $;
 };
 module.exports = Xpresser;
 //# sourceMappingURL=index.js.map

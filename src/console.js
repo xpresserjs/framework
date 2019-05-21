@@ -64,7 +64,7 @@ class JobHelper {
     };
 }
 
-const jobPath = $.backendPath('jobs');
+const jobPath = $.path.backend('jobs');
 if (argCommand.substr(0, 1) === '@') {
     loadJobs(jobPath);
 }

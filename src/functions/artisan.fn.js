@@ -54,7 +54,7 @@ module.exports = {
         const thisPath = Path.dirname($to);
         if (!fs.existsSync(thisPath)) fs.mkdirpSync(thisPath);
 
-        const $from = $.engine('factory/' + $for + '.hbs');
+        const $from = $.path.engine('factory/' + $for + '.hbs');
         $data = _.extend({}, {name: $name}, $data);
         fs.writeFileSync($to, this.factory($from, $data));
 

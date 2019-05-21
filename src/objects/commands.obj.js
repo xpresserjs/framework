@@ -29,7 +29,7 @@ $['console:commands'] = {
             command = job.trim();
         }
 
-        const jobsPath = $.backendPath('jobs');
+        const jobsPath = $.path.backend('jobs');
         artisan.copyFromFactoryToApp('job', job, jobsPath, {name: job, command}, false)
     },
 
@@ -40,7 +40,7 @@ $['console:commands'] = {
             return logThis('Controller name not defined!');
         }
 
-        const controllersPath = $.backendPath('controllers');
+        const controllersPath = $.path.backend('controllers');
         artisan.copyFromFactoryToApp('controller', controller, controllersPath)
     },
 
@@ -50,7 +50,7 @@ $['console:commands'] = {
             return logThis('Middleware name not defined!');
         }
 
-        const middlewaresPath = $.backendPath('middlewares');
+        const middlewaresPath = $.path.backend('middlewares');
         artisan.copyFromFactoryToApp('middleware', middleware, middlewaresPath)
     },
 
@@ -70,7 +70,7 @@ $['console:commands'] = {
         if (artisanConfig.pluralizeModelTable) table = artisan.pluralize(name).toLowerCase();
 
 
-        const modelPath = $.backendPath('models');
+        const modelPath = $.path.backend('models');
         artisan.copyFromFactoryToApp('model', name, modelPath, {name, table})
     },
 
@@ -93,15 +93,15 @@ $['console:commands'] = {
 
         name += '.' + config.extension;
 
-        const viewsPath = PATH.dirname($.backendPath('views/' + name));
+        const viewsPath = PATH.dirname($.path.backend('views/' + name));
 
         if (!fs.existsSync(viewsPath)) fs.mkdirpSync(viewsPath);
-        const fullPath = $.backendPath('views/' + name);
+        const fullPath = $.path.backend('views/' + name);
 
         if (name.substr(0, 2) !== '--' && fs.existsSync(fullPath)) return artisan.logThisAndExit('view {' + colors.fgYellow + name + colors.fgCyan + '} already exits!');
 
         if (!defaultContent.length) {
-            const defaultContentFile = $.backendPath('views/_.' + config.extension);
+            const defaultContentFile = $.path.backend('views/_.' + config.extension);
             if (fs.existsSync(defaultContentFile)) {
                 defaultContent = fs.readFileSync(defaultContentFile).toString();
             }
@@ -113,7 +113,7 @@ $['console:commands'] = {
     },
 
     'publish:views': function () {
-        return artisan.copyFolder($.engine('backend/views'), $.backendPath('views'))
+        return artisan.copyFolder($.path.engine('backend/views'), $.path.backend('views'))
     },
 };
 

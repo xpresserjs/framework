@@ -53,7 +53,7 @@ const KnexSessionStore = connect_session_knex_1.default(express_session_1.defaul
 const knexSessionConfig = {
     client: "sqlite3",
     connection: {
-        filename: $.basePath($.config.paths.storage + "/app/db/sessions.sqlite"),
+        filename: $.path.base($.config.paths.storage + "/app/db/sessions.sqlite"),
     },
     useNullAsDefault: true,
 };
@@ -117,7 +117,12 @@ else {
         app.set("view engine", template.engine);
     }
 }
-app.set("views", $.backendPath(template.viewsFolder));
+const viewsPath = $.path.views();
+if (!(fs_extra_1.default.existsSync(viewsPath) && fs_extra_1.default.lstatSync(viewsPath).isDirectory())) {
+    $.logError("View path does not exists");
+    $.logErrorAndExit(viewsPath);
+}
+app.set("views", viewsPath);
 // Not Tinker? Require Controllers
 if (!$.$options.isTinker) {
     $.controller = require("./classes/Controller");
@@ -126,15 +131,17 @@ if (!$.$options.isTinker) {
 const ModelEngine = require("./ModelEngine");
 $.model = ModelEngine;
 // Include xjs/cycles/beforeRoutes.js if exists
-const beforeRoutesPath = $.basePath($.config.paths.xjs + "/cycles/beforeRoutes.js");
+const beforeRoutesPath = $.path.base($.config.paths.xjs + "/cycles/beforeRoutes.js");
 if (fs_extra_1.default.existsSync(beforeRoutesPath)) {
     require(beforeRoutesPath);
 }
+const Path = require("./helpers/Path");
 const RouterEngine = require("./RouterEngine");
 $.routerEngine = RouterEngine;
+const RouteFile = Path.resolve($.config.paths.routesFile);
 // Require Routes
 try {
-    $.backendPath("routers/router", true);
+    require(RouteFile);
 }
 catch (e) {
     $.logErrorAndExit("Routes File Missing.");
@@ -154,7 +161,7 @@ app.use((req, res, next) => {
     }
 });
 // Include xjs/cycles/afterRoutes.js if exists
-const afterRoutesPath = $.basePath($.config.paths.xjs + "/cycles/afterRoutes.js");
+const afterRoutesPath = $.path.base($.config.paths.xjs + "/cycles/afterRoutes.js");
 if (fs_extra_1.default.existsSync(afterRoutesPath)) {
     require(afterRoutesPath);
 }

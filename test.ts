@@ -1,7 +1,11 @@
-import path from "path";
 import Xpresser = require("./index");
 
-const base = path.resolve(__dirname, "../../xjs");
-
-// console.log(path.resolve(__dirname, "../../domain-manager"));
-const xpresser = Xpresser(base + "/config.js");
+Xpresser({
+    name: "TestXjsApp",
+    paths: {
+        base: __dirname,
+        routesFile: "test/routes.js",
+        controllers: "test",
+        views: "test",
+    },
+});

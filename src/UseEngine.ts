@@ -133,7 +133,7 @@ class UseEngine {
      * @return {*}
      */
     public static file(path) {
-        const fullPath = $.backendPath("{file}.js");
+        const fullPath = $.path.backend("{file}.js");
         const [hasPath, realPath] = fileExistsInPath(path, fullPath);
         if (!hasPath) {
             return $.logErrorAndExit(`File ${realPath} does not exist!`);
@@ -148,7 +148,7 @@ class UseEngine {
      * @return {boolean|*}
      */
     public static model(model, handleError = true) {
-        const fullPath = $.backendPath("models/{file}.js");
+        const fullPath = $.path.backend("models/{file}.js");
         const [hasPath, realPath] = fileExistsInPath(model, fullPath);
 
         if (!hasPath) {
@@ -174,7 +174,7 @@ class UseEngine {
             }
         }
 
-        const fullPath = $.backendPath("middlewares/{file}.js");
+        const fullPath = $.path.backend("middlewares/{file}.js");
 
         const [hasPath, realPath] = fileExistsInPath(middleware, fullPath, suffix ? "Middleware" : "");
         if (!hasPath) {

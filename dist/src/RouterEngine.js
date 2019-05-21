@@ -176,10 +176,10 @@ class RouterEngine {
                 const split = route.controller.split("@");
                 let controller = split[0];
                 const method = split[1];
-                let controllerPath = $.backendPath("controllers/" + controller + ".js");
+                let controllerPath = $.path.controllers(controller + ".js");
                 if (!fs_1.default.existsSync(controllerPath)) {
                     if (!controller.toLowerCase().includes("controller")) {
-                        controllerPath = $.backendPath("controllers/" + controller + "Controller.js");
+                        controllerPath = $.path.controllers(controller + "Controller.js");
                         if (!fs_1.default.existsSync(controllerPath)) {
                             $.logErrorAndExit("Controller: " + split.join("@") + " not found");
                         }

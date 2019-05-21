@@ -12,7 +12,7 @@ const vm = require('vm');
 const Inspector = require('util').inspect;
 const os = require('os');
 
-const historyFile = $.storagePath('framework/console/tinker.json');
+const historyFile = $.path.storage('framework/console/tinker.json');
 const historyFileFolder = dirname(historyFile);
 
 /* Make historyFile folder if it does not exits! */

@@ -117,7 +117,7 @@ class UseEngine {
      * @return {*}
      */
     static file(path) {
-        const fullPath = $.backendPath("{file}.js");
+        const fullPath = $.path.backend("{file}.js");
         const [hasPath, realPath] = fileExistsInPath(path, fullPath);
         if (!hasPath) {
             return $.logErrorAndExit(`File ${realPath} does not exist!`);
@@ -131,7 +131,7 @@ class UseEngine {
      * @return {boolean|*}
      */
     static model(model, handleError = true) {
-        const fullPath = $.backendPath("models/{file}.js");
+        const fullPath = $.path.backend("models/{file}.js");
         const [hasPath, realPath] = fileExistsInPath(model, fullPath);
         if (!hasPath) {
             return !handleError ? false : $.logErrorAndExit(`Model ${realPath} does not exists`);
@@ -153,7 +153,7 @@ class UseEngine {
                 return require(useMiddlewares[middleWithoutSuffix]);
             }
         }
-        const fullPath = $.backendPath("middlewares/{file}.js");
+        const fullPath = $.path.backend("middlewares/{file}.js");
         const [hasPath, realPath] = fileExistsInPath(middleware, fullPath, suffix ? "Middleware" : "");
         if (!hasPath) {
             return !handleError ? false : $.logErrorAndExit(new Error(`Middleware ${realPath} does not exits`));

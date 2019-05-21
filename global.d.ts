@@ -59,6 +59,39 @@ declare interface Xjs {
     // Controller
     controller: Controller;
 
+    /*----------------- PATH FUNCTIONS ------------------- */
+    path: {
+        /**
+         * Get path in base folder.
+         */
+        base(path?: string, returnRequire?: boolean): string | any;
+
+        /**
+         * Get path in backend folder
+         */
+        backend(path?: string, returnRequire?: boolean): string | any;
+
+        /**
+         * Get path in storage folder
+         */
+        storage(path?: string, returnRequire?: boolean): string | any;
+
+        /**
+         * Get path in Framework src folder
+         */
+        engine(path?: string, returnRequire?: boolean): string | any;
+
+        /**
+         * Get path controllers folder
+         */
+        controllers(path?: string, returnRequire?: boolean): string | any;
+
+        /**
+         * Get path in Framework view folder
+         */
+        views(path?: string): string;
+    };
+
     /**
      * .Env File Reader Helper
      */
@@ -103,26 +136,4 @@ declare interface Xjs {
      * Log Per Line
      */
     logPerLine($args: any[], $spacePerLine?: boolean): void;
-
-    /*----------------- PATH FUNCTIONS ------------------- */
-
-    /**
-     * Get path in base folder.
-     */
-    basePath(path?: string, returnRequire?: boolean): string | any;
-
-    /**
-     * Get path in backend folder
-     */
-    backendPath(path?: string, returnRequire?: boolean): string | any;
-
-    /**
-     * Get path in storage folder
-     */
-    storagePath(path?: string, returnRequire?: boolean): string | any;
-
-    /**
-     * Get path in Framework src folder
-     */
-    engine(path?: string, returnRequire?: boolean): string | any;
 }

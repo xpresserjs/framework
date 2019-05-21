@@ -4,6 +4,6 @@ const ModelEngine = require("./ModelEngine");
 const RouterEngine = require("./RouterEngine");
 $.model = ModelEngine;
 $.routerEngine = RouterEngine;
-$.backendPath("routers/router", true);
+$.path.backend("routers/router", true);
 $.routerEngine.processRoutes();
 //# sourceMappingURL=StartConsole.js.map

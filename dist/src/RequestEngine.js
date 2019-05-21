@@ -41,7 +41,7 @@ class RequestEngine {
             if (!x.isLogged()) {
                 return null;
             }
-            const User = $.backendPath("models/User.js", true);
+            const User = $.path.backend("models/User.js", true);
             const email = $.base64.decode(x.session.email);
             return yield User.query().where("email", email).first();
         });
@@ -160,6 +160,7 @@ class RequestEngine {
         const all = localsConfig.all;
         this.res.locals.__currentView = file;
         this.res.locals.__flash = this.req.flash();
+        this.res.locals.__currentUrl = this.req.url;
         if (all || localsConfig.__stackedScripts) {
             this.res.locals.__stackedScripts = [];
         }
@@ -224,7 +225,7 @@ class RequestEngine {
      * @returns {*}
      */
     renderViewFromEngine(file, data) {
-        const view = $.engine("backend/views/" + file);
+        const view = $.path.engine("backend/views/" + file);
         return this.renderView(view, data, true, true);
     }
     /**
