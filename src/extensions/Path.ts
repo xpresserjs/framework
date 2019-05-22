@@ -10,17 +10,6 @@ const paths = $.config.paths;
 const baseFiles = paths.base + "/";
 const backendFiles = baseFiles + paths.backend + "/";
 
-let EnginePath = baseFiles + "src/";
-if (typeof paths.engine === "string") {
-    EnginePath = Path.resolve(paths.engine) + "/";
-} else {
-    const nodeModulesEngine = baseFiles + "node_modules/" + packageName + "/src";
-
-    if (FS.existsSync(nodeModulesEngine)) {
-        EnginePath = nodeModulesEngine + "/";
-    }
-}
-
 $.path = {
     base: (path = "", returnRequire = false) => {
         if (path[0] === "/") {
@@ -50,6 +39,21 @@ $.path = {
      * @param {boolean} returnRequire
      */
     engine: (path: string = "", returnRequire = false): string | any => {
+        const dataKey = "Path:engine";
+        let EnginePath: string;
+
+        if ($.engineData.has(dataKey)) {
+            EnginePath = $.engineData.get(dataKey);
+        } else {
+            if (typeof paths.engine === "string") {
+                EnginePath = Path.resolve(paths.engine) + "/";
+            } else {
+                EnginePath = Path.resolve([$.config.paths.npm, packageName, "src"]) + "/";
+            }
+
+            $.engineData.set(dataKey, EnginePath);
+        }
+
         if (path[0] === "/") {
             path = path.substr(1);
         }
@@ -71,4 +75,19 @@ $.path = {
         }
         return Path.resolve([$.config.paths.views, path]);
     },
+
+    jsonConfigs: (path: string = "") => {
+        if (path[0] === "/") {
+            path = path.substr(1);
+        }
+        return Path.resolve([$.config.paths.jsonConfigs, path]);
+    },
 };
+
+const XpresserEngine = $.path.engine("backend");
+if (!FS.existsSync(XpresserEngine)) {
+
+    $.logError("Xpresser Engine not found in folder:");
+    $.logErrorAndExit(XpresserEngine);
+
+}

@@ -1,17 +1,42 @@
+import FS from "fs";
 import ObjectCollection from "./helpers/ObjectCollection";
 import PathHelper from "./helpers/Path";
-declare let $: any;
+import {Xjs} from "../global";
+
+declare let $: Xjs;
 
 let plugins = [] as any[];
 const pluginRoutes = [] as any[];
+const PluginNamespaceToData = {};
 
 try {
 
-    plugins = require(PathHelper._path("plugins.json"));
+    plugins = require($.path.jsonConfigs("plugins.json"));
 
 } catch (e) {
     // Do Absolutely Nothing
 }
+
+const pluginFileExistOrExit = ($plugin, $pluginPath, $file) => {
+    const ResolvedRoutePath = PathHelper.resolve($file, false);
+
+    if ($file === ResolvedRoutePath) {
+        $file = ResolvedRoutePath;
+    }
+
+    $file = $pluginPath + "/" + $file;
+
+
+    if (!FS.existsSync($file)) {
+        return $.logPerLine([
+            {error: $plugin},
+            {error: `REQUIRED FILE or DIR MISSING: ${$file}`},
+            {errorAndExit: ""},
+        ], true);
+    }
+
+    return $file;
+};
 
 class PluginEngine {
 
@@ -25,8 +50,9 @@ class PluginEngine {
                 try {
 
                     const $data = PluginEngine.loadPluginUseData($plugin, $pluginPath);
-                    PluginEngine.usePlugin($plugin, $pluginPath, $data);
+                    PluginNamespaceToData[$data.namespace] = PluginEngine.usePlugin($plugin, $pluginPath, $data);
 
+                    $.engineData.set("PluginEngine:namespaces", PluginNamespaceToData);
                     $.logInfo(`Using Plugin --> ${$data.namespace}`);
 
                 } catch (e) {
@@ -40,6 +66,8 @@ class PluginEngine {
                 }
             }
         }
+
+        return {routes: pluginRoutes};
     }
 
     public static loadPluginUseData($plugin, $pluginPath) {
@@ -52,18 +80,35 @@ class PluginEngine {
 
     public static usePlugin($plugin, $path, data) {
         const $data = new ObjectCollection(data);
+        let $pluginData: any;
 
-        if ($data.has("paths.routes")) {
-            let RoutePath = $data.get("paths.routes");
-            const ResolvedRoutePath = PathHelper.resolve(RoutePath, false);
+        $pluginData = {
+            plugin: $plugin,
+            path: $path,
+        };
 
-            if (RoutePath === ResolvedRoutePath) {
-                RoutePath = ResolvedRoutePath;
-            }
+        if ($data.has("paths.routesFile")) {
+            let RoutePath = $data.get("paths.routesFile");
 
-            // console.log(RoutePath);
+            RoutePath = pluginFileExistOrExit($plugin, $path, RoutePath);
+
+            pluginRoutes.push({plugin: $plugin, path: RoutePath});
         }
-        // console.log($path);
+
+        if ($data.has("paths.controllers")) {
+            let controllerPath = $data.get("paths.controllers");
+            controllerPath = pluginFileExistOrExit($plugin, $path, controllerPath);
+
+            $pluginData.controllers = controllerPath;
+        }
+
+        if ($data.has("paths.views")) {
+            let viewsPath = $data.get("paths.views");
+            viewsPath = pluginFileExistOrExit($plugin, $path, viewsPath);
+            $pluginData.views = viewsPath;
+        }
+
+        return $pluginData;
     }
 
 }

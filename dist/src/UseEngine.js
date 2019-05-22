@@ -12,12 +12,13 @@ const fs_1 = __importDefault(require("fs"));
 const Path_1 = __importDefault(require("./helpers/Path"));
 const String_1 = __importDefault(require("./helpers/String"));
 let Use = {};
+const PluginNamespaces = $.engineData.get("PluginEngine:namespaces", {});
 /**
  * UseEngine requires `use.json` in frameworks backend folder.
  * Object returned from use.json is processed and saved in $.engineData as path to file.
  * @type {{}}
  */
-const UsePath = Path_1.default._path("use.json");
+const UsePath = $.path.jsonConfigs("use.json");
 if ($.engineData.has(UsePath)) {
     // If has usePath Before then Reuse
     Use = $.engineData.get(UsePath);
@@ -159,6 +160,19 @@ class UseEngine {
             return !handleError ? false : $.logErrorAndExit(new Error(`Middleware ${realPath} does not exits`));
         }
         return require(realPath);
+    }
+    static controller(controller, handleError = true, suffix = true) {
+        if (controller.indexOf("::") > 2) {
+            const $splitController = controller.split("::");
+            const $pluginNamespace = $splitController[0];
+            if (PluginNamespaces.hasOwnProperty($pluginNamespace)) {
+                const plugin = PluginNamespaces[$pluginNamespace];
+                if (plugin.hasOwnProperty("controllers")) {
+                    return plugin.controllers + "/" + $splitController[1];
+                }
+            }
+        }
+        return $.path.controllers(controller);
     }
     /**
      * Return Router

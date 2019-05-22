@@ -7,6 +7,8 @@ import ObjectCollection from "./helpers/ObjectCollection";
 
 declare let _: any;
 declare let $: Xjs;
+const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
+
 
 class RequestEngine {
     public req: XjsHttp.Request;
@@ -214,10 +216,32 @@ class RequestEngine {
      */
     public view(file, data = {}, fullPath: boolean = false, useEjs = false) {
         const Render = typeof this.customRenderer === "function" ? this.customRenderer : this.res.render;
+        const $filePath = file;
+
+        // if View has namespace
+        if (file.indexOf("::") > 2) {
+            if ($.engineData.has("RequestEngine:views." + $filePath)) {
+                file = $.engineData.get("RequestEngine:views." + $filePath);
+            } else {
+                const $splitFile = file.split("::");
+                const $pluginNamespace = _.upperFirst($splitFile[0]);
+
+                if (PluginNameSpaces.hasOwnProperty($pluginNamespace)) {
+                    if (typeof PluginNameSpaces[$pluginNamespace].views === "string") {
+
+                        file = PluginNameSpaces[$pluginNamespace].path + "/Views/" + $splitFile[1];
+
+                        $.engineData.addToObject("RequestEngine:views", {key: $filePath, value: file});
+                    }
+                }
+            }
+        }
 
         const path = file + "." + (useEjs ? "ejs" : $.config.template.extension);
 
-        data = this.viewData(file, data);
+        // $.logError(Path.resolve(path));
+
+        data = this.viewData($filePath, data);
 
         if (typeof fullPath === "function") {
             return Render(path, data, fullPath);
@@ -231,7 +255,12 @@ class RequestEngine {
                 {filename: path},
             ));
         } else {
-            return Render(file, data);
+            try {
+                return Render(file, data);
+            } catch (e) {
+                $.logError(e.message);
+            }
+
         }
     }
 

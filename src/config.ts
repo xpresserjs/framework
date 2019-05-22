@@ -39,11 +39,14 @@ const Config = {
         public: "public",
         storage: "storage",
         xjs: "xjs",
+        // Npm Dir
+        npm: "base://node_modules",
 
         // Other Paths
         routesFile: "backend://routes.js",
         controllers: "backend://controllers",
         views: "backend://views",
+        jsonConfigs: "base://_",
     },
     template: {
         use: false,

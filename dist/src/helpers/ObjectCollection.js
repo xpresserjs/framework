@@ -50,6 +50,33 @@ class ObjectCollection {
         return lodash_1.default.unset(this.data, path);
     }
     /**
+     * Push to array in object
+     * @param path
+     * @param value
+     */
+    push(path, value) {
+        const storedValue = this.get(path, []);
+        if (Array.isArray(storedValue)) {
+            const pushed = storedValue.push(value);
+            this.set(path, storedValue);
+            return pushed;
+        }
+        return false;
+    }
+    /**
+     * Add Key and Value to Object
+     * @param path
+     * @param $object
+     */
+    addToObject(path, $object) {
+        const storedValue = this.get(path, {});
+        if (typeof storedValue === "object") {
+            storedValue[$object.key] = $object.value;
+            this.set(path, storedValue);
+        }
+        return false;
+    }
+    /**
      * Return all data.
      * @returns {*}
      */

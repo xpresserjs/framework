@@ -40,11 +40,12 @@ const Xpresser = (AppConfig, AppOptions) => {
     $.logIfNotConsole(`Starting ${$.config.name}...`);
     // Include Path Extension
     require("./src/extensions/Path");
-    // Global
-    require("./src/global");
     // Require Plugin Engine and load plugins
     const PluginEngine = require("./src/PluginEngine");
-    PluginEngine.loadPlugins();
+    const PluginData = PluginEngine.loadPlugins();
+    $.engineData.set("PluginEngineData", PluginData);
+    // Global
+    require("./src/global");
     // Add Router
     $.router = new router_1.default();
     if ($.$options.isConsole) {

@@ -20,6 +20,19 @@ class RouterEngine {
     }
 
     /**
+     * Add Routes to already set routes
+     * @param route
+     */
+    public static addToRoutes(route: XpresserRouter) {
+        if (typeof route.routes !== "undefined" && Array.isArray(route.routes)) {
+            const allRoutes = $.router.routes;
+            $.router.routes = _.concat(allRoutes, route.routes);
+
+            $.engineData.set(AllRoutesKey, $.router.routes);
+        }
+    }
+
+    /**
      * Get All Processed Routes
      * @returns {*}
      */
@@ -217,14 +230,15 @@ class RouterEngine {
                 let controller = split[0];
                 const method = split[1];
 
-
-                let controllerPath = $.path.controllers(controller + ".js");
+                let controllerPath = $.use.controller(controller + ".js");
 
                 if (!fs.existsSync(controllerPath)) {
 
+
+
                     if (!controller.toLowerCase().includes("controller")) {
 
-                        controllerPath = $.path.controllers(controller + "Controller.js");
+                        controllerPath = $.use.controller(controller + "Controller.js");
 
                         if (!fs.existsSync(controllerPath)) {
                             $.logErrorAndExit("Controller: " + split.join("@") + " not found");

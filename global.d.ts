@@ -90,6 +90,11 @@ declare interface Xjs {
          * Get path in Framework view folder
          */
         views(path?: string): string;
+
+        /**
+         * Get json in json configs folder
+         */
+        jsonConfigs(path?: string): string;
     };
 
     /**

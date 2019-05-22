@@ -183,6 +183,15 @@ try {
     $.logErrorAndExit("Routes File Missing.");
 }
 
+// Import plugin routes
+const PluginData = $.engineData.get("PluginEngineData");
+const PluginRoutes = PluginData.routes;
+
+for (let i = 0; i < PluginRoutes.length; i++) {
+    const pluginRoute = PluginRoutes[i];
+    require(pluginRoute.path);
+}
+
 // Process Routes
 $.routerEngine.processRoutes($.router.routes);
 

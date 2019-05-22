@@ -156,7 +156,7 @@ const controller = (controller, method = null) => {
         const split = controller.split("@");
         controller = split[0];
         method = split[1];
-        controllerPath = $.path.controllers(controller + ".js");
+        controllerPath = $.use.controller(controller + ".js");
         controller = require(controllerPath);
     }
     if (typeof controller !== "function") {

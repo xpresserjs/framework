@@ -12,7 +12,8 @@
         "interface-name": false,
         "no-var-requires": false,
         "no-unnecessary-initializer": false,
-        "no-shadowed-variable": false
+        "no-shadowed-variable": false,
+        "ordered-imports": false
     },
     "rulesDirectory": []
 }

@@ -12,15 +12,15 @@ import StringHelper from "./helpers/String";
 
 declare let $: any;
 
-
 let Use = {} as JsonSettings.Use;
+const PluginNamespaces = $.engineData.get("PluginEngine:namespaces", {});
 
 /**
  * UseEngine requires `use.json` in frameworks backend folder.
  * Object returned from use.json is processed and saved in $.engineData as path to file.
  * @type {{}}
  */
-const UsePath = PathHelper._path("use.json");
+const UsePath = $.path.jsonConfigs("use.json");
 
 if ($.engineData.has(UsePath)) {
     // If has usePath Before then Reuse
@@ -182,6 +182,21 @@ class UseEngine {
         }
 
         return require(realPath);
+    }
+
+    public static controller(controller: string, handleError: boolean = true, suffix: boolean = true) {
+        if (controller.indexOf("::") > 2) {
+            const $splitController = controller.split("::");
+            const $pluginNamespace = $splitController[0];
+
+            if (PluginNamespaces.hasOwnProperty($pluginNamespace)) {
+                const plugin = PluginNamespaces[$pluginNamespace];
+                if (plugin.hasOwnProperty("controllers")) {
+                    return plugin.controllers + "/" + $splitController[1];
+                }
+            }
+        }
+        return $.path.controllers(controller);
     }
 
     /**

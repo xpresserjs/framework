@@ -14,6 +14,7 @@ const ejs_1 = __importDefault(require("ejs"));
 const fs_1 = __importDefault(require("fs"));
 const request_fn_1 = __importDefault(require("./functions/request.fn"));
 const ObjectCollection_1 = __importDefault(require("./helpers/ObjectCollection"));
+const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
 class RequestEngine {
     /**
      *
@@ -185,8 +186,26 @@ class RequestEngine {
      */
     view(file, data = {}, fullPath = false, useEjs = false) {
         const Render = typeof this.customRenderer === "function" ? this.customRenderer : this.res.render;
+        const $filePath = file;
+        // if View has namespace
+        if (file.indexOf("::") > 2) {
+            if ($.engineData.has("RequestEngine:views." + $filePath)) {
+                file = $.engineData.get("RequestEngine:views." + $filePath);
+            }
+            else {
+                const $splitFile = file.split("::");
+                const $pluginNamespace = _.upperFirst($splitFile[0]);
+                if (PluginNameSpaces.hasOwnProperty($pluginNamespace)) {
+                    if (typeof PluginNameSpaces[$pluginNamespace].views === "string") {
+                        file = PluginNameSpaces[$pluginNamespace].path + "/Views/" + $splitFile[1];
+                        $.engineData.addToObject("RequestEngine:views", { key: $filePath, value: file });
+                    }
+                }
+            }
+        }
         const path = file + "." + (useEjs ? "ejs" : $.config.template.extension);
-        data = this.viewData(file, data);
+        // $.logError(Path.resolve(path));
+        data = this.viewData($filePath, data);
         if (typeof fullPath === "function") {
             return Render(path, data, fullPath);
         }
@@ -195,7 +214,12 @@ class RequestEngine {
             return this.res.send(ejs_1.default.render(fs_1.default.readFileSync(path).toString(), data, { filename: path }));
         }
         else {
-            return Render(file, data);
+            try {
+                return Render(file, data);
+            }
+            catch (e) {
+                $.logError(e.message);
+            }
         }
     }
     /**

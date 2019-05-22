@@ -12,9 +12,6 @@ const pathHelpers = {
     public: "public://",
 };
 module.exports = {
-    _path($path) {
-        return $.path.base("_/" + $path);
-    },
     resolve($path, $resolve = true) {
         if (Array.isArray($path)) {
             $path = $path.join("/");
@@ -31,6 +28,7 @@ module.exports = {
                 }
             }
         }
+        // console.log($path);
         return $resolve ? path_1.default.resolve($path) : $path;
     },
     helperToPath($path, $helper) {
@@ -39,7 +37,7 @@ module.exports = {
             return $.path.base($path);
         }
         else if ($helper === pathHelpers.npm) {
-            return $.path.base(`node_modules/${$path}`);
+            return this.resolve([$.config.paths.npm, $path]);
         }
         else {
             $helper = $helper.replace("://", "");

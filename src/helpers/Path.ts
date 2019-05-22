@@ -13,11 +13,6 @@ const pathHelpers = {
 };
 
 export = {
-
-    _path($path: string): string {
-        return $.path.base("_/" + $path);
-    },
-
     resolve($path: string | string[], $resolve: boolean = true): string {
 
         if (Array.isArray($path)) {
@@ -45,6 +40,8 @@ export = {
 
         }
 
+        // console.log($path);
+
         return $resolve ? Path.resolve($path) : $path;
 
     },
@@ -55,7 +52,7 @@ export = {
         if ($helper === pathHelpers.base) {
             return $.path.base($path);
         } else if ($helper === pathHelpers.npm) {
-            return $.path.base(`node_modules/${$path}`);
+            return this.resolve([$.config.paths.npm, $path]);
         } else {
 
             $helper = $helper.replace("://", "");
