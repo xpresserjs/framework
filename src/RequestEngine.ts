@@ -53,7 +53,7 @@ class RequestEngine {
             return null;
         }
 
-        const User = $.path.backend("models/User.js", true);
+        const User = $.path.backend("models/User" + $.config.project.fileExtension, true);
         const email = $.base64.decode(x.session.email);
 
         return await User.query().where("email", email).first();
@@ -221,7 +221,9 @@ class RequestEngine {
         // if View has namespace
         if (file.indexOf("::") > 2) {
             if ($.engineData.has("RequestEngine:views." + $filePath)) {
+
                 file = $.engineData.get("RequestEngine:views." + $filePath);
+
             } else {
                 const $splitFile = file.split("::");
                 const $pluginNamespace = _.upperFirst($splitFile[0]);
@@ -229,7 +231,7 @@ class RequestEngine {
                 if (PluginNameSpaces.hasOwnProperty($pluginNamespace)) {
                     if (typeof PluginNameSpaces[$pluginNamespace].views === "string") {
 
-                        file = PluginNameSpaces[$pluginNamespace].path + "/Views/" + $splitFile[1];
+                        file = PluginNameSpaces[$pluginNamespace].views + "/" + $splitFile[1];
 
                         $.engineData.addToObject("RequestEngine:views", {key: $filePath, value: file});
                     }

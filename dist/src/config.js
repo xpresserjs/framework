@@ -21,6 +21,9 @@ const Config = {
         controllerAction: true,
         routerLiveView: false,
     },
+    project: {
+        fileExtension: ".js",
+    },
     server: ServerConfig,
     database: {
         startOnBoot: true,
@@ -34,6 +37,7 @@ const Config = {
         // Should be relative to the base set above.
         // e.g base+'/'+backend should resolve to /full/path/base/backend
         backend: "backend",
+        // Must be relative to base
         frontend: "frontend",
         public: "public",
         storage: "storage",

@@ -14,33 +14,39 @@ const pathHelpers = {
 module.exports = {
     resolve($path, $resolve = true) {
         if (Array.isArray($path)) {
+            for (let i = 0; i < $path.length; i++) {
+                const $pathElement = $path[i];
+                if ($pathElement.substr(-1) === "/") {
+                    $path[i] = $pathElement.substr(0, $pathElement.length - 1);
+                }
+            }
             $path = $path.join("/");
+        }
+        if ($path.indexOf("://") >= 0) {
+            const $splitPath = $path.split("://");
+            if (pathHelpers.hasOwnProperty($splitPath[0])) {
+                if (!$splitPath[1]) {
+                    $splitPath[1] = "";
+                }
+                return this.helperToPath($splitPath);
+            }
         }
         if ($path.substr(-1) === "/") {
             $path = $path.substr(0, $path.length - 1);
         }
-        if ($path.indexOf("://") > 0) {
-            const pathHelperKeys = Object.keys(pathHelpers);
-            for (let i = 0; i < pathHelperKeys.length; i++) {
-                const key = pathHelperKeys[i];
-                if ($path.substr(0, key.length) === key) {
-                    return this.helperToPath($path, pathHelpers[key]);
-                }
-            }
-        }
-        // console.log($path);
         return $resolve ? path_1.default.resolve($path) : $path;
     },
-    helperToPath($path, $helper) {
-        $path = $path.substr($helper.length);
-        if ($helper === pathHelpers.base) {
-            return $.path.base($path);
+    helperToPath([$helper, $path]) {
+        if ($helper === "base") {
+            return $.config.paths.base + "/" + $path;
         }
-        else if ($helper === pathHelpers.npm) {
+        else if ($helper === "npm") {
             return this.resolve([$.config.paths.npm, $path]);
         }
         else {
-            $helper = $helper.replace("://", "");
+            if ($.$config.has("paths." + $helper)) {
+                return this.resolve([$.$config.get("paths." + $helper), $path]);
+            }
             return $.path.base(`${$helper}/${$path}`);
         }
     },

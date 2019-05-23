@@ -8,6 +8,14 @@ const PathHelper = require('../helpers/Path');
 
 const logThis = artisan.logThis;
 
+const removeSlashAtEnd = (str) => {
+    if (str.substr(-1) === '/') {
+        return str.substr(0, str.length - 1);
+    }
+
+    return str;
+};
+
 $['console:commands'] = {
     install([$plugin]) {
         if ($plugin === 'undefined') {
@@ -40,7 +48,7 @@ $['console:commands'] = {
             return logThis('Controller name not defined!');
         }
 
-        const controllersPath = $.path.backend('controllers');
+        const controllersPath = removeSlashAtEnd($.path.controllers());
         artisan.copyFromFactoryToApp('controller', controller, controllersPath)
     },
 
@@ -93,15 +101,15 @@ $['console:commands'] = {
 
         name += '.' + config.extension;
 
-        const viewsPath = PATH.dirname($.path.backend('views/' + name));
+        const viewsPath = PATH.dirname($.path.views(name));
 
         if (!fs.existsSync(viewsPath)) fs.mkdirpSync(viewsPath);
-        const fullPath = $.path.backend('views/' + name);
+        const fullPath = $.path.views(name);
 
         if (name.substr(0, 2) !== '--' && fs.existsSync(fullPath)) return artisan.logThisAndExit('view {' + colors.fgYellow + name + colors.fgCyan + '} already exits!');
 
         if (!defaultContent.length) {
-            const defaultContentFile = $.path.backend('views/_.' + config.extension);
+            const defaultContentFile = $.path.views('_.' + config.extension);
             if (fs.existsSync(defaultContentFile)) {
                 defaultContent = fs.readFileSync(defaultContentFile).toString();
             }

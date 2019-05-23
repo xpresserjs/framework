@@ -1,5 +1,6 @@
-import Path from "path";
 import {Xjs} from "../../global";
+import path from "path";
+import helpers = require("../helpers");
 
 declare let $: Xjs;
 
@@ -16,46 +17,47 @@ export = {
     resolve($path: string | string[], $resolve: boolean = true): string {
 
         if (Array.isArray($path)) {
+            for (let i = 0; i < $path.length; i++) {
+                const $pathElement = $path[i];
+                if ($pathElement.substr(-1) === "/") {
+                    $path[i] = $pathElement.substr(0, $pathElement.length - 1);
+                }
+            }
+
             $path = $path.join("/");
+        }
+
+        if ($path.indexOf("://") >= 0) {
+            const $splitPath = $path.split("://");
+
+            if (pathHelpers.hasOwnProperty($splitPath[0])) {
+                if (!$splitPath[1]) {
+                    $splitPath[1] = "";
+                }
+
+                return this.helperToPath($splitPath);
+            }
+
         }
 
         if ($path.substr(-1) === "/") {
             $path = $path.substr(0, $path.length - 1);
         }
 
-        if ($path.indexOf("://") > 0) {
-            const pathHelperKeys = Object.keys(pathHelpers);
-
-            for (let i = 0; i < pathHelperKeys.length; i++) {
-
-                const key = pathHelperKeys[i];
-
-                if ($path.substr(0, key.length) === key) {
-
-                    return this.helperToPath($path, pathHelpers[key]);
-
-                }
-
-            }
-
-        }
-
-        // console.log($path);
-
-        return $resolve ? Path.resolve($path) : $path;
+        return $resolve ? path.resolve($path) : $path;
 
     },
 
-    helperToPath($path, $helper): string {
-        $path = $path.substr($helper.length);
-
-        if ($helper === pathHelpers.base) {
-            return $.path.base($path);
-        } else if ($helper === pathHelpers.npm) {
+    helperToPath([$helper, $path]): string {
+        if ($helper === "base") {
+            return $.config.paths.base + "/" + $path;
+        } else if ($helper === "npm") {
             return this.resolve([$.config.paths.npm, $path]);
         } else {
 
-            $helper = $helper.replace("://", "");
+            if ($.$config.has("paths." + $helper)) {
+                return this.resolve([$.$config.get("paths." + $helper), $path]);
+            }
 
             return $.path.base(`${$helper}/${$path}`);
         }

@@ -8,7 +8,7 @@ declare let $: Xjs;
 
 const paths = $.config.paths;
 const baseFiles = paths.base + "/";
-const backendFiles = baseFiles + paths.backend + "/";
+const backendFiles = Path.resolve(paths.backend);
 
 $.path = {
     base: (path = "", returnRequire = false) => {
@@ -65,7 +65,9 @@ $.path = {
         if (path[0] === "/") {
             path = path.substr(1);
         }
+
         const controller = Path.resolve([$.config.paths.controllers, path]);
+
         return returnRequire ? require(controller) : controller;
     },
 

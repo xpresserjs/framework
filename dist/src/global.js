@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 // ts-check
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const moment_1 = __importDefault(require("moment"));
 const Base64_1 = __importDefault(require("./helpers/Base64"));
 global.moment = moment_1.default;
@@ -24,7 +23,6 @@ else {
 }
 // Use Engine
 $.use = require("./UseEngine");
-$.bcrypt = bcrypt_1.default;
 $.helpers = require("./helpers");
 // $.helpers.
 // Assign Functions to $.fn

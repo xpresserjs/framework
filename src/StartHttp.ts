@@ -147,7 +147,7 @@ const viewsPath = $.path.views();
 
 if (!(FS.existsSync(viewsPath) && FS.lstatSync(viewsPath).isDirectory())) {
     $.logError("View path does not exists");
-    $.logErrorAndExit(viewsPath);
+    $.logError(viewsPath);
 }
 
 app.set("views", viewsPath);
@@ -163,7 +163,7 @@ import ModelEngine = require("./ModelEngine");
 $.model = ModelEngine;
 
 // Include xjs/cycles/beforeRoutes.js if exists
-const beforeRoutesPath = $.path.base($.config.paths.xjs + "/cycles/beforeRoutes.js");
+const beforeRoutesPath = $.path.base($.config.paths.xjs + "/cycles/beforeRoutes" + $.config.project.fileExtension);
 
 if (FS.existsSync(beforeRoutesPath)) {
     require(beforeRoutesPath);

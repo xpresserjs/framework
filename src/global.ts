@@ -1,5 +1,4 @@
 // ts-check
-import Bcrypt from "bcrypt";
 import moment from "moment";
 import Base64 from "./helpers/Base64";
 declare let $: any;
@@ -24,7 +23,6 @@ if ($.config.database.startOnBoot) {
 // Use Engine
 $.use = require("./UseEngine");
 
-$.bcrypt = Bcrypt;
 $.helpers = require("./helpers");
 
 // $.helpers.

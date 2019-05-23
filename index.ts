@@ -41,6 +41,13 @@ const Xpresser = (AppConfig: object | string, AppOptions?: XpresserOptions): Xjs
     $.$options = AppOptions;
     $.engineData = new ObjectCollection();
 
+    if (process.argv[2]) {
+        const LaunchType = process.argv[2];
+        if (LaunchType === "cli") {
+            $.$options.isConsole = true;
+        }
+    }
+
     // Include Loggers
     require("./src/extensions/Loggers");
 
@@ -49,11 +56,13 @@ const Xpresser = (AppConfig: object | string, AppOptions?: XpresserOptions): Xjs
     // Include Path Extension
     require("./src/extensions/Path");
 
-    // Require Plugin Engine and load plugins
-    const PluginEngine = require("./src/PluginEngine");
-    const PluginData = PluginEngine.loadPlugins();
+    if (!$.$options.isConsole) {
+        // Require Plugin Engine and load plugins
+        const PluginEngine = require("./src/PluginEngine");
+        const PluginData = PluginEngine.loadPlugins();
 
-    $.engineData.set("PluginEngineData", PluginData);
+        $.engineData.set("PluginEngineData", PluginData);
+    }
 
     // Global
     require("./src/global");

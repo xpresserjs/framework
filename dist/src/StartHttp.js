@@ -120,7 +120,7 @@ else {
 const viewsPath = $.path.views();
 if (!(fs_extra_1.default.existsSync(viewsPath) && fs_extra_1.default.lstatSync(viewsPath).isDirectory())) {
     $.logError("View path does not exists");
-    $.logErrorAndExit(viewsPath);
+    $.logError(viewsPath);
 }
 app.set("views", viewsPath);
 // Not Tinker? Require Controllers
@@ -131,7 +131,7 @@ if (!$.$options.isTinker) {
 const ModelEngine = require("./ModelEngine");
 $.model = ModelEngine;
 // Include xjs/cycles/beforeRoutes.js if exists
-const beforeRoutesPath = $.path.base($.config.paths.xjs + "/cycles/beforeRoutes.js");
+const beforeRoutesPath = $.path.base($.config.paths.xjs + "/cycles/beforeRoutes" + $.config.project.fileExtension);
 if (fs_extra_1.default.existsSync(beforeRoutesPath)) {
     require(beforeRoutesPath);
 }

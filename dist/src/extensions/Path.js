@@ -8,7 +8,7 @@ const Path = require("../helpers/Path");
 const packageName = "xpresser";
 const paths = $.config.paths;
 const baseFiles = paths.base + "/";
-const backendFiles = baseFiles + paths.backend + "/";
+const backendFiles = Path.resolve(paths.backend);
 $.path = {
     base: (path = "", returnRequire = false) => {
         if (path[0] === "/") {

@@ -1,20 +1,4 @@
-// Find XjsConfig
-if (typeof XjsConfig === 'undefined') {
-    console.log('===> XjsConfig not found!');
-    process.exit();
-}
-
-if (process.argv.length <= 2) {
-    console.log('===> No command provided!');
-    process.exit();
-}
-
-let args = process.argv;
-
-// Require Framework
-global['__isConsole'] = true;
-require('./x');
-
+let args = process.argv.splice(3);
 if (args[2] === '--from-tinker') {
     $.isTinker = true;
     args.splice(2, 1);
@@ -23,7 +7,7 @@ if (args[2] === '--from-tinker') {
 require('./objects/commands.obj');
 
 // Require artisan helper functions
-let argCommand = args[2];
+let argCommand = args[0];
 if (typeof argCommand === "undefined") {
     $.logErrorAndExit('No command provided!');
 }
@@ -71,7 +55,7 @@ if (argCommand.substr(0, 1) === '@') {
 
 if (typeof commands[argCommand] === 'undefined') {
 
-    if (typeof $.isTinker === 'boolean' && $.isTinker) {
+    if (typeof $.$options.isTinker === 'boolean' && $.isTinker) {
         $.log('Console Command not found!');
     } else {
         $.logAndExit('Command not found!')
@@ -79,7 +63,7 @@ if (typeof commands[argCommand] === 'undefined') {
 
 } else {
     // Send only command args to function
-    args.splice(0, 3);
+    args.splice(0, 1);
     const runFn = commands[argCommand];
     let afterRun = null;
     if (typeof runFn === 'object' && typeof runFn['handler'] === 'function') {

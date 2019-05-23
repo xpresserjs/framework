@@ -38,32 +38,34 @@ else if (fs_1.default.existsSync(UsePath)) {
         for (let i = 0; i < middlewareKeys.length; i++) {
             const middlewareKey = middlewareKeys[i];
             let middleware = useMiddlewares[middlewareKey];
-            const extension = ".js";
-            if (middleware.substr(-3) === ".js") {
+            const extension = $.config.project.fileExtension;
+            if (middleware.substr(-3) === extension) {
                 middleware = middleware.substr(0, middleware.length - 3);
             }
-            middleware = Path_1.default.resolve(middleware);
+            let middlewareRealPath = Path_1.default.resolve(middleware);
             let hasMiddleware = false;
-            if (fs_1.default.existsSync(middleware + extension)) {
+            if (fs_1.default.existsSync(middlewareRealPath + extension)) {
                 hasMiddleware = true;
             }
             else {
-                if (fs_1.default.existsSync(middleware + MiddlewareSuffix + extension)) {
-                    middleware = middleware + MiddlewareSuffix;
+                if (fs_1.default.existsSync(middlewareRealPath + MiddlewareSuffix + extension)) {
+                    middlewareRealPath = middlewareRealPath + MiddlewareSuffix;
                     hasMiddleware = true;
                 }
             }
             if (hasMiddleware) {
                 const hasSuffix = String_1.default.hasSuffix(middlewareKey, MiddlewareSuffix);
                 if (hasSuffix) {
-                    Use.middlewares[String_1.default.withoutSuffix(middlewareKey, MiddlewareSuffix)] = middleware;
+                    Use.middlewares[String_1.default.withoutSuffix(middlewareKey, MiddlewareSuffix)] = middlewareRealPath;
                     delete Use.middlewares[middlewareKey];
                 }
                 else {
-                    Use.middlewares[middlewareKey] = middleware;
+                    Use.middlewares[middlewareKey] = middlewareRealPath;
                 }
             }
             else {
+                $.logError(`Middleware not found:`);
+                $.logErrorAndExit(middleware);
                 delete Use.middlewares[middlewareKey];
             }
         }
@@ -118,7 +120,7 @@ class UseEngine {
      * @return {*}
      */
     static file(path) {
-        const fullPath = $.path.backend("{file}.js");
+        const fullPath = $.path.backend("{file}" + $.config.project.fileExtension);
         const [hasPath, realPath] = fileExistsInPath(path, fullPath);
         if (!hasPath) {
             return $.logErrorAndExit(`File ${realPath} does not exist!`);
@@ -132,7 +134,7 @@ class UseEngine {
      * @return {boolean|*}
      */
     static model(model, handleError = true) {
-        const fullPath = $.path.backend("models/{file}.js");
+        const fullPath = $.path.backend("models/{file}" + $.config.project.fileExtension);
         const [hasPath, realPath] = fileExistsInPath(model, fullPath);
         if (!hasPath) {
             return !handleError ? false : $.logErrorAndExit(`Model ${realPath} does not exists`);
@@ -154,7 +156,7 @@ class UseEngine {
                 return require(useMiddlewares[middleWithoutSuffix]);
             }
         }
-        const fullPath = $.path.backend("middlewares/{file}.js");
+        const fullPath = $.path.backend("middlewares/{file}" + $.config.project.fileExtension);
         const [hasPath, realPath] = fileExistsInPath(middleware, fullPath, suffix ? "Middleware" : "");
         if (!hasPath) {
             return !handleError ? false : $.logErrorAndExit(new Error(`Middleware ${realPath} does not exits`));
