@@ -14,5 +14,5 @@ catch (e) {
     $.logErrorAndExit("Routes File Missing.");
 }
 // $.routerEngine.processRoutes($.router.routes);
-require("./console.js");
+require("./console");
 //# sourceMappingURL=StartConsole.js.map

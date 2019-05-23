@@ -5,3 +5,4 @@ test.ts
 test
 dist/test.js
 storage
+.sqlite

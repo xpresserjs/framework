@@ -5,7 +5,7 @@ Xpresser({
     name: "TestXjsApp",
     paths: {
         base: __dirname + "/test",
-        // backend: "base://",
+        backend: "base://",
         // Path with helpers
         routesFile: "base://routes.js",
         jsonConfigs: "base://",
@@ -18,7 +18,7 @@ Xpresser({
         config: {
             client: "sqlite",
             connection: {
-                filename: __dirname + "database.sqlite",
+                filename: __dirname + "/test/database.sqlite",
             },
             migrations: {
                 tableName: "migrations",

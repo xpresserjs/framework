@@ -18,4 +18,4 @@ try {
 
 // $.routerEngine.processRoutes($.router.routes);
 
-require("./console.js");
+require("./console");

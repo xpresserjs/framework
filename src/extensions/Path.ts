@@ -75,6 +75,7 @@ $.path = {
         if (path[0] === "/") {
             path = path.substr(1);
         }
+
         return Path.resolve([$.config.paths.views, path]);
     },
 

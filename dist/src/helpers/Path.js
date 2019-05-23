@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
 const pathHelpers = {
     base: "base://",
     backend: "backend://",
@@ -61,6 +62,20 @@ module.exports = {
             path = path.substr(1);
         }
         return $.path.storage("framework/" + path);
+    },
+    /**
+     * Makes a dir if it does not exist.
+     * @param $path
+     * @param $isFile
+     */
+    makeDirIfNotExist($path, $isFile) {
+        if ($isFile === true) {
+            $path = path_1.default.dirname($path);
+        }
+        if (!fs_1.default.existsSync($path)) {
+            fs_1.default.mkdirSync($path);
+        }
+        return $path;
     },
 };
 //# sourceMappingURL=Path.js.map

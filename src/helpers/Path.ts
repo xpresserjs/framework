@@ -1,8 +1,11 @@
 import {Xjs} from "../../global";
 import path from "path";
-import helpers = require("../helpers");
+import mkdirp = require("mkdirp");
+import fs, {mkdirSync} from "fs";
+
 
 declare let $: Xjs;
+
 
 const pathHelpers = {
     base: "base://",
@@ -75,5 +78,22 @@ export = {
             path = path.substr(1);
         }
         return $.path.storage("framework/" + path);
+    },
+
+    /**
+     * Makes a dir if it does not exist.
+     * @param $path
+     * @param $isFile
+     */
+    makeDirIfNotExist($path: string, $isFile?: boolean) {
+        if ($isFile === true) {
+            $path = path.dirname($path);
+        }
+
+        if (!fs.existsSync($path)) {
+            fs.mkdirSync($path);
+        }
+
+        return $path;
     },
 };

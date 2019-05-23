@@ -1,6 +1,6 @@
 require('./x');
 
-const consoleCommands = require('./objects/commands.obj');
+const consoleCommands = require('./console/Commands');
 const colors = require('./objects/consoleColors.obj');
 
 const fs = require('fs');
