@@ -1,4 +1,4 @@
-import FS from "fs";
+import FS = require("fs");
 import {Xjs} from "../../global";
 import Path = require("../helpers/Path");
 

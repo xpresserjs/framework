@@ -1,11 +1,8 @@
 import {Xjs} from "../../global";
-import path from "path";
-import mkdirp = require("mkdirp");
-import fs, {mkdirSync} from "fs";
-
+import PATH = require("path");
+import fs = require("fs-extra");
 
 declare let $: Xjs;
-
 
 const pathHelpers = {
     base: "base://",
@@ -16,7 +13,7 @@ const pathHelpers = {
     public: "public://",
 };
 
-export = {
+const PathHelper = {
     resolve($path: string | string[], $resolve: boolean = true): string {
 
         if (Array.isArray($path)) {
@@ -31,14 +28,14 @@ export = {
         }
 
         if ($path.indexOf("://") >= 0) {
-            const $splitPath = $path.split("://");
+            const $splitPath: any[] = $path.split("://");
 
             if (pathHelpers.hasOwnProperty($splitPath[0])) {
                 if (!$splitPath[1]) {
                     $splitPath[1] = "";
                 }
 
-                return this.helperToPath($splitPath);
+                return PathHelper.helperToPath($splitPath);
             }
 
         }
@@ -47,19 +44,19 @@ export = {
             $path = $path.substr(0, $path.length - 1);
         }
 
-        return $resolve ? path.resolve($path) : $path;
+        return $resolve ? PATH.resolve($path) : $path;
 
     },
 
-    helperToPath([$helper, $path]): string {
+    helperToPath([$helper, $path]: string[]): string {
         if ($helper === "base") {
             return $.config.paths.base + "/" + $path;
         } else if ($helper === "npm") {
-            return this.resolve([$.config.paths.npm, $path]);
+            return PathHelper.resolve([$.config.paths.npm, $path]);
         } else {
 
             if ($.$config.has("paths." + $helper)) {
-                return this.resolve([$.$config.get("paths." + $helper), $path]);
+                return PathHelper.resolve([$.$config.get("paths." + $helper), $path]);
             }
 
             return $.path.base(`${$helper}/${$path}`);
@@ -87,7 +84,7 @@ export = {
      */
     makeDirIfNotExist($path: string, $isFile?: boolean) {
         if ($isFile === true) {
-            $path = path.dirname($path);
+            $path = PATH.dirname($path);
         }
 
         if (!fs.existsSync($path)) {
@@ -97,3 +94,5 @@ export = {
         return $path;
     },
 };
+
+export = PathHelper;

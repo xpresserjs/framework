@@ -1,9 +1,6 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-const build_url_1 = __importDefault(require("build-url"));
-const fs_1 = __importDefault(require("fs"));
+const BuildUrl = require("build-url");
+const fs = require("fs");
 const moment = require("moment");
 /* HELPER FUNCTIONS */
 const helpers = {
@@ -33,7 +30,7 @@ const helpers = {
             url = p + "://" + d + server.root + $path;
         }
         if (Object.keys($query).length) {
-            url = build_url_1.default(url, {
+            url = BuildUrl(url, {
                 queryParams: $query,
             });
         }
@@ -106,7 +103,7 @@ const helpers = {
         }
         else {
             const mixFile = $.path.base("public/mix-manifest.json");
-            if (fs_1.default.existsSync(mixFile)) {
+            if (fs.existsSync(mixFile)) {
                 mix = require(mixFile);
                 $.engineData.set(localVariableName, mix);
             }

@@ -1,8 +1,5 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-const lodash_1 = __importDefault(require("lodash"));
+const _ = require("lodash");
 /**
  * ObjectCollectionClass
  */
@@ -19,7 +16,7 @@ class ObjectCollection {
      * @return {*}
      */
     get(path, $default) {
-        return lodash_1.default.get(this.data, path, $default);
+        return _.get(this.data, path, $default);
     }
     /**
      * Has path in object
@@ -28,7 +25,7 @@ class ObjectCollection {
      * @return {boolean}
      */
     has(path) {
-        return lodash_1.default.has(this.data, path);
+        return _.has(this.data, path);
     }
     /**
      * Set value to path of object.
@@ -38,7 +35,7 @@ class ObjectCollection {
      * @return {*}
      */
     set(path, value) {
-        return lodash_1.default.set(this.data, path, value);
+        return _.set(this.data, path, value);
     }
     /**
      * Unset a path in object.
@@ -47,7 +44,7 @@ class ObjectCollection {
      * @return {boolean}
      */
     unset(path) {
-        return lodash_1.default.unset(this.data, path);
+        return _.unset(this.data, path);
     }
     /**
      * Push to array in object

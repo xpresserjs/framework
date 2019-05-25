@@ -1,9 +1,6 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs_1 = __importDefault(require("fs"));
+const FS = require("fs");
 const Path = require("../helpers/Path");
 const packageName = "xpresser";
 const paths = $.config.paths;
@@ -76,7 +73,7 @@ $.path = {
     },
 };
 const XpresserEngine = $.path.engine("backend");
-if (!fs_1.default.existsSync(XpresserEngine)) {
+if (!FS.existsSync(XpresserEngine)) {
     $.logError("Xpresser Engine not found in folder:");
     $.logErrorAndExit(XpresserEngine);
 }

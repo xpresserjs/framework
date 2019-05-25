@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs = require("fs");
 import {Xjs} from "../global";
 
 const Controller = require("./ControllerEngine");

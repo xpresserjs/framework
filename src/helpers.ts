@@ -1,5 +1,5 @@
-import BuildUrl from "build-url";
-import fs from "fs";
+import BuildUrl = require("build-url");
+import fs = require("fs");
 import moment = require("moment");
 
 declare let _;

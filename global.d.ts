@@ -7,7 +7,6 @@ import RouterEngine = require("./src/RouterEngine");
 import UseEngine = require("./src/UseEngine");
 
 type DB = import("./src/database/Db");
-type Bcrypt = import("bcrypt");
 
 declare namespace JsonSettings {
     interface Use {
@@ -34,9 +33,6 @@ declare interface Xjs {
 
     // Use Engine
     use: typeof UseEngine;
-
-    // Bcrypt
-    bcrypt: Bcrypt;
 
     // Set XjsHelpers
     helpers: XjsHelpers.Main;

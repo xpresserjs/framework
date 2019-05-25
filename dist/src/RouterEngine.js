@@ -1,8 +1,5 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-const fs_1 = __importDefault(require("fs"));
+const fs = require("fs");
 const Controller = require("./ControllerEngine");
 const AllRoutesKey = "RouterEngine:allRoutes";
 const NameToRoute = {};
@@ -188,10 +185,10 @@ class RouterEngine {
                 let controller = split[0];
                 const method = split[1];
                 let controllerPath = $.use.controller(controller + $.config.project.fileExtension);
-                if (!fs_1.default.existsSync(controllerPath)) {
+                if (!fs.existsSync(controllerPath)) {
                     if (!controller.toLowerCase().includes("controller")) {
                         controllerPath = $.use.controller(controller + "Controller" + $.config.project.fileExtension);
-                        if (!fs_1.default.existsSync(controllerPath)) {
+                        if (!fs.existsSync(controllerPath)) {
                             $.logErrorAndExit("Controller: " + split.join("@") + " not found");
                         }
                         controller = controller + "Controller";

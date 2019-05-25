@@ -1,11 +1,10 @@
 /// <reference types="node"/>
-import XpresserRouter from "@xpresser/router";
-import fs from "fs";
-import _ from "lodash";
+import XpresserRouter = require("@xpresser/router");
+import fs = require("fs");
+import _  = require("lodash");
 import {Xjs} from "./global";
 import Configurations = require("./src/config");
 import ObjectCollection = require("./src/helpers/ObjectCollection");
-
 const {Config, Options} = Configurations;
 
 const Xpresser = (AppConfig: object | string, AppOptions?: XpresserOptions): Xjs => {

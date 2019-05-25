@@ -2,10 +2,10 @@ import {Xjs} from "../../global";
 
 declare const $: Xjs;
 
-import os from "os";
-import PATH from "path";
-import fs from "fs-extra";
-import shellJs from "shelljs";
+import os = require("os");
+import PATH = require("path");
+import fs = require("fs-extra");
+import shellJs = require("shelljs");
 
 import artisan = require("../functions/artisan.fn");
 

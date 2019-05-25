@@ -1,9 +1,6 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-const path_1 = __importDefault(require("path"));
-const fs_1 = __importDefault(require("fs"));
+const PATH = require("path");
+const fs = require("fs-extra");
 const pathHelpers = {
     base: "base://",
     backend: "backend://",
@@ -12,7 +9,7 @@ const pathHelpers = {
     migrations: "migrations://",
     public: "public://",
 };
-module.exports = {
+const PathHelper = {
     resolve($path, $resolve = true) {
         if (Array.isArray($path)) {
             for (let i = 0; i < $path.length; i++) {
@@ -29,24 +26,24 @@ module.exports = {
                 if (!$splitPath[1]) {
                     $splitPath[1] = "";
                 }
-                return this.helperToPath($splitPath);
+                return PathHelper.helperToPath($splitPath);
             }
         }
         if ($path.substr(-1) === "/") {
             $path = $path.substr(0, $path.length - 1);
         }
-        return $resolve ? path_1.default.resolve($path) : $path;
+        return $resolve ? PATH.resolve($path) : $path;
     },
     helperToPath([$helper, $path]) {
         if ($helper === "base") {
             return $.config.paths.base + "/" + $path;
         }
         else if ($helper === "npm") {
-            return this.resolve([$.config.paths.npm, $path]);
+            return PathHelper.resolve([$.config.paths.npm, $path]);
         }
         else {
             if ($.$config.has("paths." + $helper)) {
-                return this.resolve([$.$config.get("paths." + $helper), $path]);
+                return PathHelper.resolve([$.$config.get("paths." + $helper), $path]);
             }
             return $.path.base(`${$helper}/${$path}`);
         }
@@ -70,12 +67,13 @@ module.exports = {
      */
     makeDirIfNotExist($path, $isFile) {
         if ($isFile === true) {
-            $path = path_1.default.dirname($path);
+            $path = PATH.dirname($path);
         }
-        if (!fs_1.default.existsSync($path)) {
-            fs_1.default.mkdirSync($path);
+        if (!fs.existsSync($path)) {
+            fs.mkdirSync($path);
         }
         return $path;
     },
 };
+module.exports = PathHelper;
 //# sourceMappingURL=Path.js.map

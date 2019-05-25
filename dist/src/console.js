@@ -1,9 +1,6 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs_1 = __importDefault(require("fs"));
+const fs = require("fs");
 const args = process.argv.splice(3);
 if (args[2] === "--from-tinker") {
     $.$options.isTinker = true;
@@ -16,15 +13,15 @@ if (typeof argCommand === "undefined") {
     $.logErrorAndExit("No command provided!");
 }
 const loadJobs = (path) => {
-    if (fs_1.default.existsSync(path)) {
-        const jobFiles = fs_1.default.readdirSync(path);
+    if (fs.existsSync(path)) {
+        const jobFiles = fs.readdirSync(path);
         for (let i = 0; i < jobFiles.length; i++) {
             const jobFile = jobFiles[i];
             const jobFullPath = path + "/" + jobFile;
-            if (fs_1.default.lstatSync(jobFullPath).isDirectory()) {
+            if (fs.lstatSync(jobFullPath).isDirectory()) {
                 loadJobs(jobFullPath);
             }
-            else if (fs_1.default.lstatSync(jobFullPath).isFile()) {
+            else if (fs.lstatSync(jobFullPath).isFile()) {
                 const job = require(jobFullPath);
                 if (typeof job !== "object") {
                     $.logErrorAndExit("Job: {" + jobFile + "} did not return object!");

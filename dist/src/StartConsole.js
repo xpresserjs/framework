@@ -3,15 +3,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ModelEngine = require("./ModelEngine");
 const RouterEngine = require("./RouterEngine");
 const Path = require("./helpers/Path");
+const fs = require("fs");
 $.model = ModelEngine;
 $.routerEngine = RouterEngine;
 const RouteFile = Path.resolve($.config.paths.routesFile);
 // Require Routes
+if (!fs.existsSync(RouteFile)) {
+    $.logErrorAndExit("Routes File Missing.");
+}
 try {
     require(RouteFile);
 }
 catch (e) {
-    $.logErrorAndExit("Routes File Missing.");
+    $.logErrorAndExit(e.message);
 }
 // $.routerEngine.processRoutes($.router.routes);
 require("./console");

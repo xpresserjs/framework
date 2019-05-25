@@ -1,14 +1,13 @@
-import ejs from "ejs";
-import fs from "fs";
+import ejs = require("ejs");
+import fs = require("fs");
 import {Xjs} from "../global";
 import {XjsHttp} from "../types/http";
-import requestHelpers from "./functions/request.fn";
-import ObjectCollection from "./helpers/ObjectCollection";
+import requestHelpers = require("./functions/request.fn");
+import ObjectCollection = require("./helpers/ObjectCollection");
 
 declare let _: any;
 declare let $: Xjs;
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
-
 
 class RequestEngine {
     public req: XjsHttp.Request;
@@ -324,6 +323,7 @@ class RequestEngine {
         const email = $.base64.decode(x.session.email);
         const hash = $.base64.decode(x.session.loginKey);
 
+        // @ts-ignore
         return !!$.bcrypt.compareSync(email, hash);
     }
 

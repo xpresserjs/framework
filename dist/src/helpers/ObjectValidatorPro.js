@@ -1,9 +1,6 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-const object_validator_pro_1 = __importDefault(require("object-validator-pro"));
-const ovp = new object_validator_pro_1.default();
+const Validator = require("object-validator-pro");
+const ovp = new Validator();
 ovp.setEventHandler({
     onEachError: (param, msg) => {
         $.logError("Database: " + msg);

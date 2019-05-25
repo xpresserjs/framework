@@ -5,7 +5,7 @@
  * UseEngine is later exposed to the framework as $.use
  */
 
-import fs from "fs";
+import fs  = require("fs");
 import {JsonSettings} from "../global";
 import PathHelper from "./helpers/Path";
 import StringHelper from "./helpers/String";

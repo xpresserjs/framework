@@ -1,11 +1,8 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 /// <reference types="node"/>
-const router_1 = __importDefault(require("@xpresser/router"));
-const fs_1 = __importDefault(require("fs"));
-const lodash_1 = __importDefault(require("lodash"));
+const XpresserRouter = require("@xpresser/router");
+const fs = require("fs");
+const _ = require("lodash");
 const Configurations = require("./src/config");
 const ObjectCollection = require("./src/helpers/ObjectCollection");
 const { Config, Options } = Configurations;
@@ -17,7 +14,7 @@ const Xpresser = (AppConfig, AppOptions) => {
         AppOptions = {};
     }
     if (typeof AppConfig === "string") {
-        if (fs_1.default.lstatSync(AppConfig).isFile()) {
+        if (fs.lstatSync(AppConfig).isFile()) {
             AppConfig = require(AppConfig);
         }
         else {
@@ -26,11 +23,11 @@ const Xpresser = (AppConfig, AppOptions) => {
             AppConfig = {};
         }
     }
-    AppConfig = lodash_1.default.merge(Config, AppConfig);
-    AppOptions = lodash_1.default.extend(Options, AppOptions);
+    AppConfig = _.merge(Config, AppConfig);
+    AppOptions = _.extend(Options, AppOptions);
     const $ = {};
     global.$ = $;
-    global._ = lodash_1.default;
+    global._ = _;
     $.config = AppConfig;
     $.$config = new ObjectCollection($.config);
     $.$options = AppOptions;
@@ -55,7 +52,7 @@ const Xpresser = (AppConfig, AppOptions) => {
     // Global
     require("./src/global");
     // Add Router
-    $.router = new router_1.default();
+    $.router = new XpresserRouter();
     if ($.$options.isConsole) {
         require("./src/StartConsole");
     }

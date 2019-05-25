@@ -7,13 +7,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-const ejs_1 = __importDefault(require("ejs"));
-const fs_1 = __importDefault(require("fs"));
-const request_fn_1 = __importDefault(require("./functions/request.fn"));
-const ObjectCollection_1 = __importDefault(require("./helpers/ObjectCollection"));
+const ejs = require("ejs");
+const fs = require("fs");
+const requestHelpers = require("./functions/request.fn");
+const ObjectCollection = require("./helpers/ObjectCollection");
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
 class RequestEngine {
     /**
@@ -33,8 +30,8 @@ class RequestEngine {
         }
         this.session = req.session;
         this.bothData = this.all();
-        this.locals = new ObjectCollection_1.default(res.locals);
-        this.fn = _.extend({}, $.helpers, request_fn_1.default(this));
+        this.locals = new ObjectCollection(res.locals);
+        this.fn = _.extend({}, $.helpers, requestHelpers(this));
     }
     auth() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -211,7 +208,7 @@ class RequestEngine {
         }
         if (useEjs === true) {
             data = Object.assign(this.res.locals, data);
-            return this.res.send(ejs_1.default.render(fs_1.default.readFileSync(path).toString(), data, { filename: path }));
+            return this.res.send(ejs.render(fs.readFileSync(path).toString(), data, { filename: path }));
         }
         else {
             try {
@@ -271,6 +268,7 @@ class RequestEngine {
         }
         const email = $.base64.decode(x.session.email);
         const hash = $.base64.decode(x.session.loginKey);
+        // @ts-ignore
         return !!$.bcrypt.compareSync(email, hash);
     }
     /**

@@ -8,7 +8,7 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const fs_1 = __importDefault(require("fs"));
+const fs = require("fs");
 const Path_1 = __importDefault(require("./helpers/Path"));
 const String_1 = __importDefault(require("./helpers/String"));
 let Use = {};
@@ -23,7 +23,7 @@ if ($.engineData.has(UsePath)) {
     // If has usePath Before then Reuse
     Use = $.engineData.get(UsePath);
 }
-else if (fs_1.default.existsSync(UsePath)) {
+else if (fs.existsSync(UsePath)) {
     // Process Use Data
     try {
         Use = require(UsePath);
@@ -44,11 +44,11 @@ else if (fs_1.default.existsSync(UsePath)) {
             }
             let middlewareRealPath = Path_1.default.resolve(middleware);
             let hasMiddleware = false;
-            if (fs_1.default.existsSync(middlewareRealPath + extension)) {
+            if (fs.existsSync(middlewareRealPath + extension)) {
                 hasMiddleware = true;
             }
             else {
-                if (fs_1.default.existsSync(middlewareRealPath + MiddlewareSuffix + extension)) {
+                if (fs.existsSync(middlewareRealPath + MiddlewareSuffix + extension)) {
                     middlewareRealPath = middlewareRealPath + MiddlewareSuffix;
                     hasMiddleware = true;
                 }
@@ -91,9 +91,9 @@ function fileExistsInPath(file, path, suffix = "") {
         }
     }
     const fullPath = parsePath(path, { file });
-    if (!fs_1.default.existsSync(fullPath)) {
+    if (!fs.existsSync(fullPath)) {
         file = String_1.default.upperFirst(file);
-        if (!fs_1.default.existsSync(parsePath(path, { file }))) {
+        if (!fs.existsSync(parsePath(path, { file }))) {
             return [false, fullPath];
         }
     }

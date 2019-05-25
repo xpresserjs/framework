@@ -108,10 +108,10 @@
   resolved "https://registry.yarnpkg.com/@types/strip-json-comments/-/strip-json-comments-0.0.30.tgz#9aa30c04db212a9a0649d6ae6fd50accc40748a1"
   integrity sha512-7NQmHra/JILCd1QqpSzl8+mJRc8ZHz3uDm8YV1Ks9IhK0epEiTw8aIErbvH9PI+6XbqhyIQy3462nEsn7UVzjQ==
 
-"@xpresser/router@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@xpresser/router/-/router-0.0.6.tgz#0599055a1d76a1a2f853c43d6abf344b30c201e8"
-  integrity sha512-roROu9vI9TVfJJnqIsAQlHR+GEdcCGpwspjalZhmCAhYXJWjVLc9LnOGAQqvljzzBN4l7ysjRh18RXiJ2Yzwyg==
+"@xpresser/router@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@xpresser/router/-/router-0.0.8.tgz#eb1482f0d54537d6990e7f1b228f4195c9a06b22"
+  integrity sha512-+277dmmAJGHlFSRjxq4EJJ2DH8hW0Zj88YJnsiPEW2WckewEduc/MpYhbSm4loGRf0+HicV1i37Dqy2hvhIkYw==
   dependencies:
     lodash.clone "^4.5.0"
 

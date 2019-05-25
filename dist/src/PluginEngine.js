@@ -2,7 +2,7 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const fs_1 = __importDefault(require("fs"));
+const FS = require("fs");
 const ObjectCollection_1 = __importDefault(require("./helpers/ObjectCollection"));
 const Path_1 = __importDefault(require("./helpers/Path"));
 let plugins = [];
@@ -20,7 +20,7 @@ const pluginFileExistOrExit = ($plugin, $pluginPath, $file) => {
         $file = ResolvedRoutePath;
     }
     $file = $pluginPath + "/" + $file;
-    if (!fs_1.default.existsSync($file)) {
+    if (!FS.existsSync($file)) {
         return $.logPerLine([
             { error: $plugin },
             { error: `REQUIRED FILE or DIR MISSING: ${$file}` },

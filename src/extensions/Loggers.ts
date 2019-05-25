@@ -65,6 +65,7 @@ $.logErrorAndExit = (...args) => {
 };
 
 $.logPerLine = ($logs = [], $spacePerLine= false) => {
+
     console.log();
     for (let i = 0; i < $logs.length; i++) {
         const $log = $logs[i];

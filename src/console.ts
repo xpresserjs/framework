@@ -1,5 +1,5 @@
 import {Xjs} from "../global";
-import fs from "fs";
+import fs = require("fs");
 declare let $: Xjs;
 
 const args = process.argv.splice(3);

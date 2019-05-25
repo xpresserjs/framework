@@ -7,21 +7,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const body_parser_1 = __importDefault(require("body-parser"));
-const connect_session_knex_1 = __importDefault(require("connect-session-knex"));
-const cors_1 = __importDefault(require("cors"));
-const express_1 = __importDefault(require("express"));
-const express_flash_1 = __importDefault(require("express-flash"));
-const express_session_1 = __importDefault(require("express-session"));
-const fs_extra_1 = __importDefault(require("fs-extra"));
-const path_1 = require("path");
+const FS = require("fs-extra");
+const { dirname, resolve } = require("path");
+const bodyParser = require("body-parser");
+const connect_session_knex = require("connect-session-knex");
+const cors = require("cors");
+const express = require("express");
+const flash = require("express-flash");
+const session = require("express-session");
 const http_1 = require("http");
 const paths = $.$config.get("paths");
-const app = express_1.default();
+const app = express();
 app.use((req, res, next) => {
     res.set("X-Powered-By", "Xjs");
     if ($.config.response.overrideServerName) {
@@ -29,7 +26,7 @@ app.use((req, res, next) => {
     }
     next();
 });
-app.use(express_1.default.static(paths.public, {
+app.use(express.static(paths.public, {
     setHeaders(res, path) {
         const responseConfig = $.config.response;
         if ($.config.response.cacheFiles) {
@@ -49,33 +46,34 @@ app.use(express_1.default.static(paths.public, {
         }
     },
 }));
-const KnexSessionStore = connect_session_knex_1.default(express_session_1.default);
+const Path = require("./helpers/Path");
+const KnexSessionStore = connect_session_knex(session);
 const knexSessionConfig = {
     client: "sqlite3",
     connection: {
-        filename: $.path.base($.config.paths.storage + "/app/db/sessions.sqlite"),
+        filename: Path.frameworkStorage("db/sessions.sqlite"),
     },
     useNullAsDefault: true,
 };
 const sessionFilePath = knexSessionConfig.connection.filename;
-if (!fs_extra_1.default.existsSync(sessionFilePath)) {
-    fs_extra_1.default.mkdirpSync(path_1.dirname(sessionFilePath));
+if (!FS.existsSync(sessionFilePath)) {
+    FS.mkdirpSync(dirname(sessionFilePath));
 }
 const store = new KnexSessionStore({
     knex: require("knex")(knexSessionConfig),
     tablename: "sessions",
 });
 // Add Cors
-app.use(cors_1.default());
-app.use(body_parser_1.default.json());
-app.use(body_parser_1.default.urlencoded({ extended: true }));
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 // Use Session
 const sessionConfig = _.extend({}, $.config.session, {
     store,
 });
-app.use(express_session_1.default(sessionConfig));
+app.use(session(sessionConfig));
 // Use Flash
-app.use(express_flash_1.default());
+app.use(flash());
 // Set local AppData
 app.locals.appData = {};
 $.app = app;
@@ -117,12 +115,7 @@ else {
         app.set("view engine", template.engine);
     }
 }
-const viewsPath = $.path.views();
-if (!(fs_extra_1.default.existsSync(viewsPath) && fs_extra_1.default.lstatSync(viewsPath).isDirectory())) {
-    $.logError("View path does not exists");
-    $.logError(viewsPath);
-}
-app.set("views", viewsPath);
+app.set("views", $.path.views());
 // Not Tinker? Require Controllers
 if (!$.$options.isTinker) {
     $.controller = require("./classes/Controller");
@@ -132,19 +125,29 @@ const ModelEngine = require("./ModelEngine");
 $.model = ModelEngine;
 // Include xjs/cycles/beforeRoutes.js if exists
 const beforeRoutesPath = $.path.base($.config.paths.xjs + "/cycles/beforeRoutes" + $.config.project.fileExtension);
-if (fs_extra_1.default.existsSync(beforeRoutesPath)) {
+if (FS.existsSync(beforeRoutesPath)) {
     require(beforeRoutesPath);
 }
-const Path = require("./helpers/Path");
+// import Path = require("./helpers/Path");
 const RouterEngine = require("./RouterEngine");
 $.routerEngine = RouterEngine;
 const RouteFile = Path.resolve($.config.paths.routesFile);
-// Require Routes
-try {
-    require(RouteFile);
+if (FS.existsSync(RouteFile)) {
+    try {
+        require(RouteFile);
+    }
+    catch (e) {
+        $.logPerLine([
+            { error: "Router Error:" },
+            { errorAndExit: e.message },
+        ]);
+    }
 }
-catch (e) {
-    $.logErrorAndExit("Routes File Missing.");
+else {
+    $.logPerLine([
+        { error: "Routes File Missing." },
+        { error: RouteFile },
+    ]);
 }
 // Import plugin routes
 const PluginData = $.engineData.get("PluginEngineData");
@@ -169,7 +172,7 @@ app.use((req, res, next) => {
 });
 // Include xjs/cycles/afterRoutes.js if exists
 const afterRoutesPath = $.path.base($.config.paths.xjs + "/cycles/afterRoutes.js");
-if (fs_extra_1.default.existsSync(afterRoutesPath)) {
+if (FS.existsSync(afterRoutesPath)) {
     require(afterRoutesPath);
 }
 // Start server if not tinker
@@ -196,16 +199,16 @@ if (!$.$options.isTinker && $.config.server.startOnBoot) {
         if (!files.key.length || !files.cert.length) {
             $.logErrorAndExit("Config {server.ssl.files} not configured properly!");
         }
-        files.key = path_1.resolve(files.key);
-        files.cert = path_1.resolve(files.cert);
-        if (!fs_extra_1.default.existsSync(files.key)) {
+        files.key = resolve(files.key);
+        files.cert = resolve(files.cert);
+        if (!FS.existsSync(files.key)) {
             $.logErrorAndExit("Key file {" + files.key + "} not found!");
         }
-        if (!fs_extra_1.default.existsSync(files.cert)) {
+        if (!FS.existsSync(files.cert)) {
             $.logErrorAndExit("Cert file {" + files.key + "} not found!");
         }
-        files.key = fs_extra_1.default.readFileSync(files.key);
-        files.cert = fs_extra_1.default.readFileSync(files.cert);
+        files.key = FS.readFileSync(files.key);
+        files.cert = FS.readFileSync(files.cert);
         https.createServer(files, app).listen(httpsPort, () => {
             $.log("Server started and available on " + $.helpers.url());
             $.log("PORT:" + httpsPort);

@@ -1,6 +1,14 @@
-import Xpresser = require("./index");
+import xpresser from "./index";
 
-Xpresser({
+xpresser({
+    name: "RedEye",
+    paths: {
+        base: __dirname,
+        npm: "base://node_modules",
+    },
+});
+
+/*Xpresser({
     name: "TestXjsApp",
     paths: {
         base: __dirname + "/test",
@@ -26,4 +34,4 @@ Xpresser({
             useNullAsDefault: true,
         },
     },
-});
+});*/

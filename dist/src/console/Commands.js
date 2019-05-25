@@ -1,11 +1,8 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-const os_1 = __importDefault(require("os"));
-const path_1 = __importDefault(require("path"));
-const fs_extra_1 = __importDefault(require("fs-extra"));
-const shelljs_1 = __importDefault(require("shelljs"));
+const os = require("os");
+const PATH = require("path");
+const fs = require("fs-extra");
+const shellJs = require("shelljs");
 const artisan = require("../functions/artisan.fn");
 const artisanConfig = $.config.artisan;
 const colors = require("../objects/consoleColors.obj");
@@ -79,26 +76,26 @@ const Commands = {
         }
         if (name === "--routes") {
             defaultContent = $.base64.encode($.routerEngine.nameToUrl());
-            defaultContent = "<script>" + os_1.default.EOL +
-                "window['--routes'] = '" + defaultContent + "';" + os_1.default.EOL +
+            defaultContent = "<script>" + os.EOL +
+                "window['--routes'] = '" + defaultContent + "';" + os.EOL +
                 "</script>";
         }
         name += "." + config.extension;
-        const viewsPath = path_1.default.dirname($.path.views(name));
-        if (!fs_extra_1.default.existsSync(viewsPath)) {
-            fs_extra_1.default.mkdirpSync(viewsPath);
+        const viewsPath = PATH.dirname($.path.views(name));
+        if (!fs.existsSync(viewsPath)) {
+            fs.mkdirpSync(viewsPath);
         }
         const fullPath = $.path.views(name);
-        if (name.substr(0, 2) !== "--" && fs_extra_1.default.existsSync(fullPath)) {
+        if (name.substr(0, 2) !== "--" && fs.existsSync(fullPath)) {
             return artisan.logThisAndExit("view {" + colors.fgYellow + name + colors.fgCyan + "} already exits!");
         }
         if (!defaultContent.length) {
             const defaultContentFile = $.path.views("_." + config.extension);
-            if (fs_extra_1.default.existsSync(defaultContentFile)) {
-                defaultContent = fs_extra_1.default.readFileSync(defaultContentFile).toString();
+            if (fs.existsSync(defaultContentFile)) {
+                defaultContent = fs.readFileSync(defaultContentFile).toString();
             }
         }
-        fs_extra_1.default.writeFileSync(fullPath, defaultContent);
+        fs.writeFileSync(fullPath, defaultContent);
         artisan.logThis("View created successfully!");
         artisan.logThisAndExit("Located @ " + fullPath);
     },
@@ -114,14 +111,14 @@ const Commands = {
         const filePath = $.path.base("knexfile.js");
         const migrations = $.path.base("migrations");
         PathHelper.makeDirIfNotExist(migrations);
-        fs_extra_1.default.writeFileSync(filePath, fileContent);
+        fs.writeFileSync(filePath, fileContent);
         if (args.length) {
-            shelljs_1.default.exec(`knex migrate:${args.join(" ")} --knexfile=${filePath}`);
+            shellJs.exec(`knex migrate:${args.join(" ")} --knexfile=${filePath}`);
         }
         else {
-            shelljs_1.default.exec(`knex migrate:latest --knexfile=${filePath}`);
+            shellJs.exec(`knex migrate:latest --knexfile=${filePath}`);
         }
-        fs_extra_1.default.unlinkSync(filePath);
+        fs.unlinkSync(filePath);
     },
 };
 module.exports = Commands;

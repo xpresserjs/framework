@@ -1,13 +1,15 @@
-import bodyParser from "body-parser";
-import connect_session_knex from "connect-session-knex";
-import cors from "cors";
-import express from "express";
-import flash from "express-flash";
-import session from "express-session";
-import FS from "fs-extra";
-import {dirname, resolve} from "path";
+import FS = require("fs-extra");
+
+const {dirname, resolve} = require("path");
 import {Xjs} from "../global";
 import {XjsHttp} from "../types/http";
+
+import bodyParser = require("body-parser");
+import connect_session_knex = require("connect-session-knex");
+import cors = require("cors");
+import express = require("express");
+import flash = require("express-flash");
+import session = require("express-session");
 
 import {createServer} from "http";
 
@@ -52,11 +54,13 @@ app.use(
     }),
 );
 
+import Path = require("./helpers/Path");
+
 const KnexSessionStore = connect_session_knex(session);
 const knexSessionConfig = {
     client: "sqlite3",
     connection: {
-        filename: $.path.base($.config.paths.storage + "/app/db/sessions.sqlite"),
+        filename: Path.frameworkStorage("db/sessions.sqlite"),
     },
     useNullAsDefault: true,
 };
@@ -143,14 +147,7 @@ if (typeof template.engine === "function") {
     }
 }
 
-const viewsPath = $.path.views();
-
-if (!(FS.existsSync(viewsPath) && FS.lstatSync(viewsPath).isDirectory())) {
-    $.logError("View path does not exists");
-    $.logError(viewsPath);
-}
-
-app.set("views", viewsPath);
+app.set("views", $.path.views());
 
 // Not Tinker? Require Controllers
 if (!$.$options.isTinker) {
@@ -169,18 +166,27 @@ if (FS.existsSync(beforeRoutesPath)) {
     require(beforeRoutesPath);
 }
 
-import Path = require("./helpers/Path");
+// import Path = require("./helpers/Path");
 import RouterEngine = require("./RouterEngine");
 
 $.routerEngine = RouterEngine;
 
 const RouteFile = Path.resolve($.config.paths.routesFile);
 
-// Require Routes
-try {
-    require(RouteFile);
-} catch (e) {
-    $.logErrorAndExit("Routes File Missing.");
+if (FS.existsSync(RouteFile)) {
+    try {
+        require(RouteFile);
+    } catch (e) {
+        $.logPerLine([
+            {error: "Router Error:"},
+            {errorAndExit: e.message},
+        ]);
+    }
+} else {
+    $.logPerLine([
+        {error: "Routes File Missing."},
+        {error: RouteFile},
+    ]);
 }
 
 // Import plugin routes
