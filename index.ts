@@ -41,7 +41,7 @@ const Xpresser = (AppConfig: object | string, AppOptions?: XpresserOptions): Xjs
     $.$options = AppOptions;
     $.engineData = new ObjectCollection();
 
-    if (typeof global.hasOwnProperty("XjsCliConfig")) {
+    if (typeof global["XjsCliConfig"] !== "undefined") {
         $.$options.isConsole = true;
     } else if (process.argv[2]) {
         const LaunchType = process.argv[2];

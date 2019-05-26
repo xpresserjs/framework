@@ -13,6 +13,7 @@
         "no-var-requires": false,
         "no-unnecessary-initializer": false,
         "no-shadowed-variable": false,
+        "no-string-literal": false,
         "ordered-imports": false
     },
     "rulesDirectory": []
