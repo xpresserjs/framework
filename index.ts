@@ -1,10 +1,11 @@
 /// <reference types="node"/>
 import XpresserRouter = require("@xpresser/router");
 import fs = require("fs");
-import _  = require("lodash");
+import _ = require("lodash");
 import {Xjs} from "./global";
 import Configurations = require("./src/config");
 import ObjectCollection = require("./src/helpers/ObjectCollection");
+
 const {Config, Options} = Configurations;
 
 const Xpresser = (AppConfig: object | string, AppOptions?: XpresserOptions): Xjs => {
@@ -40,7 +41,9 @@ const Xpresser = (AppConfig: object | string, AppOptions?: XpresserOptions): Xjs
     $.$options = AppOptions;
     $.engineData = new ObjectCollection();
 
-    if (process.argv[2]) {
+    if (typeof global.hasOwnProperty("XjsCliConfig")) {
+        $.$options.isConsole = true;
+    } else if (process.argv[2]) {
         const LaunchType = process.argv[2];
         if (LaunchType === "cli") {
             $.$options.isConsole = true;

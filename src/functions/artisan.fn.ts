@@ -1,11 +1,16 @@
-const fs = require('fs-extra');
-const Path = require('path');
-const Handlebars = require('handlebars');
-const Pluralise = require('pluralize');
-const colors = require('../objects/consoleColors.obj');
-const isTinker = typeof $.isTinker === 'boolean' && $.isTinker;
+import fs = require("fs-extra");
+import Path = require("path");
+import Handlebars = require("handlebars");
+import Pluralise = require("pluralize");
+import colors = require("../objects/consoleColors.obj");
+import {Xjs} from "../../global";
 
-module.exports = {
+declare let $: Xjs;
+declare let _: any;
+
+const isTinker = typeof $.$options.isTinker === "boolean" && $.$options.isTinker;
+
+export = {
     logThis(...args) {
         if (isTinker) {
             args.unshift(colors.fgMagenta);
@@ -36,38 +41,39 @@ module.exports = {
     copyFromFactoryToApp($for, $name, $to, $data = {}, addPrefix = true) {
         $name = _.upperFirst($name);
 
-        if (!fs.existsSync($to))
+        if (!fs.existsSync($to)) {
             fs.mkdirSync($to, {recursive: true});
+        }
 
         if (!$name.toLowerCase().includes($for)) {
-            if (addPrefix && $for !== 'model') {
+            if (addPrefix && $for !== "model") {
                 $name = $name + _.upperFirst($for);
             }
         }
 
-        $to = $to + '/' + $name + '.js';
+        $to = $to + "/" + $name + ".js";
 
         if (fs.existsSync($to)) {
-            return this.logThisAndExit($name + ' already exists!');
+            return this.logThisAndExit($name + " already exists!");
         }
 
         const thisPath = Path.dirname($to);
-        if (!fs.existsSync(thisPath)) fs.mkdirpSync(thisPath);
+        if (!fs.existsSync(thisPath)) { fs.mkdirpSync(thisPath); }
 
-        const $from = $.path.engine('factory/' + $for + '.hbs');
+        const $from = $.path.engine("factory/" + $for + ".hbs");
         $data = _.extend({}, {name: $name}, $data);
         fs.writeFileSync($to, this.factory($from, $data));
 
-        this.logThis($name + ' created successfully.');
-        this.logThis('located @ ' + $to);
+        this.logThis($name + " created successfully.");
+        this.logThis("located @ " + $to);
     },
 
     copyFolder($from, $to) {
         fs.copySync($from, $to);
-        $.logAndExit('Views folder published successful.');
+        $.logAndExit("Views folder published successful.");
     },
 
-    pluralize(str = '') {
+    pluralize(str = "") {
         if (!str.trim().length) {
             return Pluralise;
         }
@@ -77,5 +83,5 @@ module.exports = {
 
     singular(str) {
         return Pluralise.singular(str);
-    }
+    },
 };

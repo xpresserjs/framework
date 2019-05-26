@@ -3,8 +3,13 @@
  */
 module.exports = {
     command: '{{command}}',
-    // Handle Task
-    handler(args) {
+    // Job Handler
+    handler(args, job) {
+        // Your Job Here
 
+
+        // End of job
+        $.log(`JOB: ${this.command} was executed at ${$.helpers.now()}`);
+        job.end();
     }
 };

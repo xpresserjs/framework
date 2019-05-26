@@ -18,5 +18,7 @@ catch (e) {
     $.logErrorAndExit(e.message);
 }
 // $.routerEngine.processRoutes($.router.routes);
-require("./console");
+if (!global.hasOwnProperty("XjsCliConfig")) {
+    require("./console");
+}
 //# sourceMappingURL=StartConsole.js.map

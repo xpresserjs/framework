@@ -36,7 +36,7 @@ const Config = {
         base: __dirname,
         // Should be relative to the base set above.
         // e.g base+'/'+backend should resolve to /full/path/base/backend
-        backend: "backend",
+        backend: "base://backend",
         // Must be relative to base
         frontend: "frontend",
         public: "public",
@@ -47,6 +47,8 @@ const Config = {
         // Other Paths
         routesFile: "backend://routes.js",
         controllers: "backend://controllers",
+        models: "backend://models",
+        middlewares: "backend://middlewares",
         views: "backend://views",
         jsonConfigs: "base://_",
     },

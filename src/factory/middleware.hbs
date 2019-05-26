@@ -1,14 +1,14 @@
 /**
 * {{name}}
-* @type \{{allow(*): boolean}}
+* @type \{{allow(*): any}}
 */
-
 module.exports = {
 
+    // Default middleware action
     allow(x) {
         // run check here
 
-        return true;
+        return x.next();
     }
 
 };

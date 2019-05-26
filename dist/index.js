@@ -32,7 +32,10 @@ const Xpresser = (AppConfig, AppOptions) => {
     $.$config = new ObjectCollection($.config);
     $.$options = AppOptions;
     $.engineData = new ObjectCollection();
-    if (process.argv[2]) {
+    if (typeof global.hasOwnProperty("XjsCliConfig")) {
+        $.$options.isConsole = true;
+    }
+    else if (process.argv[2]) {
         const LaunchType = process.argv[2];
         if (LaunchType === "cli") {
             $.$options.isConsole = true;

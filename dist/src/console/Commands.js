@@ -46,7 +46,7 @@ const Commands = {
         if (typeof middleware === "undefined") {
             return logThis("Middleware name not defined!");
         }
-        const middlewaresPath = $.path.backend("middlewares");
+        const middlewaresPath = PathHelper.resolve($.config.path.middlewares);
         artisan.copyFromFactoryToApp("middleware", middleware, middlewaresPath);
     },
     "make:model"(args) {
@@ -56,15 +56,15 @@ const Commands = {
             return logThis("Model name not defined!");
         }
         if (typeof table === "undefined") {
-            table = artisan.pluralize(name);
+            table = name;
         }
         if (artisanConfig.singleModelName) {
             name = artisan.singular(name);
         }
         if (artisanConfig.pluralizeModelTable) {
-            table = artisan.pluralize(name).toLowerCase();
+            table = artisan.pluralize(name.toLowerCase());
         }
-        const modelPath = $.path.backend("models");
+        const modelPath = PathHelper.resolve($.config.paths.models);
         artisan.copyFromFactoryToApp("model", name, modelPath, { name, table });
     },
     "make:view"(args) {

@@ -4,7 +4,6 @@ import {Xjs} from "../global";
 import Path = require("./helpers/Path");
 import fs = require("fs");
 
-
 declare let $: Xjs;
 
 $.model = ModelEngine;
@@ -22,5 +21,6 @@ try {
 }
 
 // $.routerEngine.processRoutes($.router.routes);
-
-require("./console");
+if (!global.hasOwnProperty("XjsCliConfig")) {
+    require("./console");
+}
