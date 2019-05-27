@@ -1,6 +1,7 @@
 "use strict";
 const PATH = require("path");
 const fs = require("fs-extra");
+const mkdirp = require("mkdirp");
 const pathHelpers = {
     base: "base://",
     backend: "backend://",
@@ -70,7 +71,17 @@ const PathHelper = {
             $path = PATH.dirname($path);
         }
         if (!fs.existsSync($path)) {
-            fs.mkdirSync($path, { recursive: true });
+            try {
+                fs.mkdirSync($path, { recursive: true });
+            }
+            catch (e) {
+                try {
+                    mkdirp.sync($path);
+                }
+                catch (e) {
+                    $.logErrorAndExit(e.message);
+                }
+            }
         }
         return $path;
     },
