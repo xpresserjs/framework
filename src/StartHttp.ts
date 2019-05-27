@@ -18,7 +18,7 @@ declare let _: any;
 declare let $: Xjs;
 
 const paths = $.$config.get("paths");
-const $pluginData = $.engineData.get("PluginEngine:namespaces", null);
+const $pluginData = $.engineData.get("PluginEngine:namespaces", {});
 const $pluginNamespaceKeys = Object.keys($pluginData);
 
 const app = express();
