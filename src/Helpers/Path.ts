@@ -88,7 +88,7 @@ const PathHelper = {
         }
 
         if (!fs.existsSync($path)) {
-            fs.mkdirSync($path);
+            fs.mkdirSync($path, {recursive: true});
         }
 
         return $path;
