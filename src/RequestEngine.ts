@@ -2,8 +2,8 @@ import ejs = require("ejs");
 import fs = require("fs");
 import {Xjs} from "../global";
 import {XjsHttp} from "../types/http";
-import requestHelpers = require("./functions/request.fn");
-import ObjectCollection = require("./helpers/ObjectCollection");
+import requestHelpers = require("./Functions/request.fn");
+import ObjectCollection = require("./Helpers/ObjectCollection");
 
 declare let _: any;
 declare let $: Xjs;
@@ -43,27 +43,6 @@ class RequestEngine {
         this.locals = new ObjectCollection(res.locals);
 
         this.fn = _.extend({}, $.helpers, requestHelpers(this));
-    }
-
-    public async auth() {
-        const x = this;
-
-        if (!x.isLogged()) {
-            return null;
-        }
-
-        const User = $.path.backend("models/User" + $.config.project.fileExtension, true);
-        const email = $.base64.decode(x.session.email);
-
-        return await User.query().where("email", email).first();
-    }
-
-    /**
-     * Get Auth User Object
-     * @returns {*}
-     */
-    public authUser() {
-        return this.res.locals[$.config.auth.templateVariable];
     }
 
     /**
@@ -298,33 +277,6 @@ class RequestEngine {
         const view = $.path.engine("backend/views/" + file);
         return this.renderView(view, data, true, true);
 
-    }
-
-    /**
-     * If User is logged
-     * @returns {boolean}
-     */
-    public isLogged() {
-        /*
-        * If authUser has been set before then return true.
-        * Prevents Bcrypt from running twice.
-        * ThereBy increasing runtime.
-        */
-        if (this.authUser() !== undefined) {
-            return true;
-        }
-
-        const x = this;
-
-        if (typeof x.session.email === "undefined" || typeof x.session.loginKey === "undefined") {
-            return false;
-        }
-
-        const email = $.base64.decode(x.session.email);
-        const hash = $.base64.decode(x.session.loginKey);
-
-        // @ts-ignore
-        return !!$.bcrypt.compareSync(email, hash);
     }
 
     /**

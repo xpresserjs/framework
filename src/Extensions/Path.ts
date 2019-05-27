@@ -1,6 +1,6 @@
 import FS = require("fs");
 import {Xjs} from "../../global";
-import Path = require("../helpers/Path");
+import Path = require("../Helpers/Path");
 
 const packageName: string = "xpresser";
 
@@ -69,6 +69,16 @@ $.path = {
         const controller = Path.resolve([$.config.paths.controllers, path]);
 
         return returnRequire ? require(controller) : controller;
+    },
+
+    models: (path: string = "", returnRequire: boolean = false): string | any => {
+        if (path[0] === "/") {
+            path = path.substr(1);
+        }
+
+        const model = Path.resolve([$.config.paths.models, path]);
+
+        return returnRequire ? require(model) : model;
     },
 
     views: (path: string = "") => {

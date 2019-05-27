@@ -5,10 +5,10 @@
  * UseEngine is later exposed to the framework as $.use
  */
 
-import fs  = require("fs");
+import fs = require("fs");
 import {JsonSettings} from "../global";
-import PathHelper from "./helpers/Path";
-import StringHelper from "./helpers/String";
+import PathHelper = require("./Helpers/Path");
+import StringHelper = require("./Helpers/String");
 
 declare let $: any;
 
@@ -38,7 +38,6 @@ if ($.engineData.has(UsePath)) {
         const MiddlewareSuffix = "Middleware";
         const useMiddlewares = Use.middlewares;
         const middlewareKeys = Object.keys(useMiddlewares);
-
 
         for (let i = 0; i < middlewareKeys.length; i++) {
             const middlewareKey = middlewareKeys[i];
@@ -152,7 +151,7 @@ class UseEngine {
      * @return {boolean|*}
      */
     public static model(model, handleError = true) {
-        const fullPath = $.path.backend("models/{file}" + $.config.project.fileExtension);
+        const fullPath = PathHelper.resolve($.config.paths.models) + "/{file}" + $.config.project.fileExtension;
         const [hasPath, realPath] = fileExistsInPath(model, fullPath);
 
         if (!hasPath) {

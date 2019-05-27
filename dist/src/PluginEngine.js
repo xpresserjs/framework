@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 const FS = require("fs");
-const ObjectCollection_1 = __importDefault(require("./helpers/ObjectCollection"));
-const Path_1 = __importDefault(require("./helpers/Path"));
+const ObjectCollection = require("./Helpers/ObjectCollection");
+const PathHelper = require("./Helpers/Path");
 let plugins = [];
 const pluginRoutes = [];
 const PluginNamespaceToData = {};
@@ -15,7 +12,7 @@ catch (e) {
     // Do Absolutely Nothing
 }
 const pluginFileExistOrExit = ($plugin, $pluginPath, $file) => {
-    const ResolvedRoutePath = Path_1.default.resolve($file, false);
+    const ResolvedRoutePath = PathHelper.resolve($file, false);
     if ($file === ResolvedRoutePath) {
         $file = ResolvedRoutePath;
     }
@@ -34,12 +31,12 @@ class PluginEngine {
         if (plugins.length) {
             for (let i = 0; i < plugins.length; i++) {
                 const $plugin = plugins[i];
-                const $pluginPath = Path_1.default.resolve($plugin);
+                const $pluginPath = PathHelper.resolve($plugin);
                 try {
                     const $data = PluginEngine.loadPluginUseData($plugin, $pluginPath);
                     PluginNamespaceToData[$data.namespace] = PluginEngine.usePlugin($plugin, $pluginPath, $data);
                     $.engineData.set("PluginEngine:namespaces", PluginNamespaceToData);
-                    $.logInfo(`Using Plugin --> ${$data.namespace}`);
+                    $.logIfNotConsole(`Using Plugin --> ${$data.namespace}`);
                 }
                 catch (e) {
                     $.logPerLine([
@@ -60,9 +57,10 @@ class PluginEngine {
         return data;
     }
     static usePlugin($plugin, $path, data) {
-        const $data = new ObjectCollection_1.default(data);
+        const $data = new ObjectCollection(data);
         let $pluginData;
         $pluginData = {
+            namespace: $data.get("namespace"),
             plugin: $plugin,
             path: $path,
         };
@@ -80,6 +78,41 @@ class PluginEngine {
             let viewsPath = $data.get("paths.views");
             viewsPath = pluginFileExistOrExit($plugin, $path, viewsPath);
             $pluginData.views = viewsPath;
+        }
+        if ($data.has("paths.migrations")) {
+            let migrationPath = $data.get("paths.migrations");
+            migrationPath = pluginFileExistOrExit($plugin, $path, migrationPath);
+            $pluginData.migrations = migrationPath;
+        }
+        if ($data.has("paths.models")) {
+            let modelPath = $data.get("paths.models");
+            modelPath = pluginFileExistOrExit($plugin, $path, modelPath);
+            $pluginData.models = modelPath;
+        }
+        if ($data.has("paths.middlewares")) {
+            let middlewarePath = $data.get("paths.middlewares");
+            middlewarePath = pluginFileExistOrExit($plugin, $path, middlewarePath);
+            $pluginData.middlewares = middlewarePath;
+        }
+        if ($data.has("globalMiddlewares")) {
+            const globalMiddlewares = $data.get("globalMiddlewares");
+            $pluginData.globalMiddlewares = [];
+            for (let i = 0; i < globalMiddlewares.length; i++) {
+                let globalMiddleware = globalMiddlewares[i];
+                if (globalMiddleware.substr(-3) !== $.config.project.fileExtension) {
+                    globalMiddleware += $.config.project.fileExtension;
+                }
+                // tslint:disable-next-line:max-line-length
+                $pluginData.globalMiddlewares.push(pluginFileExistOrExit($plugin, $pluginData.middlewares, globalMiddleware));
+            }
+        }
+        if ($data.has("extends")) {
+            const extensionData = {};
+            if ($data.has("extends.RequestEngine")) {
+                const $extenderPath = $data.get("extends.RequestEngine");
+                extensionData["RequestEngine"] = pluginFileExistOrExit($plugin, $path, $extenderPath);
+            }
+            $pluginData.extends = extensionData;
         }
         return $pluginData;
     }

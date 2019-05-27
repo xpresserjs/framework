@@ -1,15 +1,12 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 // @ts-check
 const moment = require("moment");
 const objection_1 = require("objection");
-const ModelQueryBuilder_1 = __importDefault(require("./database/ModelQueryBuilder"));
+const ModelQueryBuilder = require("./Database/ModelQueryBuilder");
 // @ts-ignore
 class ModelEngine extends objection_1.Model {
     static get QueryBuilder() {
-        return ModelQueryBuilder_1.default;
+        return ModelQueryBuilder;
     }
     $formatJson(json) {
         return _.omit(json, this.$hidden);

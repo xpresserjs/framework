@@ -33,7 +33,7 @@ class ModelQueryBuilder extends QueryBuilder<Model> {
     }
 
     /**
-     * Paginate results from database. This method is same as
+     * Paginate results from Database. This method is same as
      * @ref('Database.forPage') but instead returns pagination
      * meta data as well.
      * @method paginate

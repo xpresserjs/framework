@@ -8,9 +8,9 @@ if (args[2] === "--from-tinker") {
     args.splice(2, 1);
 }
 
-import commands = require("./console/Commands");
+import commands = require("./Console/Commands");
 
-// Require artisan helper functions
+// Require artisan helper Functions
 const argCommand = args[0];
 if (typeof argCommand === "undefined") {
     $.logErrorAndExit("No command provided!");

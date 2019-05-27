@@ -4,7 +4,7 @@ import fs = require("fs");
 import _ = require("lodash");
 import {Xjs} from "./global";
 import Configurations = require("./src/config");
-import ObjectCollection = require("./src/helpers/ObjectCollection");
+import ObjectCollection = require("./src/Helpers/ObjectCollection");
 
 const {Config, Options} = Configurations;
 
@@ -51,20 +51,18 @@ const Xpresser = (AppConfig: object | string, AppOptions?: XpresserOptions): Xjs
     }
 
     // Include Loggers
-    require("./src/extensions/Loggers");
+    require("./src/Extensions/Loggers");
 
     $.logIfNotConsole(`Starting ${$.config.name}...`);
 
     // Include Path Extension
-    require("./src/extensions/Path");
+    require("./src/Extensions/Path");
 
-    if (!$.$options.isConsole) {
-        // Require Plugin Engine and load plugins
-        const PluginEngine = require("./src/PluginEngine");
-        const PluginData = PluginEngine.loadPlugins();
+    // Require Plugin Engine and load plugins
+    const PluginEngine = require("./src/PluginEngine");
+    const PluginData = PluginEngine.loadPlugins();
 
-        $.engineData.set("PluginEngineData", PluginData);
-    }
+    $.engineData.set("PluginEngineData", PluginData);
 
     // Global
     require("./src/global");

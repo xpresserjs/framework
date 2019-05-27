@@ -4,7 +4,7 @@ const XpresserRouter = require("@xpresser/router");
 const fs = require("fs");
 const _ = require("lodash");
 const Configurations = require("./src/config");
-const ObjectCollection = require("./src/helpers/ObjectCollection");
+const ObjectCollection = require("./src/Helpers/ObjectCollection");
 const { Config, Options } = Configurations;
 const Xpresser = (AppConfig, AppOptions) => {
     if (AppConfig === undefined) {
@@ -42,16 +42,14 @@ const Xpresser = (AppConfig, AppOptions) => {
         }
     }
     // Include Loggers
-    require("./src/extensions/Loggers");
+    require("./src/Extensions/Loggers");
     $.logIfNotConsole(`Starting ${$.config.name}...`);
     // Include Path Extension
-    require("./src/extensions/Path");
-    if (!$.$options.isConsole) {
-        // Require Plugin Engine and load plugins
-        const PluginEngine = require("./src/PluginEngine");
-        const PluginData = PluginEngine.loadPlugins();
-        $.engineData.set("PluginEngineData", PluginData);
-    }
+    require("./src/Extensions/Path");
+    // Require Plugin Engine and load plugins
+    const PluginEngine = require("./src/PluginEngine");
+    const PluginData = PluginEngine.loadPlugins();
+    $.engineData.set("PluginEngineData", PluginData);
     // Global
     require("./src/global");
     // Add Router

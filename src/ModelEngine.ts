@@ -1,7 +1,7 @@
 // @ts-check
 import moment = require("moment");
 import {Model} from "objection";
-import ModelQueryBuilder from "./database/ModelQueryBuilder";
+import ModelQueryBuilder = require("./Database/ModelQueryBuilder");
 
 declare let _: any;
 declare let $: any;

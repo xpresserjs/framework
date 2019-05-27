@@ -29,6 +29,16 @@ const Config = {
     database: {
         startOnBoot: true,
         timestampFormat: DefaultTimestamp,
+        config: {
+            client: "sqlite",
+            connection: {
+                filename: "database.sqlite",
+            },
+            migrations: {
+                tableName: "migrations",
+            },
+            useNullAsDefault: true,
+        },
     },
     date: {
         format: DefaultTimestamp,
@@ -69,8 +79,8 @@ const Config = {
         },
     },
     auth: {
-        userModel: "User",
-        afterLoginRoute: "dashboard",
+        userModel: "Auth/User",
+        afterLoginRoute: "auth.dashboard",
         templateVariable: "user",
         viewsFromEngine: true,
     },

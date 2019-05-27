@@ -7,11 +7,11 @@ import PATH = require("path");
 import fs = require("fs-extra");
 import shellJs = require("shelljs");
 
-import artisan = require("../functions/artisan.fn");
+import artisan = require("../Functions/artisan.fn");
 
 const artisanConfig = $.config.artisan;
-import colors = require("../objects/consoleColors.obj");
-import PathHelper = require("../helpers/Path");
+import colors = require("../Objects/consoleColors.obj");
+import PathHelper = require("../Helpers/Path");
 
 const logThis = artisan.logThis;
 
@@ -29,8 +29,8 @@ const Commands = {
             return logThis("Plugin not specified!");
         }
 
-        console.log(PathHelper.resolve($plugin));
-
+        const PluginInstaller = require("../Plugins/Installer");
+        PluginInstaller($plugin);
     },
     "make:job"(args) {
         const job = args[0];
@@ -140,6 +140,9 @@ const Commands = {
 
     "migrate"(args) {
         const $config = $.$config.get("database.config", {});
+        if (!Object.keys($config).length) {
+            return $.logErrorAndExit("Database config not found.");
+        }
         const data = JSON.stringify({
             [$.$config.get("env", "development")]: $config,
         }, null, 2);

@@ -16,8 +16,11 @@ const cors = require("cors");
 const express = require("express");
 const flash = require("express-flash");
 const session = require("express-session");
+const ObjectCollection = require("./Helpers/ObjectCollection");
 const http_1 = require("http");
 const paths = $.$config.get("paths");
+const $pluginData = $.engineData.get("PluginEngine:namespaces", null);
+const $pluginNamespaceKeys = Object.keys($pluginData);
 const app = express();
 app.use((req, res, next) => {
     res.set("X-Powered-By", "Xjs");
@@ -46,7 +49,7 @@ app.use(express.static(paths.public, {
         }
     },
 }));
-const Path = require("./helpers/Path");
+const Path = require("./Helpers/Path");
 const KnexSessionStore = connect_session_knex(session);
 const knexSessionConfig = {
     client: "sqlite3",
@@ -77,7 +80,6 @@ app.use(flash());
 // Set local AppData
 app.locals.appData = {};
 $.app = app;
-const RequestEngine = require("./RequestEngine");
 app.use((req, res, next) => __awaiter(this, void 0, void 0, function* () {
     // Convert Empty Strings to Null
     if (req.body && Object.keys(req.body).length) {
@@ -86,13 +88,6 @@ app.use((req, res, next) => __awaiter(this, void 0, void 0, function* () {
         ...Object.keys(req.body).map((key) => ({
             [key]: typeof req.body[key] === "string" && req.body[key].trim() === "" ? null : req.body[key],
         })));
-    }
-    const x = new RequestEngine(req, res);
-    if (x.isLogged()) {
-        res.locals[$.config.auth.templateVariable] = yield x.auth();
-    }
-    else {
-        res.locals[$.config.auth.templateVariable] = undefined;
     }
     next();
 }));
@@ -118,17 +113,61 @@ else {
 app.set("views", $.path.views());
 // Not Tinker? Require Controllers
 if (!$.$options.isTinker) {
-    $.controller = require("./classes/Controller");
+    $.controller = require("./Classes/Controller");
 }
 // Require Model Engine
 const ModelEngine = require("./ModelEngine");
 $.model = ModelEngine;
-// Include xjs/cycles/beforeRoutes.js if exists
-const beforeRoutesPath = $.path.base($.config.paths.xjs + "/cycles/beforeRoutes" + $.config.project.fileExtension);
-if (FS.existsSync(beforeRoutesPath)) {
-    require(beforeRoutesPath);
+const MainRequestEngine = require("./RequestEngine");
+let RequestEngine = MainRequestEngine;
+const ExtendRequestEngineUsing = ($extender) => {
+    RequestEngine = $extender(RequestEngine);
+};
+for (let k = 0; k < $pluginNamespaceKeys.length; k++) {
+    const $pluginNamespaceKey = $pluginNamespaceKeys[k];
+    const $plugin = new ObjectCollection($pluginData[$pluginNamespaceKey]);
+    if ($plugin.has("extends.RequestEngine")) {
+        const $requestEngineExtender = $plugin.get("extends.RequestEngine");
+        try {
+            const $requestEngine = require($requestEngineExtender);
+            ExtendRequestEngineUsing($requestEngine);
+        }
+        catch (e) {
+            $.logPerLine([
+                {
+                    error: e.message,
+                    errorAndExit: "",
+                },
+            ]);
+        }
+    }
 }
-// import Path = require("./helpers/Path");
+for (let i = 0; i < $pluginNamespaceKeys.length; i++) {
+    const $pluginNamespaceKey = $pluginNamespaceKeys[i];
+    const $plugin = new ObjectCollection($pluginData[$pluginNamespaceKey]);
+    if ($plugin.has("globalMiddlewares")) {
+        const $globalMiddlewareWrapper = ($middlewareFn) => {
+            return (res, req, next) => __awaiter(this, void 0, void 0, function* () {
+                const x = new RequestEngine(res, req, next);
+                return $middlewareFn(x);
+            });
+        };
+        const $middlewares = $plugin.get("globalMiddlewares");
+        for (let j = 0; j < $middlewares.length; j++) {
+            const $middleware = $middlewares[j];
+            try {
+                const $globalMiddleware = $globalMiddlewareWrapper(require($middleware));
+                $.app.use($globalMiddleware);
+            }
+            catch (e) {
+                $.logPerLine([{
+                        error: e.message,
+                        errorAndExit: "",
+                    }]);
+            }
+        }
+    }
+}
 const RouterEngine = require("./RouterEngine");
 $.routerEngine = RouterEngine;
 const RouteFile = Path.resolve($.config.paths.routesFile);

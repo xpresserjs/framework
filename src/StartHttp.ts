@@ -10,6 +10,7 @@ import cors = require("cors");
 import express = require("express");
 import flash = require("express-flash");
 import session = require("express-session");
+import ObjectCollection = require("./Helpers/ObjectCollection");
 
 import {createServer} from "http";
 
@@ -17,6 +18,8 @@ declare let _: any;
 declare let $: Xjs;
 
 const paths = $.$config.get("paths");
+const $pluginData = $.engineData.get("PluginEngine:namespaces", null);
+const $pluginNamespaceKeys = Object.keys($pluginData);
 
 const app = express();
 
@@ -54,7 +57,7 @@ app.use(
     }),
 );
 
-import Path = require("./helpers/Path");
+import Path = require("./Helpers/Path");
 
 const KnexSessionStore = connect_session_knex(session);
 const knexSessionConfig = {
@@ -96,8 +99,6 @@ app.locals.appData = {};
 
 $.app = app;
 
-import RequestEngine = require("./RequestEngine");
-
 app.use(async (req: XjsHttp.Request, res: XjsHttp.Response, next?: () => void) => {
 
     // Convert Empty Strings to Null
@@ -108,14 +109,6 @@ app.use(async (req: XjsHttp.Request, res: XjsHttp.Response, next?: () => void) =
                 [key]: typeof req.body[key] === "string" && req.body[key].trim() === "" ? null : req.body[key],
             })),
         );
-    }
-
-    const x = new RequestEngine(req, res);
-
-    if (x.isLogged()) {
-        res.locals[$.config.auth.templateVariable] = await x.auth();
-    } else {
-        res.locals[$.config.auth.templateVariable] = undefined;
     }
 
     next();
@@ -151,7 +144,7 @@ app.set("views", $.path.views());
 
 // Not Tinker? Require Controllers
 if (!$.$options.isTinker) {
-    $.controller = require("./classes/Controller");
+    $.controller = require("./Classes/Controller");
 }
 
 // Require Model Engine
@@ -159,14 +152,64 @@ import ModelEngine = require("./ModelEngine");
 
 $.model = ModelEngine;
 
-// Include xjs/cycles/beforeRoutes.js if exists
-const beforeRoutesPath = $.path.base($.config.paths.xjs + "/cycles/beforeRoutes" + $.config.project.fileExtension);
+import MainRequestEngine = require("./RequestEngine");
 
-if (FS.existsSync(beforeRoutesPath)) {
-    require(beforeRoutesPath);
+let RequestEngine: typeof MainRequestEngine = MainRequestEngine;
+
+const ExtendRequestEngineUsing = ($extender) => {
+    RequestEngine = $extender(RequestEngine);
+};
+
+for (let k = 0; k < $pluginNamespaceKeys.length; k++) {
+    const $pluginNamespaceKey = $pluginNamespaceKeys[k];
+    const $plugin = new ObjectCollection($pluginData[$pluginNamespaceKey]);
+
+    if ($plugin.has("extends.RequestEngine")) {
+        const $requestEngineExtender = $plugin.get("extends.RequestEngine");
+        try {
+            const $requestEngine = require($requestEngineExtender);
+            ExtendRequestEngineUsing($requestEngine);
+        } catch (e) {
+            $.logPerLine([
+                {
+                    error: e.message,
+                    errorAndExit: "",
+                },
+            ]);
+        }
+    }
 }
 
-// import Path = require("./helpers/Path");
+for (let i = 0; i < $pluginNamespaceKeys.length; i++) {
+    const $pluginNamespaceKey = $pluginNamespaceKeys[i];
+    const $plugin = new ObjectCollection($pluginData[$pluginNamespaceKey]);
+
+    if ($plugin.has("globalMiddlewares")) {
+        const $globalMiddlewareWrapper = ($middlewareFn: any) => {
+            return async (res, req, next) => {
+                const x = new RequestEngine(res, req, next);
+                return $middlewareFn(x);
+            };
+        };
+
+        const $middlewares = $plugin.get("globalMiddlewares");
+
+        for (let j = 0; j < $middlewares.length; j++) {
+            const $middleware = $middlewares[j];
+
+            try {
+                const $globalMiddleware = $globalMiddlewareWrapper(require($middleware));
+                $.app.use($globalMiddleware);
+            } catch (e) {
+                $.logPerLine([{
+                    error: e.message,
+                    errorAndExit: "",
+                }]);
+            }
+        }
+    }
+}
+
 import RouterEngine = require("./RouterEngine");
 
 $.routerEngine = RouterEngine;

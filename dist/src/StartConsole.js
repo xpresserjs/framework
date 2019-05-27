@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const ModelEngine = require("./ModelEngine");
 const RouterEngine = require("./RouterEngine");
-const Path = require("./helpers/Path");
+const Path = require("./Helpers/Path");
 const fs = require("fs");
 $.model = ModelEngine;
 $.routerEngine = RouterEngine;

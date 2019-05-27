@@ -1,7 +1,7 @@
 import ModelEngine = require("./ModelEngine");
 import RouterEngine = require("./RouterEngine");
 import {Xjs} from "../global";
-import Path = require("./helpers/Path");
+import Path = require("./Helpers/Path");
 import fs = require("fs");
 
 declare let $: Xjs;

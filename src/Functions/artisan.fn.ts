@@ -2,7 +2,7 @@ import fs = require("fs-extra");
 import Path = require("path");
 import Handlebars = require("handlebars");
 import Pluralise = require("pluralize");
-import colors = require("../objects/consoleColors.obj");
+import colors = require("../Objects/consoleColors.obj");
 import {Xjs} from "../../global";
 
 declare let $: Xjs;
@@ -60,7 +60,7 @@ export = {
         const thisPath = Path.dirname($to);
         if (!fs.existsSync(thisPath)) { fs.mkdirpSync(thisPath); }
 
-        const $from = $.path.engine("factory/" + $for + ".hbs");
+        const $from = $.path.engine("Factory/" + $for + ".hbs");
         $data = _.extend({}, {name: $name}, $data);
         fs.writeFileSync($to, this.factory($from, $data));
 

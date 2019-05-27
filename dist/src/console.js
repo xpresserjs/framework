@@ -6,8 +6,8 @@ if (args[2] === "--from-tinker") {
     $.$options.isTinker = true;
     args.splice(2, 1);
 }
-const commands = require("./console/Commands");
-// Require artisan helper functions
+const commands = require("./Console/Commands");
+// Require artisan helper Functions
 const argCommand = args[0];
 if (typeof argCommand === "undefined") {
     $.logErrorAndExit("No command provided!");

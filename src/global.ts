@@ -1,20 +1,21 @@
 // ts-check
 import moment from "moment";
-import Base64 from "./helpers/Base64";
+import Base64  = require("./Helpers/Base64");
+
 declare let $: any;
 
 global.moment = moment;
 
 // Use Base64 and Object-validator-pro
 $.base64 = Base64;
-$.ovp = require("./helpers/ObjectValidatorPro");
+$.ovp = require("./Helpers/ObjectValidatorPro");
 
 /**
- * If database.startOnBoot,
+ * If Database.startOnBoot,
  * Start Database on boot and set to $.db else set undefined
  */
 if ($.config.database.startOnBoot) {
-    const DB = require("./database/Db");
+    const DB = require("./Database/Db");
     $.db = new DB();
 } else {
     $.db = undefined;
@@ -22,10 +23,9 @@ if ($.config.database.startOnBoot) {
 
 // Use Engine
 $.use = require("./UseEngine");
-
 $.helpers = require("./helpers");
 
-// $.helpers.
+// $.Helpers.
 
 // Assign Functions to $.fn
-$.fn = require("./functions/x.fn");
+$.fn = require("./Functions/x.fn");

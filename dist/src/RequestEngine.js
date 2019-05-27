@@ -1,16 +1,8 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 const ejs = require("ejs");
 const fs = require("fs");
-const requestHelpers = require("./functions/request.fn");
-const ObjectCollection = require("./helpers/ObjectCollection");
+const requestHelpers = require("./Functions/request.fn");
+const ObjectCollection = require("./Helpers/ObjectCollection");
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
 class RequestEngine {
     /**
@@ -32,24 +24,6 @@ class RequestEngine {
         this.bothData = this.all();
         this.locals = new ObjectCollection(res.locals);
         this.fn = _.extend({}, $.helpers, requestHelpers(this));
-    }
-    auth() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const x = this;
-            if (!x.isLogged()) {
-                return null;
-            }
-            const User = $.path.backend("models/User" + $.config.project.fileExtension, true);
-            const email = $.base64.decode(x.session.email);
-            return yield User.query().where("email", email).first();
-        });
-    }
-    /**
-     * Get Auth User Object
-     * @returns {*}
-     */
-    authUser() {
-        return this.res.locals[$.config.auth.templateVariable];
     }
     /**
      * Route
@@ -248,28 +222,6 @@ class RequestEngine {
     renderViewFromEngine(file, data) {
         const view = $.path.engine("backend/views/" + file);
         return this.renderView(view, data, true, true);
-    }
-    /**
-     * If User is logged
-     * @returns {boolean}
-     */
-    isLogged() {
-        /*
-        * If authUser has been set before then return true.
-        * Prevents Bcrypt from running twice.
-        * ThereBy increasing runtime.
-        */
-        if (this.authUser() !== undefined) {
-            return true;
-        }
-        const x = this;
-        if (typeof x.session.email === "undefined" || typeof x.session.loginKey === "undefined") {
-            return false;
-        }
-        const email = $.base64.decode(x.session.email);
-        const hash = $.base64.decode(x.session.loginKey);
-        // @ts-ignore
-        return !!$.bcrypt.compareSync(email, hash);
     }
     /**
      * Send Message to view

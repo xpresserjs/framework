@@ -1,12 +1,12 @@
 import express = require("express");
 import ObjectValidator from "object-validator-pro";
-import Controller = require("./src/classes/Controller");
-import ObjectCollection from "./src/helpers/ObjectCollection";
+import Controller = require("./src/Classes/Controller");
+import ObjectCollection from "./src/Helpers/ObjectCollection";
 import ModelEngine from "./src/ModelEngine";
 import RouterEngine = require("./src/RouterEngine");
 import UseEngine = require("./src/UseEngine");
 
-type DB = import("./src/database/Db");
+type DB = import("./src/Database/Db");
 
 declare namespace JsonSettings {
     interface Use {
@@ -88,6 +88,11 @@ declare interface Xjs {
         views(path?: string): string;
 
         /**
+         * Get path in Framework view folder
+         */
+        models(path?: string, returnRequire?: boolean): string;
+
+        /**
          * Get json in json configs folder
          */
         jsonConfigs(path?: string): string;
@@ -111,7 +116,7 @@ declare interface Xjs {
     logInfo(...args): void;
 
     /**
-     * Log only if not console
+     * Log only if not Console
      */
     logIfNotConsole(...args): void;
 

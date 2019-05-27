@@ -1,38 +1,31 @@
-import knex from "knex";
-declare let $: any;
-
-
+"use strict";
+const knex = require("knex");
 class DB {
-    public knex: knex;
-
     constructor() {
         if (!$.$config.has("database.config")) {
             return;
         }
         const database = $.config.database.config;
-
         const databaseConfigIsValid = $.ovp.validate(database, {
-            client: {must: true},
-            connection: {checkDbConfig: true},
+            client: { must: true },
+            connection: { checkDbConfig: true },
         });
-
         if (!databaseConfigIsValid) {
             process.exit();
         }
-
         try {
             this.knex = knex($.config.database.config);
-        } catch (e) {
+        }
+        catch (e) {
             $.logAndExit(e);
         }
     }
-
-    public sql(arg) {
+    sql(arg) {
         if (arg == null) {
             return this.knex.queryBuilder();
         }
         return this.knex(arg);
     }
 }
-
-export = DB;
+module.exports = DB;
+//# sourceMappingURL=Db.js.map

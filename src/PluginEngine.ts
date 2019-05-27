@@ -1,6 +1,6 @@
 import FS = require("fs");
-import ObjectCollection from "./helpers/ObjectCollection";
-import PathHelper from "./helpers/Path";
+import ObjectCollection = require("./Helpers/ObjectCollection");
+import PathHelper = require("./Helpers/Path");
 import {Xjs} from "../global";
 
 declare let $: Xjs;
@@ -25,7 +25,6 @@ const pluginFileExistOrExit = ($plugin, $pluginPath, $file) => {
     }
 
     $file = $pluginPath + "/" + $file;
-
 
     if (!FS.existsSync($file)) {
         return $.logPerLine([
@@ -53,7 +52,7 @@ class PluginEngine {
                     PluginNamespaceToData[$data.namespace] = PluginEngine.usePlugin($plugin, $pluginPath, $data);
 
                     $.engineData.set("PluginEngine:namespaces", PluginNamespaceToData);
-                    $.logInfo(`Using Plugin --> ${$data.namespace}`);
+                    $.logIfNotConsole(`Using Plugin --> ${$data.namespace}`);
 
                 } catch (e) {
 
@@ -83,6 +82,7 @@ class PluginEngine {
         let $pluginData: any;
 
         $pluginData = {
+            namespace: $data.get("namespace"),
             plugin: $plugin,
             path: $path,
         };
@@ -106,6 +106,50 @@ class PluginEngine {
             let viewsPath = $data.get("paths.views");
             viewsPath = pluginFileExistOrExit($plugin, $path, viewsPath);
             $pluginData.views = viewsPath;
+        }
+
+        if ($data.has("paths.migrations")) {
+            let migrationPath = $data.get("paths.migrations");
+            migrationPath = pluginFileExistOrExit($plugin, $path, migrationPath);
+            $pluginData.migrations = migrationPath;
+        }
+
+        if ($data.has("paths.models")) {
+            let modelPath = $data.get("paths.models");
+            modelPath = pluginFileExistOrExit($plugin, $path, modelPath);
+            $pluginData.models = modelPath;
+        }
+
+        if ($data.has("paths.middlewares")) {
+            let middlewarePath = $data.get("paths.middlewares");
+            middlewarePath = pluginFileExistOrExit($plugin, $path, middlewarePath);
+            $pluginData.middlewares = middlewarePath;
+        }
+
+        if ($data.has("globalMiddlewares")) {
+            const globalMiddlewares: string[] = $data.get("globalMiddlewares");
+            $pluginData.globalMiddlewares = [];
+            for (let i = 0; i < globalMiddlewares.length; i++) {
+                let globalMiddleware = globalMiddlewares[i];
+
+                if (globalMiddleware.substr(-3) !== $.config.project.fileExtension) {
+                    globalMiddleware += $.config.project.fileExtension;
+                }
+
+                // tslint:disable-next-line:max-line-length
+                $pluginData.globalMiddlewares.push(pluginFileExistOrExit($plugin, $pluginData.middlewares, globalMiddleware));
+
+            }
+        }
+
+        if ($data.has("extends")) {
+            const extensionData = {};
+            if ($data.has("extends.RequestEngine")) {
+                const $extenderPath = $data.get("extends.RequestEngine");
+                extensionData["RequestEngine"] = pluginFileExistOrExit($plugin, $path, $extenderPath);
+            }
+
+            $pluginData.extends = extensionData;
         }
 
         return $pluginData;

@@ -5,12 +5,9 @@
  *
  * UseEngine is later exposed to the framework as $.use
  */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 const fs = require("fs");
-const Path_1 = __importDefault(require("./helpers/Path"));
-const String_1 = __importDefault(require("./helpers/String"));
+const PathHelper = require("./Helpers/Path");
+const StringHelper = require("./Helpers/String");
 let Use = {};
 const PluginNamespaces = $.engineData.get("PluginEngine:namespaces", {});
 /**
@@ -42,7 +39,7 @@ else if (fs.existsSync(UsePath)) {
             if (middleware.substr(-3) === extension) {
                 middleware = middleware.substr(0, middleware.length - 3);
             }
-            let middlewareRealPath = Path_1.default.resolve(middleware);
+            let middlewareRealPath = PathHelper.resolve(middleware);
             let hasMiddleware = false;
             if (fs.existsSync(middlewareRealPath + extension)) {
                 hasMiddleware = true;
@@ -54,9 +51,9 @@ else if (fs.existsSync(UsePath)) {
                 }
             }
             if (hasMiddleware) {
-                const hasSuffix = String_1.default.hasSuffix(middlewareKey, MiddlewareSuffix);
+                const hasSuffix = StringHelper.hasSuffix(middlewareKey, MiddlewareSuffix);
                 if (hasSuffix) {
-                    Use.middlewares[String_1.default.withoutSuffix(middlewareKey, MiddlewareSuffix)] = middlewareRealPath;
+                    Use.middlewares[StringHelper.withoutSuffix(middlewareKey, MiddlewareSuffix)] = middlewareRealPath;
                     delete Use.middlewares[middlewareKey];
                 }
                 else {
@@ -92,7 +89,7 @@ function fileExistsInPath(file, path, suffix = "") {
     }
     const fullPath = parsePath(path, { file });
     if (!fs.existsSync(fullPath)) {
-        file = String_1.default.upperFirst(file);
+        file = StringHelper.upperFirst(file);
         if (!fs.existsSync(parsePath(path, { file }))) {
             return [false, fullPath];
         }
@@ -134,7 +131,7 @@ class UseEngine {
      * @return {boolean|*}
      */
     static model(model, handleError = true) {
-        const fullPath = $.path.backend("models/{file}" + $.config.project.fileExtension);
+        const fullPath = PathHelper.resolve($.config.paths.models) + "/{file}" + $.config.project.fileExtension;
         const [hasPath, realPath] = fileExistsInPath(model, fullPath);
         if (!hasPath) {
             return !handleError ? false : $.logErrorAndExit(`Model ${realPath} does not exists`);
@@ -151,7 +148,7 @@ class UseEngine {
     static middleware(middleware, handleError = true, suffix = true) {
         if (typeof Use.middlewares === "object") {
             const useMiddlewares = Use.middlewares;
-            const middleWithoutSuffix = String_1.default.withoutSuffix(middleware, "Middleware");
+            const middleWithoutSuffix = StringHelper.withoutSuffix(middleware, "Middleware");
             if (useMiddlewares.hasOwnProperty(middleWithoutSuffix)) {
                 return require(useMiddlewares[middleWithoutSuffix]);
             }
