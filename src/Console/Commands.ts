@@ -101,7 +101,8 @@ const Commands = {
             return logThis("View name not defined!");
         }
 
-        if (name === "--routes") {
+        if (name === "__routes") {
+            require("../Routes/Loader");
             defaultContent = $.base64.encode($.routerEngine.nameToUrl());
             defaultContent = "<script>" + os.EOL +
                 "window['--routes'] = '" + defaultContent + "';" + os.EOL +
@@ -128,10 +129,6 @@ const Commands = {
         fs.writeFileSync(fullPath, defaultContent);
         artisan.logThis("View created successfully!");
         artisan.logThisAndExit("Located @ " + fullPath);
-    },
-
-    "publish:views"() {
-        return artisan.copyFolder($.path.engine("backend/views"), $.path.backend("views"));
     },
 
     "migrate"(args) {

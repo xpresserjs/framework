@@ -68,6 +68,7 @@ if (typeof commands[argCommand] === "undefined") {
     const runFn = commands[argCommand];
     let afterRun = null;
     if (typeof runFn === "object" && typeof runFn.handler === "function") {
+        require("./Routes/Loader");
         afterRun = runFn.handler(args, JobHelper);
     } else {
         afterRun = runFn(args, JobHelper);

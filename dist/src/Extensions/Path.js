@@ -18,7 +18,7 @@ $.path = {
         if (path[0] === "/") {
             path = path.substr(1);
         }
-        const backend = backendFiles + path;
+        const backend = backendFiles + "/" + path;
         return returnRequire ? require(backend) : backend;
     },
     storage: (path = "") => {

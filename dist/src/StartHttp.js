@@ -147,38 +147,7 @@ for (let i = 0; i < $pluginNamespaceKeys.length; i++) {
         }
     }
 }
-const RouterEngine = require("./RouterEngine");
-$.routerEngine = RouterEngine;
-const RouteFile = Path.resolve($.config.paths.routesFile);
-if (FS.existsSync(RouteFile)) {
-    try {
-        require(RouteFile);
-    }
-    catch (e) {
-        $.logPerLine([
-            { error: "Router Error:" },
-            { errorAndExit: e.message },
-        ]);
-    }
-}
-else {
-    $.logPerLine([
-        { error: "Routes File Missing." },
-        { error: RouteFile },
-    ]);
-}
-// Import plugin routes
-const PluginData = $.engineData.get("PluginEngineData");
-const PluginRoutes = PluginData.routes;
-for (let i = 0; i < PluginRoutes.length; i++) {
-    const pluginRoute = PluginRoutes[i];
-    require(pluginRoute.path);
-}
-if (typeof $.router.routesAfterPlugins === "function") {
-    $.router.routesAfterPlugins();
-}
-// Process Routes
-$.routerEngine.processRoutes($.router.routes);
+require("./Routes/Loader");
 app.use((req, res, next) => {
     const x = new RequestEngine(req, res, next);
     const error = new (require("./ErrorEngine"))(x);
