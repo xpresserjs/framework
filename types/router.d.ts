@@ -75,4 +75,9 @@ declare interface XpresserRouter {
      * @param action
      */
     put(path: string, action?: string): XpresserRoute;
+
+    /**
+     * Routes to run after plugins
+     */
+    routesAfterPlugins(): void;
 }

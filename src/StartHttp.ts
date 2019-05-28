@@ -219,6 +219,10 @@ for (let i = 0; i < PluginRoutes.length; i++) {
     require(pluginRoute.path);
 }
 
+if (typeof $.router.routesAfterPlugins === "function") {
+    $.router.routesAfterPlugins();
+}
+
 // Process Routes
 $.routerEngine.processRoutes($.router.routes);
 

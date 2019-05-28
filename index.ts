@@ -1,5 +1,4 @@
 /// <reference types="node"/>
-import XpresserRouter = require("@xpresser/router");
 import fs = require("fs");
 import _ = require("lodash");
 import {Xjs} from "./global";
@@ -68,6 +67,7 @@ const Xpresser = (AppConfig: object | string, AppOptions?: XpresserOptions): Xjs
     require("./src/global");
 
     // Add Router
+    const XpresserRouter = require("@xpresser/router");
     $.router = new XpresserRouter();
 
     if ($.$options.isConsole) {
