@@ -76,9 +76,13 @@ const Config = {
     },
     auth: {
         userModel: "Auth/User",
-        afterLoginRoute: "auth.dashboard",
+        routeAfterLogin: "auth.dashboard",
         templateVariable: "user",
-        viewsFromEngine: true,
+        usingEjs: true,
+        views: {
+            index: "auth::index",
+            dashboard: "auth::dashboard",
+        },
     },
     response: {
         cacheFiles: false,
