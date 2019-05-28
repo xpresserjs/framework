@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const ModelEngine = require("./ModelEngine");
-const RouterEngine = require("./RouterEngine");
 const Path = require("./Helpers/Path");
 const fs = require("fs");
+const ModelEngine = require("./ModelEngine");
 $.model = ModelEngine;
+const RouterEngine = require("./RouterEngine");
 $.routerEngine = RouterEngine;
 const RouteFile = Path.resolve($.config.paths.routesFile);
 // Require Routes

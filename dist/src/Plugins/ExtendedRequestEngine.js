@@ -7,7 +7,9 @@ const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
  * Extend RequestEngine
  */
 const ExtendRequestEngineUsing = ($extender) => {
-    ExtendedRequestEngine = $extender(RequestEngine);
+    if (typeof $extender === "function") {
+        ExtendedRequestEngine = $extender(RequestEngine);
+    }
 };
 if ($.engineData.has("ExtendedRequestEngine")) {
     ExtendedRequestEngine = $.engineData.get("ExtendedRequestEngine");

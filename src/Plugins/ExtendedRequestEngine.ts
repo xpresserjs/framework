@@ -1,6 +1,7 @@
 import RequestEngine = require("../RequestEngine");
 import {Xjs} from "../../global";
 import ObjectCollection = require("../Helpers/ObjectCollection");
+
 declare let $: Xjs;
 
 let ExtendedRequestEngine = RequestEngine;
@@ -10,7 +11,9 @@ const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
  * Extend RequestEngine
  */
 const ExtendRequestEngineUsing = ($extender) => {
-    ExtendedRequestEngine = $extender(RequestEngine);
+    if (typeof $extender === "function") {
+        ExtendedRequestEngine = $extender(RequestEngine);
+    }
 };
 
 if ($.engineData.has("ExtendedRequestEngine")) {
