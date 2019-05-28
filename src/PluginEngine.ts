@@ -5,17 +5,8 @@ import {Xjs} from "../global";
 
 declare let $: Xjs;
 
-let plugins = [] as any[];
 const pluginRoutes = [] as any[];
 const PluginNamespaceToData = {};
-
-try {
-
-    plugins = require($.path.jsonConfigs("plugins.json"));
-
-} catch (e) {
-    // Do Absolutely Nothing
-}
 
 const pluginFileExistOrExit = ($plugin, $pluginPath, $file) => {
     const ResolvedRoutePath = PathHelper.resolve($file, false);
@@ -40,28 +31,40 @@ const pluginFileExistOrExit = ($plugin, $pluginPath, $file) => {
 class PluginEngine {
 
     public static loadPlugins() {
+        let plugins = [] as any[];
+
+        try {
+
+            plugins = require($.path.jsonConfigs("plugins.json"));
+
+        } catch (e) {
+            $.logError(e);
+        }
+
         if (plugins.length) {
 
             for (let i = 0; i < plugins.length; i++) {
-                const $plugin = plugins[i];
-                const $pluginPath = PathHelper.resolve($plugin);
+                const $plugin: string = plugins[i];
+                if ($plugin.length) {
+                    const $pluginPath: string = PathHelper.resolve($plugin);
 
-                try {
+                    try {
 
-                    const $data = PluginEngine.loadPluginUseData($plugin, $pluginPath);
-                    PluginNamespaceToData[$data.namespace] = PluginEngine.usePlugin($plugin, $pluginPath, $data);
+                        const $data = PluginEngine.loadPluginUseData($plugin, $pluginPath);
+                        PluginNamespaceToData[$data.namespace] = PluginEngine.usePlugin($plugin, $pluginPath, $data);
 
-                    $.engineData.set("PluginEngine:namespaces", PluginNamespaceToData);
-                    $.logIfNotConsole(`Using Plugin --> ${$data.namespace}`);
+                        $.engineData.set("PluginEngine:namespaces", PluginNamespaceToData);
+                        $.logIfNotConsole(`Using Plugin --> ${$data.namespace}`);
 
-                } catch (e) {
+                    } catch (e) {
 
-                    $.logPerLine([
-                        {error: $plugin},
-                        {error: e.message},
-                        {errorAndExit: ""},
-                    ], true);
+                        $.logPerLine([
+                            {error: $plugin},
+                            {error: e.message},
+                            {errorAndExit: ""},
+                        ], true);
 
+                    }
                 }
             }
         }

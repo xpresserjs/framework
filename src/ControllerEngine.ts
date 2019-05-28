@@ -1,8 +1,9 @@
 import express from "express";
 import {XjsHttp} from "../types/http";
 import ErrorEngine = require("./ErrorEngine");
-import MiddleWareEngine = require("./MiddlewareEngine");
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
+
+import MiddleWareEngine = require("./MiddlewareEngine");
 
 declare let _: any;
 declare let $: any;

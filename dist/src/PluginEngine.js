@@ -2,15 +2,8 @@
 const FS = require("fs");
 const ObjectCollection = require("./Helpers/ObjectCollection");
 const PathHelper = require("./Helpers/Path");
-let plugins = [];
 const pluginRoutes = [];
 const PluginNamespaceToData = {};
-try {
-    plugins = require($.path.jsonConfigs("plugins.json"));
-}
-catch (e) {
-    // Do Absolutely Nothing
-}
 const pluginFileExistOrExit = ($plugin, $pluginPath, $file) => {
     const ResolvedRoutePath = PathHelper.resolve($file, false);
     if ($file === ResolvedRoutePath) {
@@ -28,22 +21,31 @@ const pluginFileExistOrExit = ($plugin, $pluginPath, $file) => {
 };
 class PluginEngine {
     static loadPlugins() {
+        let plugins = [];
+        try {
+            plugins = require($.path.jsonConfigs("plugins.json"));
+        }
+        catch (e) {
+            $.logError(e);
+        }
         if (plugins.length) {
             for (let i = 0; i < plugins.length; i++) {
                 const $plugin = plugins[i];
-                const $pluginPath = PathHelper.resolve($plugin);
-                try {
-                    const $data = PluginEngine.loadPluginUseData($plugin, $pluginPath);
-                    PluginNamespaceToData[$data.namespace] = PluginEngine.usePlugin($plugin, $pluginPath, $data);
-                    $.engineData.set("PluginEngine:namespaces", PluginNamespaceToData);
-                    $.logIfNotConsole(`Using Plugin --> ${$data.namespace}`);
-                }
-                catch (e) {
-                    $.logPerLine([
-                        { error: $plugin },
-                        { error: e.message },
-                        { errorAndExit: "" },
-                    ], true);
+                if ($plugin.length) {
+                    const $pluginPath = PathHelper.resolve($plugin);
+                    try {
+                        const $data = PluginEngine.loadPluginUseData($plugin, $pluginPath);
+                        PluginNamespaceToData[$data.namespace] = PluginEngine.usePlugin($plugin, $pluginPath, $data);
+                        $.engineData.set("PluginEngine:namespaces", PluginNamespaceToData);
+                        $.logIfNotConsole(`Using Plugin --> ${$data.namespace}`);
+                    }
+                    catch (e) {
+                        $.logPerLine([
+                            { error: $plugin },
+                            { error: e.message },
+                            { errorAndExit: "" },
+                        ], true);
+                    }
                 }
             }
         }

@@ -1,6 +1,5 @@
 "use strict";
 const fs = require("fs");
-const Controller = require("./ControllerEngine");
 const AllRoutesKey = "RouterEngine:allRoutes";
 const NameToRoute = {};
 const ProcessedRoutes = [];
@@ -112,6 +111,7 @@ class RouterEngine {
      * @param parent
      */
     static processRoutes(routes = null, parent = {}) {
+        const Controller = require("./ControllerEngine");
         if (!Array.isArray(routes)) {
             routes = RouterEngine.allRoutes();
         }

@@ -12,8 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 const express_1 = __importDefault(require("express"));
 const ErrorEngine = require("./ErrorEngine");
-const MiddleWareEngine = require("./MiddlewareEngine");
 const RequestEngine = require("./Plugins/ExtendedRequestEngine");
+const MiddleWareEngine = require("./MiddlewareEngine");
 // @ts-check
 class ControllerEngine {
     /**

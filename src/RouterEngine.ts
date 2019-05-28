@@ -1,7 +1,6 @@
 import fs = require("fs");
 import {Xjs} from "../global";
 
-const Controller = require("./ControllerEngine");
 const AllRoutesKey = "RouterEngine:allRoutes";
 
 declare let _: any;
@@ -142,6 +141,8 @@ class RouterEngine {
      * @param parent
      */
     public static processRoutes(routes = null, parent: any = {}) {
+        const Controller = require("./ControllerEngine");
+
         if (!Array.isArray(routes)) {
             routes = RouterEngine.allRoutes();
         }
