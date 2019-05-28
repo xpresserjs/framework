@@ -1,9 +1,10 @@
-import FS = require("fs-extra");
+import FS = require("fs");
 
 const {dirname, resolve} = require("path");
 import {Xjs} from "../global";
 import {XjsHttp} from "../types/http";
 
+import helmet = require("helmet");
 import bodyParser = require("body-parser");
 import connect_session_knex = require("connect-session-knex");
 import cors = require("cors");
@@ -57,6 +58,8 @@ app.use(
     }),
 );
 
+app.use(helmet());
+
 import Path = require("./Helpers/Path");
 
 const KnexSessionStore = connect_session_knex(session);
@@ -70,7 +73,7 @@ const knexSessionConfig = {
 
 const sessionFilePath = knexSessionConfig.connection.filename;
 if (!FS.existsSync(sessionFilePath)) {
-    FS.mkdirpSync(dirname(sessionFilePath));
+    Path.makeDirIfNotExist(dirname(sessionFilePath, true));
 }
 
 const store = new KnexSessionStore({
@@ -152,33 +155,8 @@ import ModelEngine = require("./ModelEngine");
 
 $.model = ModelEngine;
 
-import MainRequestEngine = require("./RequestEngine");
+import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 
-let RequestEngine: typeof MainRequestEngine = MainRequestEngine;
-
-const ExtendRequestEngineUsing = ($extender) => {
-    RequestEngine = $extender(RequestEngine);
-};
-
-for (let k = 0; k < $pluginNamespaceKeys.length; k++) {
-    const $pluginNamespaceKey = $pluginNamespaceKeys[k];
-    const $plugin = new ObjectCollection($pluginData[$pluginNamespaceKey]);
-
-    if ($plugin.has("extends.RequestEngine")) {
-        const $requestEngineExtender = $plugin.get("extends.RequestEngine");
-        try {
-            const $requestEngine = require($requestEngineExtender);
-            ExtendRequestEngineUsing($requestEngine);
-        } catch (e) {
-            $.logPerLine([
-                {
-                    error: e.message,
-                    errorAndExit: "",
-                },
-            ]);
-        }
-    }
-}
 
 for (let i = 0; i < $pluginNamespaceKeys.length; i++) {
     const $pluginNamespaceKey = $pluginNamespaceKeys[i];

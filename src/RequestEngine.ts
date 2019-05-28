@@ -313,6 +313,13 @@ class RequestEngine {
 
         return this;
     }
+
+    /**
+     * End Request Signal
+     */
+    public end() {
+        return "EndCurrentRequest";
+    }
 }
 
 export = RequestEngine;

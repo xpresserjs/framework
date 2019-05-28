@@ -49,7 +49,7 @@ module.exports = ($plugin) => {
             if (!isNaN(Number($splitMigrationFileName[0]))) {
                 $splitMigrationFileName[0] = moment(new Date())
                     .format("YMMDHmmss")
-                    .toString() + "::" + $pluginData.namespace.toLowerCase();
+                    .toString() + "_(" + $pluginData.namespace.toLowerCase() + ")";
             }
             const $newMigrationFile = $splitMigrationFileName.join("_");
             $newMigrationFilePath = $.path.base("migrations/" + $newMigrationFile);

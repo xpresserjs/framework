@@ -253,6 +253,12 @@ class RequestEngine {
         }
         return this;
     }
+    /**
+     * End Request Signal
+     */
+    end() {
+        return "EndCurrentRequest";
+    }
 }
 module.exports = RequestEngine;
 //# sourceMappingURL=RequestEngine.js.map

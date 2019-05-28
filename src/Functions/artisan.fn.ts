@@ -1,9 +1,10 @@
-import fs = require("fs-extra");
-import Path = require("path");
+import fs = require("fs");
+import fse = require("fs-extra");
 import Handlebars = require("handlebars");
 import Pluralise = require("pluralize");
 import colors = require("../Objects/consoleColors.obj");
 import {Xjs} from "../../global";
+import PathHelper = require("../Helpers/Path");
 
 declare let $: Xjs;
 declare let _: any;
@@ -42,7 +43,7 @@ export = {
         $name = _.upperFirst($name);
 
         if (!fs.existsSync($to)) {
-            fs.mkdirSync($to, {recursive: true});
+            PathHelper.makeDirIfNotExist($to);
         }
 
         if (!$name.toLowerCase().includes($for)) {
@@ -57,8 +58,7 @@ export = {
             return this.logThisAndExit($name + " already exists!");
         }
 
-        const thisPath = Path.dirname($to);
-        if (!fs.existsSync(thisPath)) { fs.mkdirpSync(thisPath); }
+        PathHelper.makeDirIfNotExist($to, true);
 
         const $from = $.path.engine("Factory/" + $for + ".hbs");
         $data = _.extend({}, {name: $name}, $data);
@@ -69,7 +69,7 @@ export = {
     },
 
     copyFolder($from, $to) {
-        fs.copySync($from, $to);
+        fse.copySync($from, $to);
         $.logAndExit("Views folder published successful.");
     },
 

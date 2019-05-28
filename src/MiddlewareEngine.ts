@@ -1,4 +1,4 @@
-import RequestEngine = require("./RequestEngine");
+import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 
 declare let $: any;
 
@@ -8,16 +8,19 @@ class MiddlewareEngine {
      * @param {string} action
      */
     constructor(middleware, action = "allow") {
+
+
         // @ts-ignore
-        return this.processMiddleware(middleware[action]);
+        return this.processMiddleware(middleware, action);
     }
 
     /**
      * @param {function} middleware
+     * @param action
      */
-    public processMiddleware(middleware) {
+    public processMiddleware(middleware, action) {
         return async (req, res, next) => {
-            middleware(new RequestEngine(req, res, next));
+            return middleware[action](new RequestEngine(req, res, next));
         };
     }
 }
@@ -27,6 +30,7 @@ class MiddlewareEngine {
  * @param {*} action
  */
 const middleware = (middlewarePath, action = undefined) => {
+
     const middlewareFile = $.use.middleware(middlewarePath, false);
 
     if (middlewareFile === false) {

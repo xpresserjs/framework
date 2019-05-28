@@ -1,8 +1,6 @@
 import {Xjs} from "../../global";
 import PATH = require("path");
-import fs = require("fs-extra");
-import mkdirp = require("mkdirp");
-
+import fs = require("fs");
 declare let $: Xjs;
 
 const pathHelpers = {
@@ -92,11 +90,7 @@ const PathHelper = {
             try {
                 fs.mkdirSync($path, {recursive: true});
             } catch (e) {
-                try {
-                    mkdirp.sync($path);
-                } catch (e) {
-                    $.logErrorAndExit(e.message);
-                }
+                $.logErrorAndExit(e.message);
             }
 
         }

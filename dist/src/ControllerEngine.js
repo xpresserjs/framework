@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 const express_1 = __importDefault(require("express"));
 const ErrorEngine = require("./ErrorEngine");
 const MiddleWareEngine = require("./MiddlewareEngine");
-const RequestEngine = require("./RequestEngine");
+const RequestEngine = require("./Plugins/ExtendedRequestEngine");
 // @ts-check
 class ControllerEngine {
     /**
@@ -33,7 +33,7 @@ class ControllerEngine {
                 middleware = oldMiddlewareMethod;
             }
             if (typeof middleware === "string") {
-                if (middleware.includes(".")) {
+                if (middleware.indexOf(".") > 0) {
                     const m = middleware.split(".");
                     m[0] = _.upperFirst(m[0]) + "Middleware";
                     middlewareFile = m;
@@ -46,10 +46,13 @@ class ControllerEngine {
             if (middlewareMethod === "*"
                 || middlewareMethod === method
                 || (Array.isArray(middlewareMethod)
-                    && middlewareMethod.indexOf(method) >= 0)) {
+                    && middlewareMethod.includes(method))) {
                 let path = route.path;
                 if (path.trim() === "/") {
                     path = new RegExp("^\/$");
+                }
+                else {
+                    path = new RegExp("^\\" + path + "$");
                 }
                 // @ts-ignore
                 if (typeof middleware === "function") {

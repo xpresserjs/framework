@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const RequestEngine = require("./RequestEngine");
+const RequestEngine = require("./Plugins/ExtendedRequestEngine");
 class MiddlewareEngine {
     /**
      * @param {object} middleware
@@ -15,14 +15,15 @@ class MiddlewareEngine {
      */
     constructor(middleware, action = "allow") {
         // @ts-ignore
-        return this.processMiddleware(middleware[action]);
+        return this.processMiddleware(middleware, action);
     }
     /**
      * @param {function} middleware
+     * @param action
      */
-    processMiddleware(middleware) {
+    processMiddleware(middleware, action) {
         return (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-            middleware(new RequestEngine(req, res, next));
+            return middleware[action](new RequestEngine(req, res, next));
         });
     }
 }

@@ -1,9 +1,10 @@
 "use strict";
-const fs = require("fs-extra");
-const Path = require("path");
+const fs = require("fs");
+const fse = require("fs-extra");
 const Handlebars = require("handlebars");
 const Pluralise = require("pluralize");
 const colors = require("../Objects/consoleColors.obj");
+const PathHelper = require("../Helpers/Path");
 const isTinker = typeof $.$options.isTinker === "boolean" && $.$options.isTinker;
 module.exports = {
     logThis(...args) {
@@ -33,7 +34,7 @@ module.exports = {
     copyFromFactoryToApp($for, $name, $to, $data = {}, addPrefix = true) {
         $name = _.upperFirst($name);
         if (!fs.existsSync($to)) {
-            fs.mkdirSync($to, { recursive: true });
+            PathHelper.makeDirIfNotExist($to);
         }
         if (!$name.toLowerCase().includes($for)) {
             if (addPrefix && $for !== "model") {
@@ -44,10 +45,7 @@ module.exports = {
         if (fs.existsSync($to)) {
             return this.logThisAndExit($name + " already exists!");
         }
-        const thisPath = Path.dirname($to);
-        if (!fs.existsSync(thisPath)) {
-            fs.mkdirpSync(thisPath);
-        }
+        PathHelper.makeDirIfNotExist($to, true);
         const $from = $.path.engine("Factory/" + $for + ".hbs");
         $data = _.extend({}, { name: $name }, $data);
         fs.writeFileSync($to, this.factory($from, $data));
@@ -55,7 +53,7 @@ module.exports = {
         this.logThis("located @ " + $to);
     },
     copyFolder($from, $to) {
-        fs.copySync($from, $to);
+        fse.copySync($from, $to);
         $.logAndExit("Views folder published successful.");
     },
     pluralize(str = "") {

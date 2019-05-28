@@ -68,7 +68,7 @@ export = ($plugin) => {
 
                 $splitMigrationFileName[0] = moment(new Date())
                     .format("YMMDHmmss")
-                    .toString() + "::" + $pluginData.namespace.toLowerCase();
+                    .toString() + "_(" + $pluginData.namespace.toLowerCase() + ")";
             }
 
             const $newMigrationFile = $splitMigrationFileName.join("_");

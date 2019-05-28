@@ -3,8 +3,7 @@ import {Xjs} from "../../global";
 declare const $: Xjs;
 
 import os = require("os");
-import PATH = require("path");
-import fs = require("fs-extra");
+import fs = require("fs");
 import shellJs = require("shelljs");
 
 import artisan = require("../Functions/artisan.fn");
@@ -111,12 +110,9 @@ const Commands = {
 
         name += "." + config.extension;
 
-        const viewsPath = PATH.dirname($.path.views(name));
-
-        if (!fs.existsSync(viewsPath)) {
-            fs.mkdirpSync(viewsPath);
-        }
         const fullPath = $.path.views(name);
+        PathHelper.makeDirIfNotExist(fullPath, true);
+
 
         if (name.substr(0, 2) !== "--" && fs.existsSync(fullPath)) {
             return artisan.logThisAndExit("view {" + colors.fgYellow + name + colors.fgCyan + "} already exits!");

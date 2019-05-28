@@ -1,7 +1,6 @@
 "use strict";
 const PATH = require("path");
-const fs = require("fs-extra");
-const mkdirp = require("mkdirp");
+const fs = require("fs");
 const pathHelpers = {
     base: "base://",
     backend: "backend://",
@@ -75,12 +74,7 @@ const PathHelper = {
                 fs.mkdirSync($path, { recursive: true });
             }
             catch (e) {
-                try {
-                    mkdirp.sync($path);
-                }
-                catch (e) {
-                    $.logErrorAndExit(e.message);
-                }
+                $.logErrorAndExit(e.message);
             }
         }
         return $path;

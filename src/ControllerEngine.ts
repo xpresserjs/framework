@@ -2,7 +2,7 @@ import express from "express";
 import {XjsHttp} from "../types/http";
 import ErrorEngine = require("./ErrorEngine");
 import MiddleWareEngine = require("./MiddlewareEngine");
-import RequestEngine = require("./RequestEngine");
+import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 
 declare let _: any;
 declare let $: any;
@@ -19,6 +19,7 @@ class ControllerEngine {
 
         const middlewareKeys = Object.keys($middleware);
 
+
         for (let i = 0; i < middlewareKeys.length; i++) {
             let middleware = middlewareKeys[i];
             let middlewareFile = [];
@@ -30,8 +31,10 @@ class ControllerEngine {
                 middleware = oldMiddlewareMethod;
             }
 
+
             if (typeof middleware === "string") {
-                if (middleware.includes(".")) {
+
+                if (middleware.indexOf(".") > 0) {
                     const m = middleware.split(".");
                     m[0] = _.upperFirst(m[0]) + "Middleware";
                     middlewareFile = m;
@@ -45,12 +48,14 @@ class ControllerEngine {
                 middlewareMethod === "*"
                 || middlewareMethod === method
                 || (Array.isArray(middlewareMethod)
-                && middlewareMethod.indexOf(method) >= 0)
+                && middlewareMethod.includes(method))
             ) {
                 let path = route.path;
 
                 if (path.trim() === "/") {
                     path = new RegExp("^\/$");
+                } else {
+                    path = new RegExp("^\\" + path + "$");
                 }
 
                 // @ts-ignore
@@ -175,7 +180,7 @@ const controller = (controller, method = null) => {
         controller = split[0];
         method = split[1];
 
-        controllerPath = $.use.controller( controller + $.config.project.fileExtension);
+        controllerPath = $.use.controller(controller + $.config.project.fileExtension);
 
         controller = require(controllerPath);
     }

@@ -8,8 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const FS = require("fs-extra");
+const FS = require("fs");
 const { dirname, resolve } = require("path");
+const helmet = require("helmet");
 const bodyParser = require("body-parser");
 const connect_session_knex = require("connect-session-knex");
 const cors = require("cors");
@@ -49,6 +50,7 @@ app.use(express.static(paths.public, {
         }
     },
 }));
+app.use(helmet());
 const Path = require("./Helpers/Path");
 const KnexSessionStore = connect_session_knex(session);
 const knexSessionConfig = {
@@ -60,7 +62,7 @@ const knexSessionConfig = {
 };
 const sessionFilePath = knexSessionConfig.connection.filename;
 if (!FS.existsSync(sessionFilePath)) {
-    FS.mkdirpSync(dirname(sessionFilePath));
+    Path.makeDirIfNotExist(dirname(sessionFilePath, true));
 }
 const store = new KnexSessionStore({
     knex: require("knex")(knexSessionConfig),
@@ -118,30 +120,7 @@ if (!$.$options.isTinker) {
 // Require Model Engine
 const ModelEngine = require("./ModelEngine");
 $.model = ModelEngine;
-const MainRequestEngine = require("./RequestEngine");
-let RequestEngine = MainRequestEngine;
-const ExtendRequestEngineUsing = ($extender) => {
-    RequestEngine = $extender(RequestEngine);
-};
-for (let k = 0; k < $pluginNamespaceKeys.length; k++) {
-    const $pluginNamespaceKey = $pluginNamespaceKeys[k];
-    const $plugin = new ObjectCollection($pluginData[$pluginNamespaceKey]);
-    if ($plugin.has("extends.RequestEngine")) {
-        const $requestEngineExtender = $plugin.get("extends.RequestEngine");
-        try {
-            const $requestEngine = require($requestEngineExtender);
-            ExtendRequestEngineUsing($requestEngine);
-        }
-        catch (e) {
-            $.logPerLine([
-                {
-                    error: e.message,
-                    errorAndExit: "",
-                },
-            ]);
-        }
-    }
-}
+const RequestEngine = require("./Plugins/ExtendedRequestEngine");
 for (let i = 0; i < $pluginNamespaceKeys.length; i++) {
     const $pluginNamespaceKey = $pluginNamespaceKeys[i];
     const $plugin = new ObjectCollection($pluginData[$pluginNamespaceKey]);

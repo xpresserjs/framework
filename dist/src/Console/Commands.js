@@ -1,7 +1,6 @@
 "use strict";
 const os = require("os");
-const PATH = require("path");
-const fs = require("fs-extra");
+const fs = require("fs");
 const shellJs = require("shelljs");
 const artisan = require("../Functions/artisan.fn");
 const artisanConfig = $.config.artisan;
@@ -82,11 +81,8 @@ const Commands = {
                 "</script>";
         }
         name += "." + config.extension;
-        const viewsPath = PATH.dirname($.path.views(name));
-        if (!fs.existsSync(viewsPath)) {
-            fs.mkdirpSync(viewsPath);
-        }
         const fullPath = $.path.views(name);
+        PathHelper.makeDirIfNotExist(fullPath, true);
         if (name.substr(0, 2) !== "--" && fs.existsSync(fullPath)) {
             return artisan.logThisAndExit("view {" + colors.fgYellow + name + colors.fgCyan + "} already exits!");
         }
