@@ -1,5 +1,6 @@
 "use strict";
 /// <reference types="node"/>
+const XpresserRouter = require("@xpresser/router");
 const fs = require("fs");
 const _ = require("lodash");
 const Configurations = require("./src/config");
@@ -52,7 +53,6 @@ const Xpresser = (AppConfig, AppOptions) => {
     // Global
     require("./src/global");
     // Add Router
-    const XpresserRouter = require("@xpresser/router");
     $.router = new XpresserRouter();
     if ($.$options.isConsole) {
         require("./src/StartConsole");

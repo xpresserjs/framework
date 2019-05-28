@@ -79,5 +79,5 @@ declare interface XpresserRouter {
     /**
      * Routes to run after plugins
      */
-    routesAfterPlugins(): void;
+    routesAfterPlugins?(): void;
 }
