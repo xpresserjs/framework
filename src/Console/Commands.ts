@@ -115,7 +115,7 @@ const Commands = {
         PathHelper.makeDirIfNotExist(fullPath, true);
 
 
-        if (name.substr(0, 2) !== "--" && fs.existsSync(fullPath)) {
+        if (name.substr(0, 2) !== "__" && fs.existsSync(fullPath)) {
             return artisan.logThisAndExit("view {" + colors.fgYellow + name + colors.fgCyan + "} already exits!");
         }
 
