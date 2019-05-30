@@ -167,17 +167,16 @@ if (FS.existsSync(afterRoutesPath)) {
 }
 // Start server if not tinker
 if (!$.$options.isTinker && $.config.server.startOnBoot) {
-    const http = http_1.createServer(app);
+    $.http = http_1.createServer(app);
     const port = $.$config.get("server.port", 80);
-    http.on("error", $.logError);
-    http.listen(port, () => {
+    $.http.on("error", $.logError);
+    $.http.listen(port, () => {
         $.log("Server started and available on " + $.helpers.url());
         $.log("PORT:" + port);
         $.log();
     });
     // Start ssl server if server.ssl is available
     if ($.$config.has("server.ssl.enabled") && $.config.server.ssl.enabled === true) {
-        const https = require("https");
         const httpsPort = $.$config.get("server.ssl.port", 443);
         if (!$.$config.has("server.ssl.files")) {
             $.logErrorAndExit("Ssl enabled but has no {server.ssl.files} config found.");
@@ -199,7 +198,9 @@ if (!$.$options.isTinker && $.config.server.startOnBoot) {
         }
         files.key = FS.readFileSync(files.key);
         files.cert = FS.readFileSync(files.cert);
-        https.createServer(files, app).listen(httpsPort, () => {
+        $.https = http_1.createServer(files, app);
+        $.https.on("error", $.logError);
+        $.https.listen(httpsPort, () => {
             $.log("Server started and available on " + $.helpers.url());
             $.log("PORT:" + httpsPort);
             $.log();

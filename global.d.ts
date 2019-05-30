@@ -5,6 +5,7 @@ import ObjectCollection from "./src/Helpers/ObjectCollection";
 import ModelEngine from "./src/ModelEngine";
 import RouterEngine = require("./src/RouterEngine");
 import UseEngine = require("./src/UseEngine");
+import {Server} from "net";
 
 type DB = import("./src/Database/Db");
 
@@ -45,6 +46,10 @@ declare interface Xjs {
 
     // Express App
     app: express.Application;
+
+    // Server Variables
+    http: Server;
+    https: Server;
 
     // Model Engine
     model: typeof ModelEngine;

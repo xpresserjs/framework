@@ -13,7 +13,8 @@ import flash = require("express-flash");
 import session = require("express-session");
 import ObjectCollection = require("./Helpers/ObjectCollection");
 
-import {createServer} from "http";
+import {createServer as createHttpServer} from "http";
+import {createServer as createHttpsServer} from "https";
 
 declare let _: any;
 declare let $: Xjs;
@@ -157,7 +158,6 @@ $.model = ModelEngine;
 
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 
-
 for (let i = 0; i < $pluginNamespaceKeys.length; i++) {
     const $pluginNamespaceKey = $pluginNamespaceKeys[i];
     const $plugin = new ObjectCollection($pluginData[$pluginNamespaceKey]);
@@ -212,12 +212,12 @@ if (FS.existsSync(afterRoutesPath)) {
 
 // Start server if not tinker
 if (!$.$options.isTinker && $.config.server.startOnBoot) {
-    const http = createServer(app);
+    $.http = createHttpServer(app);
     const port = $.$config.get("server.port", 80);
 
-    http.on("error", $.logError);
+    $.http.on("error", $.logError);
 
-    http.listen(port, () => {
+    $.http.listen(port, () => {
         $.log("Server started and available on " + $.helpers.url());
         $.log("PORT:" + port);
         $.log();
@@ -225,7 +225,6 @@ if (!$.$options.isTinker && $.config.server.startOnBoot) {
 
     // Start ssl server if server.ssl is available
     if ($.$config.has("server.ssl.enabled") && $.config.server.ssl.enabled === true) {
-        const https = require("https");
         const httpsPort = $.$config.get("server.ssl.port", 443);
 
         if (!$.$config.has("server.ssl.files")) {
@@ -256,7 +255,9 @@ if (!$.$options.isTinker && $.config.server.startOnBoot) {
         files.key = FS.readFileSync(files.key);
         files.cert = FS.readFileSync(files.cert);
 
-        https.createServer(files, app).listen(httpsPort, () => {
+        $.https = createHttpServer(files, app);
+        $.https.on("error", $.logError);
+        $.https.listen(httpsPort, () => {
             $.log("Server started and available on " + $.helpers.url());
             $.log("PORT:" + httpsPort);
             $.log();
