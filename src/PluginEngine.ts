@@ -32,38 +32,42 @@ class PluginEngine {
 
     public static loadPlugins() {
         let plugins = [] as any[];
+        const PluginsPath = $.path.jsonConfigs("plugins.json");
 
-        try {
+        if (FS.existsSync(PluginsPath)) {
+            try {
 
-            plugins = require($.path.jsonConfigs("plugins.json"));
+                plugins = require(PluginsPath);
 
-        } catch (e) {
-            $.logError(e);
-        }
+            } catch (e) {
+                $.logError(e);
+            }
 
-        if (plugins.length) {
+            if (plugins.length) {
 
-            for (let i = 0; i < plugins.length; i++) {
-                const $plugin: string = plugins[i];
-                if ($plugin.length) {
-                    const $pluginPath: string = PathHelper.resolve($plugin);
+                for (let i = 0; i < plugins.length; i++) {
+                    const $plugin: string = plugins[i];
+                    if ($plugin.length) {
+                        const $pluginPath: string = PathHelper.resolve($plugin);
 
-                    try {
+                        try {
 
-                        const $data = PluginEngine.loadPluginUseData($plugin, $pluginPath);
-                        PluginNamespaceToData[$data.namespace] = PluginEngine.usePlugin($plugin, $pluginPath, $data);
+                            const $data = PluginEngine.loadPluginUseData($plugin, $pluginPath);
+                            // tslint:disable-next-line:max-line-length
+                            PluginNamespaceToData[$data.namespace] = PluginEngine.usePlugin($plugin, $pluginPath, $data);
 
-                        $.engineData.set("PluginEngine:namespaces", PluginNamespaceToData);
-                        $.logIfNotConsole(`Using Plugin --> ${$data.namespace}`);
+                            $.engineData.set("PluginEngine:namespaces", PluginNamespaceToData);
+                            $.logIfNotConsole(`Using Plugin --> ${$data.namespace}`);
 
-                    } catch (e) {
+                        } catch (e) {
 
-                        $.logPerLine([
-                            {error: $plugin},
-                            {error: e.message},
-                            {errorAndExit: ""},
-                        ], true);
+                            $.logPerLine([
+                                {error: $plugin},
+                                {error: e.message},
+                                {errorAndExit: ""},
+                            ], true);
 
+                        }
                     }
                 }
             }
