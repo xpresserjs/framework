@@ -1,12 +1,13 @@
 import express = require("express");
+import RequestEngine = require("../src/RequestEngine");
 
-declare namespace XjsHttp {
+declare namespace XpresserHttp {
+    type Engine = RequestEngine;
+
     interface Request extends express.Request {
         session: object;
         flash: (key?: string, value?: any) => void;
     }
 
-    interface Response extends express.Response {
-        foo: string;
-    }
+    type Response = express.Response;
 }

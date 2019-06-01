@@ -1,5 +1,5 @@
 import express from "express";
-import {XjsHttp} from "../types/http";
+import {XpresserHttp} from "../types/http";
 import ErrorEngine = require("./ErrorEngine");
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 
@@ -97,7 +97,7 @@ class ControllerEngine {
             }
         }
 
-        return async (req: XjsHttp.Request, res: XjsHttp.Response) => {
+        return async (req: XpresserHttp.Request, res: XpresserHttp.Response) => {
             // Log Time if `DebugControllerAction` is true
             const timeLogKey = req.method.toUpperCase() + " - " + req.url;
 

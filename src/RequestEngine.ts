@@ -1,7 +1,7 @@
 import ejs = require("ejs");
 import fs = require("fs");
 import {Xjs} from "../global";
-import {XjsHttp} from "../types/http";
+import {XpresserHttp} from "../types/http";
 import requestHelpers = require("./Functions/request.fn");
 import ObjectCollection = require("./Helpers/ObjectCollection");
 
@@ -10,8 +10,8 @@ declare let $: Xjs;
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
 
 class RequestEngine {
-    public req: XjsHttp.Request;
-    public res: XjsHttp.Response;
+    public req: XpresserHttp.Request;
+    public res: XpresserHttp.Response;
     public next: () => void;
     public params: any;
     public locals: ObjectCollection;
@@ -27,7 +27,7 @@ class RequestEngine {
      * @param {*} res
      * @param {*} next
      */
-    constructor(req: XjsHttp.Request, res: XjsHttp.Response, next?: () => void) {
+    constructor(req: XpresserHttp.Request, res: XpresserHttp.Response, next?: () => void) {
         this.res = res;
         this.req = req;
 

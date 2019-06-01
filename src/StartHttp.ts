@@ -2,7 +2,7 @@ import FS = require("fs");
 
 const {dirname, resolve} = require("path");
 import {Xjs} from "../global";
-import {XjsHttp} from "../types/http";
+import {XpresserHttp} from "../types/http";
 
 import helmet = require("helmet");
 import bodyParser = require("body-parser");
@@ -103,7 +103,7 @@ app.locals.appData = {};
 
 $.app = app;
 
-app.use(async (req: XjsHttp.Request, res: XjsHttp.Response, next?: () => void) => {
+app.use(async (req: XpresserHttp.Request, res: XpresserHttp.Response, next?: () => void) => {
 
     // Convert Empty Strings to Null
     if (req.body && Object.keys(req.body).length) {
@@ -190,7 +190,7 @@ for (let i = 0; i < $pluginNamespaceKeys.length; i++) {
 
 require("./Routes/Loader");
 
-app.use((req: XjsHttp.Request, res: XjsHttp.Response, next: () => void) => {
+app.use((req: XpresserHttp.Request, res: XpresserHttp.Response, next: () => void) => {
     const x = new RequestEngine(req, res, next);
     const error = new (require("./ErrorEngine"))(x);
     res.status(404);
