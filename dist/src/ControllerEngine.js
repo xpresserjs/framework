@@ -89,16 +89,29 @@ class ControllerEngine {
         return (req, res) => __awaiter(this, void 0, void 0, function* () {
             // Log Time if `DebugControllerAction` is true
             const timeLogKey = req.method.toUpperCase() + " - " + req.url;
+            const controllerName = (typeof controller.name === "string") ? controller.name : "";
             if (DebugControllerAction) {
                 console.time(timeLogKey);
             }
             // Get `x` from RequestEngine
             const x = new RequestEngine(req, res);
+            const error = new ErrorEngine(x);
             try {
                 // Run static boot method if found in controller
                 let boot = {};
                 if (typeof controller.boot === "function") {
-                    boot = controller.boot(x);
+                    try {
+                        boot = controller.boot(x);
+                    }
+                    catch (e) {
+                        return error.view({
+                            error: {
+                                // tslint:disable-next-line:max-line-length
+                                message: `Error in Controller:  <code>${controllerName}</code>, Method: <code>${method}</code>`,
+                                log: e.stack,
+                            },
+                        });
+                    }
                     if ($.fn.isPromise(boot)) {
                         boot = yield boot;
                     }
@@ -108,12 +121,10 @@ class ControllerEngine {
                  * If `method` is not static then initialize controller and set to `useController`
                  */
                 let useController = controller;
-                const controllerName = (typeof controller.name === "string") ? controller.name : "";
                 if (typeof controller[method] !== "function") {
                     // Initialize controller
                     useController = new controller();
                 }
-                const error = new ErrorEngine(x);
                 try {
                     // If `method` does not exists then display error
                     if (typeof useController[method] !== "function") {
