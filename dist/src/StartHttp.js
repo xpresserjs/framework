@@ -19,6 +19,7 @@ const flash = require("express-flash");
 const session = require("express-session");
 const ObjectCollection = require("./Helpers/ObjectCollection");
 const http_1 = require("http");
+const https_1 = require("https");
 const paths = $.$config.get("paths");
 const $pluginData = $.engineData.get("PluginEngine:namespaces", {});
 const $pluginNamespaceKeys = Object.keys($pluginData);
@@ -198,7 +199,9 @@ if (!$.$options.isTinker && $.config.server.startOnBoot) {
         }
         files.key = FS.readFileSync(files.key);
         files.cert = FS.readFileSync(files.cert);
-        $.https = http_1.createServer(files, app).listen(httpsPort, () => {
+        $.https = https_1.createServer(files, app);
+        $.https.on("error", $.logError);
+        $.https.listen(httpsPort, () => {
             $.log("Server started and available on " + $.helpers.url());
             $.log("PORT:" + httpsPort);
             $.log();
