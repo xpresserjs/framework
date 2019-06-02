@@ -198,9 +198,7 @@ if (!$.$options.isTinker && $.config.server.startOnBoot) {
         }
         files.key = FS.readFileSync(files.key);
         files.cert = FS.readFileSync(files.cert);
-        $.https = http_1.createServer(files, app);
-        $.https.on("error", $.logError);
-        $.https.listen(httpsPort, () => {
+        $.https = http_1.createServer(files, app).listen(httpsPort, () => {
             $.log("Server started and available on " + $.helpers.url());
             $.log("PORT:" + httpsPort);
             $.log();
