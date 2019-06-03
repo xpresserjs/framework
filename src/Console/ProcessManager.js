@@ -32,7 +32,7 @@ class ProcessManager {
     }
 
     storageLocation($path = '') {
-        return this.rootDir + '/storage/framework/Console/' + $path;
+        return this.rootDir + '/storage/framework/console/' + $path;
     }
 
     currentData() {
