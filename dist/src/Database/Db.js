@@ -2,7 +2,7 @@
 const knex = require("knex");
 class DB {
     constructor() {
-        if (!$.$config.has("database.config")) {
+        if (!$.$config.has("config")) {
             return;
         }
         const database = $.config.database.config;

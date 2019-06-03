@@ -3,7 +3,7 @@ import XpresserRouter = require("@xpresser/router");
 import fs = require("fs");
 import _ = require("lodash");
 import {Xjs} from "./global";
-import Configurations = require("./src/config");
+import Configurations = require("./config");
 import ObjectCollection = require("./src/Helpers/ObjectCollection");
 
 const {Config, Options} = Configurations;

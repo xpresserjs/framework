@@ -114,7 +114,6 @@ const Commands = {
         const fullPath = $.path.views(name);
         PathHelper.makeDirIfNotExist(fullPath, true);
 
-
         if (name.substr(0, 2) !== "__" && fs.existsSync(fullPath)) {
             return artisan.logThisAndExit("view {" + colors.fgYellow + name + colors.fgCyan + "} already exits!");
         }
@@ -132,7 +131,7 @@ const Commands = {
     },
 
     "migrate"(args) {
-        const $config = $.$config.get("database.config", {});
+        const $config = $.$config.get("config", {});
         if (!Object.keys($config).length) {
             return $.logErrorAndExit("Database config not found.");
         }

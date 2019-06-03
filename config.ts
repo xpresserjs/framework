@@ -18,7 +18,7 @@ const ServerConfig = {
 };
 
 const Config = {
-    name: "Xjs",
+    name: "Xpresser",
     env: "development",
     debug: {
         enabled: true,
@@ -66,7 +66,17 @@ const Config = {
         models: "backend://models",
         middlewares: "backend://middlewares",
         views: "backend://views",
-        jsonConfigs: "base://_",
+        jsonConfigs: "base://",
+    },
+    session: {
+        secret: "!XpresserSecretKey!",
+        cookie: {
+            path: ServerConfig.root,
+            domain: ServerConfig.domain,
+            maxAge: 5000 * 60 * 24,
+        },
+        resave: true,
+        saveUninitialized: true,
     },
     template: {
         use: false,
@@ -107,17 +117,6 @@ const Config = {
         singleModelName: true,
         pluralizeModelTable: true,
     },
-    session: {
-        secret: "!xjsSecretKey!",
-        cookie: {
-            path: ServerConfig.root,
-            domain: ServerConfig.domain,
-            maxAge: 5000 * 60 * 24,
-        },
-        resave: true,
-        saveUninitialized: true,
-    },
-
     mail: {
         default: "nodemailer",
         configs: {},

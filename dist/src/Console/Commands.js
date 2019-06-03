@@ -98,7 +98,7 @@ const Commands = {
         artisan.logThisAndExit("Located @ " + fullPath);
     },
     "migrate"(args) {
-        const $config = $.$config.get("database.config", {});
+        const $config = $.$config.get("config", {});
         if (!Object.keys($config).length) {
             return $.logErrorAndExit("Database config not found.");
         }

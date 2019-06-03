@@ -3,7 +3,7 @@
 const XpresserRouter = require("@xpresser/router");
 const fs = require("fs");
 const _ = require("lodash");
-const Configurations = require("./src/config");
+const Configurations = require("./config");
 const ObjectCollection = require("./src/Helpers/ObjectCollection");
 const { Config, Options } = Configurations;
 const Xpresser = (AppConfig, AppOptions) => {
