@@ -1,6 +1,6 @@
 {
   "name": "xpresser",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "description": "Xpresser Framework for building scalable apps.",
   "main": "dist/index.js",
   "scripts": {
