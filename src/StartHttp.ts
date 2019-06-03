@@ -4,7 +4,6 @@ const {dirname, resolve} = require("path");
 import {Xjs} from "../global";
 import {XpresserHttp} from "../types/http";
 
-import helmet = require("helmet");
 import bodyParser = require("body-parser");
 import connect_session_knex = require("connect-session-knex");
 import cors = require("cors");
@@ -59,7 +58,18 @@ app.use(
     }),
 );
 
-app.use(helmet());
+/**
+ * Helmet helps you secure your Express apps by setting various HTTP headers. It’s not a silver bullet,
+ * but it can help!
+ *
+ * Read more https://helmetjs.github.io/
+ */
+const isProduction = $.$config.get("env") === "production";
+const useHelmet = $.$config.get("server.use.helmet", isProduction);
+if (useHelmet) {
+    const helmet = require("helmet");
+    app.use(helmet());
+}
 
 import Path = require("./Helpers/Path");
 

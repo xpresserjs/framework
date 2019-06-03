@@ -8,6 +8,9 @@ const ServerConfig = {
     root: "/",
     includePortInUrl: true,
     baseUrl: "",
+    use: {
+        helmet: false,
+    },
     ssl: {
         enabled: false,
         port: 443,

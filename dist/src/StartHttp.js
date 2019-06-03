@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const FS = require("fs");
 const { dirname, resolve } = require("path");
-const helmet = require("helmet");
 const bodyParser = require("body-parser");
 const connect_session_knex = require("connect-session-knex");
 const cors = require("cors");
@@ -51,7 +50,18 @@ app.use(express.static(paths.public, {
         }
     },
 }));
-app.use(helmet());
+/**
+ * Helmet helps you secure your Express apps by setting various HTTP headers. It’s not a silver bullet,
+ * but it can help!
+ *
+ * Read more https://helmetjs.github.io/
+ */
+const isProduction = $.$config.get("env") === "production";
+const useHelmet = $.$config.get("server.use.helmet", isProduction);
+if (useHelmet) {
+    const helmet = require("helmet");
+    app.use(helmet());
+}
 const Path = require("./Helpers/Path");
 const KnexSessionStore = connect_session_knex(session);
 const knexSessionConfig = {
