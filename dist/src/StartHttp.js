@@ -73,7 +73,7 @@ const knexSessionConfig = {
 };
 const sessionFilePath = knexSessionConfig.connection.filename;
 if (!FS.existsSync(sessionFilePath)) {
-    Path.makeDirIfNotExist(dirname(sessionFilePath, true));
+    Path.makeDirIfNotExist(sessionFilePath, true);
 }
 const store = new KnexSessionStore({
     knex: require("knex")(knexSessionConfig),
