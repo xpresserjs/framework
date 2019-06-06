@@ -4,7 +4,7 @@ import fs = require("fs");
 import _ = require("lodash");
 import {Xjs} from "./global";
 import Configurations = require("./config");
-import ObjectCollection = require("./src/Helpers/ObjectCollection");
+import ObjectCollection = require("object-collection");
 
 const {Config, Options} = Configurations;
 

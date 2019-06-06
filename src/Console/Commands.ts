@@ -131,10 +131,12 @@ const Commands = {
     },
 
     "migrate"(args) {
-        const $config = $.$config.get("config", {});
+        const $config = $.$config.get("database.config", {});
+
         if (!Object.keys($config).length) {
             return $.logErrorAndExit("Database config not found.");
         }
+
         const data = JSON.stringify({
             [$.$config.get("env", "development")]: $config,
         }, null, 2);

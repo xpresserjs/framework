@@ -29,6 +29,7 @@
     "lodash": "^4.17.11",
     "mkdirp": "^0.5.1",
     "moment": "^2.24.0",
+    "object-collection": "^1.0.1",
     "object-validator-pro": "^1.0.16",
     "objection": "^1.6.9",
     "pluralize": "^7.0.0",
