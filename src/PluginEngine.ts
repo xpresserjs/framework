@@ -1,5 +1,5 @@
 import FS = require("fs");
-import ObjectCollection = require("./Helpers/ObjectCollection");
+import ObjectCollection = require("object-collection");
 import PathHelper = require("./Helpers/Path");
 import {Xjs} from "../global";
 

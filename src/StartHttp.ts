@@ -10,7 +10,7 @@ import cors = require("cors");
 import express = require("express");
 import flash = require("express-flash");
 import session = require("express-session");
-import ObjectCollection = require("./Helpers/ObjectCollection");
+import ObjectCollection = require("object-collection");
 
 import {createServer as createHttpServer} from "http";
 import {createServer as createHttpsServer} from "https";

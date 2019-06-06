@@ -2,7 +2,7 @@ import {Xjs} from "../../global";
 import fs = require("fs");
 import moment = require("moment");
 import PathHelper = require("../Helpers/Path");
-import ObjectCollection = require("../Helpers/ObjectCollection");
+import ObjectCollection = require("object-collection");
 
 declare let $: Xjs;
 declare let _: any;
@@ -38,7 +38,7 @@ export = ($plugin) => {
         return $.logErrorAndExit(`Plugin: ${$plugin} not found.`);
     }
 
-    const $pluginLockData = PluginLockData.getNewInstance($plugin);
+    const $pluginLockData = PluginLockData.newInstanceFrom($plugin);
 
     if ($pluginLockData.get("installed", false)) {
         return $.logPerLine([
@@ -51,7 +51,7 @@ export = ($plugin) => {
 
     if ($pluginData.hasOwnProperty("migrations")) {
 
-        const $migrationLockData = $pluginLockData.getNewInstance("migrations");
+        const $migrationLockData = $pluginLockData.newInstanceFrom("migrations");
         const $migrationsFolder: string = $pluginData.migrations;
         const $migrationFiles = fs.readdirSync($migrationsFolder);
 

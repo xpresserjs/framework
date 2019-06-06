@@ -2,7 +2,7 @@
 const fs = require("fs");
 const moment = require("moment");
 const PathHelper = require("../Helpers/Path");
-const ObjectCollection = require("../Helpers/ObjectCollection");
+const ObjectCollection = require("object-collection");
 const PluginLockDataPath = PathHelper.frameworkStorage("plugins-lock.json");
 let PluginLockData = new ObjectCollection();
 let UpdatePluginLockData = false;
@@ -27,7 +27,7 @@ module.exports = ($plugin) => {
     if ($pluginData === null) {
         return $.logErrorAndExit(`Plugin: ${$plugin} not found.`);
     }
-    const $pluginLockData = PluginLockData.getNewInstance($plugin);
+    const $pluginLockData = PluginLockData.newInstanceFrom($plugin);
     if ($pluginLockData.get("installed", false)) {
         return $.logPerLine([
             { info: `Plugin: ${$plugin} is already installed!` },
@@ -36,7 +36,7 @@ module.exports = ($plugin) => {
     }
     $.logInfo(`Installing ${$plugin}...`);
     if ($pluginData.hasOwnProperty("migrations")) {
-        const $migrationLockData = $pluginLockData.getNewInstance("migrations");
+        const $migrationLockData = $pluginLockData.newInstanceFrom("migrations");
         const $migrationsFolder = $pluginData.migrations;
         const $migrationFiles = fs.readdirSync($migrationsFolder);
         if ($migrationFiles.length) {

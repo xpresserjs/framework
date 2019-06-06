@@ -1,6 +1,6 @@
 "use strict";
 const FS = require("fs");
-const ObjectCollection = require("./Helpers/ObjectCollection");
+const ObjectCollection = require("object-collection");
 const PathHelper = require("./Helpers/Path");
 const pluginRoutes = [];
 const PluginNamespaceToData = {};

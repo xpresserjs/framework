@@ -1,6 +1,6 @@
 "use strict";
 const RequestEngine = require("../RequestEngine");
-const ObjectCollection = require("../Helpers/ObjectCollection");
+const ObjectCollection = require("object-collection");
 let ExtendedRequestEngine = RequestEngine;
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
 /**

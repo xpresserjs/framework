@@ -2,7 +2,7 @@
 const ejs = require("ejs");
 const fs = require("fs");
 const requestHelpers = require("./Functions/request.fn");
-const ObjectCollection = require("./Helpers/ObjectCollection");
+const ObjectCollection = require("object-collection");
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
 class RequestEngine {
     /**

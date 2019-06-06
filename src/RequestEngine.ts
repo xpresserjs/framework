@@ -3,7 +3,7 @@ import fs = require("fs");
 import {Xjs} from "../global";
 import {XpresserHttp} from "../types/http";
 import requestHelpers = require("./Functions/request.fn");
-import ObjectCollection = require("./Helpers/ObjectCollection");
+import ObjectCollection = require("object-collection");
 
 declare let _: any;
 declare let $: Xjs;
