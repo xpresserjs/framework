@@ -5,9 +5,10 @@ class DB {
     public knex: knex;
 
     constructor() {
-        if (!$.$config.has("config")) {
+        if (!$.$config.has("database.config")) {
             return;
         }
+
         const database = $.config.database.config;
 
         const databaseConfigIsValid = $.ovp.validate(database, {
