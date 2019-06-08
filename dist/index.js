@@ -1,11 +1,23 @@
 "use strict";
 /// <reference types="node"/>
-const XpresserRouter = require("@xpresser/router");
+// Import system required libraries
 const fs = require("fs");
 const _ = require("lodash");
+// Import default config.
 const Configurations = require("./config");
+// XpresserRouter && ObjectionCollection
+const XpresserRouter = require("@xpresser/router");
 const ObjectCollection = require("object-collection");
+/**
+ * Get default Config and Options from Configurations
+ */
 const { Config, Options } = Configurations;
+/**
+ * Xpresser Initializer;
+ * @param AppConfig
+ * @param AppOptions
+ * @constructor
+ */
 const Xpresser = (AppConfig, AppOptions) => {
     if (AppConfig === undefined) {
         AppConfig = {};
@@ -14,23 +26,47 @@ const Xpresser = (AppConfig, AppOptions) => {
         AppOptions = {};
     }
     if (typeof AppConfig === "string") {
-        if (fs.lstatSync(AppConfig).isFile()) {
-            AppConfig = require(AppConfig);
+        const configFile = AppConfig;
+        AppConfig = {};
+        if (fs.existsSync(configFile) && fs.lstatSync(configFile).isFile()) {
+            try {
+                AppConfig = require(configFile);
+                // tslint:disable-next-line:max-line-length
+                if (typeof AppConfig !== "object" || (typeof AppConfig === "object" && !Object.keys(AppConfig).length)) {
+                    // noinspection ExceptionCaughtLocallyJS
+                    throw new Error(`CONFIG: No exported object not found in config file (${configFile})`);
+                }
+            }
+            catch (e) {
+                console.error(e.message);
+                process.exit();
+            }
         }
         else {
             console.error("Config file not found!");
-            console.error("Using default config.");
-            AppConfig = {};
+            process.exit();
         }
     }
+    // Merge Config with DefaultConfig to replace missing values.
     AppConfig = _.merge(Config, AppConfig);
-    AppOptions = _.extend(Options, AppOptions);
+    AppOptions = _.merge(Options, AppOptions);
+    // Set Xjs Global Var: $
     const $ = {};
+    // Set $ (Xjs) && _ (lodash) to globals.
     global.$ = $;
     global._ = _;
+    // Set Config to AppConfig
     $.config = AppConfig;
+    /**
+     * Set $.$config to an instance of ObjectCollection
+     * To enable access and modify apps config.
+     */
     $.$config = new ObjectCollection($.config);
     $.$options = AppOptions;
+    /**
+     * Engine Data serves as the store
+     * for all data store by Xpresser files/components
+     */
     $.engineData = new ObjectCollection();
     if (typeof global["XjsCliConfig"] !== "undefined") {
         $.$options.isConsole = true;

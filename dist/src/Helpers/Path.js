@@ -65,7 +65,7 @@ const PathHelper = {
      * @param $path
      * @param $isFile
      */
-    makeDirIfNotExist($path, $isFile) {
+    makeDirIfNotExist($path, $isFile = false) {
         if ($isFile === true) {
             $path = PATH.dirname($path);
         }

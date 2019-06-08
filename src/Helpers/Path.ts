@@ -1,6 +1,7 @@
 import {Xjs} from "../../global";
 import PATH = require("path");
 import fs = require("fs");
+
 declare let $: Xjs;
 
 const pathHelpers = {
@@ -81,7 +82,7 @@ const PathHelper = {
      * @param $path
      * @param $isFile
      */
-    makeDirIfNotExist($path: string, $isFile?: boolean) {
+    makeDirIfNotExist($path: string, $isFile = false) {
         if ($isFile === true) {
             $path = PATH.dirname($path);
         }
@@ -92,7 +93,6 @@ const PathHelper = {
             } catch (e) {
                 $.logErrorAndExit(e.message);
             }
-
         }
 
         return $path;

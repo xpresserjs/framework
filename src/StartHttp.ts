@@ -95,6 +95,7 @@ const store = new KnexSessionStore({
 // Add Cors
 app.use(cors());
 
+// Use BodyParser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
