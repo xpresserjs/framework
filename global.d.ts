@@ -6,6 +6,7 @@ import ModelEngine from "./src/ModelEngine";
 import RouterEngine = require("./src/RouterEngine");
 import UseEngine = require("./src/UseEngine");
 import {Server} from "net";
+import XpresserRouter = require("@xpresser/router/index");
 
 type DB = import("./src/Database/Db");
 

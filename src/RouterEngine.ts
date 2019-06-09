@@ -1,5 +1,6 @@
 import fs = require("fs");
 import {Xjs} from "../global";
+import XpresserRouter = require("@xpresser/router/index");
 
 const AllRoutesKey = "RouterEngine:allRoutes";
 
@@ -234,7 +235,6 @@ class RouterEngine {
                 let controllerPath = $.use.controller(controller + $.config.project.fileExtension);
 
                 if (!fs.existsSync(controllerPath)) {
-
 
                     if (!controller.toLowerCase().includes("controller")) {
 
