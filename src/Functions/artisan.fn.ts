@@ -10,6 +10,7 @@ declare let $: Xjs;
 declare let _: any;
 
 const isTinker = typeof $.$options.isTinker === "boolean" && $.$options.isTinker;
+const FILE_EXTENSION = $.$config.get("project.fileExtension", ".js");
 
 export = {
     logThis(...args) {
@@ -52,7 +53,7 @@ export = {
             }
         }
 
-        $to = $to + "/" + $name + ".js";
+        $to = $to + "/" + $name + FILE_EXTENSION;
 
         if (fs.existsSync($to)) {
             return this.logThisAndExit($name + " already exists!");

@@ -12,6 +12,6 @@ ovp.addValidator("checkDbConfig", (connection) => {
         "*": { must: true },
         "password": { must: false },
     });
-}, "Check connection config in knexFile.js");
+}, "Check connection config.");
 module.exports = ovp;
 //# sourceMappingURL=ObjectValidatorPro.js.map

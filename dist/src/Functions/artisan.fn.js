@@ -6,6 +6,7 @@ const Pluralise = require("pluralize");
 const colors = require("../Objects/consoleColors.obj");
 const PathHelper = require("../Helpers/Path");
 const isTinker = typeof $.$options.isTinker === "boolean" && $.$options.isTinker;
+const FILE_EXTENSION = $.$config.get("project.fileExtension", ".js");
 module.exports = {
     logThis(...args) {
         if (isTinker) {
@@ -41,7 +42,7 @@ module.exports = {
                 $name = $name + _.upperFirst($for);
             }
         }
-        $to = $to + "/" + $name + ".js";
+        $to = $to + "/" + $name + FILE_EXTENSION;
         if (fs.existsSync($to)) {
             return this.logThisAndExit($name + " already exists!");
         }
