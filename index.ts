@@ -65,6 +65,7 @@ const Xpresser = (AppConfig: object | string, AppOptions?: XpresserOptions): Xjs
 
     // Set $ (Xjs) && _ (lodash) to globals.
     global.$ = $;
+
     global._ = _;
 
     // Set Config to AppConfig
