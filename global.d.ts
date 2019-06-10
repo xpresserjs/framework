@@ -1,3 +1,6 @@
+import "./node";
+import "./types/helpers";
+
 import express = require("express");
 import ObjectValidator from "object-validator-pro";
 import Controller = require("./src/Classes/Controller");
