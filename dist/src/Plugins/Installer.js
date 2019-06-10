@@ -3,7 +3,7 @@ const fs = require("fs");
 const moment = require("moment");
 const PathHelper = require("../Helpers/Path");
 const ObjectCollection = require("object-collection");
-const PluginLockDataPath = PathHelper.frameworkStorage("plugins-lock.json");
+const PluginLockDataPath = $.path.jsonConfigs("plugins-lock.json");
 let PluginLockData = new ObjectCollection();
 let UpdatePluginLockData = false;
 PathHelper.makeDirIfNotExist(PluginLockDataPath, true);
@@ -105,7 +105,7 @@ module.exports = ($plugin) => {
         }
     }
     if (UpdatePluginLockData) {
-        fs.writeFileSync(PluginLockDataPath, JSON.stringify(PluginLockData.all(), null, 2));
+        fs.writeFileSync(PluginLockDataPath, JSON.stringify(PluginLockData.return(), null, 2));
         $.logInfo("Updated plugins-lock.json");
     }
     $.logInfo("Installation Complete!");

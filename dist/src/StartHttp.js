@@ -67,7 +67,7 @@ const KnexSessionStore = connect_session_knex(session);
 const knexSessionConfig = {
     client: "sqlite3",
     connection: {
-        filename: Path.frameworkStorage("db/sessions.sqlite"),
+        filename: $.path.base("sessions.sqlite"),
     },
     useNullAsDefault: true,
 };
