@@ -1,6 +1,3 @@
-import {Xjs} from "../global";
-import Path = require("./Helpers/Path");
-import fs = require("fs");
 
 declare let $: Xjs;
 

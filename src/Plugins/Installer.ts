@@ -1,4 +1,4 @@
-import {Xjs} from "../../global";
+
 import fs = require("fs");
 import moment = require("moment");
 import PathHelper = require("../Helpers/Path");

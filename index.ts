@@ -9,7 +9,6 @@ import Configurations = require("./config");
 // XpresserRouter && ObjectionCollection
 import XpresserRouter = require("@xpresser/router");
 import ObjectCollection = require("object-collection");
-import {Xjs} from "./global";
 
 /**
  * Get default Config and Options from Configurations

@@ -1,5 +1,5 @@
 import RequestEngine = require("../RequestEngine");
-import {Xjs} from "../../global";
+
 import ObjectCollection = require("object-collection");
 
 declare let $: Xjs;

@@ -1,7 +1,5 @@
 import FS = require("fs");
-
 const {dirname, resolve} = require("path");
-import {Xjs} from "../global";
 import {XpresserHttp} from "../types/http";
 
 import bodyParser = require("body-parser");

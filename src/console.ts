@@ -1,4 +1,4 @@
-import {Xjs} from "../global";
+
 import fs = require("fs");
 declare let $: Xjs;
 

@@ -1,1 +1,1 @@
-{"version":3,"file":"StartConsole.js","sourceRoot":"","sources":["../../src/StartConsole.ts"],"names":[],"mappings":";;AAMA,6CAA8C;AAC9C,CAAC,CAAC,KAAK,GAAG,WAAW,CAAC;AAGtB,IAAI,CAAC,MAAM,CAAC,cAAc,CAAC,cAAc,CAAC,EAAE;IACxC,OAAO,CAAC,WAAW,CAAC,CAAC;CACxB"}
+{"version":3,"file":"StartConsole.js","sourceRoot":"","sources":["../../src/StartConsole.ts"],"names":[],"mappings":";;AAGA,6CAA8C;AAC9C,CAAC,CAAC,KAAK,GAAG,WAAW,CAAC;AAGtB,IAAI,CAAC,MAAM,CAAC,cAAc,CAAC,cAAc,CAAC,EAAE;IACxC,OAAO,CAAC,WAAW,CAAC,CAAC;CACxB"}

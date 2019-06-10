@@ -1,4 +1,4 @@
-import {Xjs} from "../../global";
+
 declare const $: Xjs;
 
 import os = require("os");

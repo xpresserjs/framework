@@ -3,7 +3,7 @@ import fse = require("fs-extra");
 import Handlebars = require("handlebars");
 import Pluralise = require("pluralize");
 import colors = require("../Objects/consoleColors.obj");
-import {Xjs} from "../../global";
+
 import PathHelper = require("../Helpers/Path");
 
 declare let $: Xjs;

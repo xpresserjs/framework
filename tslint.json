@@ -14,7 +14,8 @@
         "no-unnecessary-initializer": false,
         "no-shadowed-variable": false,
         "no-string-literal": false,
-        "ordered-imports": false
+        "ordered-imports": false,
+        "no-reference": false
     },
     "rulesDirectory": []
 }

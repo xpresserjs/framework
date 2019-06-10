@@ -6,7 +6,6 @@
  */
 
 import fs = require("fs");
-import {JsonSettings} from "../global";
 import PathHelper = require("./Helpers/Path");
 import StringHelper = require("./Helpers/String");
 

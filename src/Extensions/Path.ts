@@ -1,5 +1,5 @@
 import FS = require("fs");
-import {Xjs} from "../../global";
+
 import Path = require("../Helpers/Path");
 
 const packageName: string = "xpresser";

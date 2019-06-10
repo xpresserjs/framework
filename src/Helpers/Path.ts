@@ -1,4 +1,4 @@
-import {Xjs} from "../../global";
+
 import PATH = require("path");
 import fs = require("fs");
 

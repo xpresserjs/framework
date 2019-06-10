@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import {Xjs} from "../../global";
+
 
 declare let $: Xjs;
 declare let _;

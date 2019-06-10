@@ -1,6 +1,6 @@
 declare namespace NodeJS {
     interface Global {
-        $: any;
+        $: Xjs;
         _: any;
         moment: any;
     }

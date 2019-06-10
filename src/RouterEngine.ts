@@ -1,5 +1,5 @@
 import fs = require("fs");
-import {Xjs} from "../global";
+
 import XpresserRouter = require("@xpresser/router/index");
 
 const AllRoutesKey = "RouterEngine:allRoutes";

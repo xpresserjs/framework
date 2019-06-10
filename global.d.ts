@@ -1,17 +1,5 @@
-import "./node";
-import "./types/helpers";
-
-import express = require("express");
-import ObjectValidator from "object-validator-pro";
-import Controller = require("./src/Classes/Controller");
-import ObjectCollection from "object-collection";
-import ModelEngine from "./src/ModelEngine";
-import RouterEngine = require("./src/RouterEngine");
-import UseEngine = require("./src/UseEngine");
-import {Server} from "net";
-import XpresserRouter = require("@xpresser/router/index");
-
-type DB = import("./src/Database/Db");
+/// <reference path="node.d.ts" />
+/// <reference path="./types/helpers.d.ts" />
 
 declare namespace JsonSettings {
     interface Use {
@@ -21,48 +9,48 @@ declare namespace JsonSettings {
 
 declare interface Xjs {
     config: any;
-    $config: ObjectCollection;
+    $config: import("object-collection");
     $options: XpresserOptions;
 
     // Stores Engine Data
-    engineData: ObjectCollection;
+    engineData: import("object-collection");
 
     // Base64 Encoder
     base64: XjsHelpers.Base64;
 
     // Object validator
-    ovp: ObjectValidator;
+    ovp: import("object-validator-pro");
 
     // Database
-    db: DB;
+    db: import("./src/Database/Db");
 
     // Use Engine
-    use: typeof UseEngine;
+    use: typeof import("./src/UseEngine");
 
     // Set XjsHelpers
     helpers: XjsHelpers.Main;
 
     // Router Helper
-    router: XpresserRouter;
+    router: import("@xpresser/router");
 
     // Register Functions
     fn: XjsHelpers.FN;
 
     // Express App
-    app: express.Application;
+    app: import("express").Application;
 
     // Server Variables
-    http: Server;
-    https: Server;
+    http: import("net").Server;
+    https: import("net").Server;
 
     // Model Engine
-    model: typeof ModelEngine;
+    model: typeof import("./src/ModelEngine");
 
     // Router Engine
-    routerEngine: typeof RouterEngine;
+    routerEngine: typeof import("./src/RouterEngine");
 
     // Controller
-    controller: Controller;
+    controller: import("./src/Classes/Controller") | any;
 
     /*----------------- PATH FUNCTIONS ------------------- */
     path: {

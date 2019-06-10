@@ -1,10 +1,10 @@
 "use strict";
 // @ts-check
 const moment = require("moment");
-const objection_1 = require("objection");
+const Objection = require("objection");
 const ModelQueryBuilder = require("./Database/ModelQueryBuilder");
 // @ts-ignore
-class ModelEngine extends objection_1.Model {
+class ModelEngine extends Objection.Model {
     static get QueryBuilder() {
         return ModelQueryBuilder;
     }

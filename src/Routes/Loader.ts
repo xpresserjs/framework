@@ -1,6 +1,6 @@
 import fs = require("fs");
 import RouterEngine = require("../RouterEngine");
-import {Xjs} from "../../global";
+
 import Path = require("../Helpers/Path");
 
 declare let $: Xjs;

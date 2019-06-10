@@ -1,13 +1,13 @@
 // @ts-check
 import moment = require("moment");
-import {Model} from "objection";
+import Objection = require("objection");
 import ModelQueryBuilder = require("./Database/ModelQueryBuilder");
 
 declare let _: any;
 declare let $: any;
 
 // @ts-ignore
-class ModelEngine extends Model {
+class ModelEngine extends Objection.Model {
 
     static get QueryBuilder() {
         return ModelQueryBuilder;

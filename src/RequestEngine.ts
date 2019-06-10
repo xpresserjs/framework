@@ -1,6 +1,6 @@
 import ejs = require("ejs");
 import fs = require("fs");
-import {Xjs} from "../global";
+
 import {XpresserHttp} from "../types/http";
 import requestHelpers = require("./Functions/request.fn");
 import ObjectCollection = require("object-collection");
