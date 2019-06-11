@@ -27,8 +27,11 @@ module.exports = ($plugin) => {
     if ($pluginData === null) {
         return $.logErrorAndExit(`Plugin: ${$plugin} not found.`);
     }
-    const $pluginLockData = PluginLockData.newInstanceFrom($plugin);
-    if ($pluginLockData.get("installed", false)) {
+    if (!PluginLockData.has($plugin)) {
+        PluginLockData.set($plugin, {});
+    }
+    const $thisPluginLockData = PluginLockData.newInstanceFrom($plugin);
+    if ($thisPluginLockData.get("installed", false)) {
         return $.logPerLine([
             { info: `Plugin: ${$plugin} is already installed!` },
             { errorAndExit: "" },
@@ -36,7 +39,7 @@ module.exports = ($plugin) => {
     }
     $.logInfo(`Installing ${$plugin}...`);
     if ($pluginData.hasOwnProperty("migrations")) {
-        const $migrationLockData = $pluginLockData.newInstanceFrom("migrations");
+        const $migrationLockData = $thisPluginLockData.newInstanceFrom("migrations");
         const $migrationsFolder = $pluginData.migrations;
         const $migrationFiles = fs.readdirSync($migrationsFolder);
         if ($migrationFiles.length) {
@@ -62,7 +65,7 @@ module.exports = ($plugin) => {
                         [$migrationFile]: $newMigrationFile,
                     },
                 };
-                PluginLockData.mergeWith($plugin, $data);
+                $thisPluginLockData.merge($data);
                 UpdatePluginLockData = true;
             }
         }
@@ -85,18 +88,18 @@ module.exports = ($plugin) => {
                     [$modelFile]: $newModel,
                 },
             };
-            PluginLockData.mergeWith($plugin, $data);
+            $thisPluginLockData.merge($data);
             UpdatePluginLockData = true;
         }
     }
-    const $pluginIsInstalled = $pluginLockData.get("installed", false);
+    const $pluginIsInstalled = $thisPluginLockData.get("installed", false);
     if (!$pluginIsInstalled) {
         try {
             const pluginInit = require($pluginData.path);
             if (typeof pluginInit.install === "function") {
                 pluginInit.install();
             }
-            $pluginLockData.set("installed", true);
+            $thisPluginLockData.set("installed", true);
             UpdatePluginLockData = true;
         }
         catch (e) {
