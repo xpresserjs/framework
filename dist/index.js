@@ -88,7 +88,10 @@ const Xpresser = (AppConfig, AppOptions) => {
     $.engineData.set("PluginEngineData", PluginData);
     // Global
     require("./src/global");
-    // Add Router
+    /**
+     * Add Router
+     * @type {XpresserRouter}
+     */
     $.router = new XpresserRouter();
     if ($.$options.isConsole) {
         require("./src/StartConsole");

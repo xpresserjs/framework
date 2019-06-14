@@ -110,7 +110,10 @@ const Xpresser = (AppConfig: object | string, AppOptions?: XpresserOptions): Xjs
     // Global
     require("./src/global");
 
-    // Add Router
+    /**
+     * Add Router
+     * @type {XpresserRouter}
+     */
     $.router = new XpresserRouter();
 
     if ($.$options.isConsole) {
