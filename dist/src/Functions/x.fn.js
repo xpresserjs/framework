@@ -40,4 +40,3 @@ module.exports = {
         return text;
     },
 };
-//# sourceMappingURL=x.fn.js.map

@@ -34,4 +34,3 @@ if (typeof $.router.routesAfterPlugins === "function") {
 }
 // Process Routes
 $.routerEngine.processRoutes($.router.routes);
-//# sourceMappingURL=Loader.js.map

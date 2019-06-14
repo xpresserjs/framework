@@ -123,4 +123,3 @@ const Options = {
     isTinker: false,
 };
 module.exports = { Config, Options };
-//# sourceMappingURL=config.js.map

@@ -13,4 +13,3 @@ class Controller {
     }
 }
 module.exports = Controller;
-//# sourceMappingURL=Controller.js.map

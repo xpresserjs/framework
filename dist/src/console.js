@@ -65,4 +65,3 @@ else {
         afterRun = runFn(args, JobHelper);
     }
 }
-//# sourceMappingURL=console.js.map

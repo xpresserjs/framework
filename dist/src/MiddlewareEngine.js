@@ -42,4 +42,3 @@ const middleware = (middlewarePath, action = undefined) => {
     return new MiddlewareEngine(middlewareFile, action);
 };
 module.exports = middleware;
-//# sourceMappingURL=MiddlewareEngine.js.map

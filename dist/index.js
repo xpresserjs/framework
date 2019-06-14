@@ -102,4 +102,3 @@ const Xpresser = (AppConfig, AppOptions) => {
     return $;
 };
 module.exports = Xpresser;
-//# sourceMappingURL=index.js.map

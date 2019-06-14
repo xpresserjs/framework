@@ -113,4 +113,3 @@ module.exports = ($plugin) => {
     }
     $.logInfo("Installation Complete!");
 };
-//# sourceMappingURL=Installer.js.map

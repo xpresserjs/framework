@@ -27,4 +27,3 @@ $.helpers = require("./helpers");
 // $.Helpers.
 // Assign Functions to $.fn
 $.fn = require("./Functions/x.fn");
-//# sourceMappingURL=global.js.map

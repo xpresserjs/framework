@@ -23,4 +23,3 @@ const self = {
     },
 };
 module.exports = self;
-//# sourceMappingURL=String.js.map

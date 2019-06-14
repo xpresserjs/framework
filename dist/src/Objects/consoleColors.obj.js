@@ -24,4 +24,3 @@ module.exports = {
     bgCyan: "\x1b[46m",
     bgWhite: "\x1b[47m",
 };
-//# sourceMappingURL=consoleColors.obj.js.map

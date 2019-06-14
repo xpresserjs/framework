@@ -5,4 +5,3 @@ $.model = ModelEngine;
 if (!global.hasOwnProperty("XjsCliConfig")) {
     require("./console");
 }
-//# sourceMappingURL=StartConsole.js.map

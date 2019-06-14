@@ -21,4 +21,3 @@ class ModelEngine extends Objection.Model {
     }
 }
 module.exports = ModelEngine;
-//# sourceMappingURL=ModelEngine.js.map

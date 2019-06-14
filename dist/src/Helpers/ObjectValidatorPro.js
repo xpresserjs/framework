@@ -14,4 +14,3 @@ ovp.addValidator("checkDbConfig", (connection) => {
     });
 }, "Check connection config.");
 module.exports = ovp;
-//# sourceMappingURL=ObjectValidatorPro.js.map

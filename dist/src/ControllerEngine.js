@@ -186,4 +186,3 @@ const controller = (controller, method = null) => {
     return new ControllerEngine(controller, method);
 };
 module.exports = controller;
-//# sourceMappingURL=ControllerEngine.js.map

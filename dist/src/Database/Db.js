@@ -28,4 +28,3 @@ class DB {
     }
 }
 module.exports = DB;
-//# sourceMappingURL=Db.js.map

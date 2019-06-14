@@ -84,4 +84,3 @@ if (!FS.existsSync(XpresserEngine)) {
     $.logError("Xpresser Engine not found in folder:");
     $.logErrorAndExit(XpresserEngine);
 }
-//# sourceMappingURL=Path.js.map

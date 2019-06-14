@@ -79,4 +79,3 @@ class ModelQueryBuilder extends objection_1.QueryBuilder {
     }
 }
 module.exports = ModelQueryBuilder;
-//# sourceMappingURL=ModelQueryBuilder.js.map

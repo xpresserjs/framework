@@ -67,4 +67,3 @@ module.exports = {
         return Pluralise.singular(str);
     },
 };
-//# sourceMappingURL=artisan.fn.js.map
