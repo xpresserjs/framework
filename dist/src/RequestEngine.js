@@ -169,7 +169,7 @@ class RequestEngine {
                 if (PluginNameSpaces.hasOwnProperty($pluginNamespace)) {
                     if (typeof PluginNameSpaces[$pluginNamespace].views === "string") {
                         file = PluginNameSpaces[$pluginNamespace].views + "/" + $splitFile[1];
-                        $.engineData.addToObject("RequestEngine:views", { key: $filePath, value: file });
+                        $.engineData.path("RequestEngine:views").set($filePath, file);
                     }
                 }
             }
