@@ -60,7 +60,6 @@ const Xpresser = (AppConfig, AppOptions) => {
     /**
      * Set $.$config to an instance of ObjectCollection
      * To enable access and modify apps config.
-     * @type Xpresser.$config
      */
     $.$config = new ObjectCollection($.config);
     /**
