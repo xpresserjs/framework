@@ -166,6 +166,7 @@ import ModelEngine = require("./ModelEngine");
 $.model = ModelEngine;
 
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
+import {Xpresser} from "../global";
 
 for (let i = 0; i < $pluginNamespaceKeys.length; i++) {
     const $pluginNamespaceKey = $pluginNamespaceKeys[i];

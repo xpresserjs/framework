@@ -2,6 +2,7 @@ import fs = require("fs");
 import moment = require("moment");
 import PathHelper = require("../Helpers/Path");
 import ObjectCollection = require("object-collection");
+import {Xpresser} from "../../global";
 
 declare let $: Xpresser;
 declare let _: any;

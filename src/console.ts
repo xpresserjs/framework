@@ -1,5 +1,6 @@
 
 import fs = require("fs");
+import {Xpresser} from "../global";
 declare let $: Xpresser;
 
 const args = process.argv.splice(3);

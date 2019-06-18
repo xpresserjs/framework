@@ -1,6 +1,7 @@
 import RequestEngine = require("../RequestEngine");
 
 import ObjectCollection = require("object-collection");
+import {Xpresser} from "../../global";
 
 declare let $: Xpresser;
 

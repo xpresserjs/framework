@@ -4,6 +4,7 @@ import fs = require("fs");
 import {XpresserHttp} from "../http";
 import requestHelpers = require("./Functions/request.fn");
 import ObjectCollection = require("object-collection");
+import {Xpresser} from "../global";
 
 declare let _: any;
 declare let $: Xpresser;

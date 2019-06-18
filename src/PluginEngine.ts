@@ -1,6 +1,7 @@
 import FS = require("fs");
 import ObjectCollection = require("object-collection");
 import PathHelper = require("./Helpers/Path");
+import {Xpresser} from "../global";
 
 
 declare let $: Xpresser;

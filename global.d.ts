@@ -1,9 +1,10 @@
 /// <reference path="node.d.ts" />
 /// <reference path="helpers.d.ts" />
+/// <reference path="./types/object-collection.d.ts" />
 
-declare type XpresserRouter = import("@xpresser/router");
-declare type ObjectCollection = import("object-collection");
-declare type ObjectValidatorPro = import("object-validator-pro");
+import XpresserRouter = require("@xpresser/router");
+import ObjectCollection = require("object-collection");
+import ObjectValidatorPro = require("object-validator-pro");
 
 declare namespace XpresserJsonSettings {
     interface Use {

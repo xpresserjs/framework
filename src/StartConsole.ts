@@ -1,3 +1,4 @@
+import {Xpresser} from "../global";
 
 declare let $: Xpresser;
 

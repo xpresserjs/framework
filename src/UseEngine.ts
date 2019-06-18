@@ -8,6 +8,7 @@
 import fs = require("fs");
 import PathHelper = require("./Helpers/Path");
 import StringHelper = require("./Helpers/String");
+import {XpresserJsonSettings} from "../global";
 
 declare let $: any;
 

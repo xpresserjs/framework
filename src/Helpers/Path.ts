@@ -1,6 +1,7 @@
 
 import PATH = require("path");
 import fs = require("fs");
+import {Xpresser} from "../../global";
 
 declare let $: Xpresser;
 

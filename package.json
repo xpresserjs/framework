@@ -3,7 +3,7 @@
   "version": "0.0.50",
   "description": "Xpresser Framework for building scalable apps.",
   "main": "dist/index.js",
-  "types": "index.d.ts",
+  "types": "global.d.ts",
   "scripts": {
     "prod": "tsc && node dist/index.js",
     "dev": "ts-node-dev --respawn --transpileOnly ./test.ts"

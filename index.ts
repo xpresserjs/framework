@@ -9,6 +9,7 @@ import Configurations = require("./config");
 // XpresserRouter && ObjectionCollection
 import XpresserRouter = require("@xpresser/router");
 import ObjectCollection = require("object-collection");
+import {Xpresser} from "./global";
 
 /**
  * Get default Config and Options from Configurations
@@ -21,7 +22,7 @@ const {Config, Options} = Configurations;
  * @param AppOptions
  * @constructor
  */
-const Xpresser = (AppConfig: object | string, AppOptions?: XpresserOptions): Xpresser => {
+const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions): Xpresser => {
 
     if (AppConfig === undefined) {
         AppConfig = {};
@@ -131,4 +132,4 @@ const Xpresser = (AppConfig: object | string, AppOptions?: XpresserOptions): Xpr
     return $;
 };
 
-export = Xpresser;
+export = XpresserInit;

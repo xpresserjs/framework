@@ -18,7 +18,7 @@ const { Config, Options } = Configurations;
  * @param AppOptions
  * @constructor
  */
-const Xpresser = (AppConfig, AppOptions) => {
+const XpresserInit = (AppConfig, AppOptions) => {
     if (AppConfig === undefined) {
         AppConfig = {};
     }
@@ -106,4 +106,4 @@ const Xpresser = (AppConfig, AppOptions) => {
     }
     return $;
 };
-module.exports = Xpresser;
+module.exports = XpresserInit;

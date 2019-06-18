@@ -1,6 +1,6 @@
 declare namespace NodeJS {
     interface Global {
-        $: Xpresser;
+        $: any;
         _: any;
         moment: any;
     }
