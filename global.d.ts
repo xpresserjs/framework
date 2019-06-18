@@ -5,6 +5,12 @@
 import XpresserRouter = require("@xpresser/router");
 import ObjectCollection = require("object-collection");
 import ObjectValidatorPro = require("object-validator-pro");
+import UseEngine = require("./src/UseEngine");
+import DB = require("./src/Database/Db");
+import {Server} from "net";
+import ModelEngine = require("./src/ModelEngine");
+import RouterEngine = require("./src/RouterEngine");
+import Controller = require("./src/Classes/Controller");
 
 declare namespace XpresserJsonSettings {
     interface Use {
@@ -27,10 +33,10 @@ declare interface Xpresser {
     ovp: ObjectValidatorPro;
 
     // Database
-    db: import("./src/Database/Db");
+    db: DB;
 
     // Use Engine
-    use: typeof import("./src/UseEngine");
+    use: typeof UseEngine;
 
     // Set XpresserHelpers
     helpers: XpresserHelpers.Main;
@@ -45,17 +51,17 @@ declare interface Xpresser {
     app: import("express").Application;
 
     // Server Variables
-    http: import("net").Server;
-    https: import("net").Server;
+    http: Server;
+    https: Server;
 
     // Model Engine
-    model: typeof import("./src/ModelEngine");
+    model: typeof ModelEngine;
 
     // Router Engine
-    routerEngine: typeof import("./src/RouterEngine");
+    routerEngine: typeof RouterEngine;
 
     // Controller
-    controller: import("./src/Classes/Controller") | any;
+    controller: Controller | any;
 
     /*----------------- PATH FUNCTIONS ------------------- */
     path: {
