@@ -2,7 +2,7 @@ import RequestEngine = require("../RequestEngine");
 
 import ObjectCollection = require("object-collection");
 
-declare let $: Xjs;
+declare let $: Xpresser;
 
 let ExtendedRequestEngine = RequestEngine;
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});

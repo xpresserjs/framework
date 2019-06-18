@@ -50,9 +50,9 @@ const Xpresser = (AppConfig, AppOptions) => {
     // Merge Config with DefaultConfig to replace missing values.
     AppConfig = _.merge(Config, AppConfig);
     AppOptions = _.merge(Options, AppOptions);
-    // Set Xjs Global Var: $
+    // Set Xpresser Global Var: $
     const $ = {};
-    // Set $ (Xjs) && _ (lodash) to globals.
+    // Set $ (Xpresser) && _ (lodash) to globals.
     global.$ = $;
     global._ = _;
     // Set Config to AppConfig
@@ -60,8 +60,14 @@ const Xpresser = (AppConfig, AppOptions) => {
     /**
      * Set $.$config to an instance of ObjectCollection
      * To enable access and modify apps config.
+     * @type Xpresser.$config
      */
     $.$config = new ObjectCollection($.config);
+    /**
+     * Set $.$config to an instance of ObjectCollection
+     * To enable access and modify apps config.
+     * @type XpresserOptions
+     */
     $.$options = AppOptions;
     /**
      * Engine Data serves as the store

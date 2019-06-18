@@ -5,7 +5,7 @@ import XpresserRouter = require("@xpresser/router/index");
 const AllRoutesKey = "RouterEngine:allRoutes";
 
 declare let _: any;
-declare let $: Xjs;
+declare let $: Xpresser;
 
 const NameToRoute = {};
 const ProcessedRoutes = [];

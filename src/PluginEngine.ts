@@ -3,7 +3,7 @@ import ObjectCollection = require("object-collection");
 import PathHelper = require("./Helpers/Path");
 
 
-declare let $: Xjs;
+declare let $: Xpresser;
 
 const pluginRoutes = [] as any[];
 const PluginNamespaceToData = {};

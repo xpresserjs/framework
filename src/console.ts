@@ -1,6 +1,6 @@
 
 import fs = require("fs");
-declare let $: Xjs;
+declare let $: Xpresser;
 
 const args = process.argv.splice(3);
 if (args[2] === "--from-tinker") {

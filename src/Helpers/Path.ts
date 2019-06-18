@@ -2,7 +2,7 @@
 import PATH = require("path");
 import fs = require("fs");
 
-declare let $: Xjs;
+declare let $: Xpresser;
 
 const pathHelpers = {
     base: "base://",

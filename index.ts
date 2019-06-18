@@ -21,7 +21,7 @@ const {Config, Options} = Configurations;
  * @param AppOptions
  * @constructor
  */
-const Xpresser = (AppConfig: object | string, AppOptions?: XpresserOptions): Xjs => {
+const Xpresser = (AppConfig: object | string, AppOptions?: XpresserOptions): Xpresser => {
 
     if (AppConfig === undefined) {
         AppConfig = {};
@@ -60,10 +60,10 @@ const Xpresser = (AppConfig: object | string, AppOptions?: XpresserOptions): Xjs
     AppConfig = _.merge(Config, AppConfig);
     AppOptions = _.merge(Options, AppOptions);
 
-    // Set Xjs Global Var: $
-    const $ = {} as Xjs;
+    // Set Xpresser Global Var: $
+    const $ = {} as Xpresser;
 
-    // Set $ (Xjs) && _ (lodash) to globals.
+    // Set $ (Xpresser) && _ (lodash) to globals.
     global.$ = $;
 
     global._ = _;
@@ -74,8 +74,15 @@ const Xpresser = (AppConfig: object | string, AppOptions?: XpresserOptions): Xjs
     /**
      * Set $.$config to an instance of ObjectCollection
      * To enable access and modify apps config.
+     * @type Xpresser.$config
      */
     $.$config = new ObjectCollection($.config);
+
+    /**
+     * Set $.$config to an instance of ObjectCollection
+     * To enable access and modify apps config.
+     * @type XpresserOptions
+     */
     $.$options = AppOptions;
 
     /**

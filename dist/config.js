@@ -103,7 +103,7 @@ const Config = {
         cacheIfMatch: [],
         cacheMaxAge: 31536000,
         overrideServerName: true,
-        serverName: "Xjs",
+        serverName: "Xpresser",
     },
     backgroundMonitor: {
         start: "forever start {file}",

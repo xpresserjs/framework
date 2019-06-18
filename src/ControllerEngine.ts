@@ -1,5 +1,5 @@
 import express from "express";
-import {XpresserHttp} from "../types/http";
+import {XpresserHttp} from "../http";
 import ErrorEngine = require("./ErrorEngine");
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 

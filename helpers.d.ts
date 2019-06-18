@@ -1,4 +1,4 @@
-declare namespace XjsHelpers {
+declare namespace XpresserHelpers {
     interface Main {
         url($path?: string, $query?: object): string;
 

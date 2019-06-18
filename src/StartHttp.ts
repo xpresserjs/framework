@@ -1,6 +1,6 @@
 import FS = require("fs");
 const {dirname, resolve} = require("path");
-import {XpresserHttp} from "../types/http";
+import {XpresserHttp} from "../http";
 
 import bodyParser = require("body-parser");
 import connect_session_knex = require("connect-session-knex");
@@ -14,7 +14,7 @@ import {createServer as createHttpServer} from "http";
 import {createServer as createHttpsServer} from "https";
 
 declare let _: any;
-declare let $: Xjs;
+declare let $: Xpresser;
 
 const paths = $.$config.get("paths");
 const $pluginData = $.engineData.get("PluginEngine:namespaces", {});
@@ -23,9 +23,9 @@ const $pluginNamespaceKeys = Object.keys($pluginData);
 const app = express();
 
 app.use((req, res, next) => {
-    res.set("X-Powered-By", "Xjs");
+    res.set("X-Powered-By", "Xpresser");
     if ($.config.response.overrideServerName) {
-        res.set("Server", "Xjs");
+        res.set("Server", "Xpresser");
     }
     next();
 });

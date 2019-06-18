@@ -1,12 +1,12 @@
 import ejs = require("ejs");
 import fs = require("fs");
 
-import {XpresserHttp} from "../types/http";
+import {XpresserHttp} from "../http";
 import requestHelpers = require("./Functions/request.fn");
 import ObjectCollection = require("object-collection");
 
 declare let _: any;
-declare let $: Xjs;
+declare let $: Xpresser;
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
 
 class RequestEngine {
@@ -18,7 +18,7 @@ class RequestEngine {
 
     public bothData: any;
     public session: any;
-    public fn: XjsHelpers.FN;
+    public fn: XpresserHelpers.FN;
     public customRenderer: () => string;
 
     /**

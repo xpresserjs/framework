@@ -4,7 +4,7 @@ import Path = require("../Helpers/Path");
 
 const packageName: string = "xpresser";
 
-declare let $: Xjs;
+declare let $: Xpresser;
 
 const paths = $.config.paths;
 const baseFiles = paths.base + "/";

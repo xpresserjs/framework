@@ -6,6 +6,7 @@
     "moduleResolution": "node",
     "sourceMap": false,
     "outDir": "dist",
+    "declaration": false,
     "types": [
       "node",
       "express"
@@ -16,11 +17,15 @@
   ],
   "files": [
     "./node.d.ts",
-    "./index.d.ts",
-    "./types/helpers.d.ts",
-    "./types/http.d.ts"
+    "./global.d.ts",
+    "./helpers.d.ts",
+    "./http.d.ts"
   ],
   "include": [
     "./**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
   ]
 }

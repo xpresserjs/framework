@@ -1,5 +1,5 @@
 import express = require("express");
-import RequestEngine = require("../src/RequestEngine");
+import RequestEngine = require("./src/RequestEngine");
 
 declare namespace XpresserHttp {
     type Engine = RequestEngine;

@@ -3,7 +3,7 @@ import RouterEngine = require("../RouterEngine");
 
 import Path = require("../Helpers/Path");
 
-declare let $: Xjs;
+declare let $: Xpresser;
 
 $.routerEngine = RouterEngine;
 const RouteFile = Path.resolve($.config.paths.routesFile);

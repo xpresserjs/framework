@@ -6,7 +6,7 @@ import colors = require("../Objects/consoleColors.obj");
 
 import PathHelper = require("../Helpers/Path");
 
-declare let $: Xjs;
+declare let $: Xpresser;
 declare let _: any;
 
 const isTinker = typeof $.$options.isTinker === "boolean" && $.$options.isTinker;

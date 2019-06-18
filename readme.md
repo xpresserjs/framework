@@ -17,11 +17,11 @@ A powerful framework for nodejs, Using `expressjs` as a server and also other co
 9. _So much more!!!_
 
 ### Installation
-Installing Xjs Framework requires [**Xjs CLI**](https://www.npmjs.com/package/xjs-cli)
+Installing Xpresser Framework requires [**Xpresser CLI**](https://www.npmjs.com/package/xjs-cli)
 
 The `xjs-cli` command includes all the helpers you need.
 
-#### Install Xjs-CLI
+#### Install Xpresser-CLI
 ```console
 npm install xjs-cli -g
 ```
@@ -51,7 +51,7 @@ xjs start
 
 #### Hurray!
 ```
-===>  Starting Xjs...
+===>  Starting Xpresser...
 ===>  Server started and available on http://localhost:2000/
 ===>  PORT:2000
 ```

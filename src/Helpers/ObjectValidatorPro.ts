@@ -2,7 +2,7 @@ import Validator = require("object-validator-pro");
 
 const ovp = new Validator();
 
-declare let $: Xjs;
+declare let $: Xpresser;
 
 ovp.setEventHandler({
     onEachError: (param, msg) => {

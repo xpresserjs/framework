@@ -3,7 +3,7 @@ import moment = require("moment");
 import PathHelper = require("../Helpers/Path");
 import ObjectCollection = require("object-collection");
 
-declare let $: Xjs;
+declare let $: Xpresser;
 declare let _: any;
 
 const PluginLockDataPath: string = $.path.jsonConfigs("plugins-lock.json");

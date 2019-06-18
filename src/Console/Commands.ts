@@ -1,5 +1,5 @@
 
-declare const $: Xjs;
+declare const $: Xpresser;
 
 import os = require("os");
 import fs = require("fs");

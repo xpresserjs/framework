@@ -24,9 +24,9 @@ const $pluginData = $.engineData.get("PluginEngine:namespaces", {});
 const $pluginNamespaceKeys = Object.keys($pluginData);
 const app = express();
 app.use((req, res, next) => {
-    res.set("X-Powered-By", "Xjs");
+    res.set("X-Powered-By", "Xpresser");
     if ($.config.response.overrideServerName) {
-        res.set("Server", "Xjs");
+        res.set("Server", "Xpresser");
     }
     next();
 });

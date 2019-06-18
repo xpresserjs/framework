@@ -1,7 +1,7 @@
 import chalk from "chalk";
 
 
-declare let $: Xjs;
+declare let $: Xpresser;
 declare let _;
 
 /**

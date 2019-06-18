@@ -11,7 +11,7 @@ import StringHelper = require("./Helpers/String");
 
 declare let $: any;
 
-let Use = {} as JsonSettings.Use;
+let Use = {} as XpresserJsonSettings.Use;
 const PluginNamespaces = $.engineData.get("PluginEngine:namespaces", {});
 
 /**

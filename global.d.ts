@@ -1,17 +1,17 @@
 /// <reference path="node.d.ts" />
-/// <reference path="./types/helpers.d.ts" />
+/// <reference path="helpers.d.ts" />
 
 type XpresserRouter = import("@xpresser/router");
 type ObjectCollection = import("object-collection");
 type ObjectValidatorPro = import("object-validator-pro");
 
-declare namespace JsonSettings {
+declare namespace XpresserJsonSettings {
     interface Use {
         middlewares?: object;
     }
 }
 
-declare interface Xjs {
+declare interface Xpresser {
     config: any;
     $config: ObjectCollection;
     $options: XpresserOptions;
@@ -20,7 +20,7 @@ declare interface Xjs {
     engineData: ObjectCollection;
 
     // Base64 Encoder
-    base64: XjsHelpers.Base64;
+    base64: XpresserHelpers.Base64;
 
     // Object validator
     ovp: ObjectValidatorPro;
@@ -31,14 +31,14 @@ declare interface Xjs {
     // Use Engine
     use: typeof import("./src/UseEngine");
 
-    // Set XjsHelpers
-    helpers: XjsHelpers.Main;
+    // Set XpresserHelpers
+    helpers: XpresserHelpers.Main;
 
     // Router Helper
     router: XpresserRouter;
 
     // Register Functions
-    fn: XjsHelpers.FN;
+    fn: XpresserHelpers.FN;
 
     // Express App
     app: import("express").Application;
