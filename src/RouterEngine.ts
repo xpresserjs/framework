@@ -187,7 +187,12 @@ class RouterEngine {
             }
 
             if (!route.children && parent.useMethodAsName && !route.name) {
-                route.name = route.controller;
+                let nameFromController = route.controller;
+                if (nameFromController.includes("@")) {
+                    nameFromController = nameFromController.split("@");
+                    nameFromController = nameFromController[nameFromController.length - 1];
+                }
+                route.name = nameFromController;
                 nameWasGenerated = true;
             }
 
