@@ -64,7 +64,7 @@ const Commands = {
             return logThis("Middleware name not defined!");
         }
 
-        const middlewaresPath = PathHelper.resolve($.config.path.middlewares);
+        const middlewaresPath = PathHelper.resolve($.config.paths.middlewares);
         artisan.copyFromFactoryToApp("middleware", middleware, middlewaresPath);
     },
 
