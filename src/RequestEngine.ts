@@ -13,7 +13,7 @@ const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
 class RequestEngine {
     public req: XpresserHttp.Request;
     public res: XpresserHttp.Response;
-    public next: () => void;
+
     public params: any;
     public locals: ObjectCollection;
 
@@ -44,6 +44,13 @@ class RequestEngine {
         this.locals = new ObjectCollection(res.locals);
 
         this.fn = _.extend({}, $.helpers, requestHelpers(this));
+    }
+
+    /**
+     * Request Next Function
+     */
+    public next() {
+        return null;
     }
 
     /**

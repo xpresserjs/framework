@@ -26,6 +26,12 @@ class RequestEngine {
         this.fn = _.extend({}, $.helpers, requestHelpers(this));
     }
     /**
+     * Request Next Function
+     */
+    next() {
+        return null;
+    }
+    /**
      * Route
      * @returns {*}
      * @param {string} route
