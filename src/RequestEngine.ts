@@ -62,10 +62,41 @@ class RequestEngine {
      * @param key
      * @param $default
      * @returns {*}
+     * @deprecated
      */
     public get(key, $default) {
         if (this.bothData.hasOwnProperty(key)) {
             return this.bothData[key];
+        }
+        return $default;
+    }
+
+    /**
+     * Request Query Data
+     * @param [key]
+     * @param [$default]
+     * @returns {*|ObjectCollection}
+     */
+    public query(key?: string | undefined, $default?: any): any | ObjectCollection {
+        if (key === undefined) {
+            return new ObjectCollection(this.req.query);
+        } else if (this.req.query.hasOwnProperty(key)) {
+            return this.req.query[key];
+        }
+        return $default;
+    }
+
+    /**
+     * Request Body Data
+     * @param [key]
+     * @param [$default]
+     * @returns {*|ObjectCollection}
+     */
+    public body(key?: string | undefined, $default?: any): any | ObjectCollection {
+        if (key === undefined) {
+            return new ObjectCollection(this.req.body);
+        } else if (this.req.body.hasOwnProperty(key)) {
+            return this.req.body[key];
         }
         return $default;
     }
@@ -87,6 +118,7 @@ class RequestEngine {
      * Pluck data from Request data
      * @param items
      * @returns {*}
+     * @deprecated
      */
     public pluck(items: any[] = []) {
         return this.all(items);

@@ -40,10 +40,41 @@ class RequestEngine {
      * @param key
      * @param $default
      * @returns {*}
+     * @deprecated
      */
     get(key, $default) {
         if (this.bothData.hasOwnProperty(key)) {
             return this.bothData[key];
+        }
+        return $default;
+    }
+    /**
+     * Request Query Data
+     * @param [key]
+     * @param [$default]
+     * @returns {*|ObjectCollection}
+     */
+    query(key, $default) {
+        if (key === undefined) {
+            return new ObjectCollection(this.req.query);
+        }
+        else if (this.req.query.hasOwnProperty(key)) {
+            return this.req.query[key];
+        }
+        return $default;
+    }
+    /**
+     * Request Body Data
+     * @param [key]
+     * @param [$default]
+     * @returns {*|ObjectCollection}
+     */
+    body(key, $default) {
+        if (key === undefined) {
+            return new ObjectCollection(this.req.body);
+        }
+        else if (this.req.body.hasOwnProperty(key)) {
+            return this.req.body[key];
         }
         return $default;
     }
@@ -63,6 +94,7 @@ class RequestEngine {
      * Pluck data from Request data
      * @param items
      * @returns {*}
+     * @deprecated
      */
     pluck(items = []) {
         return this.all(items);
