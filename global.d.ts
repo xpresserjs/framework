@@ -19,6 +19,7 @@ declare namespace XpresserJsonSettings {
 }
 
 declare interface Xpresser {
+    objectCollection: typeof ObjectCollection;
     config: any;
     $config: ObjectCollection;
     $options: XpresserOptions;

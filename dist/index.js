@@ -53,6 +53,8 @@ const XpresserInit = (AppConfig, AppOptions) => {
     AppOptions = _.merge(Options, AppOptions);
     // Set Xpresser Global Var: $
     const $ = {};
+    // Set ObjectCollection
+    $.objectCollection = ObjectCollection;
     // Set $ (Xpresser) && _ (lodash) to globals.
     global.$ = $;
     global._ = _;
