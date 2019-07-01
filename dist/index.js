@@ -2,12 +2,13 @@
 /// <reference types="node"/>
 // Import system required libraries
 const fs = require("fs");
-const _ = require("lodash");
+const ObjectCollection = require("object-collection");
+// Use Lodash from ObjectCollection
+const _ = ObjectCollection._;
 // Import default config.
 const Configurations = require("./config");
 // XpresserRouter && ObjectionCollection
 const XpresserRouter = require("@xpresser/router");
-const ObjectCollection = require("object-collection");
 /**
  * Get default Config and Options from Configurations
  */
