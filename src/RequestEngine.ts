@@ -1,5 +1,6 @@
 import ejs = require("ejs");
 import fs = require("fs");
+import express = require("express");
 
 import {XpresserHttp} from "../http";
 import requestHelpers = require("./Functions/request.fn");
@@ -12,7 +13,7 @@ const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
 
 class RequestEngine {
     public req: XpresserHttp.Request;
-    public res: XpresserHttp.Response;
+    public res: express.Response;
 
     public params: any;
     public locals: ObjectCollection;
@@ -28,7 +29,7 @@ class RequestEngine {
      * @param {*} res
      * @param {*} next
      */
-    constructor(req: XpresserHttp.Request, res: XpresserHttp.Response, next?: () => void) {
+    constructor(req: XpresserHttp.Request, res: express.Response, next?: () => void) {
         this.res = res;
         this.req = req;
 
