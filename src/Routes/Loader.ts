@@ -31,7 +31,15 @@ const PluginRoutes = PluginData.routes;
 
 for (let i = 0; i < PluginRoutes.length; i++) {
     const pluginRoute = PluginRoutes[i];
-    require(pluginRoute.path);
+    const Routes = require(pluginRoute.path);
+
+    // Add to routes if returned value is instance of XpresserRouter
+    if (
+        typeof Routes === "object" &&
+        (Routes.constructor && Routes.constructor.name === "XpresserRouter")
+    ) {
+        $.routerEngine.addToRoutes(Routes);
+    }
 }
 
 if (typeof $.router.routesAfterPlugins === "function") {

@@ -168,17 +168,18 @@ $.model = ModelEngine;
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 import {Xpresser} from "../global";
 
+const $globalMiddlewareWrapper = ($middlewareFn: any) => {
+    return async (res, req, next) => {
+        const x = new RequestEngine(res, req, next);
+        return $middlewareFn(x);
+    };
+};
+
 for (let i = 0; i < $pluginNamespaceKeys.length; i++) {
     const $pluginNamespaceKey = $pluginNamespaceKeys[i];
     const $plugin = new ObjectCollection($pluginData[$pluginNamespaceKey]);
 
     if ($plugin.has("globalMiddlewares")) {
-        const $globalMiddlewareWrapper = ($middlewareFn: any) => {
-            return async (res, req, next) => {
-                const x = new RequestEngine(res, req, next);
-                return $middlewareFn(x);
-            };
-        };
 
         const $middlewares = $plugin.get("globalMiddlewares");
 
@@ -186,13 +187,17 @@ for (let i = 0; i < $pluginNamespaceKeys.length; i++) {
             const $middleware = $middlewares[j];
 
             try {
+
                 const $globalMiddleware = $globalMiddlewareWrapper(require($middleware));
                 $.app.use($globalMiddleware);
+
             } catch (e) {
+
                 $.logPerLine([{
                     error: e.message,
                     errorAndExit: "",
                 }]);
+
             }
         }
     }

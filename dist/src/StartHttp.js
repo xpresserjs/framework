@@ -133,16 +133,16 @@ if (!$.$options.isTinker) {
 const ModelEngine = require("./ModelEngine");
 $.model = ModelEngine;
 const RequestEngine = require("./Plugins/ExtendedRequestEngine");
+const $globalMiddlewareWrapper = ($middlewareFn) => {
+    return (res, req, next) => __awaiter(this, void 0, void 0, function* () {
+        const x = new RequestEngine(res, req, next);
+        return $middlewareFn(x);
+    });
+};
 for (let i = 0; i < $pluginNamespaceKeys.length; i++) {
     const $pluginNamespaceKey = $pluginNamespaceKeys[i];
     const $plugin = new ObjectCollection($pluginData[$pluginNamespaceKey]);
     if ($plugin.has("globalMiddlewares")) {
-        const $globalMiddlewareWrapper = ($middlewareFn) => {
-            return (res, req, next) => __awaiter(this, void 0, void 0, function* () {
-                const x = new RequestEngine(res, req, next);
-                return $middlewareFn(x);
-            });
-        };
         const $middlewares = $plugin.get("globalMiddlewares");
         for (let j = 0; j < $middlewares.length; j++) {
             const $middleware = $middlewares[j];

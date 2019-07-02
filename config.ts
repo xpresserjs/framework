@@ -91,16 +91,6 @@ const Config = {
             __stackedScripts: false,
         },
     },
-    auth: {
-        userModel: "Auth/User",
-        routeAfterLogin: "auth.dashboard",
-        templateVariable: "user",
-        usingEjs: true,
-        views: {
-            index: "auth::index",
-            dashboard: "auth::dashboard",
-        },
-    },
     response: {
         cacheFiles: false,
         cacheFileExtensions: ["js", "css"],
