@@ -21,6 +21,15 @@ const https_1 = require("https");
 const paths = $.$config.get("paths");
 const $pluginData = $.engineData.get("PluginEngine:namespaces", {});
 const $pluginNamespaceKeys = Object.keys($pluginData);
+/////////////
+// Load Use.json Data
+const $useDotJson = $.objectCollection();
+const $useDotJsonPath = $.path.jsonConfigs("use.json");
+if (FS.existsSync($useDotJsonPath)) {
+    $useDotJson.merge(require($useDotJsonPath));
+    // Save to EngineData
+    $.engineData.set("USE_DOT_JSON", $useDotJson.return());
+}
 const app = express();
 app.use((req, res, next) => {
     res.set("X-Powered-By", "Xpresser");
@@ -130,6 +139,9 @@ if (!$.$options.isTinker) {
 }
 // Require Model Engine
 const ModelEngine = require("./ModelEngine");
+/**
+ * @type ModelEngine
+ */
 $.model = ModelEngine;
 const RequestEngine = require("./Plugins/ExtendedRequestEngine");
 const $globalMiddlewareWrapper = ($middlewareFn) => {
@@ -138,23 +150,24 @@ const $globalMiddlewareWrapper = ($middlewareFn) => {
         return $middlewareFn(x);
     });
 };
-for (let i = 0; i < $pluginNamespaceKeys.length; i++) {
-    const $pluginNamespaceKey = $pluginNamespaceKeys[i];
-    const $plugin = $.objectCollection($pluginData[$pluginNamespaceKey]);
-    if ($plugin.has("globalMiddlewares")) {
-        const $middlewares = $plugin.get("globalMiddlewares");
-        for (let j = 0; j < $middlewares.length; j++) {
-            const $middleware = $middlewares[j];
-            try {
-                const $globalMiddleware = $globalMiddlewareWrapper(require($middleware));
-                $.app.use($globalMiddleware);
-            }
-            catch (e) {
-                $.logPerLine([{
-                        error: e.message,
-                        errorAndExit: "",
-                    }]);
-            }
+if ($useDotJson.has("globalMiddlewares")) {
+    const $middlewares = $useDotJson.get("globalMiddlewares");
+    for (let i = 0; i < $middlewares.length; i++) {
+        let $middleware = $middlewares[i];
+        if ($middleware.substr(-3) !== $.config.project.fileExtension) {
+            $middleware += $.config.project.fileExtension;
+        }
+        $middleware = Path.resolve($middleware);
+        try {
+            const $globalMiddleware = $globalMiddlewareWrapper(require($middleware));
+            $.app.use($globalMiddleware);
+        }
+        catch (e) {
+            $.logPerLine([
+                { error: "Error in use.json" },
+                { error: e.message },
+                { errorAndExit: "" },
+            ]);
         }
     }
 }

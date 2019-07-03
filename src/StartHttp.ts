@@ -1,4 +1,5 @@
 import FS = require("fs");
+
 const {dirname, resolve} = require("path");
 import {XpresserHttp} from "../http";
 
@@ -11,6 +12,7 @@ import session = require("express-session");
 
 import {createServer as createHttpServer} from "http";
 import {createServer as createHttpsServer} from "https";
+import {Xpresser} from "../global";
 
 declare let _: any;
 declare let $: Xpresser;
@@ -18,6 +20,18 @@ declare let $: Xpresser;
 const paths = $.$config.get("paths");
 const $pluginData = $.engineData.get("PluginEngine:namespaces", {});
 const $pluginNamespaceKeys = Object.keys($pluginData);
+
+/////////////
+// Load Use.json Data
+const $useDotJson = $.objectCollection();
+const $useDotJsonPath = $.path.jsonConfigs("use.json");
+
+if (FS.existsSync($useDotJsonPath)) {
+    $useDotJson.merge(require($useDotJsonPath));
+
+    // Save to EngineData
+    $.engineData.set("USE_DOT_JSON", $useDotJson.return());
+}
 
 const app = express();
 
@@ -162,10 +176,12 @@ if (!$.$options.isTinker) {
 // Require Model Engine
 import ModelEngine = require("./ModelEngine");
 
+/**
+ * @type ModelEngine
+ */
 $.model = ModelEngine;
 
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
-import {Xpresser} from "../global";
 
 const $globalMiddlewareWrapper = ($middlewareFn: any) => {
     return async (res, req, next) => {
@@ -174,32 +190,34 @@ const $globalMiddlewareWrapper = ($middlewareFn: any) => {
     };
 };
 
-for (let i = 0; i < $pluginNamespaceKeys.length; i++) {
-    const $pluginNamespaceKey = $pluginNamespaceKeys[i];
-    const $plugin = $.objectCollection($pluginData[$pluginNamespaceKey]);
+if ($useDotJson.has("globalMiddlewares")) {
+    const $middlewares = $useDotJson.get("globalMiddlewares");
 
-    if ($plugin.has("globalMiddlewares")) {
+    for (let i = 0; i < $middlewares.length; i++) {
+        let $middleware = $middlewares[i];
 
-        const $middlewares = $plugin.get("globalMiddlewares");
+        if ($middleware.substr(-3) !== $.config.project.fileExtension) {
+            $middleware += $.config.project.fileExtension;
+        }
 
-        for (let j = 0; j < $middlewares.length; j++) {
-            const $middleware = $middlewares[j];
+        $middleware = Path.resolve($middleware);
 
-            try {
+        try {
 
-                const $globalMiddleware = $globalMiddlewareWrapper(require($middleware));
-                $.app.use($globalMiddleware);
+            const $globalMiddleware = $globalMiddlewareWrapper(require($middleware));
+            $.app.use($globalMiddleware);
 
-            } catch (e) {
+        } catch (e) {
 
-                $.logPerLine([{
-                    error: e.message,
-                    errorAndExit: "",
-                }]);
+            $.logPerLine([
+                {error: "Error in use.json"},
+                {error: e.message},
+                {errorAndExit: ""},
+            ]);
 
-            }
         }
     }
+
 }
 
 require("./Routes/Loader");

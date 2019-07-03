@@ -31,10 +31,8 @@ if ($.engineData.has("ExtendedRequestEngine")) {
                 ExtendRequestEngineUsing($requestEngine);
             } catch (e) {
                 $.logPerLine([
-                    {
-                        error: e.message,
-                        errorAndExit: "",
-                    },
+                    {error: e.message},
+                    {errorAndExit: ""},
                 ]);
             }
         }

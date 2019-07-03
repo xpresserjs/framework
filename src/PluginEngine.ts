@@ -132,22 +132,6 @@ class PluginEngine {
             $pluginData.middlewares = middlewarePath;
         }
 
-        if ($data.has("globalMiddlewares")) {
-            const globalMiddlewares: string[] = $data.get("globalMiddlewares");
-            $pluginData.globalMiddlewares = [];
-            for (let i = 0; i < globalMiddlewares.length; i++) {
-                let globalMiddleware = globalMiddlewares[i];
-
-                if (globalMiddleware.substr(-3) !== $.config.project.fileExtension) {
-                    globalMiddleware += $.config.project.fileExtension;
-                }
-
-                // tslint:disable-next-line:max-line-length
-                $pluginData.globalMiddlewares.push(pluginFileExistOrExit($plugin, $pluginData.middlewares, globalMiddleware));
-
-            }
-        }
-
         if ($data.has("extends")) {
             const extensionData = {};
             if ($data.has("extends.RequestEngine")) {

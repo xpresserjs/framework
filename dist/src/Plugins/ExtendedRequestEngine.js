@@ -26,10 +26,8 @@ else {
             }
             catch (e) {
                 $.logPerLine([
-                    {
-                        error: e.message,
-                        errorAndExit: "",
-                    },
+                    { error: e.message },
+                    { errorAndExit: "" },
                 ]);
             }
         }
