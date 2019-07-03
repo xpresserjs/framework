@@ -2,14 +2,13 @@
 const fs = require("fs");
 const moment = require("moment");
 const PathHelper = require("../Helpers/Path");
-const ObjectCollection = require("object-collection");
 const PluginLockDataPath = $.path.jsonConfigs("plugins-lock.json");
-let PluginLockData = new ObjectCollection();
+let PluginLockData = $.objectCollection();
 let UpdatePluginLockData = false;
 PathHelper.makeDirIfNotExist(PluginLockDataPath, true);
 if (fs.existsSync(PluginLockDataPath)) {
     const lockData = require(PluginLockDataPath);
-    PluginLockData = new ObjectCollection(lockData);
+    PluginLockData = $.objectCollection(lockData);
 }
 module.exports = ($plugin) => {
     // Get all loaded plugin namespace

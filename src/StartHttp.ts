@@ -8,7 +8,6 @@ import cors = require("cors");
 import express = require("express");
 import flash = require("express-flash");
 import session = require("express-session");
-import ObjectCollection = require("object-collection");
 
 import {createServer as createHttpServer} from "http";
 import {createServer as createHttpsServer} from "https";
@@ -177,7 +176,7 @@ const $globalMiddlewareWrapper = ($middlewareFn: any) => {
 
 for (let i = 0; i < $pluginNamespaceKeys.length; i++) {
     const $pluginNamespaceKey = $pluginNamespaceKeys[i];
-    const $plugin = new ObjectCollection($pluginData[$pluginNamespaceKey]);
+    const $plugin = $.objectCollection($pluginData[$pluginNamespaceKey]);
 
     if ($plugin.has("globalMiddlewares")) {
 

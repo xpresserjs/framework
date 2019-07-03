@@ -1,6 +1,5 @@
 "use strict";
 const FS = require("fs");
-const ObjectCollection = require("object-collection");
 const PathHelper = require("./Helpers/Path");
 const pluginRoutes = [];
 const PluginNamespaceToData = {};
@@ -63,7 +62,7 @@ class PluginEngine {
         return data;
     }
     static usePlugin($plugin, $path, data) {
-        const $data = new ObjectCollection(data);
+        const $data = $.objectCollection(data);
         let $pluginData;
         $pluginData = {
             namespace: $data.get("namespace"),

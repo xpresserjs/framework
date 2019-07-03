@@ -1,6 +1,4 @@
 import RequestEngine = require("../RequestEngine");
-
-import ObjectCollection = require("object-collection");
 import {Xpresser} from "../../global";
 
 declare let $: Xpresser;
@@ -24,7 +22,7 @@ if ($.engineData.has("ExtendedRequestEngine")) {
 
     for (let k = 0; k < $pluginNamespaceKeys.length; k++) {
         const $pluginNamespaceKey = $pluginNamespaceKeys[k];
-        const $plugin = new ObjectCollection(PluginNameSpaces[$pluginNamespaceKey]);
+        const $plugin = $.objectCollection(PluginNameSpaces[$pluginNamespaceKey]);
 
         if ($plugin.has("extends.RequestEngine")) {
             const $requestEngineExtender = $plugin.get("extends.RequestEngine");

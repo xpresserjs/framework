@@ -19,7 +19,6 @@ declare namespace XpresserJsonSettings {
 }
 
 declare interface Xpresser {
-    objectCollection: typeof ObjectCollection;
     config: any;
     $config: ObjectCollection;
     $options: XpresserOptions;
@@ -106,6 +105,12 @@ declare interface Xpresser {
          */
         jsonConfigs(path?: string): string;
     };
+
+    /**
+     * Return new instance of object collection.
+     * @param [obj]
+     */
+    objectCollection(obj?: object): ObjectCollection;
 
     /**
      * .Env File Reader Helper

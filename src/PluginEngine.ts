@@ -1,8 +1,6 @@
 import FS = require("fs");
-import ObjectCollection = require("object-collection");
 import PathHelper = require("./Helpers/Path");
 import {Xpresser} from "../global";
-
 
 declare let $: Xpresser;
 
@@ -86,7 +84,7 @@ class PluginEngine {
     }
 
     public static usePlugin($plugin, $path, data) {
-        const $data = new ObjectCollection(data);
+        const $data = $.objectCollection(data);
         let $pluginData: any;
 
         $pluginData = {

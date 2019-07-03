@@ -1,21 +1,20 @@
 import fs = require("fs");
 import moment = require("moment");
 import PathHelper = require("../Helpers/Path");
-import ObjectCollection = require("object-collection");
 import {Xpresser} from "../../global";
 
 declare let $: Xpresser;
 declare let _: any;
 
 const PluginLockDataPath: string = $.path.jsonConfigs("plugins-lock.json");
-let PluginLockData = new ObjectCollection();
+let PluginLockData = $.objectCollection();
 let UpdatePluginLockData = false;
 
 PathHelper.makeDirIfNotExist(PluginLockDataPath, true);
 
 if (fs.existsSync(PluginLockDataPath)) {
     const lockData = require(PluginLockDataPath);
-    PluginLockData = new ObjectCollection(lockData);
+    PluginLockData = $.objectCollection(lockData);
 }
 
 export = ($plugin) => {

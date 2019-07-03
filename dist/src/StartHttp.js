@@ -16,7 +16,6 @@ const cors = require("cors");
 const express = require("express");
 const flash = require("express-flash");
 const session = require("express-session");
-const ObjectCollection = require("object-collection");
 const http_1 = require("http");
 const https_1 = require("https");
 const paths = $.$config.get("paths");
@@ -141,7 +140,7 @@ const $globalMiddlewareWrapper = ($middlewareFn) => {
 };
 for (let i = 0; i < $pluginNamespaceKeys.length; i++) {
     const $pluginNamespaceKey = $pluginNamespaceKeys[i];
-    const $plugin = new ObjectCollection($pluginData[$pluginNamespaceKey]);
+    const $plugin = $.objectCollection($pluginData[$pluginNamespaceKey]);
     if ($plugin.has("globalMiddlewares")) {
         const $middlewares = $plugin.get("globalMiddlewares");
         for (let j = 0; j < $middlewares.length; j++) {

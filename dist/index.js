@@ -54,7 +54,7 @@ const XpresserInit = (AppConfig, AppOptions) => {
     // Set Xpresser Global Var: $
     const $ = {};
     // Set ObjectCollection
-    $.objectCollection = ObjectCollection;
+    $.objectCollection = (obj) => new ObjectCollection(obj);
     // Set $ (Xpresser) && _ (lodash) to globals.
     global.$ = $;
     global._ = _;
@@ -64,7 +64,7 @@ const XpresserInit = (AppConfig, AppOptions) => {
      * Set $.$config to an instance of ObjectCollection
      * To enable access and modify apps config.
      */
-    $.$config = new ObjectCollection($.config);
+    $.$config = $.objectCollection($.config);
     /**
      * Set $.$config to an instance of ObjectCollection
      * To enable access and modify apps config.
@@ -75,7 +75,7 @@ const XpresserInit = (AppConfig, AppOptions) => {
      * Engine Data serves as the store
      * for all data store by Xpresser files/components
      */
-    $.engineData = new ObjectCollection();
+    $.engineData = $.objectCollection();
     if (typeof global["XjsCliConfig"] !== "undefined") {
         $.$options.isConsole = true;
     }

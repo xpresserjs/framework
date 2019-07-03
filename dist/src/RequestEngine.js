@@ -2,7 +2,6 @@
 const ejs = require("ejs");
 const fs = require("fs");
 const requestHelpers = require("./Functions/request.fn");
-const ObjectCollection = require("object-collection");
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
 class RequestEngine {
     /**
@@ -22,7 +21,7 @@ class RequestEngine {
         }
         this.session = req.session;
         this.bothData = this.all();
-        this.locals = new ObjectCollection(res.locals);
+        this.locals = $.objectCollection(res.locals);
         this.fn = _.extend({}, $.helpers, requestHelpers(this));
     }
     /**
@@ -62,7 +61,7 @@ class RequestEngine {
      */
     query(key, $default) {
         if (key === undefined) {
-            return new ObjectCollection(this.req.query);
+            return $.objectCollection(this.req.query);
         }
         else if (this.req.query.hasOwnProperty(key)) {
             return this.req.query[key];
@@ -77,7 +76,7 @@ class RequestEngine {
      */
     body(key, $default) {
         if (key === undefined) {
-            return new ObjectCollection(this.req.body);
+            return $.objectCollection(this.req.body);
         }
         else if (this.req.body.hasOwnProperty(key)) {
             return this.req.body[key];
