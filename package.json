@@ -6,7 +6,9 @@
   "types": "global.d.ts",
   "scripts": {
     "prod": "tsc && node dist/index.js",
-    "dev": "ts-node-dev --respawn --transpileOnly ./test.ts"
+    "dev": "ts-node-dev --respawn --transpileOnly ./test.ts",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "repository": "https://github.com/xpresserjs/framework.git",
   "author": "xpresserjs",
@@ -35,7 +37,8 @@
     "pluralize": "^8.0.0",
     "ps-node": "^0.1.6",
     "shelljs": "^0.8.3",
-    "sqlite3": "^4.0.8"
+    "sqlite3": "^4.0.8",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.0",
@@ -45,5 +48,6 @@
     "ts-node-dev": "^1.0.0-pre.40",
     "tslint": "5.18.0",
     "typescript": "^3.5.2"
-  }
+  },
+  "snyk": true
 }
