@@ -134,6 +134,7 @@ class UseEngine {
         const fullPath = PathHelper.resolve($.config.paths.models) + "/{file}" + $.config.project.fileExtension;
         const [hasPath, realPath] = fileExistsInPath(model, fullPath);
         if (!hasPath) {
+            // @ts-ignore
             return !handleError ? false : $.logErrorAndExit(`Model ${realPath} does not exists`);
         }
         return require(realPath);

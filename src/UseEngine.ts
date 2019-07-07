@@ -149,13 +149,14 @@ class UseEngine {
      * Use Model
      * @param {string} model
      * @param {boolean} [handleError=true]
-     * @return {ModelEngine|boolean|void}
+     * @return {ModelEngine}
      */
-    public static model(model, handleError = true): ModelEngine | false | void {
+    public static model(model, handleError = true): typeof ModelEngine {
         const fullPath = PathHelper.resolve($.config.paths.models) + "/{file}" + $.config.project.fileExtension;
         const [hasPath, realPath] = fileExistsInPath(model, fullPath);
 
         if (!hasPath) {
+            // @ts-ignore
             return !handleError ? false : $.logErrorAndExit(`Model ${realPath} does not exists`);
         }
         return require(realPath);

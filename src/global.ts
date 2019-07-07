@@ -1,4 +1,3 @@
-// ts-check
 import moment from "moment";
 import Base64  = require("./Helpers/Base64");
 import {Xpresser} from "../global";
@@ -23,10 +22,15 @@ if ($.config.database.startOnBoot) {
 }
 
 // Use Engine
-$.use = require("./UseEngine");
-$.helpers = require("./helpers");
+import UseEngine  = require("./UseEngine");
+/**
+ * @type {UseEngine}
+ */
+$.use = UseEngine;
 
-// $.Helpers.
+// Helpers
+import Helpers = require("./helpers");
+$.helpers = Helpers;
 
 // Assign Functions to $.fn
 $.fn = require("./Functions/x.fn");
