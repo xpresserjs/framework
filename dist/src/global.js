@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// ts-check
 const moment_1 = __importDefault(require("moment"));
 const Base64 = require("./Helpers/Base64");
 global.moment = moment_1.default;
@@ -22,8 +21,13 @@ else {
     $.db = undefined;
 }
 // Use Engine
-$.use = require("./UseEngine");
-$.helpers = require("./helpers");
-// $.Helpers.
+const UseEngine = require("./UseEngine");
+/**
+ * @type {UseEngine}
+ */
+$.use = UseEngine;
+// Helpers
+const Helpers = require("./helpers");
+$.helpers = Helpers;
 // Assign Functions to $.fn
 $.fn = require("./Functions/x.fn");
