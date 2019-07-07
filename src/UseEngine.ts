@@ -149,7 +149,7 @@ class UseEngine {
      * Use Model
      * @param {string} model
      * @param {boolean} [handleError=true]
-     * @return {boolean|*}
+     * @return {ModelEngine|boolean|void}
      */
     public static model(model, handleError = true): ModelEngine | false | void {
         const fullPath = PathHelper.resolve($.config.paths.models) + "/{file}" + $.config.project.fileExtension;
