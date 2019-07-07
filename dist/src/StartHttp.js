@@ -140,7 +140,7 @@ if (!$.$options.isTinker) {
 // Require Model Engine
 const ModelEngine = require("./ModelEngine");
 /**
- * @type ModelEngine
+ * @type {ModelEngine}
  */
 $.model = ModelEngine;
 const RequestEngine = require("./Plugins/ExtendedRequestEngine");

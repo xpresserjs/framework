@@ -1,6 +1,6 @@
 "use strict";
 /**
- * UseEngine is a class that provides methods for including
+ * UseEngine provides methods for including
  * different types of files.
  *
  * UseEngine is later exposed to the framework as $.use

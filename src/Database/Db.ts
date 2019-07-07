@@ -1,5 +1,6 @@
 import knex = require("knex");
-declare let $: any;
+import {Xpresser} from "../../global";
+declare let $: Xpresser;
 
 class DB {
     public knex: knex;

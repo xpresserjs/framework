@@ -4,9 +4,10 @@ import ErrorEngine = require("./ErrorEngine");
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 
 import MiddleWareEngine = require("./MiddlewareEngine");
+import {Xpresser} from "../global";
 
 declare let _: any;
-declare let $: any;
+declare let $: Xpresser;
 
 // @ts-check
 class ControllerEngine {
@@ -20,7 +21,6 @@ class ControllerEngine {
 
         const middlewareKeys = Object.keys($middleware);
 
-
         for (let i = 0; i < middlewareKeys.length; i++) {
             let middleware = middlewareKeys[i];
             let middlewareFile = [];
@@ -31,7 +31,6 @@ class ControllerEngine {
                 middlewareMethod = middleware.substr(1);
                 middleware = oldMiddlewareMethod;
             }
-
 
             if (typeof middleware === "string") {
 
@@ -140,8 +139,6 @@ class ControllerEngine {
                     // Initialize controller
                     useController = new controller();
                 }
-
-
 
                 try {
                     // If `method` does not exists then display error

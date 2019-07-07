@@ -1,5 +1,5 @@
 /**
- * UseEngine is a class that provides methods for including
+ * UseEngine provides methods for including
  * different types of files.
  *
  * UseEngine is later exposed to the framework as $.use
@@ -8,9 +8,10 @@
 import fs = require("fs");
 import PathHelper = require("./Helpers/Path");
 import StringHelper = require("./Helpers/String");
-import {XpresserJsonSettings} from "../global";
+import {Xpresser, XpresserJsonSettings} from "../global";
+import ModelEngine = require("./ModelEngine");
 
-declare let $: any;
+declare let $: Xpresser;
 
 let Use = {} as XpresserJsonSettings.Use;
 const PluginNamespaces = $.engineData.get("PluginEngine:namespaces", {});
@@ -150,7 +151,7 @@ class UseEngine {
      * @param {boolean} [handleError=true]
      * @return {boolean|*}
      */
-    public static model(model, handleError = true) {
+    public static model(model, handleError = true): ModelEngine | false | void {
         const fullPath = PathHelper.resolve($.config.paths.models) + "/{file}" + $.config.project.fileExtension;
         const [hasPath, realPath] = fileExistsInPath(model, fullPath);
 
@@ -188,6 +189,7 @@ class UseEngine {
     }
 
     public static controller(controller: string, handleError: boolean = true, suffix: boolean = true) {
+
         if (controller.indexOf("::") > 2) {
             const $splitController = controller.split("::");
             const $pluginNamespace = $splitController[0];
@@ -199,6 +201,7 @@ class UseEngine {
                 }
             }
         }
+
         return $.path.controllers(controller);
     }
 

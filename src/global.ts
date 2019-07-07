@@ -1,8 +1,9 @@
 // ts-check
 import moment from "moment";
 import Base64  = require("./Helpers/Base64");
+import {Xpresser} from "../global";
 
-declare let $: any;
+declare let $: Xpresser;
 
 global.moment = moment;
 

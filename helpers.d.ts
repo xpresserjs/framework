@@ -32,7 +32,7 @@ declare namespace XpresserHelpers {
 
         findWordsInString($string: string, $keywords: string[]): string;
 
-        isPromise($promise: any[]): boolean;
+        isPromise($promise: any): boolean;
 
         randomStr(length: number): string;
     }

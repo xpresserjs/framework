@@ -1,6 +1,7 @@
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
+import {Xpresser} from "../global";
 
-declare let $: any;
+declare let $: Xpresser;
 
 class MiddlewareEngine {
     /**
@@ -8,7 +9,6 @@ class MiddlewareEngine {
      * @param {string} action
      */
     constructor(middleware, action = "allow") {
-
 
         // @ts-ignore
         return this.processMiddleware(middleware, action);
@@ -29,7 +29,7 @@ class MiddlewareEngine {
  * @param {string} middlewarePath
  * @param {*} action
  */
-const middleware = (middlewarePath, action = undefined) => {
+const middleware = (middlewarePath: any, action = undefined): MiddlewareEngine | any => {
 
     const middlewareFile = $.use.middleware(middlewarePath, false);
 

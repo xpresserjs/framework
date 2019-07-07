@@ -2,9 +2,10 @@
 import moment = require("moment");
 import Objection = require("objection");
 import ModelQueryBuilder = require("./Database/ModelQueryBuilder");
+import {Xpresser} from "../global";
 
 declare let _: any;
-declare let $: any;
+declare let $: Xpresser;
 
 // @ts-ignore
 class ModelEngine extends Objection.Model {

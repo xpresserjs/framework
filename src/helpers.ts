@@ -1,9 +1,10 @@
 import BuildUrl = require("build-url");
 import fs = require("fs");
 import moment = require("moment");
+import {Xpresser} from "../global";
 
 declare let _;
-declare let $: any;
+declare let $: Xpresser;
 
 /* HELPER FUNCTIONS */
 const helpers = {

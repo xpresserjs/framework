@@ -177,9 +177,10 @@ if (!$.$options.isTinker) {
 import ModelEngine = require("./ModelEngine");
 
 /**
- * @type ModelEngine
+ * @type {ModelEngine}
  */
 $.model = ModelEngine;
+
 
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 
