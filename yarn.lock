@@ -1608,6 +1608,11 @@ lodash@^4.17.11:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
 
+lodash@^4.17.14:
+  version "4.17.14"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.14.tgz#9ce487ae66c96254fe20b599f21b6816028078ba"
+  integrity sha512-mmKYbW3GLuJeX+iGP+Y7Gp1AiGHGbXHCOh/jZmrawMmsE7MS4znI3RL2FsjbqOyMayHInjOeykW7PEajUk1/xw==
+
 loud-rejection@^1.0.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/loud-rejection/-/loud-rejection-1.6.0.tgz#5b46f80147edee578870f086d04821cf998e551f"
@@ -1908,12 +1913,12 @@ object-assign@^4, object-assign@^4.0.1, object-assign@^4.1.0:
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
   integrity sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM=
 
-object-collection@^1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/object-collection/-/object-collection-1.0.9.tgz#386988cbb5ef55f6668ebc352ad2588cda6667a6"
-  integrity sha512-sw/qlDB+HH0uHmatVHNyTBQlauDO3ZQw/nusWAd4GvLhPEMPMUGzAdrXqaTAdK2WTGaQjdx0h9Cl8H+A2EAdyQ==
+object-collection@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/object-collection/-/object-collection-1.0.11.tgz#2417de93f21774173eafca9a43b418535e11164a"
+  integrity sha512-eUp93eDvUzlCdhTnStu6uKkai/6DQDyT2048AnD4I7vFHafkEB9JMYiW9N2YPLKQfa3l/XrapV4tDLAMNLBU7A==
   dependencies:
-    lodash "^4.17.11"
+    lodash "^4.17.14"
 
 object-copy@^0.1.0:
   version "0.1.0"
@@ -1924,12 +1929,12 @@ object-copy@^0.1.0:
     define-property "^0.2.5"
     kind-of "^3.0.3"
 
-object-validator-pro@1.0.18:
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/object-validator-pro/-/object-validator-pro-1.0.18.tgz#78760d23c51466e27db18191a6f15fe35988585e"
-  integrity sha512-t9wSSANNSoKK9cc2pFASK4QR0lyibF3xY7QZ4vR21gYd9dQCdNNuTaCyOugayDJUQZ9NoiYHTbBnigQCTylfMg==
+object-validator-pro@^1.0.19:
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/object-validator-pro/-/object-validator-pro-1.0.19.tgz#e8407a37fdde21a1ea1db4e58385b595d10b2982"
+  integrity sha512-yjzh6JZNXwPsxrBlOxzaKqIvJ/bRTuUQS+RBhIG0JWaeEkJICsQC7YHPFgUV+hGHKurgvB0ahjblg3K2uOwUBQ==
   dependencies:
-    lodash "^4.17.11"
+    lodash "^4.17.14"
 
 object-visit@^1.0.0:
   version "1.0.1"
