@@ -4,6 +4,7 @@ const fs = require("fs");
 const moment = require("moment");
 /* HELPER FUNCTIONS */
 const helpers = {
+    buildUrl: BuildUrl,
     /**
      * Get full url of path
      * @param {string} $path
@@ -144,6 +145,9 @@ const helpers = {
             i++;
         }
         return newArray;
+    },
+    randomInteger(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     },
     // ---------------------------
     // ---------------------------

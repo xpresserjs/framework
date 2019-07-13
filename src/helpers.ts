@@ -8,6 +8,7 @@ declare let $: Xpresser;
 
 /* HELPER FUNCTIONS */
 const helpers = {
+    buildUrl: BuildUrl,
 
     /**
      * Get full url of path
@@ -173,6 +174,10 @@ const helpers = {
         }
 
         return newArray;
+    },
+
+    randomInteger(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) ) + min;
     },
 
     // ---------------------------
