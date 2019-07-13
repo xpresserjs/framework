@@ -4,11 +4,8 @@ const {dirname, resolve} = require("path");
 import {XpresserHttp} from "../http";
 
 import bodyParser = require("body-parser");
-import connect_session_knex = require("connect-session-knex");
 import cors = require("cors");
 import express = require("express");
-import flash = require("express-flash");
-import session = require("express-session");
 
 import {createServer as createHttpServer} from "http";
 import {createServer as createHttpsServer} from "https";
@@ -84,25 +81,6 @@ if (useHelmet) {
 
 import Path = require("./Helpers/Path");
 
-const KnexSessionStore = connect_session_knex(session);
-const knexSessionConfig = {
-    client: "sqlite3",
-    connection: {
-        filename: $.path.base("sessions.sqlite"),
-    },
-    useNullAsDefault: true,
-};
-
-const sessionFilePath = knexSessionConfig.connection.filename;
-if (!FS.existsSync(sessionFilePath)) {
-    Path.makeDirIfNotExist(sessionFilePath, true);
-}
-
-const store = new KnexSessionStore({
-    knex: require("knex")(knexSessionConfig),
-    tablename: "sessions",
-});
-
 // Add Cors
 app.use(cors());
 
@@ -111,14 +89,41 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 // Use Session
-const sessionConfig = _.extend({}, $.config.session, {
-    store,
-});
+const useSession = $.$config.get("session.startOnBoot", false);
+if (useSession) {
+    // tslint:disable-next-line:variable-name
+    const connect_session_knex = require("connect-session-knex");
+    const flash = require("express-flash");
+    const session = require("express-session");
 
-app.use(session(sessionConfig));
+    const KnexSessionStore = connect_session_knex(session);
+    const knexSessionConfig = {
+        client: "sqlite3",
+        connection: {
+            filename: $.path.base("sessions.sqlite"),
+        },
+        useNullAsDefault: true,
+    };
 
-// Use Flash
-app.use(flash());
+    const sessionFilePath = knexSessionConfig.connection.filename;
+    if (!FS.existsSync(sessionFilePath)) {
+        Path.makeDirIfNotExist(sessionFilePath, true);
+    }
+
+    const store = new KnexSessionStore({
+        knex: require("knex")(knexSessionConfig),
+        tablename: "sessions",
+    });
+
+    const sessionConfig = _.extend({}, $.config.session, {
+        store,
+    });
+
+    app.use(session(sessionConfig));
+
+    // Use Flash
+    app.use(flash());
+}
 
 // Set local AppData
 app.locals.appData = {};

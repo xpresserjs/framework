@@ -69,6 +69,7 @@ const Config = {
         jsonConfigs: "base://",
     },
     session: {
+        startOnBoot: false,
         secret: "!XpresserSecretKey!",
         cookie: {
             path: ServerConfig.root,
