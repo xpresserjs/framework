@@ -1,5 +1,6 @@
 declare namespace XpresserHelpers {
     interface Main {
+        urlBuilder: any;
         url($path?: string, $query?: object): string;
 
         route($route: string, $keys?: any[], $query?: object | boolean, $includeUrl?: boolean): string;
@@ -15,6 +16,13 @@ declare namespace XpresserHelpers {
          * @param [length=10]
          */
         randomStr(length: number): string;
+
+        /**
+         * Random Number Generator
+         * @param min
+         * @param max
+         */
+        randomInteger(min: number, max: number): number;
 
         randomArray(length: number): any[];
 

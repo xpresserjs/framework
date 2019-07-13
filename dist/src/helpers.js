@@ -4,7 +4,7 @@ const fs = require("fs");
 const moment = require("moment");
 /* HELPER FUNCTIONS */
 const helpers = {
-    buildUrl: BuildUrl,
+    urlBuilder: BuildUrl,
     /**
      * Get full url of path
      * @param {string} $path

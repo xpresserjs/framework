@@ -8,7 +8,7 @@ declare let $: Xpresser;
 
 /* HELPER FUNCTIONS */
 const helpers = {
-    buildUrl: BuildUrl,
+    urlBuilder: BuildUrl,
 
     /**
      * Get full url of path
