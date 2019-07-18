@@ -147,14 +147,16 @@ class RouterEngine {
                     route = _.extend({}, parent, route);
                 }
             }
-            if (!route.children && parent.useMethodAsName && !route.name) {
-                let nameFromController = route.controller;
-                if (nameFromController.includes("@")) {
-                    nameFromController = nameFromController.split("@");
-                    nameFromController = nameFromController[nameFromController.length - 1];
+            if (typeof route.controller === "string") {
+                if (!route.children && parent.useMethodAsName && !route.name) {
+                    let nameFromController = route.controller;
+                    if (nameFromController.includes("@")) {
+                        nameFromController = nameFromController.split("@");
+                        nameFromController = nameFromController[nameFromController.length - 1];
+                    }
+                    route.name = nameFromController;
+                    nameWasGenerated = true;
                 }
-                route.name = nameFromController;
-                nameWasGenerated = true;
             }
             if (parent.as && typeof route.name === "string" && route.name.substr(0, 1) !== "/") {
                 if (route.path === "" && nameWasGenerated) {
@@ -170,7 +172,7 @@ class RouterEngine {
                 }
                 route.name = route.name.toLowerCase();
             }
-            if (!route.children && parent.controller && route.controller && !route.controller.includes("@")) {
+            if (!route.children && parent.controller && typeof route.controller === "string" && !route.controller.includes("@")) {
                 route.controller = parent.controller + "@" + route.controller;
             }
             if (parent.path) {

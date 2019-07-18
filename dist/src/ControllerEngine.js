@@ -7,10 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-const express_1 = __importDefault(require("express"));
+const express = require("express");
 const ErrorEngine = require("./ErrorEngine");
 const RequestEngine = require("./Plugins/ExtendedRequestEngine");
 const MiddleWareEngine = require("./MiddlewareEngine");
@@ -67,23 +64,30 @@ class ControllerEngine {
     /**
      * @param {function} controller
      * @param {string} method
+     * @param isPath
      */
-    constructor(controller, method) {
-        return this.processController(controller, method);
+    constructor(controller, method, isPath) {
+        return this.processController(controller, method, isPath);
     }
     /**
      * @param {function|object} controller
      * @param {string} method
+     * @param isPath
      */
-    processController(controller, method) {
+    processController(controller, method, isPath) {
         const DebugControllerAction = !$.config.debug.enabled ? false : $.config.debug.controllerAction;
         if (typeof controller === "function") {
             /*
-            * If `controller` does not `extendsMainController`
+            * If `isPath`
             * then we know it is a nested route function.
+            *
+            * Else it will be a request handler.
             * */
-            if (typeof controller.extendsMainController !== "boolean") {
-                return controller(express_1.default.Router());
+            if (isPath) {
+                return controller(express.Router());
+            }
+            else {
+                method = controller;
             }
         }
         return (req, res) => __awaiter(this, void 0, void 0, function* () {
@@ -121,16 +125,24 @@ class ControllerEngine {
                  * If `method` is not static then initialize controller and set to `useController`
                  */
                 let useController = controller;
-                if (typeof controller[method] !== "function") {
-                    // Initialize controller
-                    useController = new controller();
+                if (typeof method !== "function") {
+                    if (typeof controller[method] !== "function") {
+                        // Initialize controller
+                        useController = new controller();
+                    }
                 }
                 try {
                     // If `method` does not exists then display error
-                    if (typeof useController[method] !== "function") {
+                    if (typeof method !== "function" && typeof useController[method] !== "function") {
                         return error.controllerMethodNotFound("", method, controllerName);
                     }
-                    let $return = useController[method](x, boot);
+                    let $return;
+                    if (typeof method === "function") {
+                        $return = method(x, boot);
+                    }
+                    else {
+                        $return = useController[method](x, boot);
+                    }
                     if ($.fn.isPromise($return)) {
                         $return = yield $return;
                     }
@@ -156,33 +168,39 @@ class ControllerEngine {
     }
 }
 /**
- * @param {string | Object | Function} controller
+ * @param {string | Object | Function} $controller
  * @param {string |null} method
  */
-const controller = (controller, method = null) => {
+const Controller = ($controller, method = null) => {
     let route = undefined;
     let controllerPath = null;
-    if (typeof controller === "object" && controller.hasOwnProperty("controller")) {
-        route = controller;
-        controller = controller.controller;
+    let isPath = false;
+    if (typeof $controller === "object") {
+        if ($controller.hasOwnProperty("controller")) {
+            route = $controller;
+            $controller = $controller.controller;
+        }
+        if ($controller.hasOwnProperty("children")) {
+            isPath = true;
+        }
     }
-    if (typeof controller === "string" && controller.includes("@")) {
-        const split = controller.split("@");
-        controller = split[0];
+    if (typeof $controller === "string" && $controller.includes("@")) {
+        const split = $controller.split("@");
+        $controller = split[0];
         method = split[1];
-        controllerPath = $.use.controller(controller + $.config.project.fileExtension);
-        controller = require(controllerPath);
+        controllerPath = $.use.controller($controller + $.config.project.fileExtension);
+        $controller = require(controllerPath);
     }
-    if (typeof controller !== "function") {
-        if (typeof controller === "string") {
-            return $.logErrorAndExit("Controller: {" + controller + "} not found!");
+    if (!isPath && typeof $controller !== "function") {
+        if (typeof $controller === "string") {
+            return $.logErrorAndExit("Controller: {" + $controller + "} not found!");
         }
         return $.logErrorAndExit("Controller not found!");
     }
-    if (route !== undefined && typeof controller.middleware === "function") {
-        const middleware = controller.middleware();
+    if (route !== undefined && typeof $controller.middleware === "function") {
+        const middleware = $controller.middleware();
         ControllerEngine.addMiddlewares(middleware, method, route);
     }
-    return new ControllerEngine(controller, method);
+    return new ControllerEngine($controller, method, isPath);
 };
-module.exports = controller;
+module.exports = Controller;

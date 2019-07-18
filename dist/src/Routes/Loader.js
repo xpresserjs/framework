@@ -16,12 +16,6 @@ if (fs.existsSync(RouteFile)) {
         ]);
     }
 }
-else {
-    $.logPerLine([
-        { error: "Routes File Missing." },
-        { error: RouteFile },
-    ]);
-}
 // Import plugin routes
 const PluginData = $.engineData.get("PluginEngineData");
 const PluginRoutes = PluginData.routes;
@@ -37,5 +31,3 @@ for (let i = 0; i < PluginRoutes.length; i++) {
 if (typeof $.router.routesAfterPlugins === "function") {
     $.router.routesAfterPlugins();
 }
-// Process Routes
-$.routerEngine.processRoutes($.router.routes);

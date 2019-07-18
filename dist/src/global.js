@@ -1,11 +1,8 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const moment_1 = __importDefault(require("moment"));
+const moment = require("moment");
 const Base64 = require("./Helpers/Base64");
-global.moment = moment_1.default;
+global.moment = moment;
 // Use Base64 and Object-validator-pro
 $.base64 = Base64;
 $.ovp = require("./Helpers/ObjectValidatorPro");

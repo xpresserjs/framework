@@ -108,6 +108,7 @@ const Config = {
         default: "nodemailer",
         configs: {},
     },
+    packages: {},
 };
 const Options = {
     isConsole: false,

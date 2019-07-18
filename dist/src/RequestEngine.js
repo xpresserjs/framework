@@ -168,7 +168,9 @@ class RequestEngine {
         const localsConfig = $.config.template.locals;
         const all = localsConfig.all;
         this.res.locals.__currentView = file;
-        this.res.locals.__flash = this.req.flash();
+        if ($.$config.get("session.startOnBoot", false)) {
+            this.res.locals.__flash = this.req.flash();
+        }
         this.res.locals.__currentUrl = this.req.url;
         if (all || localsConfig.__stackedScripts) {
             this.res.locals.__stackedScripts = [];

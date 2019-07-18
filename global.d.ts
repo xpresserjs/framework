@@ -156,4 +156,16 @@ declare interface Xpresser {
      * Log Per Line
      */
     logPerLine($args: any[], $spacePerLine?: boolean): void;
+
+    /**
+     * StartHttpServer
+     * Starts Express Http Server.
+     */
+    startHttpServer(onSuccess?: () => void, onError?: () => void): Xpresser;
+
+    /**
+     * StartHttpsServer
+     * Starts Express Https Server.
+     */
+    startHttpsServer(onSuccess?: () => void, onError?: () => void): Xpresser;
 }
