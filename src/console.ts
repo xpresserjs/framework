@@ -70,6 +70,8 @@ if (typeof commands[argCommand] === "undefined") {
     let afterRun = null;
     if (typeof runFn === "object" && typeof runFn.handler === "function") {
         require("./Routes/Loader");
+        $.routerEngine.processRoutes($.router.routes);
+
         afterRun = runFn.handler(args, JobHelper);
     } else {
         afterRun = runFn(args, JobHelper);

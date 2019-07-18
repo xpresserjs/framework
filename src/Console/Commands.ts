@@ -102,7 +102,6 @@ const Commands = {
         }
 
         if (name === "__routes") {
-            require("../Routes/Loader");
             defaultContent = $.base64.encode($.routerEngine.nameToUrl());
             defaultContent = "<script>" + os.EOL +
                 "window['--routes'] = '" + defaultContent + "';" + os.EOL +
