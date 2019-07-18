@@ -97,9 +97,16 @@ class ControllerEngine {
             * */
             if (isPath) {
                 return controller(express.Router());
-            } else {
+            } else if (typeof controller.extendsMainController !== "boolean") {
                 method = controller;
             }
+        }
+
+        let m: string;
+        if (typeof method === "string") {
+            m = method;
+        } else {
+            m = "";
         }
 
         return async (req: XpresserHttp.Request, res: XpresserHttp.Response) => {
@@ -125,7 +132,7 @@ class ControllerEngine {
                         return error.view({
                             error: {
                                 // tslint:disable-next-line:max-line-length
-                                message: `Error in Controller:  <code>${controllerName}</code>, Method: <code>${method}</code>`,
+                                message: `Error in Controller:  <code>${controllerName}</code>, Method: <code>${m}</code>`,
                                 log: e.stack,
                             },
                         });
@@ -175,7 +182,7 @@ class ControllerEngine {
                     return error.view({
                         error: {
                             // tslint:disable-next-line:max-line-length
-                            message: `Error in Controller:  <code>${controllerName}</code>, Method: <code>${method}</code>`,
+                            message: `Error in Controller:  <code>${controllerName}</code>, Method: <code>${m}</code>`,
                             log: e.stack,
                         },
                     });

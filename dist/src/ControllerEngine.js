@@ -86,9 +86,16 @@ class ControllerEngine {
             if (isPath) {
                 return controller(express.Router());
             }
-            else {
+            else if (typeof controller.extendsMainController !== "boolean") {
                 method = controller;
             }
+        }
+        let m;
+        if (typeof method === "string") {
+            m = method;
+        }
+        else {
+            m = "";
         }
         return (req, res) => __awaiter(this, void 0, void 0, function* () {
             // Log Time if `DebugControllerAction` is true
@@ -111,7 +118,7 @@ class ControllerEngine {
                         return error.view({
                             error: {
                                 // tslint:disable-next-line:max-line-length
-                                message: `Error in Controller:  <code>${controllerName}</code>, Method: <code>${method}</code>`,
+                                message: `Error in Controller:  <code>${controllerName}</code>, Method: <code>${m}</code>`,
                                 log: e.stack,
                             },
                         });
@@ -155,7 +162,7 @@ class ControllerEngine {
                     return error.view({
                         error: {
                             // tslint:disable-next-line:max-line-length
-                            message: `Error in Controller:  <code>${controllerName}</code>, Method: <code>${method}</code>`,
+                            message: `Error in Controller:  <code>${controllerName}</code>, Method: <code>${m}</code>`,
                             log: e.stack,
                         },
                     });
