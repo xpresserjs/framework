@@ -171,6 +171,8 @@ const ModelEngine = require("./ModelEngine");
  * @type {ModelEngine}
  */
 $.model = ModelEngine;
+// Load Events
+require("./src/Events/Loader");
 const RequestEngine = require("./Plugins/ExtendedRequestEngine");
 const $globalMiddlewareWrapper = ($middlewareFn) => {
     return (res, req, next) => __awaiter(this, void 0, void 0, function* () {

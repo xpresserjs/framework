@@ -208,6 +208,9 @@ import ModelEngine = require("./ModelEngine");
  */
 $.model = ModelEngine;
 
+// Load Events
+require("./src/Events/Loader");
+
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 
 const $globalMiddlewareWrapper = ($middlewareFn: any) => {

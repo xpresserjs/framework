@@ -6,5 +6,7 @@ const ModelEngine = require("./ModelEngine");
  */
 $.model = ModelEngine;
 if (!global.hasOwnProperty("XjsCliConfig")) {
+    // Load Events
+    require("./src/Events/Loader");
     require("./console");
 }

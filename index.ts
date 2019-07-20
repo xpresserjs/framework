@@ -139,9 +139,6 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
      */
     $.router = new XpresserRouter();
 
-    // Load Events
-    require("./src/Events/Loader");
-
     $.ifIsConsole = (run: () => void): void => {
         if ($.$options.isConsole) {
             run();
