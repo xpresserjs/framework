@@ -5,7 +5,7 @@ const EventEmitter = new events.EventEmitter();
 const DefinedEvents = $.engineData.get("DefinedEvents", {});
 EventEmitter.on("runEvent", ($payload) => {
     if (DefinedEvents.hasOwnProperty($payload.event)) {
-        DefinedEvents[$payload.event]($payload.payload);
+        DefinedEvents[$payload.event](...$payload.payload);
     }
 });
 class EventsEmitter {
