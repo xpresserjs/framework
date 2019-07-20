@@ -22,7 +22,10 @@ const PluginNamespaces = $.engineData.get("PluginEngine:namespaces", {});
  * @type {{}}
  */
 const UsePath = "UseDotJson";
-Use = $.engineData.get(UsePath, {});
+Use = $.engineData.get(
+    UsePath,
+    $.objectCollection(),
+).return();
 
 // Process Use Data
 if (typeof Use.middlewares === "object") {
@@ -68,7 +71,10 @@ if (typeof Use.middlewares === "object") {
     }
 }
 
-$.engineData.set(UsePath, Use);
+$.engineData.set(
+    UsePath,
+    $.objectCollection(Use),
+);
 
 // Functions
 function parsePath(path, data = {}) {
