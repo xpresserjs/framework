@@ -12,7 +12,7 @@ EventEmitter.on("runEvent", ($payload: {
     payload: any[],
 }) => {
     if (DefinedEvents.hasOwnProperty($payload.event)) {
-        DefinedEvents[$payload.event]($payload.payload);
+        DefinedEvents[$payload.event](...$payload.payload);
     }
 });
 
