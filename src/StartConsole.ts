@@ -11,6 +11,6 @@ $.model = ModelEngine;
 
 if (!global.hasOwnProperty("XjsCliConfig")) {
     // Load Events
-    require("./src/Events/Loader");
+    require("./Events/Loader");
     require("./console");
 }

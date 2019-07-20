@@ -209,7 +209,7 @@ import ModelEngine = require("./ModelEngine");
 $.model = ModelEngine;
 
 // Load Events
-require("./src/Events/Loader");
+require("./Events/Loader");
 
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 
