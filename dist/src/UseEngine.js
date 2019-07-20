@@ -15,60 +15,49 @@ const PluginNamespaces = $.engineData.get("PluginEngine:namespaces", {});
  * Object returned from use.json is processed and saved in $.engineData as path to file.
  * @type {{}}
  */
-const UsePath = $.path.jsonConfigs("use.json");
-if ($.engineData.has(UsePath)) {
-    // If has usePath Before then Reuse
-    Use = $.engineData.get(UsePath);
-}
-else if (fs.existsSync(UsePath)) {
-    // Process Use Data
-    try {
-        Use = require(UsePath);
-    }
-    catch (e) {
-        $.logErrorAndExit(e.message);
-    }
-    if (typeof Use.middlewares === "object") {
-        const MiddlewareSuffix = "Middleware";
-        const useMiddlewares = Use.middlewares;
-        const middlewareKeys = Object.keys(useMiddlewares);
-        for (let i = 0; i < middlewareKeys.length; i++) {
-            const middlewareKey = middlewareKeys[i];
-            let middleware = useMiddlewares[middlewareKey];
-            const extension = $.config.project.fileExtension;
-            if (middleware.substr(-3) === extension) {
-                middleware = middleware.substr(0, middleware.length - 3);
-            }
-            let middlewareRealPath = PathHelper.resolve(middleware);
-            let hasMiddleware = false;
-            if (fs.existsSync(middlewareRealPath + extension)) {
+const UsePath = "UseDotJson";
+Use = $.engineData.get(UsePath, {});
+// Process Use Data
+if (typeof Use.middlewares === "object") {
+    const MiddlewareSuffix = "Middleware";
+    const useMiddlewares = Use.middlewares;
+    const middlewareKeys = Object.keys(useMiddlewares);
+    for (let i = 0; i < middlewareKeys.length; i++) {
+        const middlewareKey = middlewareKeys[i];
+        let middleware = useMiddlewares[middlewareKey];
+        const extension = $.config.project.fileExtension;
+        if (middleware.substr(-3) === extension) {
+            middleware = middleware.substr(0, middleware.length - 3);
+        }
+        let middlewareRealPath = PathHelper.resolve(middleware);
+        let hasMiddleware = false;
+        if (fs.existsSync(middlewareRealPath + extension)) {
+            hasMiddleware = true;
+        }
+        else {
+            if (fs.existsSync(middlewareRealPath + MiddlewareSuffix + extension)) {
+                middlewareRealPath = middlewareRealPath + MiddlewareSuffix;
                 hasMiddleware = true;
             }
-            else {
-                if (fs.existsSync(middlewareRealPath + MiddlewareSuffix + extension)) {
-                    middlewareRealPath = middlewareRealPath + MiddlewareSuffix;
-                    hasMiddleware = true;
-                }
-            }
-            if (hasMiddleware) {
-                const hasSuffix = StringHelper.hasSuffix(middlewareKey, MiddlewareSuffix);
-                if (hasSuffix) {
-                    Use.middlewares[StringHelper.withoutSuffix(middlewareKey, MiddlewareSuffix)] = middlewareRealPath;
-                    delete Use.middlewares[middlewareKey];
-                }
-                else {
-                    Use.middlewares[middlewareKey] = middlewareRealPath;
-                }
-            }
-            else {
-                $.logError(`Middleware not found:`);
-                $.logErrorAndExit(middleware);
+        }
+        if (hasMiddleware) {
+            const hasSuffix = StringHelper.hasSuffix(middlewareKey, MiddlewareSuffix);
+            if (hasSuffix) {
+                Use.middlewares[StringHelper.withoutSuffix(middlewareKey, MiddlewareSuffix)] = middlewareRealPath;
                 delete Use.middlewares[middlewareKey];
             }
+            else {
+                Use.middlewares[middlewareKey] = middlewareRealPath;
+            }
+        }
+        else {
+            $.logError(`Middleware not found:`);
+            $.logErrorAndExit(middleware);
+            delete Use.middlewares[middlewareKey];
         }
     }
-    $.engineData.set(UsePath, Use);
 }
+$.engineData.set(UsePath, Use);
 // Functions
 function parsePath(path, data = {}) {
     const dataKeys = Object.keys(data);

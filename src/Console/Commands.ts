@@ -47,6 +47,14 @@ const Commands = {
         artisan.copyFromFactoryToApp("job", job, jobsPath, {name: job, command}, false);
     },
 
+    "make:event"(args) {
+        const name = args[0];
+        const namespace = args[1];
+
+        const eventsPath = $.path.events();
+        artisan.copyFromFactoryToApp("event", name, eventsPath, {name, namespace}, false);
+    },
+
     "make:controller"(args) {
         const controller = args[0];
 
@@ -88,7 +96,7 @@ const Commands = {
             table = artisan.pluralize(name.toLowerCase());
         }
 
-        const modelPath = PathHelper.resolve($.config.paths.models);
+        const modelPath = $.path.models();
         artisan.copyFromFactoryToApp("model", name, modelPath, {name, table});
     },
 

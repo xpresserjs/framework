@@ -79,5 +79,63 @@ const PathHelper = {
         }
         return $path;
     },
+    /**
+     * Adds project extension to a string or array of strings
+     *
+     * e.g if project extension is `.js`
+     * ['server', 'app', 'test']
+     *
+     * => ['server.js', 'app.js', 'test.js']
+     * @param files
+     * @param clone
+     */
+    addProjectFileExtension(files, clone = false) {
+        if (Array.isArray(files)) {
+            let array;
+            if (clone) {
+                array = [...files];
+            }
+            else {
+                array = files;
+            }
+            for (let i = 0; i < array.length; i++) {
+                const file = array[i];
+                array[i] = file + $.config.project.fileExtension;
+            }
+            return array;
+        }
+        else {
+            return files + $.config.project.fileExtension;
+        }
+    },
+    /**
+     * Adds project extension to a string or array of strings
+     *
+     * e.g if project extension is `.js`
+     * ['server.js', 'app.js', 'test.js']
+     *
+     * => ['server', 'app', 'test']
+     * @param files
+     * @param clone
+     */
+    removeProjectFileExtension(files, clone = false) {
+        if (Array.isArray(files)) {
+            let array;
+            if (clone) {
+                array = [...files];
+            }
+            else {
+                array = files;
+            }
+            for (let i = 0; i < array.length; i++) {
+                const file = array[i];
+                array[i] = this.removeProjectFileExtension(file);
+            }
+            return array;
+        }
+        else {
+            return files.substr(0, files.length - $.config.project.fileExtension.length);
+        }
+    },
 };
 module.exports = PathHelper;

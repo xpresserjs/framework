@@ -94,6 +94,13 @@ const XpresserInit = (AppConfig, AppOptions) => {
     const PluginEngine = require("./src/PluginEngine");
     const PluginData = PluginEngine.loadPlugins();
     $.engineData.set("PluginEngineData", PluginData);
+    const $useDotJson = $.objectCollection();
+    const $useDotJsonPath = $.path.jsonConfigs("use.json");
+    if (fs.existsSync($useDotJsonPath)) {
+        $useDotJson.merge(require($useDotJsonPath));
+        // Save to EngineData
+        $.engineData.set("UseDotJson", $useDotJson);
+    }
     // Global
     require("./src/global");
     /**
@@ -101,6 +108,18 @@ const XpresserInit = (AppConfig, AppOptions) => {
      * @type {XpresserRouter}
      */
     $.router = new XpresserRouter();
+    // Load Events
+    require("./src/Events/Loader");
+    $.ifIsConsole = (run) => {
+        if ($.$options.isConsole) {
+            run();
+        }
+    };
+    $.ifNotConsole = (run) => {
+        if (!$.$options.isConsole) {
+            run();
+        }
+    };
     if ($.$options.isConsole) {
         require("./src/StartConsole");
     }

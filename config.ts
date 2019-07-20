@@ -62,6 +62,7 @@ const Config = {
 
         // Other Paths
         routesFile: "backend://routes.js",
+        events: "backend://events",
         controllers: "backend://controllers",
         models: "backend://models",
         middlewares: "backend://middlewares",

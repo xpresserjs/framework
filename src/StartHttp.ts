@@ -19,15 +19,7 @@ const paths = $.$config.get("paths");
 
 /////////////
 // Load Use.json Data
-const $useDotJson = $.objectCollection();
-const $useDotJsonPath = $.path.jsonConfigs("use.json");
-
-if (FS.existsSync($useDotJsonPath)) {
-    $useDotJson.merge(require($useDotJsonPath));
-
-    // Save to EngineData
-    $.engineData.set("USE_DOT_JSON", $useDotJson.return());
-}
+const $useDotJson = $.engineData.get("UseDotJson");
 
 $.app = express();
 

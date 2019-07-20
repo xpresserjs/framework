@@ -32,7 +32,7 @@ $.path = {
      * @param {boolean} returnRequire
      */
     engine: (path = "", returnRequire = false) => {
-        const dataKey = "Path:engine";
+        const dataKey = "XpresserPath";
         let EnginePath;
         if ($.engineData.has(dataKey)) {
             EnginePath = $.engineData.get(dataKey);
@@ -51,6 +51,13 @@ $.path = {
         }
         const engine = EnginePath + path;
         return returnRequire ? require(engine) : engine;
+    },
+    events: (path = "", returnRequire = false) => {
+        if (path[0] === "/") {
+            path = path.substr(1);
+        }
+        const event = Path.resolve([$.config.paths.events, path]);
+        return returnRequire ? require(event) : event;
     },
     controllers: (path = "", returnRequire = false) => {
         if (path[0] === "/") {

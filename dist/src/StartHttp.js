@@ -19,13 +19,7 @@ const paths = $.$config.get("paths");
 // const $pluginNamespaceKeys = Object.keys($pluginData);
 /////////////
 // Load Use.json Data
-const $useDotJson = $.objectCollection();
-const $useDotJsonPath = $.path.jsonConfigs("use.json");
-if (FS.existsSync($useDotJsonPath)) {
-    $useDotJson.merge(require($useDotJsonPath));
-    // Save to EngineData
-    $.engineData.set("USE_DOT_JSON", $useDotJson.return());
-}
+const $useDotJson = $.engineData.get("UseDotJson");
 $.app = express();
 $.app.use((req, res, next) => {
     res.set("X-Powered-By", "Xpresser");

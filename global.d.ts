@@ -11,11 +11,21 @@ import {Server} from "net";
 import ModelEngine = require("./src/ModelEngine");
 import RouterEngine = require("./src/RouterEngine");
 import Controller = require("./src/Classes/Controller");
+import EventsEmitter = require("./src/Events/Emitter");
 
 declare namespace XpresserJsonSettings {
     interface Use {
         middlewares?: object;
     }
+}
+
+declare interface XpresserEventEmitter {
+    /**
+     * Emit Registered Events
+     * @param event
+     * @param payload
+     */
+    emit(event: string, ...payload): void;
 }
 
 declare interface Xpresser {
@@ -63,6 +73,9 @@ declare interface Xpresser {
     // Controller
     controller: Controller | any;
 
+    // Events
+    events: XpresserEventEmitter;
+
     /*----------------- PATH FUNCTIONS ------------------- */
     path: {
         /**
@@ -84,6 +97,11 @@ declare interface Xpresser {
          * Get path in Framework src folder
          */
         engine(path?: string, returnRequire?: boolean): string | any;
+
+        /**
+         * Get path in Events Folder
+         */
+        events(path?: string, returnRequire?: boolean): string | any;
 
         /**
          * Get path controllers folder
@@ -156,6 +174,16 @@ declare interface Xpresser {
      * Log Per Line
      */
     logPerLine($args: any[], $spacePerLine?: boolean): void;
+
+    /**
+     * If Boot session is console.
+     */
+    ifIsConsole(run: () => void): void;
+
+    /**
+     * If Boot session isNot console.
+     */
+    ifNotConsole(run: () => void): void;
 
     /**
      * StartHttpServer

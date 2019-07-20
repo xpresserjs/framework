@@ -12,6 +12,7 @@ import Configurations = require("./config");
 // XpresserRouter && ObjectionCollection
 import XpresserRouter = require("@xpresser/router");
 import {Xpresser} from "./global";
+import {run} from "tslint/lib/runner";
 
 /**
  * Get default Config and Options from Configurations
@@ -119,6 +120,16 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
 
     $.engineData.set("PluginEngineData", PluginData);
 
+    const $useDotJson = $.objectCollection();
+    const $useDotJsonPath = $.path.jsonConfigs("use.json");
+
+    if (fs.existsSync($useDotJsonPath)) {
+        $useDotJson.merge(require($useDotJsonPath));
+
+        // Save to EngineData
+        $.engineData.set("UseDotJson", $useDotJson);
+    }
+
     // Global
     require("./src/global");
 
@@ -127,6 +138,21 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
      * @type {XpresserRouter}
      */
     $.router = new XpresserRouter();
+
+    // Load Events
+    require("./src/Events/Loader");
+
+    $.ifIsConsole = (run: () => void): void => {
+        if ($.$options.isConsole) {
+            run();
+        }
+    };
+
+    $.ifNotConsole = (run: () => void): void => {
+        if (!$.$options.isConsole) {
+            run();
+        }
+    };
 
     if ($.$options.isConsole) {
         require("./src/StartConsole");
