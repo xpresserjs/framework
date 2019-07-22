@@ -3,7 +3,8 @@ class ErrorEngine {
     constructor(x) {
         this.x = x;
     }
-    view(data) {
+    view(data, status = 500) {
+        this.x.res.status(500);
         return this.x.renderViewFromEngine("__errors/index", data);
     }
     controllerMethodNotFound(e, method = "", controller = "") {
@@ -22,7 +23,7 @@ class ErrorEngine {
             title: `404 Error!`,
             message: `<code>${req.method}: ${req.url}</code> <br><br> Route not found!`,
         };
-        return this.view({ error });
+        return this.view({ error }, 400);
     }
 }
 module.exports = ErrorEngine;
