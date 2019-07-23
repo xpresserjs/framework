@@ -16,7 +16,7 @@ const PluginNamespaces = $.engineData.get("PluginEngine:namespaces", {});
  * @type {{}}
  */
 const UsePath = "UseDotJson";
-Use = $.engineData.get(UsePath, $.objectCollection()).return();
+Use = $.engineData.get(UsePath, $.objectCollection()).all();
 // Process Use Data
 if (typeof Use.middlewares === "object") {
     const MiddlewareSuffix = "Middleware";

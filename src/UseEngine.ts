@@ -25,7 +25,7 @@ const UsePath = "UseDotJson";
 Use = $.engineData.get(
     UsePath,
     $.objectCollection(),
-).return();
+).all();
 
 // Process Use Data
 if (typeof Use.middlewares === "object") {

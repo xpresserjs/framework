@@ -107,7 +107,7 @@ module.exports = ($plugin) => {
         }
     }
     if (UpdatePluginLockData) {
-        fs.writeFileSync(PluginLockDataPath, JSON.stringify(PluginLockData.return(), null, 2));
+        fs.writeFileSync(PluginLockDataPath, JSON.stringify(PluginLockData.all(), null, 2));
         $.logInfo("Updated plugins-lock.json");
     }
     $.logInfo("Installation Complete!");

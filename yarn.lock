@@ -1913,10 +1913,10 @@ object-assign@^4, object-assign@^4.0.1, object-assign@^4.1.0:
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
   integrity sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM=
 
-object-collection@^1.0.11:
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/object-collection/-/object-collection-1.0.11.tgz#2417de93f21774173eafca9a43b418535e11164a"
-  integrity sha512-eUp93eDvUzlCdhTnStu6uKkai/6DQDyT2048AnD4I7vFHafkEB9JMYiW9N2YPLKQfa3l/XrapV4tDLAMNLBU7A==
+object-collection@^1.0.13:
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/object-collection/-/object-collection-1.0.13.tgz#b8a518cdb49bb323864141091e6fb8f1a2ee46fe"
+  integrity sha512-1iYHo5O6Xm4il8J+4NKxkGJzoO391TKiCrZ39w52qiJEElvWm0O6HUkxmhE3Oltf1o4HpOzzGIU40LcL+ij22g==
   dependencies:
     lodash "^4.17.14"
 
