@@ -67,6 +67,7 @@ class ProcessManager {
     removeCommandProcess($file, $process) {
         $process = Number($process);
         let processes = this.currentData();
+
         if (processes[$file] !== undefined) {
             let processData = processes[$file];
             for (let i = 0; i < processData.length; i++) {
@@ -90,10 +91,12 @@ class ProcessManager {
             for (let i = 0; i < processData.length; i++) {
                 let processDataItem = processData[i];
                 if ($process === 'all' || processDataItem.id === $process) {
-                    let self = this;
+                    const self = this;
 
-                    ps.kill(processDataItem.id, () => {
-                        self.removeCommandProcess($file, processDataItem.id);
+                    ps.kill(processDataItem.id, (err) => {
+                        if (!err) {
+                            self.removeCommandProcess($file, processDataItem.id);
+                        }
                     });
 
                     if ($process !== 'all')
