@@ -1,6 +1,6 @@
 {
   "name": "xpresser",
-  "version": "0.0.85",
+  "version": "0.1.0",
   "description": "Xpresser Framework for building scalable apps.",
   "main": "dist/index.js",
   "types": "global.d.ts",
@@ -9,6 +9,7 @@
     "dev": "ts-node-dev --respawn --transpileOnly ./test.ts"
   },
   "repository": "https://github.com/xpresserjs/framework.git",
+  "homepage": "https://xpresserjs.com",
   "author": "xpresserjs",
   "license": "ISC",
   "dependencies": {
@@ -19,13 +20,13 @@
     "connect-session-knex": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
-    "ejs": "2.6.2",
+    "ejs": "^2.6.2",
     "express": "^4.17.1",
     "express-flash": "^0.0.2",
     "express-session": "^1.16.2",
-    "fs-extra": "8.1.0",
+    "fs-extra": "^8.1.0",
     "handlebars": "^4.1.2",
-    "helmet": "^3.18.0",
+    "helmet": "^3.20.0",
     "knex": "0.18.0",
     "mkdirp": "^0.5.1",
     "moment": "^2.24.0",
