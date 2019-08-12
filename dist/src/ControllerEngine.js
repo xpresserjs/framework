@@ -62,19 +62,21 @@ class ControllerEngine {
         }
     }
     /**
+     * @param route
      * @param {function} controller
      * @param {string} method
      * @param isPath
      */
-    constructor(controller, method, isPath) {
-        return this.processController(controller, method, isPath);
+    constructor(route, controller, method, isPath) {
+        return this.processController(route, controller, method, isPath);
     }
     /**
+     * @param route
      * @param {function|object} controller
      * @param {string} method
      * @param isPath
      */
-    processController(controller, method, isPath) {
+    processController(route, controller, method, isPath) {
         const DebugControllerAction = !$.config.debug.enabled ? false : $.config.debug.controllerAction;
         if (typeof controller === "function") {
             /*
@@ -105,7 +107,7 @@ class ControllerEngine {
                 console.time(timeLogKey);
             }
             // Get `x` from RequestEngine
-            const x = new RequestEngine(req, res);
+            const x = new RequestEngine(req, res, undefined, route);
             const error = new ErrorEngine(x);
             try {
                 // Run static boot method if found in controller
@@ -124,6 +126,7 @@ class ControllerEngine {
                         });
                     }
                     if ($.fn.isPromise(boot)) {
+                        // noinspection ES6RedundantAwait
                         boot = yield boot;
                     }
                 }
@@ -175,19 +178,18 @@ class ControllerEngine {
     }
 }
 /**
- * @param {string | Object | Function} $controller
+ * @param {string | Object | Function} route
  * @param {string |null} method
  */
-const Controller = ($controller, method = null) => {
-    let route = undefined;
+const Controller = (route, method = null) => {
+    let $controller = undefined;
     let controllerPath = null;
     let isPath = false;
-    if (typeof $controller === "object") {
-        if ($controller.hasOwnProperty("controller")) {
-            route = $controller;
-            $controller = $controller.controller;
+    if (typeof route === "object") {
+        if (route.hasOwnProperty("controller")) {
+            $controller = route.controller;
         }
-        if ($controller.hasOwnProperty("children")) {
+        if (route.hasOwnProperty("children")) {
             isPath = true;
         }
     }
@@ -204,10 +206,12 @@ const Controller = ($controller, method = null) => {
         }
         return $.logErrorAndExit("Controller not found!");
     }
+    // noinspection JSObjectNullOrUndefined
     if (route !== undefined && typeof $controller.middleware === "function") {
+        // noinspection TypeScriptValidateJSTypes
         const middleware = $controller.middleware();
         ControllerEngine.addMiddlewares(middleware, method, route);
     }
-    return new ControllerEngine($controller, method, isPath);
+    return new ControllerEngine(route, $controller, method, isPath);
 };
 module.exports = Controller;

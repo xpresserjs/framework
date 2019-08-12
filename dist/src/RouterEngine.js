@@ -172,6 +172,7 @@ class RouterEngine {
                 }
                 route.name = route.name.toLowerCase();
             }
+            // tslint:disable-next-line:max-line-length
             if (!route.children && parent.controller && typeof route.controller === "string" && !route.controller.includes("@")) {
                 route.controller = parent.controller + "@" + route.controller;
             }

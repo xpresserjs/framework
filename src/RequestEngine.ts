@@ -9,7 +9,9 @@ import {Xpresser} from "../global";
 
 declare let _: any;
 declare let $: Xpresser;
+
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
+const sessionStartOnBoot = $.$config.get("session.startOnBoot", false);
 
 class RequestEngine {
     public req: XpresserHttp.Request;
@@ -22,22 +24,31 @@ class RequestEngine {
     public session: any;
     public fn: XpresserHelpers.FN;
     public customRenderer: () => string;
+    public route: { name: string } = {name: undefined};
 
     /**
      *
      * @param {*} req
      * @param {*} res
      * @param {*} next
+     * @param route
      */
-    constructor(req: XpresserHttp.Request, res: express.Response, next?: () => void) {
+    constructor(req: XpresserHttp.Request, res: express.Response, next?: () => void, route?: any) {
         this.res = res;
         this.req = req;
 
+        if (typeof next === "function") {
+            this.next = next;
+        }
+
+        if (route) {
+            this.route = {
+                name: route.name || "",
+            };
+        }
+
         if (req.params) {
             this.params = req.params;
-        }
-        if (next !== undefined) {
-            this.next = next;
         }
 
         this.session = req.session;
@@ -52,17 +63,6 @@ class RequestEngine {
      */
     public next() {
         return null;
-    }
-
-    /**
-     * Route
-     * @returns {*}
-     * @param {string} route
-     * @param {array} keys
-     * @param query
-     */
-    public route(route, keys = [], query = {}) {
-        return $.helpers.route(route, keys, query);
     }
 
     /**
@@ -198,32 +198,43 @@ class RequestEngine {
      * @returns {*}
      */
     public redirectToRoute(route, keys = []) {
-        return this.redirect(this.route(route, keys));
+        return this.redirect($.helpers.route(route, keys));
     }
 
     public viewData(file, data = {}) {
         const localsConfig = $.config.template.locals;
         const all = localsConfig.all;
 
+        this.res.locals.__route = this.route;
         this.res.locals.__currentView = file;
 
-        if ($.$config.get("session.startOnBoot", false)) {
+        if (sessionStartOnBoot) {
             this.res.locals.__flash = this.req.flash();
         }
 
         this.res.locals.__currentUrl = this.req.url;
 
-        if (all || localsConfig.__stackedScripts) {
-            this.res.locals.__stackedScripts = [];
-        }
-        if (all || localsConfig.__session) {
-            this.res.locals.__session = this.session;
-        }
-        if (all || localsConfig.__get) {
+        if (all) {
+
             this.res.locals.__get = this.req.query;
-        }
-        if (all || localsConfig.__post) {
             this.res.locals.__post = this.req.body;
+            this.res.locals.__stackedScripts = [];
+            this.res.locals.__session = this.session || {};
+
+        } else {
+
+            if (localsConfig.__stackedScripts) {
+                this.res.locals.__stackedScripts = [];
+            }
+            if (localsConfig.__session) {
+                this.res.locals.__session = this.session || {};
+            }
+            if (localsConfig.__get) {
+                this.res.locals.__get = this.req.query;
+            }
+            if (localsConfig.__post) {
+                this.res.locals.__post = this.req.body;
+            }
         }
 
         return _.extend({}, this.fn, data);
@@ -238,7 +249,12 @@ class RequestEngine {
      * @returns {*}
      */
     public view(file, data = {}, fullPath: boolean = false, useEjs = false) {
-        const Render = typeof this.customRenderer === "function" ? this.customRenderer : this.res.render;
+        const defaultRender = (...args) => {
+            // @ts-ignore
+            return this.res.render(...args);
+        };
+
+        const Render = typeof this.customRenderer === "function" ? this.customRenderer : defaultRender;
         const $filePath = file;
 
         // if View has namespace
@@ -264,8 +280,6 @@ class RequestEngine {
 
         const path = file + "." + (useEjs ? "ejs" : $.config.template.extension);
 
-        // $.logError(Path.resolve(path));
-
         data = this.viewData($filePath, data);
 
         if (typeof fullPath === "function") {
@@ -280,10 +294,11 @@ class RequestEngine {
                 {filename: path},
             ));
         } else {
+
             try {
                 return Render(file, data);
             } catch (e) {
-                $.logError(e.message);
+                $.logError(e.stack);
             }
 
         }

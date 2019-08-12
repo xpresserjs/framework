@@ -3,21 +3,29 @@ const ejs = require("ejs");
 const fs = require("fs");
 const requestHelpers = require("./Functions/request.fn");
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
+const sessionStartOnBoot = $.$config.get("session.startOnBoot", false);
 class RequestEngine {
     /**
      *
      * @param {*} req
      * @param {*} res
      * @param {*} next
+     * @param route
      */
-    constructor(req, res, next) {
+    constructor(req, res, next, route) {
+        this.route = { name: undefined };
         this.res = res;
         this.req = req;
+        if (typeof next === "function") {
+            this.next = next;
+        }
+        if (route) {
+            this.route = {
+                name: route.name || "",
+            };
+        }
         if (req.params) {
             this.params = req.params;
-        }
-        if (next !== undefined) {
-            this.next = next;
         }
         this.session = req.session;
         this.bothData = this.all();
@@ -29,16 +37,6 @@ class RequestEngine {
      */
     next() {
         return null;
-    }
-    /**
-     * Route
-     * @returns {*}
-     * @param {string} route
-     * @param {array} keys
-     * @param query
-     */
-    route(route, keys = [], query = {}) {
-        return $.helpers.route(route, keys, query);
     }
     /**
      * get Request Data
@@ -162,27 +160,36 @@ class RequestEngine {
      * @returns {*}
      */
     redirectToRoute(route, keys = []) {
-        return this.redirect(this.route(route, keys));
+        return this.redirect($.helpers.route(route, keys));
     }
     viewData(file, data = {}) {
         const localsConfig = $.config.template.locals;
         const all = localsConfig.all;
+        this.res.locals.__route = this.route;
         this.res.locals.__currentView = file;
-        if ($.$config.get("session.startOnBoot", false)) {
+        if (sessionStartOnBoot) {
             this.res.locals.__flash = this.req.flash();
         }
         this.res.locals.__currentUrl = this.req.url;
-        if (all || localsConfig.__stackedScripts) {
-            this.res.locals.__stackedScripts = [];
-        }
-        if (all || localsConfig.__session) {
-            this.res.locals.__session = this.session;
-        }
-        if (all || localsConfig.__get) {
+        if (all) {
             this.res.locals.__get = this.req.query;
-        }
-        if (all || localsConfig.__post) {
             this.res.locals.__post = this.req.body;
+            this.res.locals.__stackedScripts = [];
+            this.res.locals.__session = this.session || {};
+        }
+        else {
+            if (localsConfig.__stackedScripts) {
+                this.res.locals.__stackedScripts = [];
+            }
+            if (localsConfig.__session) {
+                this.res.locals.__session = this.session || {};
+            }
+            if (localsConfig.__get) {
+                this.res.locals.__get = this.req.query;
+            }
+            if (localsConfig.__post) {
+                this.res.locals.__post = this.req.body;
+            }
         }
         return _.extend({}, this.fn, data);
     }
@@ -195,7 +202,11 @@ class RequestEngine {
      * @returns {*}
      */
     view(file, data = {}, fullPath = false, useEjs = false) {
-        const Render = typeof this.customRenderer === "function" ? this.customRenderer : this.res.render;
+        const defaultRender = (...args) => {
+            // @ts-ignore
+            return this.res.render(...args);
+        };
+        const Render = typeof this.customRenderer === "function" ? this.customRenderer : defaultRender;
         const $filePath = file;
         // if View has namespace
         if (file.indexOf("::") > 2) {
@@ -214,7 +225,6 @@ class RequestEngine {
             }
         }
         const path = file + "." + (useEjs ? "ejs" : $.config.template.extension);
-        // $.logError(Path.resolve(path));
         data = this.viewData($filePath, data);
         if (typeof fullPath === "function") {
             return Render(path, data, fullPath);
@@ -228,7 +238,7 @@ class RequestEngine {
                 return Render(file, data);
             }
             catch (e) {
-                $.logError(e.message);
+                $.logError(e.stack);
             }
         }
     }

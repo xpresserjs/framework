@@ -71,30 +71,34 @@ class ControllerEngine {
     public controller: () => void;
 
     /**
+     * @param route
      * @param {function} controller
      * @param {string} method
      * @param isPath
      */
-    public constructor(controller: () => void, method: string, isPath?: boolean) {
-        return this.processController(controller, method, isPath);
+    public constructor(route: any, controller: () => void, method: string, isPath?: boolean) {
+        return this.processController(route, controller, method, isPath);
     }
 
     /**
+     * @param route
      * @param {function|object} controller
      * @param {string} method
      * @param isPath
      */
-    public processController(controller, method, isPath?: boolean) {
+    public processController(route: any, controller, method, isPath?: boolean) {
 
         const DebugControllerAction = !$.config.debug.enabled ? false : $.config.debug.controllerAction;
 
         if (typeof controller === "function") {
+
             /*
             * If `isPath`
             * then we know it is a nested route function.
             *
             * Else it will be a request handler.
             * */
+
             if (isPath) {
                 return controller(express.Router());
             } else if (typeof controller.extendsMainController !== "boolean") {
@@ -103,6 +107,7 @@ class ControllerEngine {
         }
 
         let m: string;
+
         if (typeof method === "string") {
             m = method;
         } else {
@@ -119,12 +124,13 @@ class ControllerEngine {
             }
 
             // Get `x` from RequestEngine
-            const x = new RequestEngine(req, res);
+            const x = new RequestEngine(req, res, undefined, route);
             const error = new ErrorEngine(x);
 
             try {
                 // Run static boot method if found in controller
                 let boot = {};
+
                 if (typeof controller.boot === "function") {
                     try {
                         boot = controller.boot(x);
@@ -139,6 +145,7 @@ class ControllerEngine {
                     }
 
                     if ($.fn.isPromise(boot)) {
+                        // noinspection ES6RedundantAwait
                         boot = await boot;
                     }
                 }
@@ -195,27 +202,29 @@ class ControllerEngine {
 }
 
 /**
- * @param {string | Object | Function} $controller
+ * @param {string | Object | Function} route
  * @param {string |null} method
  */
-const Controller = ($controller, method = null) => {
-    let route = undefined;
+const Controller = (route, method = null) => {
+    let $controller: any = undefined;
     let controllerPath = null;
     let isPath = false;
 
-    if (typeof $controller === "object") {
-        if ($controller.hasOwnProperty("controller")) {
-            route = $controller;
-            $controller = $controller.controller;
+    if (typeof route === "object") {
+
+        if (route.hasOwnProperty("controller")) {
+            $controller = route.controller;
         }
 
-        if ($controller.hasOwnProperty("children")) {
+        if (route.hasOwnProperty("children")) {
             isPath = true;
         }
+
     }
 
     if (typeof $controller === "string" && $controller.includes("@")) {
         const split = $controller.split("@");
+
         $controller = split[0];
         method = split[1];
 
@@ -228,15 +237,18 @@ const Controller = ($controller, method = null) => {
         if (typeof $controller === "string") {
             return $.logErrorAndExit("Controller: {" + $controller + "} not found!");
         }
+
         return $.logErrorAndExit("Controller not found!");
     }
 
+    // noinspection JSObjectNullOrUndefined
     if (route !== undefined && typeof $controller.middleware === "function") {
+        // noinspection TypeScriptValidateJSTypes
         const middleware = $controller.middleware();
         ControllerEngine.addMiddlewares(middleware, method, route);
     }
 
-    return new ControllerEngine($controller, method, isPath);
+    return new ControllerEngine(route, $controller, method, isPath);
 };
 
 export = Controller;

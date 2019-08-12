@@ -198,7 +198,6 @@ class RouterEngine {
                 }
             }
 
-
             if (parent.as && typeof route.name === "string" && route.name.substr(0, 1) !== "/") {
                 if (route.path === "" && nameWasGenerated) {
                     route.name = parent.as;
@@ -215,6 +214,7 @@ class RouterEngine {
                 route.name = route.name.toLowerCase();
             }
 
+            // tslint:disable-next-line:max-line-length
             if (!route.children && parent.controller && typeof route.controller === "string" && !route.controller.includes("@")) {
                 route.controller = parent.controller + "@" + route.controller;
             }
