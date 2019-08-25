@@ -54,8 +54,6 @@ class ControllerEngine {
 
                 if (path.trim() === "/") {
                     path = new RegExp("^\/$");
-                } else {
-                    path = new RegExp("^\\" + path + "$");
                 }
 
                 // @ts-ignore
