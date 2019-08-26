@@ -3,8 +3,19 @@
 import fs = require("fs");
 import ObjectCollection = require("object-collection");
 
-// Import Package.json
-const PackageDotJson = require("./package.json");
+/**
+ * Importing Package.json
+ *
+ * Since typescript is bundled in `dist` folder
+ * package.json would be in the parent directory
+ */
+let PackageDotJson: any = {};
+
+try {
+    PackageDotJson = require("./package.json");
+} catch (e) {
+    PackageDotJson = require("../package.json");
+}
 
 // Use Lodash from ObjectCollection
 const _ = ObjectCollection._;
