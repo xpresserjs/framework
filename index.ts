@@ -24,7 +24,7 @@ const _ = ObjectCollection._;
 import Configurations = require("./config");
 
 // XpresserRouter && ObjectionCollection
-import XpresserRouter = require("@xpresser/router");
+import XpresserRouter = require("@xpresser/router/index");
 import {Xpresser} from "./global";
 
 /**

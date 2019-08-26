@@ -4,23 +4,21 @@ import {Xpresser} from "../global";
 declare let $: Xpresser;
 
 class MiddlewareEngine {
+    public middleware: any;
+    public action: string;
+
     /**
      * @param {object} middleware
      * @param {string} action
      */
     constructor(middleware, action = "allow") {
-
-        // @ts-ignore
-        return this.processMiddleware(middleware, action);
+        this.middleware = middleware;
+        this.action = action;
     }
 
-    /**
-     * @param {function} middleware
-     * @param action
-     */
-    public processMiddleware(middleware, action) {
+    public processMiddleware() {
         return async (req, res, next) => {
-            return middleware[action](new RequestEngine(req, res, next));
+            return this.middleware[this.action](new RequestEngine(req, res, next));
         };
     }
 }
@@ -29,7 +27,7 @@ class MiddlewareEngine {
  * @param {string} middlewarePath
  * @param {*} action
  */
-const middleware = (middlewarePath: any, action = undefined): MiddlewareEngine | any => {
+const GetMiddleware = (middlewarePath: any, action = undefined): MiddlewareEngine | any => {
 
     const middlewareFile = $.use.middleware(middlewarePath, false);
 
@@ -41,7 +39,7 @@ const middleware = (middlewarePath: any, action = undefined): MiddlewareEngine |
         return $.logErrorAndExit("Method {" + action + "} not found in middleware: " + middlewarePath);
     }
 
-    return new MiddlewareEngine(middlewareFile, action);
+    return (new MiddlewareEngine(middlewareFile, action)).processMiddleware();
 };
 
-export = middleware;
+export = GetMiddleware;

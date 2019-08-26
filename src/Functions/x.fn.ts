@@ -1,9 +1,11 @@
 export = {
     extArrayRegex($array) {
         let regex = "\\.+(";
-        const  regexEnd = ")";
+        const regexEnd = ")";
 
-        if (!$array.length) { return regex + regexEnd; }
+        if (!$array.length) {
+            return regex + regexEnd;
+        }
 
         for (let i = 0; i < $array.length; i++) {
             regex = regex + $array[i] + "|";
@@ -16,7 +18,9 @@ export = {
     },
 
     findWordsInString($string, $keywords) {
-        if (!$keywords.length) { return null; }
+        if (!$keywords.length) {
+            return null;
+        }
 
         let regex = "";
 
@@ -34,14 +38,21 @@ export = {
     },
 
     randomStr(length = 10) {
-        let i, possible, text;
-        text = "";
-        possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        i = 0;
+        let text = "";
+        const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let i = 0;
         while (i < length) {
             text += possible.charAt(Math.floor(Math.random() * possible.length));
             i++;
         }
         return text;
+    },
+
+    regExpSourceOrString($string: string | RegExp) {
+        if ($string instanceof RegExp) {
+            return $string.source;
+        }
+
+        return $string;
     },
 };

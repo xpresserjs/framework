@@ -21,7 +21,7 @@ const _ = ObjectCollection._;
 // Import default config.
 const Configurations = require("./config");
 // XpresserRouter && ObjectionCollection
-const XpresserRouter = require("@xpresser/router");
+const XpresserRouter = require("@xpresser/router/index");
 /**
  * Get default Config and Options from Configurations
  */

@@ -3,7 +3,7 @@ import {XpresserHttp} from "../http";
 import ErrorEngine = require("./ErrorEngine");
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 
-import MiddleWareEngine = require("./MiddlewareEngine");
+import GetMiddleware = require("./MiddlewareEngine");
 import {Xpresser} from "../global";
 
 declare let _: any;
@@ -17,9 +17,10 @@ class ControllerEngine {
      * @param {string} method
      * @param {object} route
      */
-    public static addMiddlewares($middleware: object, method: string, route: any) {
+    public static getMiddlewares($middleware: object, method: string, route: any) {
 
         const middlewareKeys = Object.keys($middleware);
+        const middlewares = [];
 
         for (let i = 0; i < middlewareKeys.length; i++) {
             let middleware = middlewareKeys[i];
@@ -52,18 +53,23 @@ class ControllerEngine {
             ) {
                 let path = route.path;
 
-                if (path.trim() === "/") {
-                    path = new RegExp("^\/$");
+                if (typeof path === "string") {
+
+                    if (path.trim() === "/") {
+                        path = new RegExp("^\/$");
+                    }
                 }
 
                 // @ts-ignore
                 if (typeof middleware === "function") {
-                    $.app.use(path, middleware);
+                    middlewares.push(middleware);
                 } else {
-                    $.app.use(path, MiddleWareEngine(middlewareFile[0], middlewareFile[1]));
+                    middlewares.push(GetMiddleware(middlewareFile[0], middlewareFile[1]));
                 }
             }
         }
+
+        return middlewares;
     }
 
     public controller: () => void;
@@ -207,6 +213,7 @@ const Controller = (route, method = null) => {
     let $controller: any = undefined;
     let controllerPath = null;
     let isPath = false;
+    let middlewares = [];
 
     if (typeof route === "object") {
 
@@ -243,10 +250,15 @@ const Controller = (route, method = null) => {
     if (route !== undefined && typeof $controller.middleware === "function") {
         // noinspection TypeScriptValidateJSTypes
         const middleware = $controller.middleware();
-        ControllerEngine.addMiddlewares(middleware, method, route);
+        middlewares = ControllerEngine.getMiddlewares(middleware, method, route);
     }
 
-    return new ControllerEngine(route, $controller, method, isPath);
+    const $method = new ControllerEngine(route, $controller, method, isPath);
+
+    return {
+        middlewares,
+        method: $method,
+    };
 };
 
 export = Controller;

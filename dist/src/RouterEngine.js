@@ -26,7 +26,7 @@ class RouterEngine {
      * Get All Processed Routes
      * @returns {*}
      */
-    static allProcessedRoutes($format) {
+    static allProcessedRoutes($format, $key = "path") {
         if ($format === "array") {
             const routesArray = [];
             for (let i = 0; i < ProcessedRoutes.length; i++) {
@@ -37,6 +37,14 @@ class RouterEngine {
                     processedRoute.name || null,
                 ];
                 routesArray.push(routeArray);
+            }
+            return routesArray;
+        }
+        else if ($format === "key") {
+            const routesArray = [];
+            for (let i = 0; i < ProcessedRoutes.length; i++) {
+                const processedRoute = ProcessedRoutes[i];
+                routesArray.push(processedRoute[$key]);
             }
             return routesArray;
         }
@@ -177,12 +185,19 @@ class RouterEngine {
                 route.controller = parent.controller + "@" + route.controller;
             }
             if (parent.path) {
-                if (route.path.length && parent.path.substr(-1) !== "/" && route.path.substr(0, 1) !== "/") {
-                    route.path = "/" + route.path;
+                const routePath = $.fn.regExpSourceOrString(route.path);
+                const parentPath = $.fn.regExpSourceOrString(parent.path);
+                if (route.path instanceof RegExp || parent.path instanceof RegExp) {
+                    route.path = new RegExp(`${parentPath}${parentPath !== "/" ? "/" : ""}${routePath}`);
                 }
-                route.path = parent.path + route.path;
+                else {
+                    if (routePath.length && parentPath.substr(-1) !== "/" && routePath.substr(0, 1) !== "/") {
+                        route.path = "/" + routePath;
+                    }
+                    route.path = parent.path + route.path;
+                }
             }
-            if (route.path.substr(0, 2) === "//") {
+            if (typeof route.path === "string" && route.path.substr(0, 2) === "//") {
                 route.path = route.path.substr(1);
             }
             if (typeof route.name !== "undefined") {
@@ -211,7 +226,8 @@ class RouterEngine {
                 // Add To All Routes
                 ProcessedRoutes.push(route);
                 if ($.app && (!$.$options.isTinker && !$.$options.isConsole)) {
-                    $.app[route.method](route.path, Controller(route));
+                    const controller = Controller(route);
+                    $.app[route.method](route.path, controller.middlewares, controller.method);
                 }
             }
         }

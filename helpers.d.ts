@@ -1,6 +1,7 @@
 declare namespace XpresserHelpers {
     interface Main {
         urlBuilder: any;
+
         url($path?: string, $query?: object): string;
 
         route($route: string, $keys?: any[], $query?: object | boolean, $includeUrl?: boolean): string;
@@ -43,6 +44,8 @@ declare namespace XpresserHelpers {
         isPromise($promise: any): boolean;
 
         randomStr(length: number): string;
+
+        regExpSourceOrString($string: string | RegExp): string;
     }
 
     interface Base64 {

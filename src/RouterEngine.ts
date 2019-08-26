@@ -37,7 +37,7 @@ class RouterEngine {
      * Get All Processed Routes
      * @returns {*}
      */
-    public static allProcessedRoutes($format) {
+    public static allProcessedRoutes($format?, $key: string = "path") {
         if ($format === "array") {
             const routesArray = [];
             for (let i = 0; i < ProcessedRoutes.length; i++) {
@@ -51,6 +51,15 @@ class RouterEngine {
                 ];
 
                 routesArray.push(routeArray);
+            }
+
+            return routesArray;
+        } else if ($format === "key") {
+            const routesArray = [];
+
+            for (let i = 0; i < ProcessedRoutes.length; i++) {
+                const processedRoute = ProcessedRoutes[i];
+                routesArray.push(processedRoute[$key]);
             }
 
             return routesArray;
@@ -220,15 +229,25 @@ class RouterEngine {
             }
 
             if (parent.path) {
+                const routePath = $.fn.regExpSourceOrString(route.path);
+                const parentPath = $.fn.regExpSourceOrString(parent.path);
 
-                if (route.path.length && parent.path.substr(-1) !== "/" && route.path.substr(0, 1) !== "/") {
-                    route.path = "/" + route.path;
+                if (route.path instanceof RegExp || parent.path instanceof RegExp) {
+
+                    route.path = new RegExp(`${parentPath}${parentPath !== "/" ? "/" : ""}${routePath}`);
+
+                } else {
+
+                    if (routePath.length && parentPath.substr(-1) !== "/" && routePath.substr(0, 1) !== "/") {
+                        route.path = "/" + routePath;
+                    }
+
+                    route.path = parent.path + route.path;
                 }
 
-                route.path = parent.path + route.path;
             }
 
-            if (route.path.substr(0, 2) === "//") {
+            if (typeof route.path === "string" && route.path.substr(0, 2) === "//") {
                 route.path = route.path.substr(1);
             }
 
@@ -268,7 +287,8 @@ class RouterEngine {
                 ProcessedRoutes.push(route);
 
                 if ($.app && (!$.$options.isTinker && !$.$options.isConsole)) {
-                    $.app[route.method](route.path, Controller(route));
+                    const controller = Controller(route);
+                    $.app[route.method](route.path, controller.middlewares, controller.method);
                 }
             }
         }
