@@ -3,6 +3,9 @@
 import fs = require("fs");
 import ObjectCollection = require("object-collection");
 
+// Import Package.json
+const PackageDotJson = require("./package.json");
+
 // Use Lodash from ObjectCollection
 const _ = ObjectCollection._;
 
@@ -12,7 +15,6 @@ import Configurations = require("./config");
 // XpresserRouter && ObjectionCollection
 import XpresserRouter = require("@xpresser/router");
 import {Xpresser} from "./global";
-import {run} from "tslint/lib/runner";
 
 /**
  * Get default Config and Options from Configurations
@@ -109,6 +111,7 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
     // Include Loggers
     require("./src/Extensions/Loggers");
 
+    $.logIfNotConsole(`${PackageDotJson.name} v${PackageDotJson.version}`);
     $.logIfNotConsole(`Starting ${$.config.name}...`);
 
     // Include Path Extension

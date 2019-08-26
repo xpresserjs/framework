@@ -3,6 +3,8 @@
 // Import system required libraries
 const fs = require("fs");
 const ObjectCollection = require("object-collection");
+// Import Package.json
+const PackageDotJson = require("./package.json");
 // Use Lodash from ObjectCollection
 const _ = ObjectCollection._;
 // Import default config.
@@ -87,6 +89,7 @@ const XpresserInit = (AppConfig, AppOptions) => {
     }
     // Include Loggers
     require("./src/Extensions/Loggers");
+    $.logIfNotConsole(`${PackageDotJson.name} v${PackageDotJson.version}`);
     $.logIfNotConsole(`Starting ${$.config.name}...`);
     // Include Path Extension
     require("./src/Extensions/Path");
