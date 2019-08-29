@@ -8,7 +8,7 @@ const dotenv = require("dotenv");
 module.exports = (path) => {
 
     if (!fs.existsSync(path)) {
-        return throw new Error(`Env file: {${path}} does not exists!`);
+        throw new Error(`Env file: {${path}} does not exists!`);
     }
 
     if (fs.lstatSync(path).isDirectory()) {
