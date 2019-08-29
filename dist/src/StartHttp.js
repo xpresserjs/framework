@@ -245,6 +245,9 @@ $.startHttpServer = (onSuccess = undefined, onError = undefined) => {
             onSuccess();
         }
     });
+    if ($.$config.has("server.ssl.enabled") && $.config.server.ssl.enabled === true) {
+        $.startHttpsServer();
+    }
     return $;
 };
 /**
@@ -279,9 +282,6 @@ $.startHttpsServer = () => {
         $.log("PORT:" + httpsPort);
         $.log();
     });
-    if ($.$config.has("server.ssl.enabled") && $.config.server.ssl.enabled === true) {
-        $.startHttpsServer();
-    }
     return $;
 };
 // Start server if not tinker
