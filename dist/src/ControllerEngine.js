@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -13,6 +14,15 @@ const RequestEngine = require("./Plugins/ExtendedRequestEngine");
 const GetMiddleware = require("./MiddlewareEngine");
 // @ts-check
 class ControllerEngine {
+    /**
+     * @param route
+     * @param {function} controller
+     * @param {string} method
+     * @param isPath
+     */
+    constructor(route, controller, method, isPath) {
+        return this.processController(route, controller, method, isPath);
+    }
     /**
      * @param {object} $middleware
      * @param {string} method
@@ -61,15 +71,6 @@ class ControllerEngine {
             }
         }
         return middlewares;
-    }
-    /**
-     * @param route
-     * @param {function} controller
-     * @param {string} method
-     * @param isPath
-     */
-    constructor(route, controller, method, isPath) {
-        return this.processController(route, controller, method, isPath);
     }
     /**
      * @param route
