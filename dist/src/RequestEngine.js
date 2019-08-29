@@ -23,7 +23,6 @@ class RequestEngine {
         if (typeof next === "function") {
             this.next = next;
         }
-        console.log(route);
         if (route) {
             this.route = {
                 name: route.name || "",

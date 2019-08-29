@@ -49,8 +49,6 @@ class RequestEngine {
             this.next = next;
         }
 
-        console.log(route);
-
         if (route) {
             this.route = {
                 name: route.name || "",
