@@ -93,6 +93,7 @@ class ControllerEngine {
     public processController(route: any, controller, method, isPath?: boolean) {
 
         const DebugControllerAction = !$.config.debug.enabled ? false : $.config.debug.controllerAction;
+        const controllerName = (typeof controller.name === "string") ? controller.name : "";
 
         if (typeof controller === "function") {
 
@@ -118,12 +119,28 @@ class ControllerEngine {
             m = "";
         }
 
+        /*
+         * Since we can't tell if `method` is static we check
+         * If `method` is not static then initialize controller and set to `useController`
+         */
+        let useController = controller;
+        if (typeof method !== "function") {
+            if (typeof controller[method] !== "function") {
+                // Initialize controller
+                useController = new controller();
+            }
+
+            // If `method` does not exists then display error
+            if (typeof useController[method] !== "function") {
+                return $.logErrorAndExit(`Method: {${method}} does not exist in controller: {${controllerName}}`);
+            }
+        }
+
         return async (req: XpresserHttp.Request, res: XpresserHttp.Response) => {
             // Log Time if `DebugControllerAction` is true
-            const timeLogKey = req.method.toUpperCase() + " - " + req.url;
-            const controllerName = (typeof controller.name === "string") ? controller.name : "";
-
+            let timeLogKey = "";
             if (DebugControllerAction) {
+                timeLogKey = req.method.toUpperCase() + " - " + req.url;
                 console.time(timeLogKey);
             }
 
@@ -154,23 +171,7 @@ class ControllerEngine {
                     }
                 }
 
-                /*
-                 * Since we can't tell if `method` is static we check
-                 * If `method` is not static then initialize controller and set to `useController`
-                 */
-                let useController = controller;
-                if (typeof method !== "function") {
-                    if (typeof controller[method] !== "function") {
-                        // Initialize controller
-                        useController = new controller();
-                    }
-                }
-
                 try {
-                    // If `method` does not exists then display error
-                    if (typeof method !== "function" && typeof useController[method] !== "function") {
-                        return error.controllerMethodNotFound("", method, controllerName);
-                    }
 
                     let $return;
 

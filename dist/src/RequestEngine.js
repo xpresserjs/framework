@@ -13,15 +13,23 @@ class RequestEngine {
      * @param route
      */
     constructor(req, res, next, route) {
-        this.route = { name: undefined };
+        this.route = {
+            name: "",
+            method: "",
+            controller: "",
+        };
         this.res = res;
         this.req = req;
         if (typeof next === "function") {
             this.next = next;
         }
+        console.log(route);
         if (route) {
             this.route = {
                 name: route.name || "",
+                method: route.method || "",
+                controller: typeof route.controller === "string"
+                    ? route.controller : "",
             };
         }
         if (req.params) {

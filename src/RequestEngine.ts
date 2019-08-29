@@ -24,7 +24,15 @@ class RequestEngine {
     public session: any;
     public fn: XpresserHelpers.FN;
     public customRenderer: () => string;
-    public route: { name: string } = {name: undefined};
+    public route: {
+        name: string,
+        method: string,
+        controller: string,
+    } = {
+        name: "",
+        method: "",
+        controller: "",
+    };
 
     /**
      *
@@ -41,9 +49,14 @@ class RequestEngine {
             this.next = next;
         }
 
+        console.log(route);
+
         if (route) {
             this.route = {
                 name: route.name || "",
+                method: route.method || "",
+                controller: typeof route.controller === "string"
+                    ? route.controller : "",
             };
         }
 
