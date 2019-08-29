@@ -16,8 +16,6 @@ const express = require("express");
 const http_1 = require("http");
 const https_1 = require("https");
 const paths = $.$config.get("paths");
-// const $pluginData = $.engineData.get("PluginEngine:namespaces", {});
-// const $pluginNamespaceKeys = Object.keys($pluginData);
 /////////////
 // Load Use.json Data
 const $useDotJson = $.engineData.get("UseDotJson");
@@ -73,7 +71,7 @@ if (useHelmet) {
  * Read more https://expressjs.com/en/resources/middleware/cors.html
  *
  * By default Cors is disabled,
- * if you don't define a config @ {server.use.helmet}
+ * if you don't define a config @ {server.use.cors}
  */
 const useCors = $.$config.get("server.use.cors", false);
 if (useCors) {
@@ -231,16 +229,12 @@ $.startHttpServer = (onSuccess = undefined, onError = undefined) => {
     $.http = http_1.createServer($.app);
     const port = $.$config.get("server.port", 80);
     $.http.on("error", (err) => {
-        if (err["syscall"] === "listen") {
-            if (err["errno"] === "EACCES") {
-                $.logErrorAndExit(`Port ${err["port"]} is already in use.`);
-            }
-            if (typeof onError === "function") {
-                onError();
-            }
+        if (err["errno"] === "EADDRINUSE") {
+            return $.logErrorAndExit(`Port ${err["port"]} is already in use.`);
         }
-        else {
-            throw Error(err.toString());
+        if (typeof onError === "function") {
+            // @ts-ignore
+            onError(err);
         }
     });
     $.http.listen(port, () => {
@@ -285,13 +279,13 @@ $.startHttpsServer = () => {
         $.log("PORT:" + httpsPort);
         $.log();
     });
+    if ($.$config.has("server.ssl.enabled") && $.config.server.ssl.enabled === true) {
+        $.startHttpsServer();
+    }
     return $;
 };
 // Start server if not tinker
 if (!$.$options.isTinker && $.config.server.startOnBoot) {
     $.startHttpServer();
     // Start ssl server if server.ssl is available
-    if ($.$config.has("server.ssl.enabled") && $.config.server.ssl.enabled === true) {
-        $.startHttpsServer();
-    }
 }

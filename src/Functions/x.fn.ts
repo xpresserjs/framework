@@ -1,5 +1,5 @@
 export = {
-    extArrayRegex($array) {
+    extArrayRegex($array: []) {
         let regex = "\\.+(";
         const regexEnd = ")";
 
@@ -17,7 +17,7 @@ export = {
         return new RegExp(regex, "g");
     },
 
-    findWordsInString($string, $keywords) {
+    findWordsInString($string: string, $keywords: []) {
         if (!$keywords.length) {
             return null;
         }
@@ -33,7 +33,7 @@ export = {
         return $string.match(pattern);
     },
 
-    isPromise($promise) {
+    isPromise($promise: any) {
         return $promise !== undefined && typeof $promise === "object" && typeof $promise.then === "function";
     },
 

@@ -1,13 +1,8 @@
-/// <reference types="node"/>
-// Import system required libraries
-import fs = require("fs");
-import ObjectCollection = require("object-collection");
-
 /**
  * Importing Package.json
  *
  * Since typescript is bundled in `dist` folder
- * package.json would be in the parent directory
+ * package.json will be in the parent directory
  */
 let PackageDotJson: any = {};
 
@@ -17,15 +12,17 @@ try {
     PackageDotJson = require("../package.json");
 }
 
+// Import system required libraries
+import fs = require("fs");
+import ObjectCollection = require("object-collection");
+import XpresserRouter = require("@xpresser/router");
+import {Xpresser} from "./global";
+
 // Use Lodash from ObjectCollection
 const _ = ObjectCollection._;
 
 // Import default config.
 import Configurations = require("./config");
-
-// XpresserRouter && ObjectionCollection
-import XpresserRouter = require("@xpresser/router");
-import {Xpresser} from "./global";
 
 /**
  * Get default Config and Options from Configurations
@@ -58,7 +55,7 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
                 // tslint:disable-next-line:max-line-length
                 if (typeof AppConfig !== "object" || (typeof AppConfig === "object" && !Object.keys(AppConfig).length)) {
                     // noinspection ExceptionCaughtLocallyJS
-                    throw new Error(`CONFIG: No exported object not found in config file (${configFile})`);
+                    throw new Error(`CONFIG: No exported object found in config file: (${configFile})`);
                 }
             } catch (e) {
                 console.error(e.message);
@@ -85,7 +82,6 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
 
     // Set $ (Xpresser) && _ (lodash) to globals.
     global.$ = $;
-
     global._ = _;
 
     // Set Config to AppConfig
@@ -98,8 +94,7 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
     $.$config = $.objectCollection($.config);
 
     /**
-     * Set $.$config to an instance of ObjectCollection
-     * To enable access and modify apps config.
+     * Set $.$options
      * @type XpresserOptions
      */
     $.$options = AppOptions;
@@ -110,13 +105,10 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
      */
     $.engineData = $.objectCollection();
 
-    if (typeof global["XjsCliConfig"] !== "undefined") {
+    const LaunchType = process.argv[2];
+
+    if (typeof global["XjsCliConfig"] !== "undefined" || LaunchType === "cli") {
         $.$options.isConsole = true;
-    } else if (process.argv[2]) {
-        const LaunchType = process.argv[2];
-        if (LaunchType === "cli") {
-            $.$options.isConsole = true;
-        }
     }
 
     // Include Loggers
@@ -165,11 +157,19 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
         }
     };
 
-    if ($.$options.isConsole) {
+    /**
+     * Require Console.
+     */
+    $.ifIsConsole(() => {
         require("./src/StartConsole");
-    } else {
+    });
+
+    /**
+     * Require Http
+     */
+    $.ifNotConsole(() => {
         require("./src/StartHttp");
-    }
+    });
 
     return $;
 };

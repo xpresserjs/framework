@@ -64,7 +64,7 @@ class ControllerEngine {
                 if (typeof middleware === "function") {
                     middlewares.push(middleware);
                 } else {
-                    middlewares.push(GetMiddleware(middlewareFile[0], middlewareFile[1]));
+                    middlewares.push(GetMiddleware(middlewareFile[0], middlewareFile[1], route));
                 }
             }
         }

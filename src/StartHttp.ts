@@ -14,8 +14,6 @@ declare let _: any;
 declare let $: Xpresser;
 
 const paths = $.$config.get("paths");
-// const $pluginData = $.engineData.get("PluginEngine:namespaces", {});
-// const $pluginNamespaceKeys = Object.keys($pluginData);
 
 /////////////
 // Load Use.json Data
@@ -82,7 +80,7 @@ if (useHelmet) {
  * Read more https://expressjs.com/en/resources/middleware/cors.html
  *
  * By default Cors is disabled,
- * if you don't define a config @ {server.use.helmet}
+ * if you don't define a config @ {server.use.cors}
  */
 const useCors = $.$config.get("server.use.cors", false);
 if (useCors) {
@@ -286,16 +284,13 @@ $.startHttpServer = (onSuccess = undefined, onError = undefined) => {
     const port = $.$config.get("server.port", 80);
 
     $.http.on("error", (err) => {
-        if (err["syscall"] === "listen") {
-            if (err["errno"] === "EACCES") {
-                $.logErrorAndExit(`Port ${err["port"]} is already in use.`);
-            }
+        if (err["errno"] === "EADDRINUSE") {
+            return $.logErrorAndExit(`Port ${err["port"]} is already in use.`);
+        }
 
-            if (typeof onError === "function") {
-                onError();
-            }
-        } else {
-            throw Error(err.toString());
+        if (typeof onError === "function") {
+            // @ts-ignore
+            onError(err);
         }
     });
 
@@ -355,6 +350,10 @@ $.startHttpsServer = () => {
         $.log();
     });
 
+    if ($.$config.has("server.ssl.enabled") && $.config.server.ssl.enabled === true) {
+        $.startHttpsServer();
+    }
+
     return $;
 };
 
@@ -364,9 +363,4 @@ if (!$.$options.isTinker && $.config.server.startOnBoot) {
     $.startHttpServer();
 
     // Start ssl server if server.ssl is available
-    if ($.$config.has("server.ssl.enabled") && $.config.server.ssl.enabled === true) {
-
-        $.startHttpsServer();
-
-    }
 }

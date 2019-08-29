@@ -1,13 +1,9 @@
 "use strict";
-/// <reference types="node"/>
-// Import system required libraries
-const fs = require("fs");
-const ObjectCollection = require("object-collection");
 /**
  * Importing Package.json
  *
  * Since typescript is bundled in `dist` folder
- * package.json would be in the parent directory
+ * package.json will be in the parent directory
  */
 let PackageDotJson = {};
 try {
@@ -16,12 +12,14 @@ try {
 catch (e) {
     PackageDotJson = require("../package.json");
 }
+// Import system required libraries
+const fs = require("fs");
+const ObjectCollection = require("object-collection");
+const XpresserRouter = require("@xpresser/router");
 // Use Lodash from ObjectCollection
 const _ = ObjectCollection._;
 // Import default config.
 const Configurations = require("./config");
-// XpresserRouter && ObjectionCollection
-const XpresserRouter = require("@xpresser/router");
 /**
  * Get default Config and Options from Configurations
  */
@@ -48,7 +46,7 @@ const XpresserInit = (AppConfig, AppOptions) => {
                 // tslint:disable-next-line:max-line-length
                 if (typeof AppConfig !== "object" || (typeof AppConfig === "object" && !Object.keys(AppConfig).length)) {
                     // noinspection ExceptionCaughtLocallyJS
-                    throw new Error(`CONFIG: No exported object not found in config file (${configFile})`);
+                    throw new Error(`CONFIG: No exported object found in config file: (${configFile})`);
                 }
             }
             catch (e) {
@@ -79,8 +77,7 @@ const XpresserInit = (AppConfig, AppOptions) => {
      */
     $.$config = $.objectCollection($.config);
     /**
-     * Set $.$config to an instance of ObjectCollection
-     * To enable access and modify apps config.
+     * Set $.$options
      * @type XpresserOptions
      */
     $.$options = AppOptions;
@@ -89,14 +86,9 @@ const XpresserInit = (AppConfig, AppOptions) => {
      * for all data store by Xpresser files/components
      */
     $.engineData = $.objectCollection();
-    if (typeof global["XjsCliConfig"] !== "undefined") {
+    const LaunchType = process.argv[2];
+    if (typeof global["XjsCliConfig"] !== "undefined" || LaunchType === "cli") {
         $.$options.isConsole = true;
-    }
-    else if (process.argv[2]) {
-        const LaunchType = process.argv[2];
-        if (LaunchType === "cli") {
-            $.$options.isConsole = true;
-        }
     }
     // Include Loggers
     require("./src/Extensions/Loggers");
@@ -132,12 +124,18 @@ const XpresserInit = (AppConfig, AppOptions) => {
             run();
         }
     };
-    if ($.$options.isConsole) {
+    /**
+     * Require Console.
+     */
+    $.ifIsConsole(() => {
         require("./src/StartConsole");
-    }
-    else {
+    });
+    /**
+     * Require Http
+     */
+    $.ifNotConsole(() => {
         require("./src/StartHttp");
-    }
+    });
     return $;
 };
 module.exports = XpresserInit;

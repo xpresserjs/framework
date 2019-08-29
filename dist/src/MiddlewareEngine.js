@@ -13,22 +13,25 @@ class MiddlewareEngine {
     /**
      * @param {object} middleware
      * @param {string} action
+     * @param route
      */
-    constructor(middleware, action = "allow") {
+    constructor(middleware, action = "allow", route = undefined) {
         this.middleware = middleware;
         this.action = action;
+        this.route = route;
     }
     processMiddleware() {
         return (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-            return this.middleware[this.action](new RequestEngine(req, res, next));
+            return this.middleware[this.action](new RequestEngine(req, res, next, this.route));
         });
     }
 }
 /**
  * @param {string} middlewarePath
  * @param {*} action
+ * @param route
  */
-const GetMiddleware = (middlewarePath, action = undefined) => {
+const GetMiddleware = (middlewarePath, action = undefined, route) => {
     const middlewareFile = $.use.middleware(middlewarePath, false);
     if (middlewareFile === false) {
         return $.logErrorAndExit("Middleware: " + middlewarePath + " not found!");
@@ -36,6 +39,6 @@ const GetMiddleware = (middlewarePath, action = undefined) => {
     if (typeof middlewareFile === "object" && typeof middlewareFile[action] === "undefined") {
         return $.logErrorAndExit("Method {" + action + "} not found in middleware: " + middlewarePath);
     }
-    return (new MiddlewareEngine(middlewareFile, action)).processMiddleware();
+    return (new MiddlewareEngine(middlewareFile, action, route)).processMiddleware();
 };
 module.exports = GetMiddleware;
