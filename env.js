@@ -2,10 +2,35 @@ const fs = require('fs');
 const dotenv = require("dotenv");
 
 /**
- * @param {string} path
+ * Cast True/False to booleans
+ * @param env
  * @returns {*}
  */
-module.exports = (path) => {
+const castBooleans = (env) => {
+    const envKeys = Object.keys(env);
+    for (let i = 0; i < envKeys.length; i++) {
+        const envKey = envKeys[i];
+        const envVal = env[envKey];
+
+        if (envVal === 'true') {
+            env[envKey] = true;
+        } else if (envVal === 'false') {
+            env[envKey] = false;
+        }
+    }
+
+    return env;
+};
+
+/**
+ *
+ * @param path
+ * @param config
+ * @returns {*}
+ */
+module.exports = (path, config = {
+    castBoolean: true
+}) => {
 
     if (!fs.existsSync(path)) {
         throw new Error(`Env file: {${path}} does not exists!`);
@@ -15,5 +40,9 @@ module.exports = (path) => {
         path = path + "/.env";
     }
 
-    return dotenv.config({path}).parsed;
+    const env = dotenv.config({path}).parsed;
+
+    if (config.castBoolean) castBooleans(env);
+
+    return env;
 };
