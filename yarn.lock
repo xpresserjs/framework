@@ -100,10 +100,10 @@
   resolved "https://registry.yarnpkg.com/@types/strip-json-comments/-/strip-json-comments-0.0.30.tgz#9aa30c04db212a9a0649d6ae6fd50accc40748a1"
   integrity sha512-7NQmHra/JILCd1QqpSzl8+mJRc8ZHz3uDm8YV1Ks9IhK0epEiTw8aIErbvH9PI+6XbqhyIQy3462nEsn7UVzjQ==
 
-"@xpresser/router@^0.0.14":
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/@xpresser/router/-/router-0.0.14.tgz#7b6831f2166f52bc2000153640c905770e17fd36"
-  integrity sha512-NL76DpQfB5vfkkphYDUg1ld9SPdCq2jI90bC90+NmR+Y3WzdMP37usiDRqLf+zsadQJAWGK/isFQsXoyPJvGAQ==
+"@xpresser/router@^0.0.15":
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/@xpresser/router/-/router-0.0.15.tgz#49a45b925e08a5e85823076e38d544af04a834c4"
+  integrity sha512-t1MVZKmOcvc2NgZnwRHjB94I8IvxwB9CuMSSr+UhLq+IjQLt9p+WfwE6KZsDexwIveBi/RurauksFuKv5AVmVw==
   dependencies:
     lodash.clone "^4.5.0"
 
@@ -668,10 +668,10 @@ dont-sniff-mimetype@1.1.0:
   resolved "https://registry.yarnpkg.com/dont-sniff-mimetype/-/dont-sniff-mimetype-1.1.0.tgz#c7d0427f8bcb095762751252af59d148b0a623b2"
   integrity sha512-ZjI4zqTaxveH2/tTlzS1wFp+7ncxNZaIEWYg3lzZRHkKf5zPT/MnEG6WL0BhHMJUabkh8GeU5NL5j+rEUCb7Ug==
 
-dotenv@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.0.0.tgz#ed310c165b4e8a97bb745b0a9d99c31bda566440"
-  integrity sha512-30xVGqjLjiUOArT4+M5q9sYdvuR4riM6yK9wMcas9Vbp6zZa+ocC9dp6QoftuhTPhFAiLK/0C5Ni2nou/Bk8lg==
+dotenv@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.1.0.tgz#d811e178652bfb8a1e593c6dd704ec7e90d85ea2"
+  integrity sha512-GUE3gqcDCaMltj2++g6bRQ5rBJWtkWTmqmD0fo1RnnMuUqHNCt2oTPeDnS9n6fKYvlhn7AeBkb38lymBtWBQdA==
 
 dynamic-dedupe@^0.3.0:
   version "0.3.0"
