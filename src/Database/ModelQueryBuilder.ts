@@ -1,14 +1,8 @@
 import {Model, QueryBuilder} from "objection";
-import {Xpresser} from "../../global";
 
 const excludeAttrFromCount = ["order", "columns", "limit", "offset"];
 
 declare let _: any;
-declare let $: Xpresser;
-
-if ($.config.database.startOnBoot) {
-    Model.knex($.db.knex);
-}
 
 class ModelQueryBuilder extends QueryBuilder<Model> {
 

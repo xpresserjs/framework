@@ -1,14 +1,19 @@
 // @ts-check
 import moment = require("moment");
-import Objection = require("objection");
+
+const {Model} = require("objection");
 import ModelQueryBuilder = require("./Database/ModelQueryBuilder");
 import {Xpresser} from "../global";
 
 declare let _: any;
 declare let $: Xpresser;
 
+if ($.config.database.startOnBoot) {
+    Model.knex($.db.knex);
+}
+
 // @ts-ignore
-class ModelEngine extends Objection.Model {
+class ModelEngine extends Model {
 
     static get QueryBuilder() {
         return ModelQueryBuilder;

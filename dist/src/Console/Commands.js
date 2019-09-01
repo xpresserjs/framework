@@ -62,13 +62,13 @@ const Commands = {
             return logThis("Model name not defined!");
         }
         if (typeof table === "undefined") {
-            table = name;
+            table = _.snakeCase(name);
         }
         if (artisanConfig.singleModelName) {
             name = artisan.singular(name);
         }
         if (artisanConfig.pluralizeModelTable) {
-            table = artisan.pluralize(name.toLowerCase());
+            table = artisan.pluralize(table);
         }
         const modelPath = $.path.models();
         artisan.copyFromFactoryToApp("model", name, modelPath, { name, table });

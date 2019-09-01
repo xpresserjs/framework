@@ -10,9 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 const objection_1 = require("objection");
 const excludeAttrFromCount = ["order", "columns", "limit", "offset"];
-if ($.config.database.startOnBoot) {
-    objection_1.Model.knex($.db.knex);
-}
 class ModelQueryBuilder extends objection_1.QueryBuilder {
     /**
      * CountRows

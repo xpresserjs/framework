@@ -30,7 +30,7 @@ const Config = {
     },
     server: ServerConfig,
     database: {
-        startOnBoot: true,
+        startOnBoot: false,
         timestampFormat: DefaultTimestamp,
         config: {
             client: "sqlite",

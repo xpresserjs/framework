@@ -1,10 +1,13 @@
 "use strict";
 // @ts-check
 const moment = require("moment");
-const Objection = require("objection");
+const { Model } = require("objection");
 const ModelQueryBuilder = require("./Database/ModelQueryBuilder");
+if ($.config.database.startOnBoot) {
+    Model.knex($.db.knex);
+}
 // @ts-ignore
-class ModelEngine extends Objection.Model {
+class ModelEngine extends Model {
     static get QueryBuilder() {
         return ModelQueryBuilder;
     }

@@ -1,6 +1,7 @@
 import {Xpresser} from "../../global";
 
 declare const $: Xpresser;
+declare const _: any;
 
 import os = require("os");
 import fs = require("fs");
@@ -85,7 +86,7 @@ const Commands = {
         }
 
         if (typeof table === "undefined") {
-            table = name;
+            table = _.snakeCase(name);
         }
 
         if (artisanConfig.singleModelName) {
@@ -93,7 +94,7 @@ const Commands = {
         }
 
         if (artisanConfig.pluralizeModelTable) {
-            table = artisan.pluralize(name.toLowerCase());
+            table = artisan.pluralize(table);
         }
 
         const modelPath = $.path.models();
