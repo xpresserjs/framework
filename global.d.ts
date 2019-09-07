@@ -76,6 +76,11 @@ declare interface Xpresser {
     // Events
     events: XpresserEventEmitter;
 
+    /*----------------- ON FUNCTIONS ------------------- */
+    on: {
+        boot(): void;
+    };
+
     /*----------------- PATH FUNCTIONS ------------------- */
     path: {
         /**
@@ -176,6 +181,11 @@ declare interface Xpresser {
     logPerLine($args: any[], $spacePerLine?: boolean): void;
 
     /**
+     * If Boot session is or not console.
+     */
+    ifConsole(isConsole: () => void, notConsole: () => void): void;
+
+    /**
      * If Boot session is console.
      */
     ifIsConsole(run: () => void): void;
@@ -184,6 +194,11 @@ declare interface Xpresser {
      * If Boot session isNot console.
      */
     ifNotConsole(run: () => void): void;
+
+    /**
+     * Start Console
+     */
+    startConsole(): void;
 
     /**
      * StartHttpServer

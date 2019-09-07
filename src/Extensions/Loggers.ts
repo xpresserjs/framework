@@ -1,7 +1,6 @@
 import chalk from "chalk";
 import {Xpresser} from "../../global";
 
-
 declare let $: Xpresser;
 declare let _;
 

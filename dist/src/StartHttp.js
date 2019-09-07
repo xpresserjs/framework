@@ -164,14 +164,6 @@ $.app.set("views", $.path.views());
 if (!$.$options.isTinker) {
     $.controller = require("./Classes/Controller");
 }
-// Require Model Engine
-const ModelEngine = require("./ModelEngine");
-/**
- * @type {ModelEngine}
- */
-$.model = ModelEngine;
-// Load Events
-require("./Events/Loader");
 const RequestEngine = require("./Plugins/ExtendedRequestEngine");
 const $globalMiddlewareWrapper = ($middlewareFn) => {
     return (res, req, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -285,7 +277,6 @@ $.startHttpsServer = () => {
     return $;
 };
 // Start server if not tinker
-if (!$.$options.isTinker && $.config.server.startOnBoot) {
+if ($.config.server.startOnBoot) {
     $.startHttpServer();
-    // Start ssl server if server.ssl is available
 }

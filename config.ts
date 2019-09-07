@@ -28,6 +28,9 @@ const Config = {
     project: {
         fileExtension: ".js",
     },
+    console: {
+        startOnBoot: true,
+    },
     server: ServerConfig,
     database: {
         startOnBoot: false,
@@ -113,9 +116,7 @@ const Config = {
         default: "nodemailer",
         configs: {},
     },
-    packages: {
-
-    },
+    packages: {},
 };
 
 const Options = {

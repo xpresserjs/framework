@@ -16,10 +16,10 @@ catch (e) {
 const fs = require("fs");
 const ObjectCollection = require("object-collection");
 const XpresserRouter = require("@xpresser/router");
-// Use Lodash from ObjectCollection
-const _ = ObjectCollection._;
 // Import default config.
 const Configurations = require("./config");
+// Use Lodash from ObjectCollection
+const _ = ObjectCollection._;
 /**
  * Get default Config and Options from Configurations
  */
@@ -64,6 +64,9 @@ const XpresserInit = (AppConfig, AppOptions) => {
     AppOptions = _.merge(Options, AppOptions);
     // Set Xpresser Global Var: $
     const $ = {};
+    // Initialize $.on for the first time.
+    // @ts-ignore
+    $.on = {};
     // Set ObjectCollection
     $.objectCollection = (obj) => new ObjectCollection(obj);
     // Set $ (Xpresser) && _ (lodash) to globals.
@@ -96,6 +99,7 @@ const XpresserInit = (AppConfig, AppOptions) => {
     $.logIfNotConsole(`Starting ${$.config.name}...`);
     // Include Path Extension
     require("./src/Extensions/Path");
+    require("./src/Extensions/If");
     // Require Plugin Engine and load plugins
     const PluginEngine = require("./src/PluginEngine");
     const PluginData = PluginEngine.loadPlugins();
@@ -107,22 +111,29 @@ const XpresserInit = (AppConfig, AppOptions) => {
         // Save to EngineData
         $.engineData.set("UseDotJson", $useDotJson);
     }
-    // Global
+    // Require Global
     require("./src/global");
     /**
      * Add Router
      * @type {XpresserRouter}
      */
     $.router = new XpresserRouter();
-    $.ifIsConsole = (run) => {
-        if ($.$options.isConsole) {
-            run();
-        }
-    };
-    $.ifNotConsole = (run) => {
-        if (!$.$options.isConsole) {
-            run();
-        }
+    /**
+     * Require Model Engine
+     * @type {ModelEngine}
+     */
+    $.model = require("./src/ModelEngine");
+    /**
+     * Load Registered Events
+     */
+    require("./src/Events/Loader");
+    /**
+     * Start Console
+     */
+    $.startConsole = () => {
+        $.ifIsConsole(() => {
+            require("./src/console");
+        });
     };
     /**
      * Require Console.

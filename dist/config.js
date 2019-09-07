@@ -27,6 +27,9 @@ const Config = {
     project: {
         fileExtension: ".js",
     },
+    console: {
+        startOnBoot: true,
+    },
     server: ServerConfig,
     database: {
         startOnBoot: false,

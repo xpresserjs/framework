@@ -198,17 +198,6 @@ if (!$.$options.isTinker) {
     $.controller = require("./Classes/Controller");
 }
 
-// Require Model Engine
-import ModelEngine = require("./ModelEngine");
-
-/**
- * @type {ModelEngine}
- */
-$.model = ModelEngine;
-
-// Load Events
-require("./Events/Loader");
-
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 
 const $globalMiddlewareWrapper = ($middlewareFn: any) => {
@@ -358,9 +347,6 @@ $.startHttpsServer = () => {
 };
 
 // Start server if not tinker
-if (!$.$options.isTinker && $.config.server.startOnBoot) {
-
+if ($.config.server.startOnBoot) {
     $.startHttpServer();
-
-    // Start ssl server if server.ssl is available
 }
