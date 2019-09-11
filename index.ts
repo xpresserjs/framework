@@ -165,11 +165,18 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
 
     $.boot = () => {
         const BOOT = () => {
-            $.ifConsole(() => {
-                require("./src/StartConsole");
-            }, () => {
-                require("./src/StartHttp");
-            });
+            /**
+             * XjsCliConfig.require_only
+             * This config is only used by xpresser cron.
+             * Used to load your main file without booting it
+             */
+            if (!(typeof global["XjsCliConfig"] !== "undefined" && global["XjsCliConfig"]["require_only"])) {
+                $.ifConsole(() => {
+                    require("./src/StartConsole");
+                }, () => {
+                    require("./src/StartHttp");
+                });
+            }
         };
 
         /**
