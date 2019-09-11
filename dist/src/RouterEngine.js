@@ -225,7 +225,7 @@ class RouterEngine {
             else {
                 // Add To All Routes
                 ProcessedRoutes.push(route);
-                if ($.app && (!$.$options.isTinker && !$.$options.isConsole)) {
+                if ($.app && (!$.options.isTinker && !$.options.isConsole)) {
                     const controller = Controller(route);
                     $.app[route.method](route.path, controller.middlewares, controller.method);
                 }

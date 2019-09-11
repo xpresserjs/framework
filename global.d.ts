@@ -11,7 +11,10 @@ import {Server} from "net";
 import ModelEngine = require("./src/ModelEngine");
 import RouterEngine = require("./src/RouterEngine");
 import Controller = require("./src/Classes/Controller");
-import EventsEmitter = require("./src/Events/Emitter");
+
+/*--- Declare Types ---*/
+declare type TodoFunction = (next?: any) => any;
+/*--- End Declare Types ---*/
 
 declare namespace XpresserJsonSettings {
     interface Use {
@@ -30,8 +33,8 @@ declare interface XpresserEventEmitter {
 
 declare interface Xpresser {
     config: any;
+    options: XpresserOptions;
     $config: ObjectCollection;
-    $options: XpresserOptions;
 
     // Stores Engine Data
     engineData: ObjectCollection;
@@ -78,7 +81,13 @@ declare interface Xpresser {
 
     /*----------------- ON FUNCTIONS ------------------- */
     on: {
-        boot(): void;
+        /**
+         * Returns events object.
+         */
+        events(): object;
+
+        boot(todo: TodoFunction | TodoFunction[]): void;
+        startHttp(todo: TodoFunction | TodoFunction[]): void;
     };
 
     /*----------------- PATH FUNCTIONS ------------------- */
@@ -128,6 +137,9 @@ declare interface Xpresser {
          */
         jsonConfigs(path?: string): string;
     };
+
+    /* --------------- Boot Function ------------------- */
+    boot(): void;
 
     /**
      * Return new instance of object collection.
@@ -194,21 +206,4 @@ declare interface Xpresser {
      * If Boot session isNot console.
      */
     ifNotConsole(run: () => void): void;
-
-    /**
-     * Start Console
-     */
-    startConsole(): void;
-
-    /**
-     * StartHttpServer
-     * Starts Express Http Server.
-     */
-    startHttpServer(onSuccess?: () => void, onError?: () => void): Xpresser;
-
-    /**
-     * StartHttpsServer
-     * Starts Express Https Server.
-     */
-    startHttpsServer(onSuccess?: () => void, onError?: () => void): Xpresser;
 }

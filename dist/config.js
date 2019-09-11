@@ -115,6 +115,7 @@ const Config = {
     packages: {},
 };
 const Options = {
+    autoBoot: true,
     isConsole: false,
     isTinker: false,
 };

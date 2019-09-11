@@ -33,7 +33,7 @@ $.logInfo = (...args) => {
 };
 
 $.logIfNotConsole = (...args) => {
-    if (!$.$options.isConsole) {
+    if (!$.options.isConsole) {
         $.log(...args);
     }
 };

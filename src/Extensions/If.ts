@@ -4,7 +4,7 @@ declare const $: Xpresser;
 
 // ---------- IF Helpers ----------
 $.ifConsole = (isConsole: () => void, notConsole: () => void): void => {
-    if ($.$options.isConsole) {
+    if ($.options.isConsole) {
         isConsole();
     } else {
         notConsole();
@@ -12,13 +12,13 @@ $.ifConsole = (isConsole: () => void, notConsole: () => void): void => {
 };
 
 $.ifIsConsole = (isConsole: () => void): void => {
-    if ($.$options.isConsole) {
+    if ($.options.isConsole) {
         isConsole();
     }
 };
 
 $.ifNotConsole = (notConsole: () => void): void => {
-    if (!$.$options.isConsole) {
+    if (!$.options.isConsole) {
         notConsole();
     }
 };

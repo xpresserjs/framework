@@ -29,7 +29,7 @@ $.logInfo = (...args) => {
     return console.log(...args);
 };
 $.logIfNotConsole = (...args) => {
-    if (!$.$options.isConsole) {
+    if (!$.options.isConsole) {
         $.log(...args);
     }
 };

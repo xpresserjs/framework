@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 /**
  * Importing Package.json
  *
@@ -80,10 +89,10 @@ const XpresserInit = (AppConfig, AppOptions) => {
      */
     $.$config = $.objectCollection($.config);
     /**
-     * Set $.$options
+     * Set $.options
      * @type XpresserOptions
      */
-    $.$options = AppOptions;
+    $.options = AppOptions;
     /**
      * Engine Data serves as the store
      * for all data store by Xpresser files/components
@@ -91,13 +100,13 @@ const XpresserInit = (AppConfig, AppOptions) => {
     $.engineData = $.objectCollection();
     const LaunchType = process.argv[2];
     if (typeof global["XjsCliConfig"] !== "undefined" || LaunchType === "cli") {
-        $.$options.isConsole = true;
+        $.options.isConsole = true;
     }
     // Include Loggers
     require("./src/Extensions/Loggers");
     $.logIfNotConsole(`${PackageDotJson.name} v${PackageDotJson.version}`);
     $.logIfNotConsole(`Starting ${$.config.name}...`);
-    // Include Path Extension
+    // Include Extensions
     require("./src/Extensions/Path");
     require("./src/Extensions/If");
     // Require Plugin Engine and load plugins
@@ -127,26 +136,44 @@ const XpresserInit = (AppConfig, AppOptions) => {
      * Load Registered Events
      */
     require("./src/Events/Loader");
-    /**
-     * Start Console
-     */
-    $.startConsole = () => {
-        $.ifIsConsole(() => {
-            require("./src/console");
-        });
+    /* ------------- $.on Events Loader ------------- */
+    require("./src/On");
+    // const onEvents
+    $.boot = () => {
+        const BOOT = () => {
+            $.ifConsole(() => {
+                require("./src/StartConsole");
+            }, () => {
+                require("./src/StartHttp");
+            });
+        };
+        /**
+         * Load on.boot Events
+         */
+        const bootEvents = $.on.events()["boot"];
+        if (bootEvents.length) {
+            bootEvents.push(() => {
+                BOOT();
+            });
+            $.engineData.set("on.boot", 0);
+            const next = () => __awaiter(void 0, void 0, void 0, function* () {
+                const currentIndex = $.engineData.get("on.boot", 0);
+                const nextIndex = currentIndex + 1;
+                $.engineData.set("on.boot", nextIndex);
+                bootEvents[nextIndex](next);
+            });
+            bootEvents[0](next);
+        }
+        else {
+            BOOT();
+        }
     };
     /**
-     * Require Console.
+     * Boot if $.options.autoBoot is true.
      */
-    $.ifIsConsole(() => {
-        require("./src/StartConsole");
-    });
-    /**
-     * Require Http
-     */
-    $.ifNotConsole(() => {
-        require("./src/StartHttp");
-    });
+    if ($.options.autoBoot === true) {
+        $.boot();
+    }
     return $;
 };
 module.exports = XpresserInit;

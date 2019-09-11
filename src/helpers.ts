@@ -3,8 +3,8 @@ import fs = require("fs");
 import moment = require("moment");
 import {Xpresser} from "../global";
 
-declare let _;
-declare let $: Xpresser;
+declare const _;
+declare const $: Xpresser;
 
 /* HELPER FUNCTIONS */
 const helpers = {

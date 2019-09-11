@@ -10,7 +10,7 @@ import {Xpresser} from "../../global";
 declare let $: Xpresser;
 declare let _: any;
 
-const isTinker = typeof $.$options.isTinker === "boolean" && $.$options.isTinker;
+const isTinker = typeof $.options.isTinker === "boolean" && $.options.isTinker;
 const FILE_EXTENSION = $.$config.get("project.fileExtension", ".js");
 
 export = {

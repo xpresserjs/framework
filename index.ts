@@ -96,10 +96,10 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
     $.$config = $.objectCollection($.config);
 
     /**
-     * Set $.$options
+     * Set $.options
      * @type XpresserOptions
      */
-    $.$options = AppOptions;
+    $.options = AppOptions;
 
     /**
      * Engine Data serves as the store
@@ -110,7 +110,7 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
     const LaunchType = process.argv[2];
 
     if (typeof global["XjsCliConfig"] !== "undefined" || LaunchType === "cli") {
-        $.$options.isConsole = true;
+        $.options.isConsole = true;
     }
 
     // Include Loggers
@@ -119,7 +119,7 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
     $.logIfNotConsole(`${PackageDotJson.name} v${PackageDotJson.version}`);
     $.logIfNotConsole(`Starting ${$.config.name}...`);
 
-    // Include Path Extension
+    // Include Extensions
     require("./src/Extensions/Path");
     require("./src/Extensions/If");
 
@@ -159,28 +159,52 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
      */
     require("./src/Events/Loader");
 
-    /**
-     * Start Console
-     */
-    $.startConsole = () => {
-        $.ifIsConsole(() => {
-            require("./src/console");
-        });
+    /* ------------- $.on Events Loader ------------- */
+    require("./src/On");
+    // const onEvents
+
+    $.boot = () => {
+        const BOOT = () => {
+            $.ifConsole(() => {
+                require("./src/StartConsole");
+            }, () => {
+                require("./src/StartHttp");
+            });
+        };
+
+        /**
+         * Load on.boot Events
+         */
+        const bootEvents: any[] = $.on.events()["boot"];
+        if (bootEvents.length) {
+
+            bootEvents.push(() => {
+                BOOT();
+            });
+
+            $.engineData.set("on.boot", 0);
+
+            const next = async () => {
+                const currentIndex = $.engineData.get("on.boot", 0);
+                const nextIndex = currentIndex + 1;
+                $.engineData.set("on.boot", nextIndex);
+
+                bootEvents[nextIndex](next);
+            };
+
+            bootEvents[0](next);
+        } else {
+            BOOT();
+        }
+
     };
 
     /**
-     * Require Console.
+     * Boot if $.options.autoBoot is true.
      */
-    $.ifIsConsole(() => {
-        require("./src/StartConsole");
-    });
-
-    /**
-     * Require Http
-     */
-    $.ifNotConsole(() => {
-        require("./src/StartHttp");
-    });
+    if ($.options.autoBoot === true) {
+        $.boot();
+    }
 
     return $;
 };

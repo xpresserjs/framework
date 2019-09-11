@@ -120,6 +120,7 @@ const Config = {
 };
 
 const Options = {
+    autoBoot: true,
     isConsole: false,
     isTinker: false,
 };

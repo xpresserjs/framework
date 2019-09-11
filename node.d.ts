@@ -5,7 +5,9 @@ declare namespace NodeJS {
         moment: any;
     }
 }
+
 interface XpresserOptions {
+    autoBoot?: boolean;
     isConsole?: boolean;
     isTinker?: boolean;
 }

@@ -161,7 +161,7 @@ else {
 }
 $.app.set("views", $.path.views());
 // Not Tinker? Require Controllers
-if (!$.$options.isTinker) {
+if (!$.options.isTinker) {
     $.controller = require("./Classes/Controller");
 }
 const RequestEngine = require("./Plugins/ExtendedRequestEngine");
@@ -193,15 +193,11 @@ if ($useDotJson.has("globalMiddlewares")) {
     }
 }
 require("./Routes/Loader");
-// Include xjs/cycles/afterRoutes.js if exists
-const afterRoutesPath = $.path.base($.config.paths.xjs + "/cycles/afterRoutes.js");
-if (FS.existsSync(afterRoutesPath)) {
-    require(afterRoutesPath);
-}
 /**
  * StartHttpServer
+ * Http server starts here.
  */
-$.startHttpServer = (onSuccess = undefined, onError = undefined) => {
+const startHttpServer = (onSuccess = undefined, onError = undefined) => {
     $.routerEngine.processRoutes($.router.routes);
     /**
      * Add 404 error
@@ -238,14 +234,15 @@ $.startHttpServer = (onSuccess = undefined, onError = undefined) => {
         }
     });
     if ($.$config.has("server.ssl.enabled") && $.config.server.ssl.enabled === true) {
-        $.startHttpsServer();
+        startHttpsServer();
     }
     return $;
 };
 /**
  * StartHttpsServer
+ * Https Server starts here.
  */
-$.startHttpsServer = () => {
+const startHttpsServer = () => {
     const httpsPort = $.$config.get("server.ssl.port", 443);
     if (!$.$config.has("server.ssl.files")) {
         $.logErrorAndExit("Ssl enabled but has no {server.ssl.files} config found.");
@@ -276,7 +273,23 @@ $.startHttpsServer = () => {
     });
     return $;
 };
-// Start server if not tinker
-if ($.config.server.startOnBoot) {
-    $.startHttpServer();
+/**
+ * Load on.startHttp Events.
+ */
+const startHttpEvents = $.on.events()["startHttp"];
+if (startHttpEvents.length) {
+    startHttpEvents.push(() => {
+        startHttpServer();
+    });
+    $.engineData.set("on.startHttp", 0);
+    const next = () => __awaiter(void 0, void 0, void 0, function* () {
+        const currentIndex = $.engineData.get("on.startHttp", 0);
+        const nextIndex = currentIndex + 1;
+        $.engineData.set("on.startHttp", nextIndex);
+        startHttpEvents[nextIndex](next);
+    });
+    startHttpEvents[0](next);
+}
+else {
+    startHttpServer();
 }
