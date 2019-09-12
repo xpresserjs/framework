@@ -1,7 +1,6 @@
 const DefaultTimestamp = "YYYY-MM-DD H:mm:ss";
 
 const ServerConfig = {
-    startOnBoot: true,
     port: 2000,
     protocol: "http",
     domain: "localhost",
@@ -27,9 +26,6 @@ const Config = {
     },
     project: {
         fileExtension: ".js",
-    },
-    console: {
-        startOnBoot: true,
     },
     server: ServerConfig,
     database: {
@@ -120,7 +116,7 @@ const Config = {
 };
 
 const Options = {
-    autoBoot: true,
+    autoBoot: false,
     isConsole: false,
     isTinker: false,
 };
