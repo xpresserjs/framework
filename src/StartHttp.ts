@@ -3,6 +3,7 @@ import FS = require("fs");
 const {resolve} = require("path");
 import {XpresserHttp} from "../http";
 import Path = require("./Helpers/Path");
+import loadOnEvents = require("./Events/OnEventsLoader");
 
 import express = require("express");
 
@@ -344,24 +345,4 @@ const startHttpsServer = () => {
 /**
  * Load on.startHttp Events.
  */
-const startHttpEvents: any[] = $.on.events()["startHttp"];
-if (startHttpEvents.length) {
-
-    startHttpEvents.push(() => {
-        startHttpServer();
-    });
-
-    $.engineData.set("on.startHttp", 0);
-
-    const next = async () => {
-        const currentIndex = $.engineData.get("on.startHttp", 0);
-        const nextIndex = currentIndex + 1;
-        $.engineData.set("on.startHttp", nextIndex);
-
-        startHttpEvents[nextIndex](next);
-    };
-
-    startHttpEvents[0](next);
-} else {
-    startHttpServer();
-}
+loadOnEvents("startHttp", () => startHttpServer());

@@ -163,6 +163,10 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
     require("./src/On");
     // const onEvents
 
+    const loadOnEvents = require("./src/Events/OnEventsLoader");
+
+
+
     $.boot = () => {
         const BOOT = () => {
             /**
@@ -182,27 +186,8 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
         /**
          * Load on.boot Events
          */
-        const bootEvents: any[] = $.on.events()["boot"];
-        if (bootEvents.length) {
 
-            bootEvents.push(() => {
-                BOOT();
-            });
-
-            $.engineData.set("on.boot", 0);
-
-            const next = async () => {
-                const currentIndex = $.engineData.get("on.boot", 0);
-                const nextIndex = currentIndex + 1;
-                $.engineData.set("on.boot", nextIndex);
-
-                bootEvents[nextIndex](next);
-            };
-
-            bootEvents[0](next);
-        } else {
-            BOOT();
-        }
+        loadOnEvents("boot", () => BOOT());
 
     };
 
