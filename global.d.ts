@@ -85,9 +85,11 @@ declare interface Xpresser {
          * Returns events object.
          */
         events(): object;
-
         boot(todo: TodoFunction | TodoFunction[]): void;
-        startHttp(todo: TodoFunction | TodoFunction[]): void;
+        expressInit(todo: TodoFunction | TodoFunction[]): void;
+        bootServer(todo: TodoFunction | TodoFunction[]): void;
+        http(todo: TodoFunction | TodoFunction[]): void;
+        https(todo: TodoFunction | TodoFunction[]): void;
     };
 
     /*----------------- PATH FUNCTIONS ------------------- */

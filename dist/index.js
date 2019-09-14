@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 /**
  * Importing Package.json
  *
@@ -139,6 +130,7 @@ const XpresserInit = (AppConfig, AppOptions) => {
     /* ------------- $.on Events Loader ------------- */
     require("./src/On");
     // const onEvents
+    const loadOnEvents = require("./src/Events/OnEventsLoader");
     $.boot = () => {
         const BOOT = () => {
             /**
@@ -157,23 +149,7 @@ const XpresserInit = (AppConfig, AppOptions) => {
         /**
          * Load on.boot Events
          */
-        const bootEvents = $.on.events()["boot"];
-        if (bootEvents.length) {
-            bootEvents.push(() => {
-                BOOT();
-            });
-            $.engineData.set("on.boot", 0);
-            const next = () => __awaiter(void 0, void 0, void 0, function* () {
-                const currentIndex = $.engineData.get("on.boot", 0);
-                const nextIndex = currentIndex + 1;
-                $.engineData.set("on.boot", nextIndex);
-                bootEvents[nextIndex](next);
-            });
-            bootEvents[0](next);
-        }
-        else {
-            BOOT();
-        }
+        loadOnEvents("boot", () => BOOT());
     };
     /**
      * Boot if $.options.autoBoot is true.

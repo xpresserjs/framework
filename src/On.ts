@@ -5,33 +5,54 @@ declare const $: Xpresser;
 
 const OnEvents = {
     boot: [],
-    startHttp: [],
+    expressInit: [],
+    bootServer: [],
+    http: [],
+    https: [],
 };
 
+/**
+ * AddToEvents - Short Hand Function
+ * Adds an event to a given key.
+ * @param name
+ * @param todo
+ * @constructor
+ */
+const AddToEvents = (name, todo) => {
+    if (Array.isArray(todo)) {
+        for (const key in todo) {
+            if (todo.hasOwnProperty(key)) {
+                $.on[name](todo[key]);
+            }
+        }
+    } else {
+        OnEvents[name].push(todo);
+    }
+};
+
+// Initialise $.on
 $.on = {
     events() {
         return OnEvents;
     },
 
     boot(todo) {
-        if (Array.isArray(todo)) {
-            // tslint:disable-next-line:forin
-            for (const key in todo) {
-                this.boot(todo[key]);
-            }
-        } else {
-            OnEvents.boot.push(todo);
-        }
+        return AddToEvents("boot", todo);
     },
 
-    startHttp(todo) {
-        if (Array.isArray(todo)) {
-            // tslint:disable-next-line:forin
-            for (const key in todo) {
-                this.startHttp(todo[key]);
-            }
-        } else {
-            OnEvents.startHttp.push(todo);
-        }
+    expressInit(todo) {
+        return AddToEvents("expressInit", todo);
+    },
+
+    bootServer(todo) {
+        return AddToEvents("bootServer", todo);
+    },
+
+    http(todo) {
+        return AddToEvents("http", todo);
+    },
+
+    https(todo) {
+        return AddToEvents("https", todo);
     },
 };

@@ -108,7 +108,6 @@ if (useBodyParser) {
 
 /**
  * Session handled by knex
- *
  * Disabled on default
  */
 const useSession = $.$config.get("session.startOnBoot", false);
@@ -148,7 +147,6 @@ if (useSession) {
 }
 
 // Set local AppData
-
 $.app.locals.appData = {};
 
 $.app.use(async (req: XpresserHttp.Request, res: XpresserHttp.Response, next?: () => void) => {
@@ -194,51 +192,59 @@ if (typeof template.engine === "function") {
 
 $.app.set("views", $.path.views());
 
-// Not Tinker? Require Controllers
-if (!$.options.isTinker) {
-    $.controller = require("./Classes/Controller");
-}
-
+/**
+ *  AfterExpressInit Function
+ *  This function happens immediately after on.expressInit events are completed.
+ */
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 
-const $globalMiddlewareWrapper = ($middlewareFn: any) => {
-    return async (res, req, next) => {
-        const x = new RequestEngine(res, req, next);
-        return $middlewareFn(x);
-    };
-};
-
-if ($useDotJson.has("globalMiddlewares")) {
-    const $middlewares = $useDotJson.get("globalMiddlewares");
-
-    for (let i = 0; i < $middlewares.length; i++) {
-        let $middleware = $middlewares[i];
-
-        if ($middleware.substr(-3) !== $.config.project.fileExtension) {
-            $middleware += $.config.project.fileExtension;
-        }
-
-        $middleware = Path.resolve($middleware);
-
-        try {
-
-            const $globalMiddleware = $globalMiddlewareWrapper(require($middleware));
-            $.app.use($globalMiddleware);
-
-        } catch (e) {
-
-            $.logPerLine([
-                {error: "Error in use.json"},
-                {error: e.message},
-                {errorAndExit: ""},
-            ]);
-
-        }
+const afterExpressInit = (next: () => void) => {
+    // Not Tinker? Require Controllers
+    if (!$.options.isTinker) {
+        $.controller = require("./Classes/Controller");
     }
 
-}
+    const $globalMiddlewareWrapper = ($middlewareFn: any) => {
+        return async (res, req, next) => {
+            const x = new RequestEngine(res, req, next);
+            return $middlewareFn(x);
+        };
+    };
 
-require("./Routes/Loader");
+    if ($useDotJson.has("globalMiddlewares")) {
+        const $middlewares = $useDotJson.get("globalMiddlewares");
+
+        for (let i = 0; i < $middlewares.length; i++) {
+            let $middleware = $middlewares[i];
+
+            if ($middleware.substr(-3) !== $.config.project.fileExtension) {
+                $middleware += $.config.project.fileExtension;
+            }
+
+            $middleware = Path.resolve($middleware);
+
+            try {
+
+                const $globalMiddleware = $globalMiddlewareWrapper(require($middleware));
+                $.app.use($globalMiddleware);
+
+            } catch (e) {
+
+                $.logPerLine([
+                    {error: "Error in use.json"},
+                    {error: e.message},
+                    {errorAndExit: ""},
+                ]);
+
+            }
+        }
+
+    }
+
+    require("./Routes/Loader");
+
+    next();
+};
 
 /**
  * StartHttpServer
@@ -278,21 +284,25 @@ const startHttpServer = (onSuccess = undefined, onError = undefined) => {
         }
     });
 
-    $.http.listen(port, () => {
-        $.log("Server started and available on " + $.helpers.url());
-        $.log("PORT:" + port);
-        $.log();
+    /**
+     * Load $.on.http Events
+     * Listen to port after running events
+     */
+    loadOnEvents("http", () => {
+        $.http.listen(port, () => {
+            $.log("Server started and available on " + $.helpers.url());
+            $.log("PORT:" + port);
+            $.log();
 
-        if (typeof onSuccess === "function") {
-            onSuccess();
+            if (typeof onSuccess === "function") {
+                onSuccess();
+            }
+        });
+
+        if ($.$config.has("server.ssl.enabled") && $.config.server.ssl.enabled === true) {
+            startHttpsServer();
         }
     });
-
-    if ($.$config.has("server.ssl.enabled") && $.config.server.ssl.enabled === true) {
-        startHttpsServer();
-    }
-
-    return $;
 };
 
 /**
@@ -333,16 +343,25 @@ const startHttpsServer = () => {
     $.https = createHttpsServer(files, $.app);
     $.https.on("error", $.logError);
 
-    $.https.listen(httpsPort, () => {
-        $.log("Server started and available on " + $.helpers.url());
-        $.log("PORT:" + httpsPort);
-        $.log();
+    /**
+     * Load $.on.https Events
+     * Listen to port after running events
+     */
+    loadOnEvents("https", () => {
+        $.https.listen(httpsPort, () => {
+            $.log("Server started and available on " + $.helpers.url());
+            $.log("PORT:" + httpsPort);
+            $.log();
+        });
     });
-
-    return $;
 };
 
 /**
- * Load on.startHttp Events.
+ * Load on.expressInit Events.
  */
-loadOnEvents("startHttp", () => startHttpServer());
+loadOnEvents("expressInit", () => afterExpressInit(() => {
+    /**
+     * Load on.startHttp Events.
+     */
+    return loadOnEvents("bootServer", () => startHttpServer());
+}));
