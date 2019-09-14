@@ -21,13 +21,24 @@ const paths = $.$config.get("paths");
 // Load Use.json Data
 const $useDotJson = $.engineData.get("UseDotJson");
 $.app = express();
-$.app.use((req, res, next) => {
-    res.set("X-Powered-By", "Xpresser");
-    if ($.config.response.overrideServerName) {
-        res.set("Server", "Xpresser");
-    }
-    next();
-});
+/**
+ * If {server.poweredBy=true}
+ * Set X-Powered-By to Xpresser.
+ * Else
+ * Disable poweredBy header.
+ */
+if ($.config.server.poweredBy) {
+    $.app.use((req, res, next) => {
+        res.set("X-Powered-By", "Xpresser");
+        if ($.config.response.overrideServerName) {
+            res.set("Server", "Xpresser");
+        }
+        next();
+    });
+}
+else {
+    $.app.disable("x-powered-by");
+}
 $.app.use(express.static(paths.public, {
     setHeaders(res, path) {
         const responseConfig = $.config.response;

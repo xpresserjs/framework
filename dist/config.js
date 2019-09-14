@@ -14,6 +14,7 @@ const ServerConfig = {
         enabled: false,
         port: 443,
     },
+    poweredBy: true,
 };
 const Config = {
     name: "Xpresser",
