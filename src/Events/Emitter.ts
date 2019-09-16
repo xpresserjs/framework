@@ -10,9 +10,30 @@ const DefinedEvents = $.engineData.get("DefinedEvents", {});
 EventEmitter.on("runEvent", ($payload: {
     event: string,
     payload: any[],
+    callback?: (eventResult: any) => any,
 }) => {
     if (DefinedEvents.hasOwnProperty($payload.event)) {
-        DefinedEvents[$payload.event](...$payload.payload);
+
+        let eventResult = undefined;
+        try {
+            eventResult = DefinedEvents[$payload.event](...$payload.payload);
+        } catch (e) {
+            $.logError(e);
+        }
+
+        if (typeof eventResult !== "undefined" && $payload.hasOwnProperty("callback")) {
+            if ($.fn.isPromise(eventResult)) {
+                eventResult
+                    .then((result) => $payload.callback(result))
+                    .catch((e) => $.logError(e));
+            } else {
+                try {
+                    $payload.callback(eventResult);
+                } catch (e) {
+                    $.logError(e);
+                }
+            }
+        }
     }
 });
 
@@ -28,6 +49,14 @@ class EventsEmitter {
         setTimeout(() => {
             EventsEmitter.emit(event, ...args);
         }, time);
+    }
+
+    public static emitWithCallback(event: string, args: any[], callback: (eventResult) => any) {
+        EventEmitter.emit("runEvent", {
+            event,
+            payload: args,
+            callback,
+        });
     }
 }
 

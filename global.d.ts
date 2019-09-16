@@ -29,6 +29,27 @@ declare interface XpresserEventEmitter {
      * @param payload
      */
     emit(event: string, ...payload): void;
+
+    /**
+     * Emit Event after some seconds.
+     *
+     * This is equivalent to calling .emit in a setTimeOut function.
+     * @param time
+     * @param event
+     * @param payload
+     */
+    emitAfter(time: number, event: string, ...payload): void;
+
+    /**
+     * Emit event with callback.
+     *
+     * Data returned in your event is passed as the first parameter
+     * in your callback.
+     * @param event
+     * @param args
+     * @param callback
+     */
+    emitWithCallback(event: string, args: any[], callback: (eventResult) => any): void;
 }
 
 declare interface Xpresser {
@@ -85,10 +106,44 @@ declare interface Xpresser {
          * Returns events object.
          */
         events(): object;
+
+        /**
+         * Add `on.boot` middleware.
+         *
+         * This middleware will run when xpresser boots.
+         * They are the first in the cycle.
+         * @param todo
+         */
         boot(todo: TodoFunction | TodoFunction[]): void;
+
+        /**
+         * Add `on.expressInit` middleware.
+         *
+         * This middleware runs when express is initiated
+         * i.e `$.app` is available.
+         * @param todo
+         */
         expressInit(todo: TodoFunction | TodoFunction[]): void;
+
+        /**
+         * Add `on.bootServer` middleware.
+         * @param todo
+         */
         bootServer(todo: TodoFunction | TodoFunction[]): void;
+
+        /**
+         * Add `on.http` middleware.
+         *
+         * This middleware runs after `$.http` is available.
+         * @param todo
+         */
         http(todo: TodoFunction | TodoFunction[]): void;
+
+        /**
+         * Add `on.https` middleware.
+         * This middleware runs after `$.http` is available.
+         * @param todo
+         */
         https(todo: TodoFunction | TodoFunction[]): void;
     };
 
