@@ -2,8 +2,6 @@
 /// <reference path="helpers.d.ts" />
 /// <reference path="./types/object-collection.d.ts" />
 
-import XpresserRouter = require("@xpresser/router");
-import ObjectCollection = require("object-collection");
 import ObjectValidatorPro = require("object-validator-pro");
 import UseEngine = require("./src/UseEngine");
 import DB = require("./src/Database/Db");
@@ -13,7 +11,9 @@ import RouterEngine = require("./src/RouterEngine");
 import Controller = require("./src/Classes/Controller");
 
 /*--- Declare Types ---*/
-declare type TodoFunction = (next?: any) => any;
+type XpresserRouter = import("@xpresser/router");
+type ObjectCollection = import("object-collection");
+type TodoFunction = (next?: any) => any;
 /*--- End Declare Types ---*/
 
 declare namespace XpresserJsonSettings {

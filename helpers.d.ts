@@ -31,7 +31,7 @@ declare namespace XpresserHelpers {
 
         today(): string;
 
-        toDate(date: any, format?: string): any;
+        toDate(date?: any, format?: string): any;
 
         timeAgo(date: any, format?: string): string;
     }

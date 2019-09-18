@@ -165,8 +165,6 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
 
     const loadOnEvents = require("./src/Events/OnEventsLoader");
 
-
-
     $.boot = () => {
         const BOOT = () => {
             /**

@@ -164,8 +164,11 @@ const helpers = {
      * Parse Date
      */
     toDate(date, format) {
-        if (format === undefined) {
+        if (!format) {
             format = $.config.date.format;
+        }
+        if (!date) {
+            date = helpers.now();
         }
         return moment(date, format);
     },

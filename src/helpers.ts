@@ -177,7 +177,7 @@ const helpers = {
     },
 
     randomInteger(min, max) {
-        return Math.floor(Math.random() * (max - min + 1) ) + min;
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     },
 
     // ---------------------------
@@ -197,9 +197,13 @@ const helpers = {
     /**
      * Parse Date
      */
-    toDate(date: any, format?: string): moment.Moment {
-        if (format === undefined) {
+    toDate(date?: any, format?: string): moment.Moment {
+        if (!format) {
             format = $.config.date.format;
+        }
+
+        if (!date) {
+            date = helpers.now();
         }
         return moment(date, format);
     },

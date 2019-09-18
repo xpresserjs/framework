@@ -6,8 +6,9 @@ declare namespace NodeJS {
     }
 }
 
-interface XpresserOptions {
+declare interface XpresserOptions {
     autoBoot?: boolean;
     isConsole?: boolean;
     isTinker?: boolean;
+    puta?: import("object-collection");
 }
