@@ -2,7 +2,7 @@ import fs = require("fs");
 import RouterEngine = require("../RouterEngine");
 
 import Path = require("../Helpers/Path");
-import {Xpresser} from "../../global";
+import {Xpresser} from "../../xpresser";
 
 declare let $: Xpresser;
 

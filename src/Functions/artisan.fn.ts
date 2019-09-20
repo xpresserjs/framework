@@ -5,7 +5,7 @@ import Pluralise = require("pluralize");
 import colors = require("../Objects/consoleColors.obj");
 
 import PathHelper = require("../Helpers/Path");
-import {Xpresser} from "../../global";
+import {Xpresser} from "../../xpresser";
 
 declare let $: Xpresser;
 declare let _: any;

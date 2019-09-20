@@ -1,7 +1,7 @@
 import FS = require("fs");
 
 const {resolve} = require("path");
-import {XpresserHttp} from "../http";
+import {XpresserHttp} from "../types/http";
 import Path = require("./Helpers/Path");
 import loadOnEvents = require("./Events/OnEventsLoader");
 
@@ -9,7 +9,7 @@ import express = require("express");
 
 import {createServer as createHttpServer} from "http";
 import {createServer as createHttpsServer} from "https";
-import {Xpresser} from "../global";
+import {Xpresser} from "../xpresser";
 
 declare let _: any;
 declare let $: Xpresser;

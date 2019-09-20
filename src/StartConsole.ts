@@ -1,5 +1,5 @@
 import fs = require("fs");
-import {Xpresser} from "../global";
+import {Xpresser} from "../xpresser";
 
 declare let $: Xpresser;
 
@@ -48,7 +48,7 @@ const loadJobs = (path) => {
 
 class JobHelper {
     public static end() {
-        process.exit();
+        $.exit();
     }
 }
 

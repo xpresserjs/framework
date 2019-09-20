@@ -2,10 +2,10 @@ import ejs = require("ejs");
 import fs = require("fs");
 import express = require("express");
 
-import {XpresserHttp} from "../http";
+import {XpresserHttp} from "../types/http";
 import requestHelpers = require("./Functions/request.fn");
 import ObjectCollection = require("object-collection");
-import {Xpresser} from "../global";
+import {Xpresser} from "../xpresser";
 
 declare let _: any;
 declare let $: Xpresser;

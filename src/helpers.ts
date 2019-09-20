@@ -1,7 +1,7 @@
 import BuildUrl = require("build-url");
 import fs = require("fs");
 import moment = require("moment");
-import {Xpresser} from "../global";
+import {Xpresser} from "../xpresser";
 
 declare const _;
 declare const $: Xpresser;

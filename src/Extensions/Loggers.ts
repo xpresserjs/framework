@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import {Xpresser} from "../../global";
+import {Xpresser} from "../../xpresser";
 
 declare let $: Xpresser;
 declare let _;
@@ -40,7 +40,7 @@ $.logIfNotConsole = (...args) => {
 
 $.logAndExit = (...args) => {
     if (args.length) { $.log(...args); }
-    process.exit();
+    return $.exit();
 };
 
 $.logError = (...args) => {
@@ -53,7 +53,7 @@ $.logError = (...args) => {
     console.log(chalk.redBright(...args));
 
     if (end) {
-        return process.exit();
+        return $.exit();
     }
 };
 

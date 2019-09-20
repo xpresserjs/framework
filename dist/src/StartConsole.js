@@ -37,7 +37,7 @@ const loadJobs = (path) => {
 };
 class JobHelper {
     static end() {
-        process.exit();
+        $.exit();
     }
 }
 const jobPath = $.path.backend("jobs");

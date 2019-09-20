@@ -7,6 +7,7 @@ const artisanConfig = $.config.artisan;
 const colors = require("../Objects/consoleColors.obj");
 const PathHelper = require("../Helpers/Path");
 const logThis = artisan.logThis;
+const logThisAndExit = artisan.logThisAndExit;
 const removeSlashAtEnd = (str) => {
     if (str.substr(-1) === "/") {
         return str.substr(0, str.length - 1);
@@ -32,12 +33,14 @@ const Commands = {
         }
         const jobsPath = $.path.backend("jobs");
         artisan.copyFromFactoryToApp("job", job, jobsPath, { name: job, command }, false);
+        return $.exit();
     },
     "make:event"(args) {
         const name = args[0];
         const namespace = args[1];
         const eventsPath = $.path.events();
         artisan.copyFromFactoryToApp("event", name, eventsPath, { name, namespace }, false);
+        return $.exit();
     },
     "make:controller"(args) {
         const controller = args[0];
@@ -46,6 +49,7 @@ const Commands = {
         }
         const controllersPath = removeSlashAtEnd($.path.controllers());
         artisan.copyFromFactoryToApp("controller", controller, controllersPath);
+        return $.exit();
     },
     "make:middleware"(args) {
         const middleware = args[0];
@@ -54,6 +58,7 @@ const Commands = {
         }
         const middlewaresPath = PathHelper.resolve($.config.paths.middlewares);
         artisan.copyFromFactoryToApp("middleware", middleware, middlewaresPath);
+        return $.exit();
     },
     "make:model"(args) {
         let name = args[0];
@@ -72,6 +77,7 @@ const Commands = {
         }
         const modelPath = $.path.models();
         artisan.copyFromFactoryToApp("model", name, modelPath, { name, table });
+        $.exit();
     },
     "make:view"(args) {
         const config = $.config.template;
@@ -90,7 +96,7 @@ const Commands = {
         const fullPath = $.path.views(name);
         PathHelper.makeDirIfNotExist(fullPath, true);
         if (name.substr(0, 2) !== "__" && fs.existsSync(fullPath)) {
-            return artisan.logThisAndExit("view {" + colors.fgYellow + name + colors.fgCyan + "} already exits!");
+            return logThisAndExit("view {" + colors.fgYellow + name + colors.fgCyan + "} already exits!");
         }
         if (!defaultContent.length) {
             const defaultContentFile = $.path.views("_." + config.extension);
@@ -99,8 +105,9 @@ const Commands = {
             }
         }
         fs.writeFileSync(fullPath, defaultContent);
-        artisan.logThis("View created successfully!");
-        artisan.logThisAndExit("Located @ " + fullPath);
+        logThis("View created successfully!");
+        logThis("Located @ " + fullPath);
+        return $.exit();
     },
     "migrate"(args) {
         const $config = $.$config.get("database.config", {});
@@ -122,6 +129,7 @@ const Commands = {
             shellJs.exec(`knex migrate:latest --knexfile=${filePath}`);
         }
         fs.unlinkSync(filePath);
+        return $.exit();
     },
 };
 module.exports = Commands;

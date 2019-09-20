@@ -37,7 +37,7 @@ $.logAndExit = (...args) => {
     if (args.length) {
         $.log(...args);
     }
-    process.exit();
+    return $.exit();
 };
 $.logError = (...args) => {
     let end = false;
@@ -47,7 +47,7 @@ $.logError = (...args) => {
     }
     console.log(chalk_1.default.redBright(...args));
     if (end) {
-        return process.exit();
+        return $.exit();
     }
 };
 /**

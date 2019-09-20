@@ -3,7 +3,7 @@ import moment = require("moment");
 
 const {Model} = require("objection");
 import ModelQueryBuilder = require("./Database/ModelQueryBuilder");
-import {Xpresser} from "../global";
+import {Xpresser} from "../xpresser";
 
 declare let _: any;
 declare let $: Xpresser;

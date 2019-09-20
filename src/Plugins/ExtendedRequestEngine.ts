@@ -1,5 +1,5 @@
 import RequestEngine = require("../RequestEngine");
-import {Xpresser} from "../../global";
+import {Xpresser} from "../../xpresser";
 
 declare let $: Xpresser;
 

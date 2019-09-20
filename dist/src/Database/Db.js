@@ -11,7 +11,7 @@ class DB {
             connection: { checkDbConfig: true },
         });
         if (!databaseConfigIsValid) {
-            process.exit();
+            $.exit();
         }
         try {
             this.knex = knex($.config.database.config);

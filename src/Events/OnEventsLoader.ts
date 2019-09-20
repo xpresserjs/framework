@@ -1,4 +1,4 @@
-import {Xpresser} from "../../global";
+import {Xpresser} from "../../xpresser";
 declare const $: Xpresser;
 
 const loadOnEvents = (name: string, done: () => void) => {

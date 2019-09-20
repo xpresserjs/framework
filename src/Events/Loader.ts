@@ -2,7 +2,7 @@ import fs = require("fs");
 import Path = require("../Helpers/Path");
 
 import ObjectCollection = require("object-collection/index");
-import {Xpresser} from "../../global";
+import {Xpresser} from "../../xpresser";
 
 declare const $: Xpresser;
 const DefinedEvents: object = {};

@@ -8,7 +8,7 @@
 import fs = require("fs");
 import PathHelper = require("./Helpers/Path");
 import StringHelper = require("./Helpers/String");
-import {Xpresser, XpresserJsonSettings} from "../global";
+import {Xpresser, XpresserJsonSettings} from "../xpresser";
 import ModelEngine = require("./ModelEngine");
 
 declare let $: Xpresser;

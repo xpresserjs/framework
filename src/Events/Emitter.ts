@@ -1,6 +1,6 @@
 // Imported Immediately after events are registered.
 import events = require("events");
-import {Xpresser} from "../../global";
+import {Xpresser} from "../../xpresser";
 
 const EventEmitter = new events.EventEmitter();
 

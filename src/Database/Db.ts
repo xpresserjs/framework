@@ -1,5 +1,6 @@
 import knex = require("knex");
-import {Xpresser} from "../../global";
+import {Xpresser} from "../../xpresser";
+
 declare let $: Xpresser;
 
 class DB {
@@ -18,7 +19,7 @@ class DB {
         });
 
         if (!databaseConfigIsValid) {
-            process.exit();
+            $.exit();
         }
 
         try {

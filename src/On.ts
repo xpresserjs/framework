@@ -1,5 +1,5 @@
 /* On Applications Event Engine */
-import {Xpresser} from "../global";
+import {Xpresser} from "../xpresser";
 
 declare const $: Xpresser;
 

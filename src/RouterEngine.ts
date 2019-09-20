@@ -1,7 +1,7 @@
 import fs = require("fs");
 
 import XpresserRouter = require("@xpresser/router/index");
-import {Xpresser} from "../global";
+import {Xpresser} from "../xpresser";
 
 const AllRoutesKey = "RouterEngine:allRoutes";
 

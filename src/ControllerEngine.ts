@@ -1,10 +1,10 @@
 import express = require("express");
-import {XpresserHttp} from "../http";
+import {XpresserHttp} from "../types/http";
 import ErrorEngine = require("./ErrorEngine");
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 
 import GetMiddleware = require("./MiddlewareEngine");
-import {Xpresser} from "../global";
+import {Xpresser} from "../xpresser";
 
 declare let _: any;
 declare let $: Xpresser;

@@ -18,7 +18,7 @@ import ObjectCollection = require("object-collection");
 import XpresserRouter = require("@xpresser/router");
 // Import default config.
 import Configurations = require("./config");
-import {Xpresser} from "./global";
+import {Xpresser} from "./xpresser";
 
 // Use Lodash from ObjectCollection
 const _ = ObjectCollection._;
@@ -29,12 +29,19 @@ const _ = ObjectCollection._;
 const {Config, Options} = Configurations;
 
 /**
- * Xpresser Initializer;
+ * Initialize Xpresser;
  * @param AppConfig
  * @param AppOptions
  * @constructor
  */
 const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions): Xpresser => {
+
+    // Set Xpresser Global Var: $
+    const $ = {} as Xpresser;
+
+    $.exit = (...args) => {
+        return process.exit(...args);
+    };
 
     if (AppConfig === undefined) {
         AppConfig = {};
@@ -58,13 +65,13 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
                 }
             } catch (e) {
                 console.error(e.message);
-                process.exit();
+                $.exit();
             }
 
         } else {
 
             console.error("Config file not found!");
-            process.exit();
+            $.exit();
 
         }
     }
@@ -72,9 +79,6 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
     // Merge Config with DefaultConfig to replace missing values.
     AppConfig = _.merge(Config, AppConfig);
     AppOptions = _.merge(Options, AppOptions);
-
-    // Set Xpresser Global Var: $
-    const $ = {} as Xpresser;
 
     // Initialize $.on for the first time.
     // @ts-ignore

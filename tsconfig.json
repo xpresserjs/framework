@@ -16,10 +16,10 @@
     "es2016"
   ],
   "files": [
-    "./node.d.ts",
+    "./types/node.d.ts",
     "./global.d.ts",
-    "./helpers.d.ts",
-    "./http.d.ts"
+    "./types/helpers.d.ts",
+    "./types/http.d.ts"
   ],
   "include": [
     "./**/*.ts"

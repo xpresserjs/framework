@@ -25,12 +25,17 @@ const _ = ObjectCollection._;
  */
 const { Config, Options } = Configurations;
 /**
- * Xpresser Initializer;
+ * Initialize Xpresser;
  * @param AppConfig
  * @param AppOptions
  * @constructor
  */
 const XpresserInit = (AppConfig, AppOptions) => {
+    // Set Xpresser Global Var: $
+    const $ = {};
+    $.exit = (...args) => {
+        return process.exit(...args);
+    };
     if (AppConfig === undefined) {
         AppConfig = {};
     }
@@ -51,19 +56,17 @@ const XpresserInit = (AppConfig, AppOptions) => {
             }
             catch (e) {
                 console.error(e.message);
-                process.exit();
+                $.exit();
             }
         }
         else {
             console.error("Config file not found!");
-            process.exit();
+            $.exit();
         }
     }
     // Merge Config with DefaultConfig to replace missing values.
     AppConfig = _.merge(Config, AppConfig);
     AppOptions = _.merge(Options, AppOptions);
-    // Set Xpresser Global Var: $
-    const $ = {};
     // Initialize $.on for the first time.
     // @ts-ignore
     $.on = {};

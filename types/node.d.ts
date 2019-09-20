@@ -10,5 +10,5 @@ declare interface XpresserOptions {
     autoBoot?: boolean;
     isConsole?: boolean;
     isTinker?: boolean;
-    puta?: import("object-collection");
+    testImport?: import("object-collection");
 }

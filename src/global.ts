@@ -1,6 +1,6 @@
 import moment = require("moment");
 import Base64 = require("./Helpers/Base64");
-import {Xpresser} from "../global";
+import {Xpresser} from "../xpresser";
 
 declare let $: Xpresser;
 

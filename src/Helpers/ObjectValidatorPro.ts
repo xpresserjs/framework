@@ -1,5 +1,5 @@
 import Validator = require("object-validator-pro");
-import {Xpresser} from "../../global";
+import {Xpresser} from "../../xpresser";
 
 const ovp = new Validator();
 
