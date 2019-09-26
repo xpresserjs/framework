@@ -260,15 +260,27 @@ class RequestEngine {
      * @returns {*}
      */
     public view(file, data = {}, fullPath: boolean = false, useEjs = false) {
+
+        /**
+         * Express Default Renderer
+         * @param args
+         */
         const defaultRender = (...args) => {
             // @ts-ignore
             return this.res.render(...args);
         };
 
+        /**
+         * If RequestEngine has function this.customRenderer
+         * We use that function else we use express default.
+         */
         const Render = typeof this.customRenderer === "function" ? this.customRenderer : defaultRender;
         const $filePath = file;
 
-        // if View has namespace
+        /**
+         * If view has namespace,
+         * We file the exact path to the file.
+         */
         if (file.indexOf("::") > 2) {
             if ($.engineData.has("RequestEngine:views." + $filePath)) {
 
@@ -289,14 +301,21 @@ class RequestEngine {
             }
         }
 
+        /**
+         * Set file extension.
+         */
         const path = file + "." + (useEjs ? "ejs" : $.config.template.extension);
 
+        // Get xpresser view data
         data = this.viewData($filePath, data);
 
         if (typeof fullPath === "function") {
             return Render(path, data, fullPath);
         }
 
+        /**
+         * UseEjs if useEjs is == true.
+         */
         if (useEjs === true) {
             data = Object.assign(this.res.locals, data);
             return this.res.send(ejs.render(
@@ -307,7 +326,7 @@ class RequestEngine {
         } else {
 
             try {
-                return Render(file, data);
+                return Render(...arguments);
             } catch (e) {
                 $.logError(e.stack);
             }
