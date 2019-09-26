@@ -212,43 +212,47 @@ class RequestEngine {
         return this.redirect($.helpers.route(route, keys));
     }
 
-    public viewData(file, data = {}) {
+    public viewData(file) {
         const localsConfig = $.config.template.locals;
         const all = localsConfig.all;
 
-        this.res.locals.__route = this.route;
-        this.res.locals.__currentView = file;
+        let ctx: any;
+
+        ctx = _.extend({}, this.fn);
+
+        ctx.$route = this.route;
+        ctx.$currentView = file;
 
         if (sessionStartOnBoot) {
-            this.res.locals.__flash = this.req.flash();
+            ctx.$flash = this.req.flash();
         }
 
-        this.res.locals.__currentUrl = this.req.url;
+        ctx.$currentUrl = this.req.url;
 
         if (all) {
 
-            this.res.locals.__get = this.req.query;
-            this.res.locals.__post = this.req.body;
-            this.res.locals.__stackedScripts = [];
-            this.res.locals.__session = this.session || {};
+            ctx.$get = this.req.query;
+            ctx.$body = this.req.body;
+            ctx.$stackedScripts = [];
+            ctx.$session = this.session || {};
 
         } else {
 
-            if (localsConfig.__stackedScripts) {
-                this.res.locals.__stackedScripts = [];
+            if (localsConfig.stackedScripts) {
+                ctx.$stackedScripts = [];
             }
-            if (localsConfig.__session) {
-                this.res.locals.__session = this.session || {};
+            if (localsConfig.session) {
+                ctx.$session = this.session || {};
             }
-            if (localsConfig.__get) {
-                this.res.locals.__get = this.req.query;
+            if (localsConfig.get) {
+                ctx.$get = this.req.query;
             }
-            if (localsConfig.__post) {
-                this.res.locals.__post = this.req.body;
+            if (localsConfig.body) {
+                ctx.$body = this.req.body;
             }
         }
 
-        return _.extend({}, this.fn, data);
+        this.res.locals["ctx"] = ctx;
     }
 
     /**
@@ -307,7 +311,7 @@ class RequestEngine {
         const path = file + "." + (useEjs ? "ejs" : $.config.template.extension);
 
         // Get xpresser view data
-        data = this.viewData($filePath, data);
+        this.viewData($filePath);
 
         if (typeof fullPath === "function") {
             return Render(path, data, fullPath);
@@ -324,8 +328,6 @@ class RequestEngine {
                 {filename: path},
             ));
         } else {
-
-            arguments[1] = data;
             try {
                 return Render(...arguments);
             } catch (e) {

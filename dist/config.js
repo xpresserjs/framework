@@ -83,10 +83,10 @@ const Config = {
         extension: "ejs",
         locals: {
             all: true,
-            __get: false,
-            __post: false,
-            __session: false,
-            __stackedScripts: false,
+            get: false,
+            body: false,
+            session: false,
+            stackedScripts: false,
         },
     },
     response: {
