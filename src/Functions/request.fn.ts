@@ -27,6 +27,8 @@ export =  (x) => {
             for (let i = 0; i < scriptPath.length; i++) {
                 x.res.locals.ctx.$stackedScripts.push(scriptPath[i]);
             }
+
+            return "";
         },
 
         showStackedScripts() {
