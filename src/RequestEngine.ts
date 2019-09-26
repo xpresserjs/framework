@@ -325,6 +325,7 @@ class RequestEngine {
             ));
         } else {
 
+            arguments[1] = data;
             try {
                 return Render(...arguments);
             } catch (e) {

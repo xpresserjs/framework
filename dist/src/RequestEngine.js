@@ -259,6 +259,7 @@ class RequestEngine {
             return this.res.send(ejs.render(fs.readFileSync(path).toString(), data, { filename: path }));
         }
         else {
+            arguments[1] = data;
             try {
                 return Render(...arguments);
             }
