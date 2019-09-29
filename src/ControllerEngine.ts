@@ -1,9 +1,8 @@
 import express = require("express");
-import {XpresserHttp} from "../types/http";
 import ErrorEngine = require("./ErrorEngine");
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
-
-import GetMiddleware = require("./MiddlewareEngine");
+import MiddlewareEngine = require("./MiddlewareEngine");
+import {XpresserHttp} from "../types/http";
 import {Xpresser} from "../xpresser";
 
 declare let _: any;
@@ -61,10 +60,16 @@ class ControllerEngine {
                 }
 
                 // @ts-ignore
-                if (typeof middleware === "function") {
+                if (Array.isArray(middleware)) {
+                    for (const item of middleware) {
+                        if (typeof item === "function") {
+                            middlewares.push(item);
+                        }
+                    }
+                } else if (typeof middleware === "function") {
                     middlewares.push(middleware);
                 } else {
-                    middlewares.push(GetMiddleware(middlewareFile[0], middlewareFile[1], route));
+                    middlewares.push(MiddlewareEngine(middlewareFile[0], middlewareFile[1], route));
                 }
             }
         }
@@ -250,7 +255,14 @@ const Controller = (route, method = null) => {
     // noinspection JSObjectNullOrUndefined
     if (route !== undefined && typeof $controller.middleware === "function") {
         // noinspection TypeScriptValidateJSTypes
-        const middleware = $controller.middleware();
+        const middleware = $controller.middleware({
+            use: (middlewareFn) => {
+                return async (req, res, next) => {
+                    return middlewareFn(new RequestEngine(req, res, next, route));
+                };
+            },
+        });
+
         middlewares = ControllerEngine.getMiddlewares(middleware, method, route);
     }
 

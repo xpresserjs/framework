@@ -109,7 +109,8 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
      * Engine Data serves as the store
      * for all data store by Xpresser files/components
      */
-    $.engineData = $.objectCollection();
+    const DataInMemory = {};
+    $.engineData = $.objectCollection(DataInMemory);
 
     const LaunchType = process.argv[2];
 

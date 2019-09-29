@@ -1,3 +1,4 @@
+<% if (typeof error === "undefined") error = {}; %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,51 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title><%= ctx.config('name') %></title>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <%- include bootstrap.ejs %>
 
     <style type="text/css">
-        body {
-            background-color: #d9ac73
-        }
-
-        .app {
-            margin-top: 10vh
-        }
-
-        h1.brand {
-            margin: 10vh 0;
-            font-size: 100px
-        }
+        body {background-color: #d9ac73}
+        .app {margin-top: 10vh}
+        h1.brand {margin: 10vh 0;font-size: 100px;}
     </style>
 </head>
 <body>
-
 <section class="app">
     <div class="container">
-
-        <% if (typeof error === "undefined") error = {}; %>
-
         <div class="row">
             <div class="col-12">
                 <div class="card bg-dark shadow">
                     <div class="card-body">
                         <h3 class="text-muted"><%- error.title || 'Ops!' %></h3>
                         <hr class="mt-0">
-
                         <% if(error.message) { %>
                             <div style="color: antiquewhite; font-size: large" class="mb-3">
                                 <%- error.message %>
                             </div>
                             <hr class="mt-0">
                         <% } %>
-
                         <div class="mt-3 text-danger">
                             <code style="font-size: large">
                                 <%- error.log %>
                             </code>
                         </div>
-
                     </div>
                 </div>
             </div>

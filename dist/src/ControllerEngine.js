@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const express = require("express");
 const ErrorEngine = require("./ErrorEngine");
 const RequestEngine = require("./Plugins/ExtendedRequestEngine");
-const GetMiddleware = require("./MiddlewareEngine");
+const MiddlewareEngine = require("./MiddlewareEngine");
 // @ts-check
 class ControllerEngine {
     /**
@@ -62,11 +62,18 @@ class ControllerEngine {
                     }
                 }
                 // @ts-ignore
-                if (typeof middleware === "function") {
+                if (Array.isArray(middleware)) {
+                    for (const item of middleware) {
+                        if (typeof item === "function") {
+                            middlewares.push(item);
+                        }
+                    }
+                }
+                else if (typeof middleware === "function") {
                     middlewares.push(middleware);
                 }
                 else {
-                    middlewares.push(GetMiddleware(middlewareFile[0], middlewareFile[1], route));
+                    middlewares.push(MiddlewareEngine(middlewareFile[0], middlewareFile[1], route));
                 }
             }
         }
@@ -213,7 +220,13 @@ const Controller = (route, method = null) => {
     // noinspection JSObjectNullOrUndefined
     if (route !== undefined && typeof $controller.middleware === "function") {
         // noinspection TypeScriptValidateJSTypes
-        const middleware = $controller.middleware();
+        const middleware = $controller.middleware({
+            use: (middlewareFn) => {
+                return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+                    return middlewareFn(new RequestEngine(req, res, next, route));
+                });
+            },
+        });
         middlewares = ControllerEngine.getMiddlewares(middleware, method, route);
     }
     const $method = new ControllerEngine(route, $controller, method, isPath);

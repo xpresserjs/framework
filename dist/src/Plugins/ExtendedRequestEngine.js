@@ -1,7 +1,22 @@
 "use strict";
 const RequestEngine = require("../RequestEngine");
+const PathHelper = require("../Helpers/Path");
 let ExtendedRequestEngine = RequestEngine;
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
+const useDotJson = $.engineData.get("UseDotJson");
+const RequireOrFail = ($RequestEngine) => {
+    try {
+        $RequestEngine = PathHelper.resolve($RequestEngine);
+        const $requestEngine = require($RequestEngine);
+        ExtendRequestEngineUsing($requestEngine);
+    }
+    catch (e) {
+        $.logPerLine([
+            { error: e.message },
+            { errorAndExit: "" },
+        ]);
+    }
+};
 /**
  * Extend RequestEngine
  */
@@ -20,16 +35,18 @@ else {
         const $plugin = $.objectCollection(PluginNameSpaces[$pluginNamespaceKey]);
         if ($plugin.has("extends.RequestEngine")) {
             const $requestEngineExtender = $plugin.get("extends.RequestEngine");
-            try {
-                const $requestEngine = require($requestEngineExtender);
-                ExtendRequestEngineUsing($requestEngine);
+            RequireOrFail($requestEngineExtender);
+        }
+    }
+    const $userRequestExtension = useDotJson.get("extends.RequestEngine", false);
+    if ($userRequestExtension) {
+        if (Array.isArray($userRequestExtension)) {
+            for (const extension of $userRequestExtension) {
+                RequireOrFail(extension);
             }
-            catch (e) {
-                $.logPerLine([
-                    { error: e.message },
-                    { errorAndExit: "" },
-                ]);
-            }
+        }
+        else {
+            RequireOrFail($userRequestExtension);
         }
     }
 }

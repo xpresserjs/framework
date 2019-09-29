@@ -91,7 +91,8 @@ const XpresserInit = (AppConfig, AppOptions) => {
      * Engine Data serves as the store
      * for all data store by Xpresser files/components
      */
-    $.engineData = $.objectCollection();
+    const DataInMemory = {};
+    $.engineData = $.objectCollection(DataInMemory);
     const LaunchType = process.argv[2];
     if (typeof global["XjsCliConfig"] !== "undefined" || LaunchType === "cli") {
         $.options.isConsole = true;

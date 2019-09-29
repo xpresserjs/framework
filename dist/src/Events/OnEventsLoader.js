@@ -18,12 +18,12 @@ const loadOnEvents = (name, done) => {
             const currentIndex = $.engineData.get(key, 0);
             const nextIndex = currentIndex + 1;
             $.engineData.set(key, nextIndex);
-            onEvents[nextIndex](next);
+            return onEvents[nextIndex](next);
         });
-        onEvents[0](next);
+        return onEvents[0](next);
     }
     else {
-        done();
+        return done();
     }
 };
 module.exports = loadOnEvents;

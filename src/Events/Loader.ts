@@ -69,9 +69,7 @@ if (fs.existsSync(EventsPath)) {
     readEventsDirectory(EventsPath);
 }
 
-$.engineData.set("DefinedEvents", DefinedEvents);
-
 // Import Emitter
-const EventsEmitter = require("./Emitter");
+import EventsEmitter = require("./Emitter");
 // Set global $.events to Emitter
-$.events = EventsEmitter;
+$.events = EventsEmitter(DefinedEvents);

@@ -3,47 +3,35 @@ import {Xpresser} from "../xpresser";
 
 declare let $: Xpresser;
 
-class MiddlewareEngine {
-    public middleware: any;
-    public action: string;
-    public route: object;
-
-    /**
-     * @param {object} middleware
-     * @param {string} action
-     * @param route
-     */
-    constructor(middleware, action = "allow", route = undefined) {
-        this.middleware = middleware;
-        this.action = action;
-        this.route = route;
-    }
-
-    public processMiddleware() {
-        return async (req, res, next) => {
-            return this.middleware[this.action](new RequestEngine(req, res, next, this.route));
-        };
-    }
-}
-
 /**
  * @param {string} middlewarePath
  * @param {*} action
  * @param route
  */
-const GetMiddleware = (middlewarePath: any, action = undefined, route: undefined): MiddlewareEngine | any => {
+const MiddlewareEngine = (middlewarePath: any, action = undefined, route: undefined): any => {
 
-    const middlewareFile = $.use.middleware(middlewarePath, false);
+    /**
+     * Get Middleware from path
+     */
+    const middleware = $.use.middleware(middlewarePath, false);
 
-    if (middlewareFile === false) {
+    if (middleware === false) {
         return $.logErrorAndExit("Middleware: " + middlewarePath + " not found!");
     }
 
-    if (typeof middlewareFile === "object" && typeof middlewareFile[action] === "undefined") {
+    /**
+     * If middleware is object, check if method exists.
+     */
+    if (typeof middleware === "object" && typeof middleware[action] === "undefined") {
         return $.logErrorAndExit("Method {" + action + "} not found in middleware: " + middlewarePath);
     }
 
-    return (new MiddlewareEngine(middlewareFile, action, route)).processMiddleware();
+    /**
+     * Return Parsed Middleware
+     */
+    return async (req, res, next) => {
+        return middleware[action](new RequestEngine(req, res, next, route));
+    };
 };
 
-export = GetMiddleware;
+export = MiddlewareEngine;

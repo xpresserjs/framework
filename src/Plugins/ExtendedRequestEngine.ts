@@ -1,10 +1,25 @@
 import RequestEngine = require("../RequestEngine");
-import {Xpresser} from "../../xpresser";
+import {Xpresser, ObjectCollection} from "../../xpresser";
+import PathHelper = require("../Helpers/Path");
 
 declare let $: Xpresser;
 
 let ExtendedRequestEngine = RequestEngine;
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
+const useDotJson: ObjectCollection = $.engineData.get("UseDotJson");
+
+const RequireOrFail = ($RequestEngine) => {
+    try {
+        $RequestEngine = PathHelper.resolve($RequestEngine);
+        const $requestEngine = require($RequestEngine);
+        ExtendRequestEngineUsing($requestEngine);
+    } catch (e) {
+        $.logPerLine([
+            {error: e.message},
+            {errorAndExit: ""},
+        ]);
+    }
+};
 
 /**
  * Extend RequestEngine
@@ -26,15 +41,18 @@ if ($.engineData.has("ExtendedRequestEngine")) {
 
         if ($plugin.has("extends.RequestEngine")) {
             const $requestEngineExtender = $plugin.get("extends.RequestEngine");
-            try {
-                const $requestEngine = require($requestEngineExtender);
-                ExtendRequestEngineUsing($requestEngine);
-            } catch (e) {
-                $.logPerLine([
-                    {error: e.message},
-                    {errorAndExit: ""},
-                ]);
+            RequireOrFail($requestEngineExtender);
+        }
+    }
+
+    const $userRequestExtension = useDotJson.get("extends.RequestEngine", false);
+    if ($userRequestExtension) {
+        if (Array.isArray($userRequestExtension)) {
+            for (const extension of $userRequestExtension) {
+                RequireOrFail(extension);
             }
+        } else {
+            RequireOrFail($userRequestExtension);
         }
     }
 }

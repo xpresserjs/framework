@@ -9,36 +9,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const RequestEngine = require("./Plugins/ExtendedRequestEngine");
-class MiddlewareEngine {
-    /**
-     * @param {object} middleware
-     * @param {string} action
-     * @param route
-     */
-    constructor(middleware, action = "allow", route = undefined) {
-        this.middleware = middleware;
-        this.action = action;
-        this.route = route;
-    }
-    processMiddleware() {
-        return (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-            return this.middleware[this.action](new RequestEngine(req, res, next, this.route));
-        });
-    }
-}
 /**
  * @param {string} middlewarePath
  * @param {*} action
  * @param route
  */
-const GetMiddleware = (middlewarePath, action = undefined, route) => {
-    const middlewareFile = $.use.middleware(middlewarePath, false);
-    if (middlewareFile === false) {
+const MiddlewareEngine = (middlewarePath, action = undefined, route) => {
+    /**
+     * Get Middleware from path
+     */
+    const middleware = $.use.middleware(middlewarePath, false);
+    if (middleware === false) {
         return $.logErrorAndExit("Middleware: " + middlewarePath + " not found!");
     }
-    if (typeof middlewareFile === "object" && typeof middlewareFile[action] === "undefined") {
+    /**
+     * If middleware is object, check if method exists.
+     */
+    if (typeof middleware === "object" && typeof middleware[action] === "undefined") {
         return $.logErrorAndExit("Method {" + action + "} not found in middleware: " + middlewarePath);
     }
-    return (new MiddlewareEngine(middlewareFile, action, route)).processMiddleware();
+    /**
+     * Return Parsed Middleware
+     */
+    return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        return middleware[action](new RequestEngine(req, res, next, route));
+    });
 };
-module.exports = GetMiddleware;
+module.exports = MiddlewareEngine;
