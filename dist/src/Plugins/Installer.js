@@ -12,7 +12,7 @@ if (fs.existsSync(PluginLockDataPath)) {
 }
 module.exports = ($plugin) => {
     // Get all loaded plugin namespace
-    const $pluginNamespaces = $.engineData.get("PluginEngine:namespaces");
+    const $pluginNamespaces = $.engineData.get("PluginEngine:namespaces", {});
     const $pluginNamespaceKeys = Object.keys($pluginNamespaces);
     let $pluginData = null;
     // Loop Through all to find exact plugin to install
