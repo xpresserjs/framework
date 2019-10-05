@@ -8,25 +8,26 @@ let ExtendedRequestEngine = RequestEngine;
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
 const useDotJson: ObjectCollection = $.engineData.get("UseDotJson");
 
-const RequireOrFail = ($RequestEngine) => {
+/**
+ * Extend RequestEngine
+ */
+const ExtendRequestEngineUsing = ($extender) => {
+    if (typeof $extender === "function") {
+        ExtendedRequestEngine = $extender(ExtendedRequestEngine);
+    }
+};
+
+const RequireOrFail = ($RequestEngine, $plugin = undefined) => {
     try {
         $RequestEngine = PathHelper.resolve($RequestEngine);
         const $requestEngine = require($RequestEngine);
         ExtendRequestEngineUsing($requestEngine);
     } catch (e) {
         $.logPerLine([
-            {error: e.message},
+            $plugin === undefined ? {} : {error: `Error in plugin: ${$plugin}`},
+            {error: e.stack},
             {errorAndExit: ""},
         ]);
-    }
-};
-
-/**
- * Extend RequestEngine
- */
-const ExtendRequestEngineUsing = ($extender) => {
-    if (typeof $extender === "function") {
-        ExtendedRequestEngine = $extender(RequestEngine);
     }
 };
 
@@ -41,7 +42,7 @@ if ($.engineData.has("ExtendedRequestEngine")) {
 
         if ($plugin.has("extends.RequestEngine")) {
             const $requestEngineExtender = $plugin.get("extends.RequestEngine");
-            RequireOrFail($requestEngineExtender);
+            RequireOrFail($requestEngineExtender, $pluginNamespaceKey);
         }
     }
 

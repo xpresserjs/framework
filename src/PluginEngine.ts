@@ -56,7 +56,13 @@ class PluginEngine {
                             PluginNamespaceToData[$data.namespace] = PluginEngine.usePlugin($plugin, $pluginPath, $data);
 
                             $.engineData.set("PluginEngine:namespaces", PluginNamespaceToData);
-                            $.logIfNotConsole(`Using Plugin --> ${$data.namespace}`);
+
+                            /**
+                             * If {log.plugins.enabled===true} then display log
+                             */
+                            if ($.$config.get("log.plugins.enabled", true)) {
+                                $.logIfNotConsole(`Using plugin --> {${$data.namespace}}`);
+                            }
 
                         } catch (e) {
 

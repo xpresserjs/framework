@@ -24,6 +24,11 @@ const Config = {
         controllerAction: true,
         routerLiveView: false,
     },
+    log: {
+        plugins: {
+            enabled: true,
+        },
+    },
     project: {
         fileExtension: ".js",
     },
