@@ -22,8 +22,6 @@ const MiddlewareEngine = (middlewarePath: any, action?, route?): any => {
             middlewarePath = m[0];
             action = m[1];
         }
-    } else {
-        action = "allow";
     }
 
     middlewarePath = _.upperFirst(middlewarePath);
@@ -41,11 +39,18 @@ const MiddlewareEngine = (middlewarePath: any, action?, route?): any => {
         return $.logErrorAndExit("No Middleware found in: " + middlewarePath);
     }
 
+
     /**
      * If middleware is object, check if method exists.
      */
-    if (typeof middleware === "object" && typeof middleware[action] === "undefined") {
-        return $.logErrorAndExit("Method {" + action + "} not found in middleware: " + middlewarePath);
+    if (typeof middleware === "object") {
+        if (!action) {
+            action = "allow";
+        }
+
+        if (typeof middleware[action] === "undefined") {
+            return $.logErrorAndExit("Method {" + action + "} not found in middleware: " + middlewarePath);
+        }
     }
 
     /**
