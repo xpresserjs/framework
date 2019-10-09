@@ -66,7 +66,9 @@ if (fs.existsSync(EventsPath)) {
         }
     };
 
-    readEventsDirectory(EventsPath);
+    $.ifNotConsole(() => {
+        readEventsDirectory(EventsPath);
+    });
 }
 
 // Import Emitter

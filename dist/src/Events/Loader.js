@@ -54,7 +54,9 @@ if (fs.existsSync(EventsPath)) {
             }
         }
     };
-    readEventsDirectory(EventsPath);
+    $.ifNotConsole(() => {
+        readEventsDirectory(EventsPath);
+    });
 }
 // Import Emitter
 const EventsEmitter = require("./Emitter");

@@ -18,7 +18,9 @@ const loadOnEvents = (name, done) => {
             const currentIndex = $.engineData.get(key, 0);
             const nextIndex = currentIndex + 1;
             $.engineData.set(key, nextIndex);
-            return onEvents[nextIndex](next);
+            if (typeof onEvents[nextIndex] === "function") {
+                return onEvents[nextIndex](next);
+            }
         });
         return onEvents[0](next);
     }
