@@ -2,13 +2,31 @@ import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 import {Xpresser} from "../xpresser";
 
 declare let $: Xpresser;
+declare let _: any;
 
 /**
  * @param {string} middlewarePath
  * @param {*} action
  * @param route
  */
-const MiddlewareEngine = (middlewarePath: any, action = undefined, route: undefined): any => {
+const MiddlewareEngine = (middlewarePath: any, action?, route?): any => {
+
+    /**
+     * if middleware has a dot sing we check if it is project extension file
+     * if it is not we assume it is a method.
+     */
+    if (middlewarePath.indexOf(".") > 0) {
+        const m = middlewarePath.split(".");
+
+        if (m[1] !== $.config.project.fileExtension.substr(1)) {
+            middlewarePath = m[0];
+            action = m[1];
+        }
+    } else {
+        action = "allow";
+    }
+
+    middlewarePath = _.upperFirst(middlewarePath);
 
     /**
      * Get Middleware from path
@@ -17,6 +35,10 @@ const MiddlewareEngine = (middlewarePath: any, action = undefined, route: undefi
 
     if (middleware === false) {
         return $.logErrorAndExit("Middleware: " + middlewarePath + " not found!");
+    }
+
+    if (typeof middleware !== "object" && typeof middleware !== "function") {
+        return $.logErrorAndExit("No Middleware found in: " + middlewarePath);
     }
 
     /**
@@ -30,7 +52,12 @@ const MiddlewareEngine = (middlewarePath: any, action = undefined, route: undefi
      * Return Parsed Middleware
      */
     return async (req, res, next) => {
-        return middleware[action](new RequestEngine(req, res, next, route));
+        const request = new RequestEngine(req, res, next, route);
+        if (typeof middleware === "function") {
+            return middleware(request);
+        } else {
+            return middleware[action](request);
+        }
     };
 };
 

@@ -33,7 +33,6 @@ class ControllerEngine {
             }
 
             if (typeof middleware === "string") {
-
                 if (middleware.indexOf(".") > 0) {
                     const m = middleware.split(".");
                     m[0] = _.upperFirst(m[0]) + "Middleware";

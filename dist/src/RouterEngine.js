@@ -1,5 +1,6 @@
 "use strict";
 const fs = require("fs");
+const MiddlewareEngine = require("./MiddlewareEngine");
 const AllRoutesKey = "RouterEngine:allRoutes";
 const NameToRoute = {};
 const ProcessedRoutes = [];
@@ -156,7 +157,7 @@ class RouterEngine {
                 }
             }
             if (typeof route.controller === "string") {
-                if (!route.children && parent.useMethodAsName && !route.name) {
+                if (!route.children && parent.useActionsAsName && !route.name) {
                     let nameFromController = route.controller;
                     if (nameFromController.includes("@")) {
                         nameFromController = nameFromController.split("@");
@@ -219,8 +220,16 @@ class RouterEngine {
                 }
                 route.controller = controller + "@" + method;
             }
-            if (typeof route.children !== "undefined" && Array.isArray(route.children) && route.children.length) {
-                RouterEngine.processRoutes(route.children, route);
+            if (typeof route.children !== "undefined" && Array.isArray(route.children)) {
+                if (typeof route.middleware === "string" && route.middleware.length) {
+                    const PathMiddleware = MiddlewareEngine(route.middleware);
+                    if (PathMiddleware) {
+                        $.app.use(route.path, PathMiddleware);
+                    }
+                }
+                if (route.children.length) {
+                    RouterEngine.processRoutes(route.children, route);
+                }
             }
             else {
                 // Add To All Routes

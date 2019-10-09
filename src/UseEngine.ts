@@ -177,6 +177,7 @@ class UseEngine {
         const fullPath = $.path.backend("middlewares/{file}" + $.config.project.fileExtension);
 
         const [hasPath, realPath] = fileExistsInPath(middleware, fullPath, suffix ? "Middleware" : "");
+
         if (!hasPath) {
             return !handleError ? false : $.logErrorAndExit(new Error(`Middleware ${realPath} does not exits`));
         }

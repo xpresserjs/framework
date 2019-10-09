@@ -14,13 +14,31 @@ const RequestEngine = require("./Plugins/ExtendedRequestEngine");
  * @param {*} action
  * @param route
  */
-const MiddlewareEngine = (middlewarePath, action = undefined, route) => {
+const MiddlewareEngine = (middlewarePath, action, route) => {
+    /**
+     * if middleware has a dot sing we check if it is project extension file
+     * if it is not we assume it is a method.
+     */
+    if (middlewarePath.indexOf(".") > 0) {
+        const m = middlewarePath.split(".");
+        if (m[1] !== $.config.project.fileExtension.substr(1)) {
+            middlewarePath = m[0];
+            action = m[1];
+        }
+    }
+    else {
+        action = "allow";
+    }
+    middlewarePath = _.upperFirst(middlewarePath);
     /**
      * Get Middleware from path
      */
     const middleware = $.use.middleware(middlewarePath, false);
     if (middleware === false) {
         return $.logErrorAndExit("Middleware: " + middlewarePath + " not found!");
+    }
+    if (typeof middleware !== "object" && typeof middleware !== "function") {
+        return $.logErrorAndExit("No Middleware found in: " + middlewarePath);
     }
     /**
      * If middleware is object, check if method exists.
@@ -32,7 +50,13 @@ const MiddlewareEngine = (middlewarePath, action = undefined, route) => {
      * Return Parsed Middleware
      */
     return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        return middleware[action](new RequestEngine(req, res, next, route));
+        const request = new RequestEngine(req, res, next, route);
+        if (typeof middleware === "function") {
+            return middleware(request);
+        }
+        else {
+            return middleware[action](request);
+        }
     });
 };
 module.exports = MiddlewareEngine;
