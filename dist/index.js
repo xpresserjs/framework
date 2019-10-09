@@ -153,7 +153,7 @@ const XpresserInit = (AppConfig, AppOptions) => {
         /**
          * Load on.boot Events
          */
-        loadOnEvents("boot", () => BOOT());
+        loadOnEvents("boot", BOOT);
     };
     /**
      * Boot if $.options.autoBoot is true.

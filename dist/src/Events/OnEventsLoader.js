@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const loadOnEvents = (name, done) => {
     const key = `on.${name}`;
     const onEvents = $.on.events()[name];
+    // $.logAndExit(onEvents, done);
     if (onEvents.length) {
         onEvents.push(done);
         $.engineData.set(key, 0);

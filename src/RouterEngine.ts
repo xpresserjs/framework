@@ -280,9 +280,12 @@ class RouterEngine {
                 route.controller = controller + "@" + method;
             }
 
+            const canRegisterRoutes = $.app && (!$.options.isTinker && !$.options.isConsole);
+
             if (typeof route.children !== "undefined" && Array.isArray(route.children)) {
-                if (typeof route.middleware === "string" && route.middleware.length) {
+                if (canRegisterRoutes && typeof route.middleware === "string" && route.middleware.length) {
                     const PathMiddleware = MiddlewareEngine(route.middleware);
+
                     if (PathMiddleware) {
                         $.app.use(route.path, PathMiddleware);
                     }
@@ -295,7 +298,7 @@ class RouterEngine {
                 // Add To All Routes
                 ProcessedRoutes.push(route);
 
-                if ($.app && (!$.options.isTinker && !$.options.isConsole)) {
+                if (canRegisterRoutes) {
                     const controller = Controller(route);
                     $.app[route.method](route.path, controller.middlewares, controller.method);
                 }

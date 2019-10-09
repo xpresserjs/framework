@@ -5,6 +5,7 @@ declare const $: Xpresser;
 const loadOnEvents = (name: string, done: () => void) => {
     const key = `on.${name}`;
     const onEvents: any[] = $.on.events()[name];
+    // $.logAndExit(onEvents, done);
     if (onEvents.length) {
 
         onEvents.push(done);

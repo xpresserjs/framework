@@ -190,7 +190,7 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
          * Load on.boot Events
          */
 
-        loadOnEvents("boot", () => BOOT());
+        loadOnEvents("boot", BOOT);
 
     };
 
