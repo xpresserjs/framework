@@ -308,5 +308,5 @@ loadOnEvents("expressInit", () => afterExpressInit(() => {
     /**
      * Load on.startHttp Events.
      */
-    return loadOnEvents("bootServer", () => startHttpServer());
+    return loadOnEvents("bootServer", startHttpServer);
 }));
