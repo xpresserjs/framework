@@ -283,11 +283,20 @@ class RouterEngine {
             const canRegisterRoutes = $.app && (!$.options.isTinker && !$.options.isConsole);
 
             if (typeof route.children !== "undefined" && Array.isArray(route.children)) {
-                if (canRegisterRoutes && typeof route.middleware === "string" && route.middleware.length) {
-                    const PathMiddleware = MiddlewareEngine(route.middleware);
+                if (canRegisterRoutes) {
+                    const RegisterMiddleware = (middleware) => {
+                        const PathMiddleware = MiddlewareEngine(middleware);
+                        if (PathMiddleware) {
+                            $.app.use(route.path, PathMiddleware);
+                        }
+                    };
 
-                    if (PathMiddleware) {
-                        $.app.use(route.path, PathMiddleware);
+                    if (Array.isArray(route.middleware)) {
+                        route.middleware.forEach((element) => {
+                            RegisterMiddleware(element);
+                        });
+                    } else if (typeof route.middleware === "string") {
+                        RegisterMiddleware(route.middleware);
                     }
                 }
 
