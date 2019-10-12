@@ -66,7 +66,6 @@ if (fs.existsSync(EventsPath)) {
         }
     };
 
-    // $.ifNotConsole(() => {
     $.ifConsole(() => {
         if ($.config.artisan.loadEvents) {
             readEventsDirectory(EventsPath);
@@ -74,7 +73,6 @@ if (fs.existsSync(EventsPath)) {
     }, () => {
         readEventsDirectory(EventsPath);
     });
-    // });
 }
 
 // Import Emitter

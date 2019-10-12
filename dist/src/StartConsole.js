@@ -12,6 +12,7 @@ const argCommand = args[0];
 if (typeof argCommand === "undefined") {
     $.logErrorAndExit("No command provided!");
 }
+const DefinedCommands = {};
 const loadJobs = (path) => {
     if (fs.existsSync(path)) {
         const jobFiles = fs.readdirSync(path);
@@ -30,21 +31,21 @@ const loadJobs = (path) => {
                     }
                 }
                 const jobCommand = "@" + job.command;
-                commands[jobCommand] = job;
+                DefinedCommands[jobCommand] = job;
             }
         }
     }
 };
-class JobHelper {
-    static end() {
+const JobHelper = {
+    end() {
         $.exit();
-    }
-}
-const jobPath = $.path.backend("jobs");
+    },
+};
 if (argCommand.substr(0, 1) === "@") {
+    const jobPath = $.path.backend("jobs");
     loadJobs(jobPath);
 }
-if (typeof commands[argCommand] === "undefined") {
+if (typeof commands[argCommand] === "undefined" && typeof DefinedCommands[argCommand] === "undefined") {
     if ($.options.isTinker) {
         $.log("Console Command not found!");
     }
@@ -55,14 +56,21 @@ if (typeof commands[argCommand] === "undefined") {
 else {
     // Send only command args to function
     args.splice(0, 1);
-    const runFn = commands[argCommand];
-    let afterRun = null;
-    if (typeof runFn === "object" && typeof runFn.handler === "function") {
+    if (typeof commands[argCommand] === "function") {
+        // Run Command
+        commands[argCommand](args, JobHelper);
+    }
+    else if (typeof DefinedCommands[argCommand] === "object") {
+        const command = DefinedCommands[argCommand];
+        if (typeof command.handler !== "function") {
+            $.logAndExit(`Command: {${argCommand}} has no handler method`);
+        }
+        // Load Events
+        require("./Events/Loader");
+        // Process Routes
         require("./Routes/Loader");
         $.routerEngine.processRoutes($.router.routes);
-        afterRun = runFn.handler(args, JobHelper);
-    }
-    else {
-        afterRun = runFn(args, JobHelper);
+        // Run Command
+        command.handler(args, JobHelper);
     }
 }

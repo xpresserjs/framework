@@ -47,7 +47,6 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
     };
 
 
-
     if (AppConfig === undefined) {
         AppConfig = {};
     }
@@ -167,10 +166,12 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
      */
     $.model = require("./src/ModelEngine");
 
-    /**
-     * Load Registered Events
-     */
-    require("./src/Events/Loader");
+    $.ifNotConsole(() => {
+        /**
+         * Load Registered Events
+         */
+        require("./src/Events/Loader");
+    });
 
     /* ------------- $.on Events Loader ------------- */
     require("./src/On");

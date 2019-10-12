@@ -129,10 +129,12 @@ const XpresserInit = (AppConfig, AppOptions) => {
      * @type {ModelEngine}
      */
     $.model = require("./src/ModelEngine");
-    /**
-     * Load Registered Events
-     */
-    require("./src/Events/Loader");
+    $.ifNotConsole(() => {
+        /**
+         * Load Registered Events
+         */
+        require("./src/Events/Loader");
+    });
     /* ------------- $.on Events Loader ------------- */
     require("./src/On");
     // const onEvents
