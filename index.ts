@@ -4,6 +4,7 @@
  * Since typescript is bundled in `dist` folder
  * package.json will be in the parent directory
  */
+
 let PackageDotJson: any = {};
 
 try {
@@ -16,6 +17,8 @@ try {
 import fs = require("fs");
 import ObjectCollection = require("object-collection");
 import XpresserRouter = require("@xpresser/router");
+import FileEngine = require("./src/FileEngine");
+
 // Import default config.
 import Configurations = require("./config");
 import {Xpresser} from "./xpresser";
@@ -42,6 +45,8 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
     $.exit = (...args) => {
         return process.exit(...args);
     };
+
+
 
     if (AppConfig === undefined) {
         AppConfig = {};
@@ -90,6 +95,9 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
     global.$ = $;
     global._ = _;
 
+    // Require $.file
+    require("./src/FileEngine");
+
     // Set Config to AppConfig
     $.config = AppConfig;
 
@@ -137,7 +145,7 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
     const $useDotJson = $.objectCollection();
     const $useDotJsonPath = $.path.jsonConfigs("use.json");
 
-    if (fs.existsSync($useDotJsonPath)) {
+    if ($.file.exists($useDotJsonPath)) {
         $useDotJson.merge(require($useDotJsonPath));
 
         // Save to EngineData

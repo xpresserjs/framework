@@ -262,13 +262,12 @@ class RouterEngine {
 
                 let controllerPath = $.use.controller(controller + $.config.project.fileExtension);
 
-                if (!fs.existsSync(controllerPath)) {
+                if (!$.file.exists(controllerPath)) {
 
                     if (!controller.toLowerCase().includes("controller")) {
-
                         controllerPath = $.use.controller(controller + "Controller" + $.config.project.fileExtension);
 
-                        if (!fs.existsSync(controllerPath)) {
+                        if (!$.file.exists(controllerPath)) {
                             $.logErrorAndExit("Controller: " + split.join("@") + " not found");
                         }
 

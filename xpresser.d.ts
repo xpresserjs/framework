@@ -96,6 +96,91 @@ declare interface Xpresser {
     // Events
     events: XpresserEventEmitter;
 
+    // FileEngine
+    file: {
+        /**
+         * Return Node fs instance
+         * @return {*}
+         */
+        fs(): any;
+
+        /**
+         * Return Node fs-extra instance
+         * @return {*}
+         */
+        fsExtra(): any;
+
+        /**
+         * Check file size.
+         * @param $path
+         */
+        size($path: string): number;
+
+
+        /**
+         * IsFIle
+         * @param $path
+         */
+        isFile($path: string): boolean;
+
+        /**
+         * isSymbolicLink
+         * @param $path
+         */
+        isSymbolicLink($path: string): boolean;
+
+        /**
+         * isDirectory
+         * @param $path
+         */
+        isDirectory($path: string): boolean;
+
+        /**
+        * Get/Read File
+        * @param $path
+        * @param $options
+        */
+        get($path: string, $options?: { encoding?: string, flag?: string }): string | Buffer | false;
+
+        /**
+         * Get/Read File
+         * @param $path
+         * @param $options
+         */
+        read($path: string, $options?: { encoding?: string, flag?: string }): string | Buffer | false;
+
+        /**
+         * Get Directory
+         * @param $path
+         * @param $options
+         */
+        getDirectory($path: string, $options?: {
+            encoding?: string,
+            writeFileTypes?: string,
+        }): string[] | Buffer[] | false;
+
+        /**
+         * Check if a path or an array of paths exists.
+         *
+         * if $returnList is true and $path is an array,
+         * the list of files found will be returned.
+         * @param {string|string[]} $path - Path or Paths to find.
+         * @param {boolean} $returnList - Return list of found files in array.
+         */
+        exists($path: string | string[], $returnList?): boolean | string[];
+
+        /**
+         * Check if a path or an array of paths exists.
+         *
+         * if $returnList is true and $path is an array,
+         * the list of files found will be returned.
+         * @param {string|string[]} $path - Path or Paths to find.
+         * @param {boolean} $returnList - Return list of found files in array.
+         * @param $deleteDirectories
+         */
+        delete($path: string | string[], $returnList?, $deleteDirectories?): boolean | string[];
+    };
+
     /*----------------- ON FUNCTIONS ------------------- */
     on: {
         /**

@@ -137,7 +137,7 @@ if (useSession) {
     };
 
     const sessionFilePath = knexSessionConfig.connection.filename;
-    if (!FS.existsSync(sessionFilePath)) {
+    if (!$.file.exists(sessionFilePath)) {
         Path.makeDirIfNotExist(sessionFilePath, true);
     }
 
@@ -338,16 +338,16 @@ const startHttpsServer = () => {
     files.key = resolve(files.key);
     files.cert = resolve(files.cert);
 
-    if (!FS.existsSync(files.key)) {
+    if (!$.file.exists(files.key)) {
         $.logErrorAndExit("Key file {" + files.key + "} not found!");
     }
 
-    if (!FS.existsSync(files.cert)) {
+    if (!$.file.exists(files.cert)) {
         $.logErrorAndExit("Cert file {" + files.key + "} not found!");
     }
 
-    files.key = FS.readFileSync(files.key);
-    files.cert = FS.readFileSync(files.cert);
+    files.key = $.file.read(files.key);
+    files.cert = $.file.read(files.cert);
 
     $.https = createHttpsServer(files, $.app);
     $.https.on("error", $.logError);

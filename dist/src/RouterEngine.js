@@ -1,5 +1,4 @@
 "use strict";
-const fs = require("fs");
 const MiddlewareEngine = require("./MiddlewareEngine");
 const AllRoutesKey = "RouterEngine:allRoutes";
 const NameToRoute = {};
@@ -209,10 +208,10 @@ class RouterEngine {
                 let controller = split[0];
                 const method = split[1];
                 let controllerPath = $.use.controller(controller + $.config.project.fileExtension);
-                if (!fs.existsSync(controllerPath)) {
+                if (!$.file.exists(controllerPath)) {
                     if (!controller.toLowerCase().includes("controller")) {
                         controllerPath = $.use.controller(controller + "Controller" + $.config.project.fileExtension);
-                        if (!fs.existsSync(controllerPath)) {
+                        if (!$.file.exists(controllerPath)) {
                             $.logErrorAndExit("Controller: " + split.join("@") + " not found");
                         }
                         controller = controller + "Controller";

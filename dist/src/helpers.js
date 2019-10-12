@@ -1,6 +1,5 @@
 "use strict";
 const BuildUrl = require("build-url");
-const fs = require("fs");
 const moment = require("moment");
 /* HELPER FUNCTIONS */
 const helpers = {
@@ -104,7 +103,7 @@ const helpers = {
         }
         else {
             const mixFile = $.path.base("public/mix-manifest.json");
-            if (fs.existsSync(mixFile)) {
+            if ($.file.exists(mixFile)) {
                 mix = require(mixFile);
                 $.engineData.set(localVariableName, mix);
             }

@@ -5,7 +5,6 @@
  *
  * UseEngine is later exposed to the framework as $.use
  */
-const fs = require("fs");
 const PathHelper = require("./Helpers/Path");
 const StringHelper = require("./Helpers/String");
 let Use = {};
@@ -31,11 +30,11 @@ if (typeof Use.middlewares === "object") {
         }
         let middlewareRealPath = PathHelper.resolve(middleware);
         let hasMiddleware = false;
-        if (fs.existsSync(middlewareRealPath + extension)) {
+        if ($.file.exists(middlewareRealPath + extension)) {
             hasMiddleware = true;
         }
         else {
-            if (fs.existsSync(middlewareRealPath + MiddlewareSuffix + extension)) {
+            if ($.file.exists(middlewareRealPath + MiddlewareSuffix + extension)) {
                 middlewareRealPath = middlewareRealPath + MiddlewareSuffix;
                 hasMiddleware = true;
             }
@@ -77,9 +76,9 @@ function fileExistsInPath(file, path, suffix = "") {
         }
     }
     const fullPath = parsePath(path, { file });
-    if (!fs.existsSync(fullPath)) {
+    if (!$.file.exists(fullPath)) {
         file = StringHelper.upperFirst(file);
-        if (!fs.existsSync(parsePath(path, { file }))) {
+        if (!$.file.exists(parsePath(path, { file }))) {
             return [false, fullPath];
         }
     }

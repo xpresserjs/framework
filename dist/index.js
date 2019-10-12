@@ -75,6 +75,8 @@ const XpresserInit = (AppConfig, AppOptions) => {
     // Set $ (Xpresser) && _ (lodash) to globals.
     global.$ = $;
     global._ = _;
+    // Require $.file
+    require("./src/FileEngine");
     // Set Config to AppConfig
     $.config = AppConfig;
     /**
@@ -110,7 +112,7 @@ const XpresserInit = (AppConfig, AppOptions) => {
     $.engineData.set("PluginEngineData", PluginData);
     const $useDotJson = $.objectCollection();
     const $useDotJsonPath = $.path.jsonConfigs("use.json");
-    if (fs.existsSync($useDotJsonPath)) {
+    if ($.file.exists($useDotJsonPath)) {
         $useDotJson.merge(require($useDotJsonPath));
         // Save to EngineData
         $.engineData.set("UseDotJson", $useDotJson);
