@@ -107,6 +107,7 @@ const Config = {
         stop: "forever stop {file}",
     },
     artisan: {
+        loadEvents: false,
         singleModelName: true,
         pluralizeModelTable: true,
     },
