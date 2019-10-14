@@ -169,7 +169,9 @@ class ControllerEngine {
                     if (DebugControllerAction) {
                         console.timeEnd(timeLogKey);
                     }
-                    return $return;
+                    if ($return && (typeof $return === "string" || typeof $return === "object")) {
+                        return res.send($return);
+                    }
                 }
                 catch (e) {
                     return error.view({
