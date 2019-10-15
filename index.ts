@@ -17,7 +17,6 @@ try {
 import fs = require("fs");
 import ObjectCollection = require("object-collection");
 import XpresserRouter = require("@xpresser/router");
-import FileEngine = require("./src/FileEngine");
 
 // Import default config.
 import Configurations = require("./config");

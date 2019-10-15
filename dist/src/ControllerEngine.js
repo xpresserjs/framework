@@ -170,7 +170,12 @@ class ControllerEngine {
                         console.timeEnd(timeLogKey);
                     }
                     if ($return && (typeof $return === "string" || typeof $return === "object")) {
-                        return res.send($return);
+                        if (typeof $return === "string") {
+                            return res.send($return);
+                        }
+                        else {
+                            return res.json($return);
+                        }
                     }
                 }
                 catch (e) {
