@@ -175,39 +175,41 @@ class ControllerEngine {
                     }
                 }
 
-                try {
+                if (boot !== "EndCurrentRequest") {
+                    try {
 
-                    let $return;
+                        let $return;
 
-                    if (typeof method === "function") {
-                        $return = method(x, boot);
-                    } else {
-                        $return = useController[method](x, boot);
-                    }
-
-                    if ($.fn.isPromise($return)) {
-                        $return = await $return;
-                    }
-
-                    if (DebugControllerAction) {
-                        console.timeEnd(timeLogKey);
-                    }
-
-                    if ($return && (typeof $return === "string" || typeof $return === "object")) {
-                        if (typeof $return === "string") {
-                            return res.send($return);
+                        if (typeof method === "function") {
+                            $return = method(x, boot);
                         } else {
-                            return res.json($return);
+                            $return = useController[method](x, boot);
                         }
+
+                        if ($.fn.isPromise($return)) {
+                            $return = await $return;
+                        }
+
+                        if (DebugControllerAction) {
+                            console.timeEnd(timeLogKey);
+                        }
+
+                        if ($return && (typeof $return === "string" || typeof $return === "object")) {
+                            if (typeof $return === "string") {
+                                return res.send($return);
+                            } else {
+                                return res.json($return);
+                            }
+                        }
+                    } catch (e) {
+                        return error.view({
+                            error: {
+                                // tslint:disable-next-line:max-line-length
+                                message: `Error in Controller:  <code>${controllerName}</code>, Method: <code>${m}</code>`,
+                                log: e.stack,
+                            },
+                        });
                     }
-                } catch (e) {
-                    return error.view({
-                        error: {
-                            // tslint:disable-next-line:max-line-length
-                            message: `Error in Controller:  <code>${controllerName}</code>, Method: <code>${m}</code>`,
-                            log: e.stack,
-                        },
-                    });
                 }
             } catch (e) {
                 $.logError(e);
