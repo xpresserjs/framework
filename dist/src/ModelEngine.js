@@ -15,12 +15,24 @@ class ModelEngine extends Model {
         return _.omit(json, this.$hidden);
     }
     $beforeInsert() {
-        const timestamp = moment(new Date().toISOString()).format($.config.database.timestampFormat);
-        this.created_at = timestamp;
-        this.updated_at = timestamp;
+        let shouldUpdate = true;
+        if (typeof this.$timestamps === "boolean") {
+            shouldUpdate = this.$timestamps;
+        }
+        if (shouldUpdate) {
+            const timestamp = moment(new Date().toISOString()).format($.config.database.timestampFormat);
+            this.created_at = timestamp;
+            this.updated_at = timestamp;
+        }
     }
     $beforeUpdate() {
-        this.updated_at = moment(new Date().toISOString()).format($.config.database.timestampFormat);
+        let shouldUpdate = true;
+        if (typeof this.$timestamps === "boolean") {
+            shouldUpdate = this.$timestamps;
+        }
+        if (shouldUpdate) {
+            this.updated_at = moment(new Date().toISOString()).format($.config.database.timestampFormat);
+        }
     }
 }
 module.exports = ModelEngine;

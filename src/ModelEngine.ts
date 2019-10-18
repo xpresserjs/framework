@@ -31,13 +31,27 @@ class ModelEngine extends Model {
     }
 
     public $beforeInsert(): void {
-        const timestamp = moment(new Date().toISOString()).format($.config.database.timestampFormat);
-        this.created_at = timestamp;
-        this.updated_at = timestamp;
+        let shouldUpdate = true;
+        if (typeof this.$timestamps === "boolean") {
+            shouldUpdate = this.$timestamps;
+        }
+
+        if (shouldUpdate) {
+            const timestamp = moment(new Date().toISOString()).format($.config.database.timestampFormat);
+            this.created_at = timestamp;
+            this.updated_at = timestamp;
+        }
     }
 
     public $beforeUpdate(): void {
-        this.updated_at = moment(new Date().toISOString()).format($.config.database.timestampFormat);
+        let shouldUpdate = true;
+        if (typeof this.$timestamps === "boolean") {
+            shouldUpdate = this.$timestamps;
+        }
+
+        if (shouldUpdate) {
+            this.updated_at = moment(new Date().toISOString()).format($.config.database.timestampFormat);
+        }
     }
 }
 
