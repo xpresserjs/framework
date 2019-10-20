@@ -2,6 +2,11 @@ import express = require("express");
 import ErrorEngine = require("./ErrorEngine");
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 import MiddlewareEngine = require("./MiddlewareEngine");
+import Handler = require("./Controllers/Handler");
+import ProcessHandlerTasks = require("./Controllers/ProcessHandlerTasks");
+
+import {ServerResponse} from "http";
+
 import {XpresserHttp} from "../types/http";
 import {Xpresser} from "../xpresser";
 
@@ -94,10 +99,60 @@ class ControllerEngine {
      * @param {string} method
      * @param isPath
      */
-    public processController(route: any, controller, method, isPath?: boolean) {
+    public processController(route: any, controller: any | Handler, method, isPath?: boolean) {
 
         const DebugControllerAction = !$.config.debug.enabled ? false : $.config.debug.controllerAction;
-        const controllerName = (typeof controller.name === "string") ? controller.name : "";
+        const controllerName = (typeof controller.name === "string") ? controller.name : "__UNNAMED_CONTROLLER__";
+        const controllerIsObject = typeof controller === "object";
+        const controllerIsHandler = controllerIsObject && controller instanceof Handler;
+        const $handlerArguments = [];
+        const handlerArguments = () => _.clone($handlerArguments);
+
+        // If controller is an instance of handler then get the handler.
+        if (controllerIsHandler && typeof method === "string") {
+            controller = controller.cloneHandler();
+
+            if (controller.hasOwnProperty(method) && typeof controller[method] === "object") {
+                const actions = controller[method];
+                const config = controller.__extend__ || {tasks: {}};
+
+                let errorHandler = controller.$e || null;
+
+                if (actions.hasOwnProperty("$e")) {
+                    errorHandler = actions.$e;
+                    delete actions.$e;
+                }
+
+                const DefinedTasks = config.tasks || {};
+                const taskKeys = Object.keys(actions);
+                const tasks = {};
+
+                for (const task of taskKeys) {
+                    const taskIsFunction = typeof actions[task] === "function";
+
+                    if (!taskIsFunction && !DefinedTasks.hasOwnProperty(task)) {
+                        $.logErrorAndExit(`Task {${task}} does not exists in {${controllerName}}`);
+                    }
+
+                    if (taskIsFunction) {
+                        tasks[task] = actions[task];
+                    } else {
+                        tasks[task] = DefinedTasks[task];
+                    }
+
+                }
+
+                // Modify tasks;
+                config.tasks = tasks;
+
+                $handlerArguments.push(actions);
+                $handlerArguments.push(config);
+
+                if (errorHandler) {
+                    $handlerArguments.push(errorHandler);
+                }
+            }
+        }
 
         if (typeof controller === "function") {
 
@@ -127,15 +182,15 @@ class ControllerEngine {
          * Since we can't tell if `method` is static we check
          * If `method` is not static then initialize controller and set to `useController`
          */
-        let useController = controller;
+        let useController = controller as any;
         if (typeof method !== "function") {
-            if (typeof controller[method] !== "function") {
+            if (!controllerIsObject && typeof controller[method] !== "function") {
                 // Initialize controller
                 useController = new controller();
             }
 
             // If `method` does not exists then display error
-            if (typeof useController[method] !== "function") {
+            if (typeof useController[method] !== "function" && typeof useController[method] !== "object") {
                 return $.logErrorAndExit(`Method: {${method}} does not exist in controller: {${controllerName}}`);
             }
         }
@@ -143,6 +198,7 @@ class ControllerEngine {
         return async (req: XpresserHttp.Request, res: XpresserHttp.Response) => {
             // Log Time if `DebugControllerAction` is true
             let timeLogKey = "";
+
             if (DebugControllerAction) {
                 timeLogKey = req.method.toUpperCase() + " - " + req.url;
                 console.time(timeLogKey);
@@ -175,15 +231,23 @@ class ControllerEngine {
                     }
                 }
 
-                if (boot !== "EndCurrentRequest") {
+                if (!(boot instanceof ServerResponse)) {
                     try {
 
                         let $return;
+                        const typeOfControllerMethod = typeof useController[method];
 
                         if (typeof method === "function") {
                             $return = method(x, boot);
-                        } else {
-                            $return = useController[method](x, boot);
+                        } else if (typeof method === "string") {
+                            if (typeOfControllerMethod === "function") {
+                                $return = useController[method](x, boot);
+                            } else if (typeOfControllerMethod === "object") {
+                                const processArgs = handlerArguments();
+                                processArgs.unshift(x);
+                                // @ts-ignore
+                                $return = await ProcessHandlerTasks(...processArgs);
+                            }
                         }
 
                         if ($.fn.isPromise($return)) {
@@ -194,7 +258,8 @@ class ControllerEngine {
                             console.timeEnd(timeLogKey);
                         }
 
-                        if ($return && (typeof $return === "string" || typeof $return === "object")) {
+                        // tslint:disable-next-line:max-line-length
+                        if ($return && !($return instanceof ServerResponse) && (typeof $return === "string" || typeof $return === "object")) {
                             if (typeof $return === "string") {
                                 return res.send($return);
                             } else {
@@ -226,6 +291,7 @@ const Controller = (route, method = null) => {
     let $controller: any = undefined;
     let controllerPath = null;
     let isPath = false;
+    let isObjectController = false;
     let middlewares = [];
 
     if (typeof route === "object") {
@@ -251,7 +317,11 @@ const Controller = (route, method = null) => {
         $controller = require(controllerPath);
     }
 
-    if (!isPath && typeof $controller !== "function") {
+    if (typeof $controller === "object") {
+        isObjectController = true;
+    }
+
+    if (!isPath && typeof $controller !== "function" && !isObjectController) {
         if (typeof $controller === "string") {
             return $.logErrorAndExit("Controller: {" + $controller + "} not found!");
         }
@@ -259,18 +329,20 @@ const Controller = (route, method = null) => {
         return $.logErrorAndExit("Controller not found!");
     }
 
-    // noinspection JSObjectNullOrUndefined
-    if (route !== undefined && typeof $controller.middleware === "function") {
-        // noinspection TypeScriptValidateJSTypes
-        const middleware = $controller.middleware({
-            use: (middlewareFn) => {
-                return async (req, res, next) => {
-                    return middlewareFn(new RequestEngine(req, res, next, route));
-                };
-            },
-        });
+    if (!isObjectController) {
+        // noinspection JSObjectNullOrUndefined
+        if (route !== undefined && typeof $controller.middleware === "function") {
+            // noinspection TypeScriptValidateJSTypes
+            const middleware = $controller.middleware({
+                use: (middlewareFn) => {
+                    return async (req, res, next) => {
+                        return middlewareFn(new RequestEngine(req, res, next, route));
+                    };
+                },
+            });
 
-        middlewares = ControllerEngine.getMiddlewares(middleware, method, route);
+            middlewares = ControllerEngine.getMiddlewares(middleware, method, route);
+        }
     }
 
     const $method = new ControllerEngine(route, $controller, method, isPath);

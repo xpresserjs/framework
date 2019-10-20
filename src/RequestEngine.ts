@@ -77,6 +77,14 @@ class RequestEngine {
     }
 
     /**
+     * Response Send
+     * @param body
+     */
+    public send(body: any) {
+        return this.res.send(body);
+    }
+
+    /**
      * get Request Data
      * @param key
      * @param $default

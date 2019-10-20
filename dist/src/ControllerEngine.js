@@ -12,6 +12,9 @@ const express = require("express");
 const ErrorEngine = require("./ErrorEngine");
 const RequestEngine = require("./Plugins/ExtendedRequestEngine");
 const MiddlewareEngine = require("./MiddlewareEngine");
+const Handler = require("./Controllers/Handler");
+const ProcessHandlerTasks = require("./Controllers/ProcessHandlerTasks");
+const http_1 = require("http");
 // @ts-check
 class ControllerEngine {
     /**
@@ -87,7 +90,46 @@ class ControllerEngine {
      */
     processController(route, controller, method, isPath) {
         const DebugControllerAction = !$.config.debug.enabled ? false : $.config.debug.controllerAction;
-        const controllerName = (typeof controller.name === "string") ? controller.name : "";
+        const controllerName = (typeof controller.name === "string") ? controller.name : "__UNNAMED_CONTROLLER__";
+        const controllerIsObject = typeof controller === "object";
+        const controllerIsHandler = controllerIsObject && controller instanceof Handler;
+        const $handlerArguments = [];
+        const handlerArguments = () => _.clone($handlerArguments);
+        // If controller is an instance of handler then get the handler.
+        if (controllerIsHandler && typeof method === "string") {
+            controller = controller.cloneHandler();
+            if (controller.hasOwnProperty(method) && typeof controller[method] === "object") {
+                const actions = controller[method];
+                const config = controller.__extend__ || { tasks: {} };
+                let errorHandler = controller.$e || null;
+                if (actions.hasOwnProperty("$e")) {
+                    errorHandler = actions.$e;
+                    delete actions.$e;
+                }
+                const DefinedTasks = config.tasks || {};
+                const taskKeys = Object.keys(actions);
+                const tasks = {};
+                for (const task of taskKeys) {
+                    const taskIsFunction = typeof actions[task] === "function";
+                    if (!taskIsFunction && !DefinedTasks.hasOwnProperty(task)) {
+                        $.logErrorAndExit(`Task {${task}} does not exists in {${controllerName}}`);
+                    }
+                    if (taskIsFunction) {
+                        tasks[task] = actions[task];
+                    }
+                    else {
+                        tasks[task] = DefinedTasks[task];
+                    }
+                }
+                // Modify tasks;
+                config.tasks = tasks;
+                $handlerArguments.push(actions);
+                $handlerArguments.push(config);
+                if (errorHandler) {
+                    $handlerArguments.push(errorHandler);
+                }
+            }
+        }
         if (typeof controller === "function") {
             /*
             * If `isPath`
@@ -115,12 +157,12 @@ class ControllerEngine {
          */
         let useController = controller;
         if (typeof method !== "function") {
-            if (typeof controller[method] !== "function") {
+            if (!controllerIsObject && typeof controller[method] !== "function") {
                 // Initialize controller
                 useController = new controller();
             }
             // If `method` does not exists then display error
-            if (typeof useController[method] !== "function") {
+            if (typeof useController[method] !== "function" && typeof useController[method] !== "object") {
                 return $.logErrorAndExit(`Method: {${method}} does not exist in controller: {${controllerName}}`);
             }
         }
@@ -155,14 +197,23 @@ class ControllerEngine {
                         boot = yield boot;
                     }
                 }
-                if (boot !== "EndCurrentRequest") {
+                if (!(boot instanceof http_1.ServerResponse)) {
                     try {
                         let $return;
+                        const typeOfControllerMethod = typeof useController[method];
                         if (typeof method === "function") {
                             $return = method(x, boot);
                         }
-                        else {
-                            $return = useController[method](x, boot);
+                        else if (typeof method === "string") {
+                            if (typeOfControllerMethod === "function") {
+                                $return = useController[method](x, boot);
+                            }
+                            else if (typeOfControllerMethod === "object") {
+                                const processArgs = handlerArguments();
+                                processArgs.unshift(x);
+                                // @ts-ignore
+                                $return = yield ProcessHandlerTasks(...processArgs);
+                            }
                         }
                         if ($.fn.isPromise($return)) {
                             $return = yield $return;
@@ -170,7 +221,8 @@ class ControllerEngine {
                         if (DebugControllerAction) {
                             console.timeEnd(timeLogKey);
                         }
-                        if ($return && (typeof $return === "string" || typeof $return === "object")) {
+                        // tslint:disable-next-line:max-line-length
+                        if ($return && !($return instanceof http_1.ServerResponse) && (typeof $return === "string" || typeof $return === "object")) {
                             if (typeof $return === "string") {
                                 return res.send($return);
                             }
@@ -204,6 +256,7 @@ const Controller = (route, method = null) => {
     let $controller = undefined;
     let controllerPath = null;
     let isPath = false;
+    let isObjectController = false;
     let middlewares = [];
     if (typeof route === "object") {
         if (route.hasOwnProperty("controller")) {
@@ -220,23 +273,28 @@ const Controller = (route, method = null) => {
         controllerPath = $.use.controller($controller + $.config.project.fileExtension);
         $controller = require(controllerPath);
     }
-    if (!isPath && typeof $controller !== "function") {
+    if (typeof $controller === "object") {
+        isObjectController = true;
+    }
+    if (!isPath && typeof $controller !== "function" && !isObjectController) {
         if (typeof $controller === "string") {
             return $.logErrorAndExit("Controller: {" + $controller + "} not found!");
         }
         return $.logErrorAndExit("Controller not found!");
     }
-    // noinspection JSObjectNullOrUndefined
-    if (route !== undefined && typeof $controller.middleware === "function") {
-        // noinspection TypeScriptValidateJSTypes
-        const middleware = $controller.middleware({
-            use: (middlewareFn) => {
-                return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-                    return middlewareFn(new RequestEngine(req, res, next, route));
-                });
-            },
-        });
-        middlewares = ControllerEngine.getMiddlewares(middleware, method, route);
+    if (!isObjectController) {
+        // noinspection JSObjectNullOrUndefined
+        if (route !== undefined && typeof $controller.middleware === "function") {
+            // noinspection TypeScriptValidateJSTypes
+            const middleware = $controller.middleware({
+                use: (middlewareFn) => {
+                    return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+                        return middlewareFn(new RequestEngine(req, res, next, route));
+                    });
+                },
+            });
+            middlewares = ControllerEngine.getMiddlewares(middleware, method, route);
+        }
     }
     const $method = new ControllerEngine(route, $controller, method, isPath);
     return {

@@ -175,10 +175,12 @@ $.app.set("views", $.path.views());
  *  This function happens immediately after on.expressInit events are completed.
  */
 const RequestEngine = require("./Plugins/ExtendedRequestEngine");
+const Handler = require("./Controllers/Handler");
 const afterExpressInit = (next) => {
     // Not Tinker? Require Controllers
     if (!$.options.isTinker) {
         $.controller = require("./Classes/Controller");
+        $.handler = (handler) => new Handler(handler);
     }
     const $globalMiddlewareWrapper = ($middlewareFn) => {
         return (res, req, next) => __awaiter(void 0, void 0, void 0, function* () {

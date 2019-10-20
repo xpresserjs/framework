@@ -5,6 +5,7 @@ import {Server} from "net";
 import ModelEngine = require("./src/ModelEngine");
 import RouterEngine = require("./src/RouterEngine");
 import Controller = require("./src/Classes/Controller");
+import Handler = require("./src/Controllers/Handler");
 
 /*--- Declare Types ---*/
 type XpresserRouter = import("@xpresser/router");
@@ -91,7 +92,7 @@ declare interface Xpresser {
     routerEngine: typeof RouterEngine;
 
     // Controller
-    controller: Controller | any;
+    controller: Controller;
 
     // Events
     events: XpresserEventEmitter;
@@ -136,10 +137,10 @@ declare interface Xpresser {
         isDirectory($path: string): boolean;
 
         /**
-        * Get/Read File
-        * @param $path
-        * @param $options
-        */
+         * Get/Read File
+         * @param $path
+         * @param $options
+         */
         get($path: string, $options?: { encoding?: string, flag?: string }): string | Buffer | false;
 
         /**
@@ -349,4 +350,10 @@ declare interface Xpresser {
      * If Boot session isNot console.
      */
     ifNotConsole(run: () => void): void;
+
+    /**
+     * Controller Request Handler
+     * @param handler
+     */
+    handler(handler: object): Handler;
 }
