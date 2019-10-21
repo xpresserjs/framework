@@ -2,8 +2,8 @@ import express = require("express");
 import ErrorEngine = require("./ErrorEngine");
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 import MiddlewareEngine = require("./MiddlewareEngine");
-import Handler = require("./Controllers/Handler");
-import ProcessHandlerTasks = require("./Controllers/ProcessHandlerTasks");
+import ControllerService = require("./Controllers/ControllerService");
+import ProcessServices = require("./Controllers/ProcessServices");
 
 import {ServerResponse} from "http";
 
@@ -99,22 +99,23 @@ class ControllerEngine {
      * @param {string} method
      * @param isPath
      */
-    public processController(route: any, controller: any | Handler, method, isPath?: boolean) {
+    public processController(route: any, controller: any | ControllerService, method, isPath?: boolean) {
 
         const DebugControllerAction = !$.config.debug.enabled ? false : $.config.debug.controllerAction;
-        const controllerName = (typeof controller.name === "string") ? controller.name : "__UNNAMED_CONTROLLER__";
+        let controllerName = (typeof controller.name === "string") ? controller.name : "__UNNAMED_CONTROLLER__";
         const controllerIsObject = typeof controller === "object";
-        const controllerIsHandler = controllerIsObject && controller instanceof Handler;
+        const controllerIsHandler = controllerIsObject && controller instanceof ControllerService;
         const $handlerArguments = [];
         const handlerArguments = () => _.clone($handlerArguments);
 
         // If controller is an instance of handler then get the handler.
         if (controllerIsHandler && typeof method === "string") {
-            controller = controller.cloneHandler();
+            controller = controller.getClone();
+            controllerName = controller.name || controllerName;
 
             if (controller.hasOwnProperty(method) && typeof controller[method] === "object") {
                 const actions = controller[method];
-                const config = controller.__extend__ || {tasks: {}};
+                const config = controller.__extend__ || {services: {}};
 
                 let errorHandler = controller.$e || null;
 
@@ -123,27 +124,28 @@ class ControllerEngine {
                     delete actions.$e;
                 }
 
-                const DefinedTasks = config.tasks || {};
-                const taskKeys = Object.keys(actions);
-                const tasks = {};
+                const DefinedServices = config.services || {};
+                const serviceKeys = Object.keys(actions);
+                const services = {};
 
-                for (const task of taskKeys) {
-                    const taskIsFunction = typeof actions[task] === "function";
+                for (const service of serviceKeys) {
+                    const serviceIsFunction = typeof actions[service] === "function";
 
-                    if (!taskIsFunction && !DefinedTasks.hasOwnProperty(task)) {
-                        $.logErrorAndExit(`Task {${task}} does not exists in {${controllerName}}`);
+                    if (!serviceIsFunction && !DefinedServices.hasOwnProperty(service)) {
+                        $.logErrorAndExit(`Service {${service}} does not exists in {${controllerName}}`);
                     }
 
-                    if (taskIsFunction) {
-                        tasks[task] = actions[task];
+                    if (serviceIsFunction) {
+                        // Change to Array!
+                        services[service] = [actions[service]];
                     } else {
-                        tasks[task] = DefinedTasks[task];
+                        services[service] = DefinedServices[service];
                     }
 
                 }
 
-                // Modify tasks;
-                config.tasks = tasks;
+                // Modify services;
+                config.services = services;
 
                 $handlerArguments.push(actions);
                 $handlerArguments.push(config);
@@ -246,7 +248,7 @@ class ControllerEngine {
                                 const processArgs = handlerArguments();
                                 processArgs.unshift(x);
                                 // @ts-ignore
-                                $return = await ProcessHandlerTasks(...processArgs);
+                                $return = await ProcessServices(...processArgs);
                             }
                         }
 

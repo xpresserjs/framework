@@ -1,4 +1,4 @@
-class HandlerError {
+class ControllerServiceError {
     public args: any[];
 
     constructor(args) {
@@ -6,4 +6,4 @@ class HandlerError {
     }
 }
 
-export = HandlerError;
+export = ControllerServiceError;

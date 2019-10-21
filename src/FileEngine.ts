@@ -94,6 +94,17 @@ $.file = {
     },
 
     /**
+     * Read Directory
+     * @param $path
+     * @param $options
+     */
+    readDirectory($path: string, $options?: { encoding?: string,
+        writeFileTypes?: string,
+    }): string[] | Buffer[] | false {
+        return  this.getDirectory($path, $options);
+    },
+
+    /**
      * Get Directory
      * @param $path
      * @param $options

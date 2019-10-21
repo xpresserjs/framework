@@ -1,7 +1,7 @@
 "use strict";
-class HandlerError {
+class ControllerServiceError {
     constructor(args) {
         this.args = args;
     }
 }
-module.exports = HandlerError;
+module.exports = ControllerServiceError;

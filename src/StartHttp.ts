@@ -206,13 +206,13 @@ $.app.set("views", $.path.views());
  *  This function happens immediately after on.expressInit events are completed.
  */
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
-import Handler = require("./Controllers/Handler");
+import ControllerService = require("./Controllers/ControllerService");
 
 const afterExpressInit = (next: () => void) => {
     // Not Tinker? Require Controllers
     if (!$.options.isTinker) {
         $.controller = require("./Classes/Controller");
-        $.handler = (handler) => new Handler(handler);
+        $.handler = (handler) => new ControllerService(handler);
     }
 
     const $globalMiddlewareWrapper = ($middlewareFn: any) => {

@@ -5,12 +5,19 @@ import {Server} from "net";
 import ModelEngine = require("./src/ModelEngine");
 import RouterEngine = require("./src/RouterEngine");
 import Controller = require("./src/Classes/Controller");
-import Handler = require("./src/Controllers/Handler");
+import ControllerService = require("./src/Controllers/ControllerService");
+import {XpresserHttp} from "./types/http";
 
 /*--- Declare Types ---*/
 type XpresserRouter = import("@xpresser/router");
 type ObjectCollection = import("object-collection");
 type TodoFunction = (next?: any) => any;
+
+interface ControllerServiceObject {
+    name?: string;
+    $e?: (http: XpresserHttp.Engine, ...args) => any;
+}
+
 /*--- End Declare Types ---*/
 
 declare namespace XpresserJsonSettings {
@@ -156,6 +163,16 @@ declare interface Xpresser {
          * @param $options
          */
         getDirectory($path: string, $options?: {
+            encoding?: string,
+            writeFileTypes?: string,
+        }): string[] | Buffer[] | false;
+
+        /**
+         * Read Directory
+         * @param $path
+         * @param $options
+         */
+        readDirectory($path: string, $options?: {
             encoding?: string,
             writeFileTypes?: string,
         }): string[] | Buffer[] | false;
@@ -352,8 +369,8 @@ declare interface Xpresser {
     ifNotConsole(run: () => void): void;
 
     /**
-     * Controller Request Handler
-     * @param handler
+     * Controller Request ControllerService
+     * @param controller
      */
-    handler(handler: object): Handler;
+    handler(controller: ControllerServiceObject | any): ControllerService;
 }
