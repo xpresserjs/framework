@@ -16,8 +16,8 @@ module.exports = (x, requestServices, config, error) => __awaiter(void 0, void 0
     const serviceKeys = Object.keys(requestServices);
     for (const serviceKey of serviceKeys) {
         const options = {
-            services: serviceKeys,
-            completed: completedServices,
+            http: x,
+            services: completedServices,
             error: (...args) => {
                 return new ControllerServiceError(args);
             },
@@ -25,11 +25,13 @@ module.exports = (x, requestServices, config, error) => __awaiter(void 0, void 0
         const action = DefinedServices[serviceKey];
         let serviceResult;
         if (Array.isArray(action)) {
-            serviceResult = action[0](x, options);
+            serviceResult = action[0](options);
         }
         else {
-            options["http"] = x;
             serviceResult = DefinedServices[serviceKey](requestServices[serviceKey], options);
+        }
+        if ($.fn.isPromise(serviceResult)) {
+            serviceResult = yield serviceResult;
         }
         const serviceResultIsControllerServiceError = serviceResult instanceof ControllerServiceError;
         if (serviceResultIsControllerServiceError && error) {

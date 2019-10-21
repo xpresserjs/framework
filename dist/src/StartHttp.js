@@ -180,7 +180,7 @@ const afterExpressInit = (next) => {
     // Not Tinker? Require Controllers
     if (!$.options.isTinker) {
         $.controller = require("./Classes/Controller");
-        $.handler = (handler) => new ControllerService(handler);
+        $.handler = (controller) => new ControllerService(controller);
     }
     const $globalMiddlewareWrapper = ($middlewareFn) => {
         return (res, req, next) => __awaiter(void 0, void 0, void 0, function* () {

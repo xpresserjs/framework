@@ -1,5 +1,3 @@
-import FS = require("fs");
-
 const {resolve} = require("path");
 import {XpresserHttp} from "../types/http";
 import Path = require("./Helpers/Path");
@@ -212,7 +210,7 @@ const afterExpressInit = (next: () => void) => {
     // Not Tinker? Require Controllers
     if (!$.options.isTinker) {
         $.controller = require("./Classes/Controller");
-        $.handler = (handler) => new ControllerService(handler);
+        $.handler = (controller) => new ControllerService(controller);
     }
 
     const $globalMiddlewareWrapper = ($middlewareFn: any) => {

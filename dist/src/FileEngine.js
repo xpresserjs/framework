@@ -86,6 +86,14 @@ $.file = {
         return $.file.get($path, $options);
     },
     /**
+     * Read Directory
+     * @param $path
+     * @param $options
+     */
+    readDirectory($path, $options) {
+        return this.getDirectory($path, $options);
+    },
+    /**
      * Get Directory
      * @param $path
      * @param $options

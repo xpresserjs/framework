@@ -2,24 +2,8 @@ import {Xpresser} from "../../xpresser";
 import {XpresserHttp} from "../../types/http";
 import {ServerResponse} from "http";
 import ControllerServiceError = require("./ControllerServiceError");
-import ObjectCollection = require("object-collection/index");
-import PathHelper = require("../Helpers/Path");
 
 declare const $: Xpresser;
-
-/**
- * AutoLoad Controller Services.
- */
-const $useDotJson: ObjectCollection = $.engineData.get("UseDotJson");
-const AutoLoadPaths = $useDotJson.get("autoload.controllerServices", undefined);
-const ServicesFolder = $.path.controllers("services");
-
-// If use.json has autoload config and services folder exists in controllers folder.
-if (AutoLoadPaths && $.file.isDirectory(ServicesFolder)) {
-    const ServicesFolderFiles = $.file.readDirectory(ServicesFolder);
-    const path2d = PathHelper.addProjectFileExtension("AutoLoad.js");
-    console.log(path2d);
-}
 
 export = async (
     x: XpresserHttp.Engine,
@@ -35,8 +19,8 @@ export = async (
 
     for (const serviceKey of serviceKeys) {
         const options = {
-            services: serviceKeys,
-            completed: completedServices,
+            http: x,
+            services: completedServices,
             error: (...args) => {
                 return new ControllerServiceError(args);
             },
@@ -47,15 +31,17 @@ export = async (
 
         if (Array.isArray(action)) {
             serviceResult = action[0](
-                x,
                 options,
             );
         } else {
-            options["http"] = x;
             serviceResult = DefinedServices[serviceKey](
                 requestServices[serviceKey],
                 options,
             );
+        }
+
+        if ($.fn.isPromise(serviceResult)) {
+            serviceResult = await serviceResult;
         }
 
         const serviceResultIsControllerServiceError: boolean = serviceResult instanceof ControllerServiceError;

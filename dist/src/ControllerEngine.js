@@ -15,6 +15,66 @@ const MiddlewareEngine = require("./MiddlewareEngine");
 const ControllerService = require("./Controllers/ControllerService");
 const ProcessServices = require("./Controllers/ProcessServices");
 const http_1 = require("http");
+/**
+ * AutoLoad Controller Services.
+ */
+const $useDotJson = $.engineData.get("UseDotJson");
+const AutoLoadPaths = $useDotJson.get("autoload.controllerServices", undefined);
+const ServicesFolder = $.path.controllers("services");
+const ServicesInMemory = $.objectCollection();
+// If use.json has autoload config and services folder exists in controllers folder.
+const LoadServicesInDirectory = ($folder, $files = undefined) => {
+    let ServicesFolderFiles = [];
+    if (Array.isArray($files)) {
+        ServicesFolderFiles = $files;
+    }
+    else {
+        ServicesFolderFiles = $.file.readDirectory($folder);
+    }
+    for (const ServiceFile of ServicesFolderFiles) {
+        const fullPath = `${$folder}/${ServiceFile}`;
+        if ($.file.isDirectory(fullPath)) {
+            LoadServicesInDirectory(fullPath);
+        }
+        else {
+            try {
+                const services = require(fullPath);
+                if (typeof services !== "object" || (typeof services === "object" && !Object.keys(services).length)) {
+                    return $.logErrorAndExit(`No ControllerService object found in {${ServiceFile}}`);
+                }
+                const namespace = services.namespace || "";
+                if (services.hasOwnProperty("namespace")) {
+                    if (ServicesInMemory.has(namespace)) {
+                        // tslint:disable-next-line:max-line-length
+                        return $.logErrorAndExit(`Namespace: {${namespace}} cannot be used because it conflicts with a registered ControllerService name.`);
+                    }
+                    delete services.namespace;
+                }
+                if (namespace.length) {
+                    for (const service of Object.keys(services)) {
+                        const key = `${namespace}.${service}`;
+                        ServicesInMemory.set(key, services[service]);
+                    }
+                }
+                else {
+                    ServicesInMemory.merge(services);
+                }
+            }
+            catch (e) {
+                $.logErrorAndExit(e.message);
+            }
+        }
+    }
+};
+// If AutoLoadedPaths is all or array we load files
+if (AutoLoadPaths && $.file.isDirectory(ServicesFolder)) {
+    if (AutoLoadPaths === "all") {
+        LoadServicesInDirectory(ServicesFolder);
+    }
+    else if (Array.isArray(AutoLoadPaths)) {
+        LoadServicesInDirectory(ServicesFolder, AutoLoadPaths);
+    }
+}
 // @ts-check
 class ControllerEngine {
     /**
@@ -90,14 +150,17 @@ class ControllerEngine {
      */
     processController(route, controller, method, isPath) {
         const DebugControllerAction = !$.config.debug.enabled ? false : $.config.debug.controllerAction;
-        const controllerName = (typeof controller.name === "string") ? controller.name : "__UNNAMED_CONTROLLER__";
+        let controllerName = (typeof controller.name === "string") ? controller.name : "__UNNAMED_CONTROLLER__";
         const controllerIsObject = typeof controller === "object";
-        const controllerIsHandler = controllerIsObject && controller instanceof ControllerService;
+        const controllerIsService = controller instanceof ControllerService;
         const $handlerArguments = [];
         const handlerArguments = () => _.clone($handlerArguments);
         // If controller is an instance of handler then get the handler.
-        if (controllerIsHandler && typeof method === "string") {
-            controller = controller.getClone();
+        if (controllerIsObject && typeof method === "string") {
+            if (controllerIsService) {
+                controller = controller.getClone();
+            }
+            controllerName = controller.name || controllerName;
             if (controller.hasOwnProperty(method) && typeof controller[method] === "object") {
                 const actions = controller[method];
                 const config = controller.__extend__ || { services: {} };
@@ -110,11 +173,17 @@ class ControllerEngine {
                 const serviceKeys = Object.keys(actions);
                 const services = {};
                 for (const service of serviceKeys) {
-                    const serviceIsFunction = typeof actions[service] === "function";
-                    if (!serviceIsFunction && !DefinedServices.hasOwnProperty(service)) {
-                        $.logErrorAndExit(`Service {${service}} does not exists in {${controllerName}}`);
+                    const serviceIsDefined = DefinedServices.hasOwnProperty(service);
+                    const serviceIsInjected = typeof actions[service] === "function";
+                    if (!serviceIsDefined && !serviceIsInjected) {
+                        if (ServicesInMemory.has(service)) {
+                            DefinedServices[service] = ServicesInMemory.get(service);
+                        }
+                        else {
+                            $.logErrorAndExit(`Service {${service}} does not exists in {${controllerName}}`);
+                        }
                     }
-                    if (serviceIsFunction) {
+                    if (serviceIsInjected) {
                         // Change to Array!
                         services[service] = [actions[service]];
                     }

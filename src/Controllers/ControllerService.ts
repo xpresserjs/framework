@@ -9,10 +9,9 @@ const $defaultController = {
 };
 
 interface ControllerServices {
-    [key: string]: (value: string, options?: {
+    [name: string]: (value: string, options?: {
         http?: XpresserHttp.Engine,
-        services?: string[],
-        completed?: any,
+        services?: any,
         error?: (...args) => ControllerServiceError,
     }) => {};
 }
