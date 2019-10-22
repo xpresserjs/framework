@@ -19,15 +19,15 @@
     "chalk": "^2.4.2",
     "connect-session-knex": "^1.4.0",
     "cors": "^2.8.5",
-    "dotenv": "^8.1.0",
+    "dotenv": "8.2.0",
     "ejs": "^2.6.2",
     "express": "^4.17.1",
     "express-flash": "^0.0.2",
-    "express-session": "^1.16.2",
+    "express-session": "1.17.0",
     "fs-extra": "^8.1.0",
-    "handlebars": "^4.3.1",
-    "helmet": "^3.20.0",
-    "knex": "^0.19.3",
+    "handlebars": "4.4.5",
+    "helmet": "3.21.2",
+    "knex": "^0.19.5",
     "mkdirp": "^0.5.1",
     "moment": "^2.24.0",
     "object-collection": "^1.0.15",
@@ -40,11 +40,11 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.0",
-    "@types/lodash": "4.14.135",
+    "@types/lodash": "4.14.144",
     "@types/moment": "^2.13.0",
-    "@types/node": "12.0.10",
-    "ts-node-dev": "^1.0.0-pre.40",
-    "tslint": "5.18.0",
-    "typescript": "^3.5.2"
+    "@types/node": "12.11.2",
+    "ts-node-dev": "^1.0.0-pre.43",
+    "tslint": "^5.20.0",
+    "typescript": "3.6.4"
   }
 }
