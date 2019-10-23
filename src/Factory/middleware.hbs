@@ -1,13 +1,14 @@
+"use strict";
 /**
 * {{name}}
 */
 module.exports = {
 
     // Default middleware action
-    allow(x) {
+    allow(http) {
         // run check here
 
-        return x.next();
+        return http.next();
     }
 
 };
