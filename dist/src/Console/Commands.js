@@ -8,6 +8,10 @@ const colors = require("../Objects/consoleColors.obj");
 const PathHelper = require("../Helpers/Path");
 const logThis = artisan.logThis;
 const logThisAndExit = artisan.logThisAndExit;
+/**
+ * Remove slash at the end of str passed
+ * @param str
+ */
 const removeSlashAtEnd = (str) => {
     if (str.substr(-1) === "/") {
         return str.substr(0, str.length - 1);
@@ -49,6 +53,33 @@ const Commands = {
         }
         const controllersPath = removeSlashAtEnd($.path.controllers());
         artisan.copyFromFactoryToApp("controller", controller, controllersPath);
+        return $.exit();
+    },
+    "make:controller_object"(args) {
+        const controller = args[0];
+        if (typeof controller === "undefined") {
+            return logThis("Controller name not defined!");
+        }
+        const controllersPath = removeSlashAtEnd($.path.controllers());
+        artisan.copyFromFactoryToApp(["controller", "controller_object"], controller, controllersPath);
+        return $.exit();
+    },
+    "make:controller_services"(args) {
+        const controller = args[0];
+        if (typeof controller === "undefined") {
+            return logThis("Controller name not defined!");
+        }
+        const controllersPath = removeSlashAtEnd($.path.controllers());
+        artisan.copyFromFactoryToApp(["controller", "controller_with_services"], controller, controllersPath);
+        return $.exit();
+    },
+    "make:controllerService"(args) {
+        const service = args[0];
+        if (typeof service === "undefined") {
+            return logThis("Service name not defined!");
+        }
+        const controllersPath = removeSlashAtEnd($.path.controllers("services"));
+        artisan.copyFromFactoryToApp(["CService", "controller_service"], service, controllersPath);
         return $.exit();
     },
     "make:middleware"(args) {

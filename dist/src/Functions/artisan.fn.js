@@ -7,6 +7,17 @@ const colors = require("../Objects/consoleColors.obj");
 const PathHelper = require("../Helpers/Path");
 const isTinker = typeof $.options.isTinker === "boolean" && $.options.isTinker;
 const FILE_EXTENSION = $.$config.get("project.fileExtension", ".js");
+/**
+ * Get the string after the last forward slash.
+ * @param str
+ */
+const afterLastSlash = (str) => {
+    if (typeof str === "string" && str.includes("/")) {
+        const parts = str.split("/");
+        return parts[parts.length - 1];
+    }
+    return str;
+};
 module.exports = {
     logThis(...args) {
         if (isTinker) {
@@ -33,6 +44,11 @@ module.exports = {
         return template($data);
     },
     copyFromFactoryToApp($for, $name, $to, $data = {}, addPrefix = true) {
+        let $factory;
+        if (Array.isArray($for)) {
+            $factory = $for[1];
+            $for = $for[0];
+        }
         $name = _.upperFirst($name);
         if (!fs.existsSync($to)) {
             PathHelper.makeDirIfNotExist($to);
@@ -47,11 +63,11 @@ module.exports = {
             return this.logThisAndExit($name + " already exists!");
         }
         PathHelper.makeDirIfNotExist($to, true);
-        const $from = $.path.engine("Factory/" + $for + ".hbs");
-        $data = _.extend({}, { name: $name }, $data);
+        const $from = $.path.engine("Factory/" + ($factory || $for) + ".hbs");
+        $data = _.extend({}, { name: afterLastSlash($name) }, $data);
         fs.writeFileSync($to, this.factory($from, $data));
         this.logThis($name + " created successfully.");
-        this.logThis("located @ " + $to);
+        this.logThis("located @ " + $to.replace($.path.base(), ""));
     },
     copyFolder($from, $to) {
         fse.copySync($from, $to);

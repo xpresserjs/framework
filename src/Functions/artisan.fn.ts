@@ -13,6 +13,19 @@ declare let _: any;
 const isTinker = typeof $.options.isTinker === "boolean" && $.options.isTinker;
 const FILE_EXTENSION = $.$config.get("project.fileExtension", ".js");
 
+/**
+ * Get the string after the last forward slash.
+ * @param str
+ */
+const afterLastSlash = (str: string) => {
+    if (typeof str === "string" && str.includes("/")) {
+        const parts = str.split("/");
+        return parts[parts.length - 1];
+    }
+
+    return str;
+};
+
 export = {
     logThis(...args) {
         if (isTinker) {
@@ -41,7 +54,14 @@ export = {
         return template($data);
     },
 
-    copyFromFactoryToApp($for, $name, $to, $data = {}, addPrefix = true) {
+    copyFromFactoryToApp($for: string | string[], $name: string, $to: string, $data = {}, addPrefix = true) {
+        let $factory: string;
+
+        if (Array.isArray($for)) {
+            $factory = $for[1];
+            $for = $for[0];
+        }
+
         $name = _.upperFirst($name);
 
         if (!fs.existsSync($to)) {
@@ -62,12 +82,12 @@ export = {
 
         PathHelper.makeDirIfNotExist($to, true);
 
-        const $from = $.path.engine("Factory/" + $for + ".hbs");
-        $data = _.extend({}, {name: $name}, $data);
+        const $from = $.path.engine("Factory/" + ($factory || $for) + ".hbs");
+        $data = _.extend({}, {name: afterLastSlash($name)}, $data);
         fs.writeFileSync($to, this.factory($from, $data));
 
         this.logThis($name + " created successfully.");
-        this.logThis("located @ " + $to);
+        this.logThis("located @ " + $to.replace($.path.base(), ""));
     },
 
     copyFolder($from, $to) {

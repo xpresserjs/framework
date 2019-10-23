@@ -1,0 +1,22 @@
+/**
+ * {{name}}
+ * @type {ControllerService}
+ */
+const {{name}} = {
+    // Controller Name
+    name: "{{name}}",
+    // Controller Middlewares
+    middlewares: {},
+    // Controller Default Service Error Handler.
+    e: (x, error) => x.send({error}),
+
+
+    /**
+     * Example Method.
+     * @returns {*}
+     */
+    index: () =>  "Hello World",
+};
+
+
+module.exports = {{name}};

@@ -8,8 +8,8 @@ const $defaultController = {
     services: {},
 };
 
-interface ControllerServices {
-    [name: string]: (value: string, options?: {
+interface XpresserControllerServices {
+    [name: string]: (options: string, context?: {
         http?: XpresserHttp.Engine,
         services?: any,
         error?: (...args) => ControllerServiceError,
@@ -32,7 +32,7 @@ class ControllerService {
         }
     }
 
-    public services($services: ControllerServices): this {
+    public services($services: XpresserControllerServices): this {
         this.controller.__extend__.services = Object.assign(this.controller.__extend__.services || {}, $services);
         return this;
     }
