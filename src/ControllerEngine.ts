@@ -173,7 +173,6 @@ class ControllerEngine {
         const $handlerArguments = [];
         const handlerArguments = () => _.clone($handlerArguments);
 
-
         // If controller is an instance of handler then get the handler.
         if (controllerIsObject && typeof method === "string") {
             if (controllerIsService) {
@@ -183,8 +182,10 @@ class ControllerEngine {
             controllerName = controller.name || controllerName;
 
             if (controller.hasOwnProperty(method) && typeof controller[method] === "object") {
+
                 const actions = controller[method];
                 const config = controller.__extend__ || {services: {}};
+
 
                 let errorHandler = controller.$e || null;
 
@@ -220,10 +221,11 @@ class ControllerEngine {
                 }
 
                 // Modify services;
-                config.services = services;
-
                 $handlerArguments.push(actions);
-                $handlerArguments.push(config);
+                // push Config
+                $handlerArguments.push({
+                    services,
+                });
 
                 if (errorHandler) {
                     $handlerArguments.push(errorHandler);

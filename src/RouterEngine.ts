@@ -1,4 +1,3 @@
-import fs = require("fs");
 import MiddlewareEngine = require("./MiddlewareEngine");
 import XpresserRouter = require("@xpresser/router/index");
 import {Xpresser} from "../xpresser";

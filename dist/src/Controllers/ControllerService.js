@@ -17,7 +17,7 @@ class ControllerService {
         return this;
     }
     getClone() {
-        return _.clone(this.controller);
+        return _.cloneDeep(this.controller);
     }
 }
 module.exports = ControllerService;

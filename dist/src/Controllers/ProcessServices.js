@@ -33,14 +33,15 @@ module.exports = (x, requestServices, config, error) => __awaiter(void 0, void 0
         if ($.fn.isPromise(serviceResult)) {
             serviceResult = yield serviceResult;
         }
-        const serviceResultIsControllerServiceError = serviceResult instanceof ControllerServiceError;
-        if (serviceResultIsControllerServiceError && error) {
-            // Run user defined error
-            serviceResult = error(x, ...serviceResult.args);
-        }
-        if (serviceResult instanceof http_1.ServerResponse || serviceResultIsControllerServiceError) {
+        if (serviceResult instanceof http_1.ServerResponse) {
             break;
         }
+        // Run user defined error
+        if (serviceResult instanceof ControllerServiceError && error) {
+            serviceResult = error(x, ...serviceResult.args);
+            break;
+        }
+        // Add ServiceKey to completed service keys.
         completedServices[serviceKey] = serviceResult;
     }
     const completedServiceKeys = Object.keys(completedServices);

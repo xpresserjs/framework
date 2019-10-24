@@ -192,9 +192,11 @@ class ControllerEngine {
                     }
                 }
                 // Modify services;
-                config.services = services;
                 $handlerArguments.push(actions);
-                $handlerArguments.push(config);
+                // push Config
+                $handlerArguments.push({
+                    services,
+                });
                 if (errorHandler) {
                     $handlerArguments.push(errorHandler);
                 }

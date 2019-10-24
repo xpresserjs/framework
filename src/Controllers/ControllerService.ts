@@ -38,7 +38,7 @@ class ControllerService {
     }
 
     protected getClone(): any {
-        return _.clone(this.controller);
+        return _.cloneDeep(this.controller);
     }
 
 }

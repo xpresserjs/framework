@@ -44,17 +44,17 @@ export = async (
             serviceResult = await serviceResult;
         }
 
-        const serviceResultIsControllerServiceError: boolean = serviceResult instanceof ControllerServiceError;
-
-        if (serviceResultIsControllerServiceError && error) {
-            // Run user defined error
-            serviceResult = error(x, ...serviceResult.args);
-        }
-
-        if (serviceResult instanceof ServerResponse || serviceResultIsControllerServiceError) {
+        if (serviceResult instanceof ServerResponse) {
             break;
         }
 
+        // Run user defined error
+        if (serviceResult instanceof ControllerServiceError && error) {
+            serviceResult = error(x, ...serviceResult.args);
+            break;
+        }
+
+        // Add ServiceKey to completed service keys.
         completedServices[serviceKey] = serviceResult;
     }
 
