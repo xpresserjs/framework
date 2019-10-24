@@ -195,7 +195,7 @@ class RouterEngine {
             }
 
             if (typeof route.controller === "string") {
-                if (!route.children && parent.useMethodAsName && !route.name) {
+                if (!route.children && parent.useActionsAsName && !route.name) {
                     let nameFromController = route.controller;
                     if (nameFromController.includes("@")) {
                         nameFromController = nameFromController.split("@");
