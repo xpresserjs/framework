@@ -16,7 +16,7 @@ declare namespace XpresserHttp {
 declare namespace XpresserController {
     interface ServicesContext {
         http?: XpresserHttp.Engine;
-        boot: any;
+        boot?: any;
         services?: any;
         error?: (...args) => ControllerServiceError;
     }
