@@ -1,6 +1,4 @@
-import ControllerServiceError = require("./ControllerServiceError");
-import {XpresserHttp} from "../../types/http";
-import {ControllerServiceObject} from "../../xpresser";
+import {XpresserController} from "../../types/http";
 
 declare const _: any;
 
@@ -8,22 +6,16 @@ const $defaultController = {
     services: {},
 };
 
-interface XpresserControllerServices {
-    [name: string]: (options: string, context?: {
-        http?: XpresserHttp.Engine,
-        services?: any,
-        error?: (...args) => ControllerServiceError,
-    }) => {};
-}
 
 class ControllerService {
     public controller: {
+        [name: string]: any,
         __extend__?: {
             services?: object,
         },
     };
 
-    constructor($controller: ControllerServiceObject | any) {
+    constructor($controller: XpresserController.ControllerObject | any) {
         if ($controller) {
             this.controller = $controller;
             this.controller.__extend__ = $defaultController;
@@ -32,11 +24,18 @@ class ControllerService {
         }
     }
 
-    public services($services: XpresserControllerServices): this {
+    /**
+     * Register controller services.
+     * @param $services - object of services.
+     */
+    public services($services: XpresserController.Services): this {
         this.controller.__extend__.services = Object.assign(this.controller.__extend__.services || {}, $services);
         return this;
     }
 
+    /**
+     * Clone current controller.
+     */
     protected getClone(): any {
         return _.cloneDeep(this.controller);
     }

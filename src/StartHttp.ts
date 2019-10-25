@@ -1,5 +1,5 @@
 const {resolve} = require("path");
-import {XpresserHttp} from "../types/http";
+import {XpresserController, XpresserHttp} from "../types/http";
 import Path = require("./Helpers/Path");
 import loadOnEvents = require("./Events/OnEventsLoader");
 
@@ -210,7 +210,7 @@ const afterExpressInit = (next: () => void) => {
     // Not Tinker? Require Controllers
     if (!$.options.isTinker) {
         $.controller = require("./Classes/Controller");
-        $.handler = (controller) => new ControllerService(controller);
+        $.handler = (controller: XpresserController.ControllerObject) => new ControllerService(controller);
     }
 
     const $globalMiddlewareWrapper = ($middlewareFn: any) => {

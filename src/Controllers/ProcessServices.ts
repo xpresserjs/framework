@@ -7,6 +7,7 @@ declare const $: Xpresser;
 
 export = async (
     x: XpresserHttp.Engine,
+    boot: any,
     requestServices: any,
     config: {
         services?: object,
@@ -19,6 +20,7 @@ export = async (
 
     for (const serviceKey of serviceKeys) {
         const options = {
+            boot,
             http: x,
             services: completedServices,
             error: (...args) => {

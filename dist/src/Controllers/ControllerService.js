@@ -12,10 +12,17 @@ class ControllerService {
             throw Error("Service not defined!");
         }
     }
+    /**
+     * Register controller services.
+     * @param $services - object of services.
+     */
     services($services) {
         this.controller.__extend__.services = Object.assign(this.controller.__extend__.services || {}, $services);
         return this;
     }
+    /**
+     * Clone current controller.
+     */
     getClone() {
         return _.cloneDeep(this.controller);
     }

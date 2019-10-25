@@ -10,12 +10,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 const http_1 = require("http");
 const ControllerServiceError = require("./ControllerServiceError");
-module.exports = (x, requestServices, config, error) => __awaiter(void 0, void 0, void 0, function* () {
+module.exports = (x, boot, requestServices, config, error) => __awaiter(void 0, void 0, void 0, function* () {
     const DefinedServices = config.services || {};
     const completedServices = {};
     const serviceKeys = Object.keys(requestServices);
     for (const serviceKey of serviceKeys) {
         const options = {
+            boot,
             http: x,
             services: completedServices,
             error: (...args) => {

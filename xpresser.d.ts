@@ -6,17 +6,12 @@ import ModelEngine = require("./src/ModelEngine");
 import RouterEngine = require("./src/RouterEngine");
 import Controller = require("./src/Classes/Controller");
 import ControllerService = require("./src/Controllers/ControllerService");
-import {XpresserHttp} from "./types/http";
+import {XpresserController} from "./types/http";
 
 /*--- Declare Types ---*/
 type XpresserRouter = import("@xpresser/router");
 type ObjectCollection = import("object-collection");
 type TodoFunction = (next?: any) => any;
-
-interface ControllerServiceObject {
-    name?: string;
-    $e?: (http: XpresserHttp.Engine, ...args) => any;
-}
 
 /*--- End Declare Types ---*/
 
@@ -123,7 +118,6 @@ declare interface Xpresser {
          * @param $path
          */
         size($path: string): number;
-
 
         /**
          * IsFIle
@@ -372,5 +366,5 @@ declare interface Xpresser {
      * Controller Request ControllerService
      * @param controller
      */
-    handler(controller: ControllerServiceObject | any): ControllerService;
+    handler(controller: XpresserController.ControllerObject | any): ControllerService;
 }

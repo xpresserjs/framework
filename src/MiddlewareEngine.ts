@@ -39,7 +39,6 @@ const MiddlewareEngine = (middlewarePath: any, action?, route?): any => {
         return $.logErrorAndExit("No Middleware found in: " + middlewarePath);
     }
 
-
     /**
      * If middleware is object, check if method exists.
      */
