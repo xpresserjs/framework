@@ -27,12 +27,12 @@ declare namespace XpresserController {
          * @param options - option passed to service in controller method.
          * @param context - Your current request and services context
          */
-        [name: string]: (options: any, context?: XpresserController.ServicesContext) => {};
+        [name: string]: (options: any, context?: XpresserController.ServicesContext) => (any | void);
     }
 
-    type Method = (http?: XpresserHttp.Engine) => any;
+    type Method = (http?: XpresserHttp.Engine) => (any | void);
     type MethodWithBoot = (http?: XpresserHttp.Engine, boot?: any) => (any | void);
-    type MethodInlineService = (context?: XpresserController.ServicesContext) => any;
+    type MethodInlineService = (context?: XpresserController.ServicesContext) => (any | void);
 
     interface MethodWithServices {
         // Controller Service
