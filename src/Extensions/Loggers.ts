@@ -1,4 +1,4 @@
-import chalk from "chalk";
+const chalk = require("chalk");
 import {Xpresser} from "../../xpresser";
 
 declare let $: Xpresser;
@@ -11,7 +11,7 @@ declare let _;
 $.log = (...args) => {
     if (!args.length) { return console.log(""); }
 
-    args.unshift("===>");
+    args.unshift(chalk.white("=>"));
 
     if (args.length === 2 && typeof args[1] === "string") {
         return console.log(chalk.cyanBright(...args));

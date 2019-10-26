@@ -250,8 +250,10 @@ const startHttpServer = (onSuccess = undefined, onError = undefined) => {
      */
     loadOnEvents("http", () => {
         $.http.listen(port, () => {
-            $.log("Server started and available on " + $.helpers.url());
-            $.log("PORT:" + port);
+            const domain = $.config.server.domain;
+            const baseUrl = $.helpers.url();
+            $.log("Server started.");
+            $.log(`Domain: ${domain} | Port: ${port} | BaseUrl: ${baseUrl}`);
             $.log();
             if (typeof onSuccess === "function") {
                 onSuccess();
@@ -296,9 +298,7 @@ const startHttpsServer = () => {
      */
     loadOnEvents("https", () => {
         $.https.listen(httpsPort, () => {
-            $.log("Server started and available on " + $.helpers.url());
-            $.log("PORT:" + httpsPort);
-            $.log();
+            $.log("Ssl Enabled.");
         });
     });
 };

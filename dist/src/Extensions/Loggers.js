@@ -1,9 +1,6 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const chalk_1 = __importDefault(require("chalk"));
+const chalk = require("chalk");
 /**
  * Log Function
  * @param {*} args
@@ -12,9 +9,9 @@ $.log = (...args) => {
     if (!args.length) {
         return console.log("");
     }
-    args.unshift("===>");
+    args.unshift(chalk.white("=>"));
     if (args.length === 2 && typeof args[1] === "string") {
-        return console.log(chalk_1.default.cyanBright(...args));
+        return console.log(chalk.cyanBright(...args));
     }
     return console.log(...args);
 };
@@ -24,7 +21,7 @@ $.logInfo = (...args) => {
     }
     args.unshift("=>");
     if (args.length === 2 && typeof args[1] === "string") {
-        return console.log(chalk_1.default.magentaBright(...args));
+        return console.log(chalk.magentaBright(...args));
     }
     return console.log(...args);
 };
@@ -45,7 +42,7 @@ $.logError = (...args) => {
         args.splice(args.length - 1, 1);
         end = true;
     }
-    console.log(chalk_1.default.redBright(...args));
+    console.log(chalk.redBright(...args));
     if (end) {
         return $.exit();
     }
