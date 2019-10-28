@@ -73,7 +73,9 @@ const XpresserInit = (AppConfig, AppOptions) => {
     // Set ObjectCollection
     $.objectCollection = (obj) => new ObjectCollection(obj);
     // Set $ (Xpresser) && _ (lodash) to globals.
+    // @ts-ignore
     global.$ = $;
+    // @ts-ignore
     global._ = _;
     // Require $.file
     require("./src/FileEngine");
@@ -96,6 +98,7 @@ const XpresserInit = (AppConfig, AppOptions) => {
     const DataInMemory = {};
     $.engineData = $.objectCollection(DataInMemory);
     const LaunchType = process.argv[2];
+    $.engineData.set("LaunchType", LaunchType);
     if (typeof global["XjsCliConfig"] !== "undefined" || LaunchType === "cli") {
         $.options.isConsole = true;
     }
@@ -137,7 +140,6 @@ const XpresserInit = (AppConfig, AppOptions) => {
     });
     /* ------------- $.on Events Loader ------------- */
     require("./src/On");
-    // const onEvents
     const loadOnEvents = require("./src/Events/OnEventsLoader");
     $.boot = () => {
         const BOOT = () => {

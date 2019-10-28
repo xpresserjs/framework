@@ -1,17 +1,33 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
+const Console = require("./Console/Commands");
+const { Commands, Artisan } = Console;
+// Get Command Arguments
 const args = process.argv.splice(3);
 if (args[2] === "--from-tinker") {
     $.options.isTinker = true;
     args.splice(2, 1);
 }
-const commands = require("./Console/Commands");
-// Require artisan helper Functions
+// Require Artisan helper Functions
 const argCommand = args[0];
 if (typeof argCommand === "undefined") {
     $.logErrorAndExit("No command provided!");
 }
+// Load Plugin CLi Extensions
+const PluginData = $.engineData.get("PluginEngine:namespaces");
+const plugins = Object.keys(PluginData);
+for (const plugin of plugins) {
+    const $plugin = PluginData[plugin];
+    if ($plugin.hasOwnProperty("commands")) {
+        const commands = $plugin["commands"];
+        const commandKeys = Object.keys(commands);
+        for (const command of commandKeys) {
+            Commands[command] = commands[command];
+        }
+    }
+}
+// Load Jobs
 const DefinedCommands = {};
 const loadJobs = (path) => {
     if (fs.existsSync(path)) {
@@ -45,20 +61,24 @@ if (argCommand.substr(0, 1) === "@") {
     const jobPath = $.path.backend("jobs");
     loadJobs(jobPath);
 }
-if (typeof commands[argCommand] === "undefined" && typeof DefinedCommands[argCommand] === "undefined") {
+if (typeof Commands[argCommand] === "undefined" && typeof DefinedCommands[argCommand] === "undefined") {
     if ($.options.isTinker) {
-        $.log("Console Command not found!");
+        $.log(`Console Command not found: {${argCommand}}`);
     }
     else {
-        $.logAndExit("Command not found!");
+        $.logAndExit(`Command not found: {${argCommand}}`);
     }
 }
 else {
     // Send only command args to function
     args.splice(0, 1);
-    if (typeof commands[argCommand] === "function") {
+    if (typeof Commands[argCommand] === "function") {
         // Run Command
-        commands[argCommand](args, JobHelper);
+        Commands[argCommand](args, JobHelper);
+    }
+    else if (typeof Commands[argCommand] === "string") {
+        const command = require(Commands[argCommand]);
+        command(args, { artisan: Artisan, helper: JobHelper });
     }
     else if (typeof DefinedCommands[argCommand] === "object") {
         const command = DefinedCommands[argCommand];

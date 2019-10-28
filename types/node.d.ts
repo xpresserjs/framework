@@ -5,10 +5,3 @@ declare namespace NodeJS {
         moment: any;
     }
 }
-
-declare interface XpresserOptions {
-    autoBoot?: boolean;
-    isConsole?: boolean;
-    isTinker?: boolean;
-    testImport?: import("object-collection");
-}

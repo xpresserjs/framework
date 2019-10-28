@@ -1,43 +1,84 @@
 "use strict";
-const FS = require("fs");
 const PathHelper = require("./Helpers/Path");
+/**
+ * PluginRoutes -  holds all plugins routes.
+ */
 const pluginRoutes = [];
+/**
+ * PluginNamespaceToData - Holds plugin data using namespaces as keys.
+ */
 const PluginNamespaceToData = {};
-const pluginFileExistOrExit = ($plugin, $pluginPath, $file) => {
-    const ResolvedRoutePath = PathHelper.resolve($file, false);
-    if ($file === ResolvedRoutePath) {
-        $file = ResolvedRoutePath;
+/**
+ * Check if plugin file exists or throw error.
+ * @param plugin
+ * @param pluginPath
+ * @param file
+ */
+const pluginPathExistOrExit = (plugin, pluginPath, file) => {
+    /**
+     * ResolvedRoutePath - get file real path,
+     * Just in any case smartPaths are used.
+     */
+    const ResolvedRoutePath = PathHelper.resolve(file, false);
+    if (file === ResolvedRoutePath) {
+        // Merge plugin base path to file.
+        file = pluginPath + "/" + file;
     }
-    $file = $pluginPath + "/" + $file;
-    if (!FS.existsSync($file)) {
+    else {
+        // $file is ResolvedPath
+        file = ResolvedRoutePath;
+    }
+    // If file or folder does not exists throw error.
+    if (!$.file.exists(file)) {
         return $.logPerLine([
-            { error: $plugin },
-            { error: `REQUIRED FILE or DIR MISSING: ${$file}` },
+            { error: plugin },
+            { error: `REQUIRED FILE or DIR MISSING: ${file}` },
             { errorAndExit: "" },
         ], true);
     }
-    return $file;
+    // return real path.
+    return file;
 };
+/**
+ * @class PluginEngine
+ */
 class PluginEngine {
+    /**
+     * Load plugins and process their use.json,
+     */
     static loadPlugins() {
+        // Hold Plugins
         let plugins = [];
+        // Get plugins.json path.
         const PluginsPath = $.path.jsonConfigs("plugins.json");
-        if (FS.existsSync(PluginsPath)) {
+        /**
+         * Check if plugins.json exists
+         * if yes, we load plugins else no plugins defined.
+         */
+        if ($.file.exists(PluginsPath)) {
+            // Try to require PluginsPath
             try {
                 plugins = require(PluginsPath);
             }
             catch (e) {
+                // Log Error and continue
+                // Expected: Json Errors
                 $.logError(e);
             }
-            if (plugins.length) {
-                for (let i = 0; i < plugins.length; i++) {
-                    const $plugin = plugins[i];
-                    if ($plugin.length) {
-                        const $pluginPath = PathHelper.resolve($plugin);
+            if (Array.isArray(plugins) && plugins.length) {
+                /**
+                 * Loop through plugins found and process them using PluginEngine.loadPluginUseData
+                 */
+                for (const plugin of plugins) {
+                    if (plugin.length) {
+                        // get plugin real path.
+                        const $pluginPath = PathHelper.resolve(plugin);
+                        // Try processing plugin use.json
                         try {
-                            const $data = PluginEngine.loadPluginUseData($plugin, $pluginPath);
+                            const $data = PluginEngine.loadPluginUseData(plugin, $pluginPath);
                             // tslint:disable-next-line:max-line-length
-                            PluginNamespaceToData[$data.namespace] = PluginEngine.usePlugin($plugin, $pluginPath, $data);
+                            PluginNamespaceToData[$data.namespace] = PluginEngine.usePlugin(plugin, $pluginPath, $data);
+                            // Save to engineData
                             $.engineData.set("PluginEngine:namespaces", PluginNamespaceToData);
                             /**
                              * If {log.plugins.enabled===true} then display log
@@ -47,8 +88,9 @@ class PluginEngine {
                             }
                         }
                         catch (e) {
+                            // Throw any error from processing and stop xpresser.
                             $.logPerLine([
-                                { error: $plugin },
+                                { error: plugin },
                                 { error: e.message },
                                 { errorAndExit: "" },
                             ], true);
@@ -57,62 +99,101 @@ class PluginEngine {
                 }
             }
         }
+        // return processed plugin routes.
         return { routes: pluginRoutes };
     }
-    static loadPluginUseData($plugin, $pluginPath) {
-        const data = require($pluginPath + "/use.json");
+    /**
+     * Read plugins use.json
+     * @param plugin
+     * @param pluginPath
+     */
+    static loadPluginUseData(plugin, pluginPath) {
+        const data = require(pluginPath + "/use.json");
         if (!data.namespace) {
             throw new Error(`Cannot read property 'namespace'`);
         }
         return data;
     }
-    static usePlugin($plugin, $path, data) {
+    /**
+     * Process Plugin use.json
+     * @param plugin
+     * @param path
+     * @param data
+     */
+    static usePlugin(plugin, path, data) {
         const $data = $.objectCollection(data);
-        let $pluginData;
-        $pluginData = {
+        let pluginData;
+        // Set plugin Data
+        pluginData = {
             namespace: $data.get("namespace"),
-            plugin: $plugin,
-            path: $path,
+            plugin,
+            path,
+            paths: {},
         };
+        // check if plugin has routesFile
         if ($data.has("paths.routesFile")) {
             let RoutePath = $data.get("paths.routesFile");
-            RoutePath = pluginFileExistOrExit($plugin, $path, RoutePath);
-            pluginRoutes.push({ plugin: $plugin, path: RoutePath });
+            RoutePath = pluginPathExistOrExit(plugin, path, RoutePath);
+            pluginRoutes.push({ plugin, path: RoutePath });
         }
+        // check if plugin use.json has paths.controllers
         if ($data.has("paths.controllers")) {
             let controllerPath = $data.get("paths.controllers");
-            controllerPath = pluginFileExistOrExit($plugin, $path, controllerPath);
-            $pluginData.controllers = controllerPath;
+            controllerPath = pluginPathExistOrExit(plugin, path, controllerPath);
+            pluginData.paths.controllers = controllerPath;
         }
+        // check if plugin use.json has paths.Commands
+        if ($data.has("paths.commands")) {
+            let commandPath = $data.get("paths.commands");
+            commandPath = pluginPathExistOrExit(plugin, path, commandPath);
+            pluginData.paths.commands = commandPath;
+            const cliCommandsPath = path + "/cli-commands.json";
+            if ($.file.isFile(cliCommandsPath)) {
+                pluginData.commands = {};
+                const cliCommands = require(cliCommandsPath);
+                if (cliCommands && Array.isArray(cliCommands)) {
+                    for (const command of cliCommands) {
+                        const commandCode = command.command.split(" ")[0];
+                        pluginData.commands[commandCode] = pluginPathExistOrExit(plugin, commandPath, command.file);
+                    }
+                }
+            }
+        }
+        // check if plugin use.json has paths.views
         if ($data.has("paths.views")) {
             let viewsPath = $data.get("paths.views");
-            viewsPath = pluginFileExistOrExit($plugin, $path, viewsPath);
-            $pluginData.views = viewsPath;
+            viewsPath = pluginPathExistOrExit(plugin, path, viewsPath);
+            pluginData.paths.views = viewsPath;
         }
+        // check if plugin use.json has paths.views
         if ($data.has("paths.migrations")) {
             let migrationPath = $data.get("paths.migrations");
-            migrationPath = pluginFileExistOrExit($plugin, $path, migrationPath);
-            $pluginData.migrations = migrationPath;
+            migrationPath = pluginPathExistOrExit(plugin, path, migrationPath);
+            pluginData.paths.migrations = migrationPath;
         }
+        // check if plugin use.json has paths.models
         if ($data.has("paths.models")) {
             let modelPath = $data.get("paths.models");
-            modelPath = pluginFileExistOrExit($plugin, $path, modelPath);
-            $pluginData.models = modelPath;
+            modelPath = pluginPathExistOrExit(plugin, path, modelPath);
+            pluginData.paths.models = modelPath;
         }
+        // check if plugin use.json has paths.middlewares
         if ($data.has("paths.middlewares")) {
             let middlewarePath = $data.get("paths.middlewares");
-            middlewarePath = pluginFileExistOrExit($plugin, $path, middlewarePath);
-            $pluginData.middlewares = middlewarePath;
+            middlewarePath = pluginPathExistOrExit(plugin, path, middlewarePath);
+            pluginData.paths.middlewares = middlewarePath;
         }
+        // check if plugin use.json has extends
         if ($data.has("extends")) {
             const extensionData = {};
             if ($data.has("extends.RequestEngine")) {
-                const $extenderPath = $data.get("extends.RequestEngine");
-                extensionData["RequestEngine"] = pluginFileExistOrExit($plugin, $path, $extenderPath);
+                const extenderPath = $data.get("extends.RequestEngine");
+                extensionData["RequestEngine"] = pluginPathExistOrExit(plugin, path, extenderPath);
             }
-            $pluginData.extends = extensionData;
+            pluginData.extends = extensionData;
         }
-        return $pluginData;
+        // return processed Plugin Data
+        return pluginData;
     }
 }
 module.exports = PluginEngine;

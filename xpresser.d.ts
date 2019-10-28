@@ -368,3 +368,9 @@ declare interface Xpresser {
      */
     handler(controller: XpresserController.ControllerObject | any): ControllerService;
 }
+
+declare interface XpresserOptions {
+    autoBoot?: boolean;
+    isConsole?: boolean;
+    isTinker?: boolean;
+}

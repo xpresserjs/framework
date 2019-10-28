@@ -20,7 +20,7 @@ import XpresserRouter = require("@xpresser/router");
 
 // Import default config.
 import Configurations = require("./config");
-import {Xpresser} from "./xpresser";
+import {Xpresser, XpresserOptions} from "./xpresser";
 
 // Use Lodash from ObjectCollection
 const _ = ObjectCollection._;
@@ -44,7 +44,6 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
     $.exit = (...args) => {
         return process.exit(...args);
     };
-
 
     if (AppConfig === undefined) {
         AppConfig = {};
@@ -90,7 +89,9 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
     $.objectCollection = (obj?) => new ObjectCollection(obj);
 
     // Set $ (Xpresser) && _ (lodash) to globals.
+    // @ts-ignore
     global.$ = $;
+    // @ts-ignore
     global._ = _;
 
     // Require $.file
@@ -119,6 +120,7 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
     $.engineData = $.objectCollection(DataInMemory);
 
     const LaunchType = process.argv[2];
+    $.engineData.set("LaunchType", LaunchType);
 
     if (typeof global["XjsCliConfig"] !== "undefined" || LaunchType === "cli") {
         $.options.isConsole = true;
@@ -174,7 +176,6 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
 
     /* ------------- $.on Events Loader ------------- */
     require("./src/On");
-    // const onEvents
 
     const loadOnEvents = require("./src/Events/OnEventsLoader");
 

@@ -3,7 +3,7 @@
 /// <reference path="./types/helpers.d.ts" />
 /// <reference path="./xpresser.d.ts" />
 
-import {Xpresser} from "./xpresser";
+import {Xpresser, XpresserOptions} from "./xpresser";
 
 /**
  * Initialize Xpresser

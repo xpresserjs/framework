@@ -2,12 +2,12 @@
 const os = require("os");
 const fs = require("fs");
 const shellJs = require("shelljs");
-const artisan = require("../Functions/artisan.fn");
+const Artisan = require("../Functions/artisan.fn");
 const artisanConfig = $.config.artisan;
 const colors = require("../Objects/consoleColors.obj");
 const PathHelper = require("../Helpers/Path");
-const logThis = artisan.logThis;
-const logThisAndExit = artisan.logThisAndExit;
+const logThis = Artisan.logThis;
+const logThisAndExit = Artisan.logThisAndExit;
 /**
  * Remove slash at the end of str passed
  * @param str
@@ -36,14 +36,14 @@ const Commands = {
             command = job.trim();
         }
         const jobsPath = $.path.backend("jobs");
-        artisan.copyFromFactoryToApp("job", job, jobsPath, { name: job, command }, false);
+        Artisan.copyFromFactoryToApp("job", job, jobsPath, { name: job, command }, false);
         return $.exit();
     },
     "make:event"(args) {
         const name = args[0];
         const namespace = args[1];
         const eventsPath = $.path.events();
-        artisan.copyFromFactoryToApp("event", name, eventsPath, { name, namespace }, false);
+        Artisan.copyFromFactoryToApp("event", name, eventsPath, { name, namespace }, false);
         return $.exit();
     },
     "make:controller"(args) {
@@ -52,7 +52,7 @@ const Commands = {
             return logThis("Controller name not defined!");
         }
         const controllersPath = removeSlashAtEnd($.path.controllers());
-        artisan.copyFromFactoryToApp("controller", controller, controllersPath);
+        Artisan.copyFromFactoryToApp("controller", controller, controllersPath);
         return $.exit();
     },
     "make:controller_object"(args) {
@@ -61,7 +61,7 @@ const Commands = {
             return logThis("Controller name not defined!");
         }
         const controllersPath = removeSlashAtEnd($.path.controllers());
-        artisan.copyFromFactoryToApp(["controller", "controller_object"], controller, controllersPath);
+        Artisan.copyFromFactoryToApp(["controller", "controller_object"], controller, controllersPath);
         return $.exit();
     },
     "make:controller_services"(args) {
@@ -70,7 +70,7 @@ const Commands = {
             return logThis("Controller name not defined!");
         }
         const controllersPath = removeSlashAtEnd($.path.controllers());
-        artisan.copyFromFactoryToApp(["controller", "controller_with_services"], controller, controllersPath);
+        Artisan.copyFromFactoryToApp(["controller", "controller_with_services"], controller, controllersPath);
         return $.exit();
     },
     "make:controllerService"(args) {
@@ -79,7 +79,7 @@ const Commands = {
             return logThis("Service name not defined!");
         }
         const controllersPath = removeSlashAtEnd($.path.controllers("services"));
-        artisan.copyFromFactoryToApp(["CService", "controller_service"], service, controllersPath);
+        Artisan.copyFromFactoryToApp(["CService", "controller_service"], service, controllersPath);
         return $.exit();
     },
     "make:middleware"(args) {
@@ -88,7 +88,7 @@ const Commands = {
             return logThis("Middleware name not defined!");
         }
         const middlewaresPath = PathHelper.resolve($.config.paths.middlewares);
-        artisan.copyFromFactoryToApp("middleware", middleware, middlewaresPath);
+        Artisan.copyFromFactoryToApp("middleware", middleware, middlewaresPath);
         return $.exit();
     },
     "make:model"(args) {
@@ -101,13 +101,13 @@ const Commands = {
             table = _.snakeCase(name);
         }
         if (artisanConfig.singleModelName) {
-            name = artisan.singular(name);
+            name = Artisan.singular(name);
         }
         if (artisanConfig.pluralizeModelTable) {
-            table = artisan.pluralize(table);
+            table = Artisan.pluralize(table);
         }
         const modelPath = $.path.models();
-        artisan.copyFromFactoryToApp("model", name, modelPath, { name, table });
+        Artisan.copyFromFactoryToApp("model", name, modelPath, { name, table });
         $.exit();
     },
     "make:view"(args) {
@@ -163,4 +163,4 @@ const Commands = {
         return $.exit();
     },
 };
-module.exports = Commands;
+module.exports = { Commands, Artisan };

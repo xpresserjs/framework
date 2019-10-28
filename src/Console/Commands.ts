@@ -7,14 +7,14 @@ import os = require("os");
 import fs = require("fs");
 import shellJs = require("shelljs");
 
-import artisan = require("../Functions/artisan.fn");
+import Artisan = require("../Functions/artisan.fn");
 
 const artisanConfig = $.config.artisan;
 import colors = require("../Objects/consoleColors.obj");
 import PathHelper = require("../Helpers/Path");
 
-const logThis = artisan.logThis;
-const logThisAndExit = artisan.logThisAndExit;
+const logThis = Artisan.logThis;
+const logThisAndExit = Artisan.logThisAndExit;
 
 /**
  * Remove slash at the end of str passed
@@ -50,7 +50,7 @@ const Commands = {
         }
 
         const jobsPath = $.path.backend("jobs");
-        artisan.copyFromFactoryToApp("job", job, jobsPath, {name: job, command}, false);
+        Artisan.copyFromFactoryToApp("job", job, jobsPath, {name: job, command}, false);
 
         return $.exit();
     },
@@ -60,7 +60,7 @@ const Commands = {
         const namespace = args[1];
 
         const eventsPath = $.path.events();
-        artisan.copyFromFactoryToApp("event", name, eventsPath, {name, namespace}, false);
+        Artisan.copyFromFactoryToApp("event", name, eventsPath, {name, namespace}, false);
 
         return $.exit();
     },
@@ -73,7 +73,7 @@ const Commands = {
         }
 
         const controllersPath = removeSlashAtEnd($.path.controllers());
-        artisan.copyFromFactoryToApp("controller", controller, controllersPath);
+        Artisan.copyFromFactoryToApp("controller", controller, controllersPath);
 
         return $.exit();
     },
@@ -85,7 +85,7 @@ const Commands = {
         }
 
         const controllersPath = removeSlashAtEnd($.path.controllers());
-        artisan.copyFromFactoryToApp(["controller", "controller_object"], controller, controllersPath);
+        Artisan.copyFromFactoryToApp(["controller", "controller_object"], controller, controllersPath);
 
         return $.exit();
     },
@@ -97,7 +97,7 @@ const Commands = {
         }
 
         const controllersPath = removeSlashAtEnd($.path.controllers());
-        artisan.copyFromFactoryToApp(["controller", "controller_with_services"], controller, controllersPath);
+        Artisan.copyFromFactoryToApp(["controller", "controller_with_services"], controller, controllersPath);
 
         return $.exit();
     },
@@ -110,7 +110,7 @@ const Commands = {
         }
 
         const controllersPath = removeSlashAtEnd($.path.controllers("services"));
-        artisan.copyFromFactoryToApp(["CService", "controller_service"], service, controllersPath);
+        Artisan.copyFromFactoryToApp(["CService", "controller_service"], service, controllersPath);
 
         return $.exit();
     },
@@ -122,7 +122,7 @@ const Commands = {
         }
 
         const middlewaresPath = PathHelper.resolve($.config.paths.middlewares);
-        artisan.copyFromFactoryToApp("middleware", middleware, middlewaresPath);
+        Artisan.copyFromFactoryToApp("middleware", middleware, middlewaresPath);
 
         return $.exit();
     },
@@ -140,15 +140,15 @@ const Commands = {
         }
 
         if (artisanConfig.singleModelName) {
-            name = artisan.singular(name);
+            name = Artisan.singular(name);
         }
 
         if (artisanConfig.pluralizeModelTable) {
-            table = artisan.pluralize(table);
+            table = Artisan.pluralize(table);
         }
 
         const modelPath = $.path.models();
-        artisan.copyFromFactoryToApp("model", name, modelPath, {name, table});
+        Artisan.copyFromFactoryToApp("model", name, modelPath, {name, table});
 
         $.exit();
     },
@@ -221,4 +221,4 @@ const Commands = {
     },
 };
 
-export = Commands;
+export = {Commands, Artisan};
