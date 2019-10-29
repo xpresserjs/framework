@@ -201,7 +201,7 @@ class RouterEngine {
                         nameFromController = nameFromController.split("@");
                         nameFromController = nameFromController[nameFromController.length - 1];
                     }
-                    route.name = nameFromController;
+                    route.name = _.snakeCase(nameFromController);
                     nameWasGenerated = true;
                 }
             }
