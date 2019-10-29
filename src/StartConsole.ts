@@ -21,7 +21,7 @@ if (typeof argCommand === "undefined") {
 }
 
 // Load Plugin CLi Extensions
-const PluginData = $.engineData.get("PluginEngine:namespaces");
+const PluginData = $.engineData.get("PluginEngine:namespaces", {});
 const plugins = Object.keys(PluginData);
 
 for (const plugin of plugins) {
