@@ -274,9 +274,17 @@ class ControllerEngine {
             }
         }
 
+        if (typeof errorHandler !== "function") {
+            errorHandler = () => false;
+        }
+
         return async (req: XpresserHttp.Request, res: XpresserHttp.Response) => {
+            const http = new RequestEngine(req, res, undefined, route);
             // Log Time if `DebugControllerAction` is true
             let timeLogKey = "";
+            const mockErrorHandler = (...args) => {
+                return errorHandler(http, ...args);
+            };
 
             if (DebugControllerAction) {
                 timeLogKey = req.method.toUpperCase() + " - " + req.url;
@@ -284,7 +292,6 @@ class ControllerEngine {
             }
 
             // Get `x` from RequestEngine
-            const x = new RequestEngine(req, res, undefined, route);
 
             try {
                 // Run static boot method if found in controller
@@ -292,9 +299,9 @@ class ControllerEngine {
 
                 if (typeof controller.boot === "function") {
                     try {
-                        boot = controller.boot(x, errorHandler);
+                        boot = controller.boot(http, mockErrorHandler);
                     } catch (e) {
-                        const error = new ErrorEngine(x);
+                        const error = new ErrorEngine(http);
                         return error.view({
                             error: {
                                 // tslint:disable-next-line:max-line-length
@@ -317,14 +324,14 @@ class ControllerEngine {
                         const typeOfControllerMethod = typeof useController[method];
 
                         if (typeof method === "function") {
-                            $return = method(x, boot, errorHandler);
+                            $return = method(http, boot, mockErrorHandler);
                         } else if (typeof method === "string") {
                             if (typeOfControllerMethod === "function") {
-                                $return = useController[method](x, boot, errorHandler);
+                                $return = useController[method](http, boot, mockErrorHandler);
                             } else if (typeOfControllerMethod === "object") {
                                 const processArgs = handlerArguments();
                                 processArgs.unshift(boot);
-                                processArgs.unshift(x);
+                                processArgs.unshift(http);
                                 // @ts-ignore
                                 $return = await ProcessServices(...processArgs);
                             }
@@ -347,7 +354,7 @@ class ControllerEngine {
                             }
                         }
                     } catch (e) {
-                        const error = new ErrorEngine(x);
+                        const error = new ErrorEngine(http);
                         return error.view({
                             error: {
                                 // tslint:disable-next-line:max-line-length
