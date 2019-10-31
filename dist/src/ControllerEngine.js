@@ -154,6 +154,7 @@ class ControllerEngine {
         const controllerIsObject = typeof controller === "object";
         const controllerIsService = controller instanceof ControllerService;
         const $handlerArguments = [];
+        let errorHandler = null;
         const handlerArguments = () => _.clone($handlerArguments);
         // If controller is an instance of handler then get the handler.
         if (controllerIsObject && typeof method === "string") {
@@ -161,10 +162,10 @@ class ControllerEngine {
                 controller = controller.getClone();
             }
             controllerName = controller.name || controllerName;
+            errorHandler = controller.e || null;
             if (controller.hasOwnProperty(method) && typeof controller[method] === "object") {
                 const actions = controller[method];
                 const config = controller.__extend__ || { services: {} };
-                let errorHandler = controller.e || null;
                 if (actions.hasOwnProperty("e")) {
                     errorHandler = actions.e;
                     delete actions.e;
@@ -247,19 +248,19 @@ class ControllerEngine {
             }
             // Get `x` from RequestEngine
             const x = new RequestEngine(req, res, undefined, route);
-            const error = new ErrorEngine(x);
             try {
                 // Run static boot method if found in controller
                 let boot = {};
                 if (typeof controller.boot === "function") {
                     try {
-                        boot = controller.boot(x);
+                        boot = controller.boot(x, errorHandler);
                     }
                     catch (e) {
+                        const error = new ErrorEngine(x);
                         return error.view({
                             error: {
                                 // tslint:disable-next-line:max-line-length
-                                message: `Error in Controller:  <code>${controllerName}</code>, Method: <code>${m}</code>`,
+                                message: `Error in Controller Boot Method:  <code>${controllerName}</code>`,
                                 log: e.stack,
                             },
                         });
@@ -274,11 +275,11 @@ class ControllerEngine {
                         let $return;
                         const typeOfControllerMethod = typeof useController[method];
                         if (typeof method === "function") {
-                            $return = method(x, boot);
+                            $return = method(x, boot, errorHandler);
                         }
                         else if (typeof method === "string") {
                             if (typeOfControllerMethod === "function") {
-                                $return = useController[method](x, boot);
+                                $return = useController[method](x, boot, errorHandler);
                             }
                             else if (typeOfControllerMethod === "object") {
                                 const processArgs = handlerArguments();
@@ -305,6 +306,7 @@ class ControllerEngine {
                         }
                     }
                     catch (e) {
+                        const error = new ErrorEngine(x);
                         return error.view({
                             error: {
                                 // tslint:disable-next-line:max-line-length
