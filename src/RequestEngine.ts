@@ -167,8 +167,7 @@ class RequestEngine {
 
         d.data = data;
 
-        this.res.status(status).send(d);
-        return this.res.end();
+        return this.res.status(status).json(d);
     }
 
     /**
@@ -181,12 +180,24 @@ class RequestEngine {
     }
 
     /**
-     * Say something to your front end!
+     * Say something true to your front end!
      * @param {string} message
      * @param {boolean} proceed
      * @param {number} status
      */
     public sayToApi(message, proceed = true, status = 200) {
+        return this.toApi({
+            __say: message,
+        }, proceed, status);
+    }
+
+    /**
+     * Say some error to your front end!
+     * @param {string} message
+     * @param {boolean} proceed
+     * @param {number} status
+     */
+    public sayToApiFalse(message, proceed = false, status = 200) {
         return this.toApi({
             __say: message,
         }, proceed, status);
