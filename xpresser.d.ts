@@ -1,4 +1,5 @@
 import ObjectValidatorPro = require("object-validator-pro");
+import ObjectCollection = require("object-collection");
 import UseEngine = require("./src/UseEngine");
 import DB = require("./src/Database/Db");
 import {Server} from "net";
@@ -10,7 +11,7 @@ import {XpresserController} from "./types/http";
 
 /*--- Declare Types ---*/
 type XpresserRouter = import("@xpresser/router");
-type ObjectCollection = import("object-collection");
+// type ObjectCollection = import("object-collection");
 type TodoFunction = (next?: any) => any;
 
 /*--- End Declare Types ---*/
@@ -300,7 +301,7 @@ declare interface Xpresser {
      * Return new instance of object collection.
      * @param [obj]
      */
-    objectCollection(obj?: object): ObjectCollection;
+    objectCollection(obj?: object | any[]): ObjectCollection;
 
     /**
      * .Env File Reader Helper

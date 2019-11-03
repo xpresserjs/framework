@@ -5,10 +5,11 @@ import MiddlewareEngine = require("./MiddlewareEngine");
 import ControllerService = require("./Controllers/ControllerService");
 import ProcessServices = require("./Controllers/ProcessServices");
 
+import ObjectCollection from "object-collection";
 import {ServerResponse} from "http";
 
 import {XpresserHttp} from "../types/http";
-import {ObjectCollection, Xpresser} from "../xpresser";
+import {Xpresser} from "../xpresser";
 
 declare let _: any;
 declare let $: Xpresser;

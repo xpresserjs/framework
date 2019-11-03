@@ -1,6 +1,7 @@
 import RequestEngine = require("../RequestEngine");
-import {Xpresser, ObjectCollection} from "../../xpresser";
+import {Xpresser} from "../../xpresser";
 import PathHelper = require("../Helpers/Path");
+import ObjectCollection from "object-collection";
 
 declare let $: Xpresser;
 
