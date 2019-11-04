@@ -1,11 +1,11 @@
 import FS = require("fs");
 
 import Path = require("../Helpers/Path");
-import {Xpresser} from "../../xpresser";
+import {DollarSign} from "../../xpresser";
 
 const packageName: string = "xpresser";
 
-declare let $: Xpresser;
+declare let $: DollarSign;
 
 const paths = $.config.paths;
 const baseFiles = paths.base + "/";

@@ -1,12 +1,14 @@
-import {Xpresser} from "../../xpresser";
-import {XpresserHttp} from "../../types/http";
-import {ServerResponse} from "http";
 import ControllerServiceError = require("./ControllerServiceError");
 
-declare const $: Xpresser;
+// Import Types
+import {DollarSign} from "../../xpresser";
+import {Http} from "../../types/http";
+import {ServerResponse} from "http";
+
+declare const $: DollarSign;
 
 export = async (
-    x: XpresserHttp.Engine,
+    x: Http.Request,
     boot: any,
     requestServices: any,
     config: {

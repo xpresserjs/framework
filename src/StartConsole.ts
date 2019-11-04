@@ -1,10 +1,10 @@
 import fs = require("fs");
 import Console = require("./Console/Commands");
-import {Xpresser} from "../xpresser";
+import {DollarSign} from "../xpresser";
 
 const {Commands, Artisan} = Console;
 
-declare let $: Xpresser;
+declare let $: DollarSign;
 
 // Get Command Arguments
 const args: any[] = process.argv.splice(3);

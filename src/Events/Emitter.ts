@@ -1,7 +1,7 @@
 // Imported Immediately after events are registered.
 import events = require("events");
-import {Xpresser} from "../../xpresser";
-declare const $: Xpresser;
+import {DollarSign} from "../../xpresser";
+declare const $: DollarSign;
 
 export = (DefinedEvents: object) => {
     const EventEmitter = new events.EventEmitter();

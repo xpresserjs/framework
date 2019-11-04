@@ -2,9 +2,9 @@ import fs = require("fs");
 import RouterEngine = require("../RouterEngine");
 
 import Path = require("../Helpers/Path");
-import {Xpresser} from "../../xpresser";
+import {DollarSign} from "../../xpresser";
 
-declare let $: Xpresser;
+declare let $: DollarSign;
 
 $.routerEngine = RouterEngine;
 const RouteFile = Path.resolve($.config.paths.routesFile);

@@ -1,11 +1,11 @@
 import MiddlewareEngine = require("./MiddlewareEngine");
 import XpresserRouter = require("@xpresser/router/index");
-import {Xpresser} from "../xpresser";
+import {DollarSign} from "../xpresser";
 
 const AllRoutesKey = "RouterEngine:allRoutes";
 
 declare let _: any;
-declare let $: Xpresser;
+declare let $: DollarSign;
 
 const NameToRoute = {};
 const ProcessedRoutes = [];

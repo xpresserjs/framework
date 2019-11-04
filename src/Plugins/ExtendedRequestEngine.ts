@@ -1,9 +1,9 @@
 import RequestEngine = require("../RequestEngine");
-import {Xpresser} from "../../xpresser";
+import {DollarSign} from "../../xpresser";
 import PathHelper = require("../Helpers/Path");
 import ObjectCollection from "object-collection";
 
-declare let $: Xpresser;
+declare let $: DollarSign;
 
 let ExtendedRequestEngine = RequestEngine;
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});

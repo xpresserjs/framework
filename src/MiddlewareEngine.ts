@@ -1,7 +1,7 @@
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
-import {Xpresser} from "../xpresser";
+import {DollarSign} from "../xpresser";
 
-declare let $: Xpresser;
+declare let $: DollarSign;
 declare let _: any;
 
 /**

@@ -1,8 +1,8 @@
 import fs = require("fs");
 import fse = require("fs-extra");
-import {Xpresser} from "../xpresser";
+import {DollarSign} from "../xpresser";
 
-declare const $: Xpresser;
+declare const $: DollarSign;
 
 $.file = {
     /**

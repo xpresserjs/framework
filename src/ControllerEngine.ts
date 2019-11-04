@@ -8,11 +8,11 @@ import ProcessServices = require("./Controllers/ProcessServices");
 import ObjectCollection from "object-collection";
 import {ServerResponse} from "http";
 
-import {XpresserHttp} from "../types/http";
-import {Xpresser} from "../xpresser";
+import {Http} from "../types/http";
+import {DollarSign} from "../xpresser";
 
 declare let _: any;
-declare let $: Xpresser;
+declare let $: DollarSign;
 
 /**
  * AutoLoad Controller Services.
@@ -91,7 +91,6 @@ class ControllerEngine {
 
         const middlewareKeys = Object.keys($middleware);
         const middlewares = [];
-
 
         for (let i = 0; i < middlewareKeys.length; i++) {
             let middleware = middlewareKeys[i];
@@ -190,7 +189,6 @@ class ControllerEngine {
                 const actions = controller[method];
                 const config = controller.__extend__ || {services: {}};
 
-
                 if (actions.hasOwnProperty("e")) {
                     errorHandler = actions.e;
                     delete actions.e;
@@ -279,7 +277,7 @@ class ControllerEngine {
             errorHandler = () => false;
         }
 
-        return async (req: XpresserHttp.Request, res: XpresserHttp.Response) => {
+        return async (req: Http.Request, res: Http.Response) => {
             const http = new RequestEngine(req, res, undefined, route);
             // Log Time if `DebugControllerAction` is true
             let timeLogKey = "";
@@ -425,18 +423,19 @@ const Controller = (route, method = null) => {
 
     let controllerMiddleware: any;
     if ($controller && route !== undefined) {
-        if ($controller instanceof ControllerService) {
-            const ctrl = $controller.controller;
-            if (typeof ctrl.middlewares === "function") {
-                controllerMiddleware = ctrl.middlewares({use});
+        const isControllerService = $controller instanceof ControllerService;
+        if (isControllerService || isObjectController) {
+
+            const ctrl = isControllerService ? $controller.controller : $controller;
+            if (typeof ctrl.middleware === "function") {
+                controllerMiddleware = ctrl.middleware({use});
             } else if (typeof ctrl.middlewares === "object") {
                 controllerMiddleware = ctrl.middlewares;
             }
-        } else if (typeof $controller.middleware === "function" || typeof $controller.middlewares === "function") {
+        } else if (typeof $controller.middleware === "function") {
             controllerMiddleware = $controller.middleware({use});
         }
     }
-
 
     let middlewares = [];
     if (controllerMiddleware) {

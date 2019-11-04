@@ -1,28 +1,28 @@
 import ejs = require("ejs");
 import fs = require("fs");
-import express = require("express");
 
-import {XpresserHttp} from "../types/http";
+import {Http} from "../types/http";
 import requestHelpers = require("./Functions/request.fn");
 import ObjectCollection = require("object-collection");
-import {Xpresser} from "../xpresser";
+import {DollarSign} from "../xpresser";
+import {Helpers} from "../types/helpers";
 
 declare let _: any;
-declare let $: Xpresser;
+declare let $: DollarSign;
 
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
 const sessionStartOnBoot = $.$config.get("session.startOnBoot", false);
 
 class RequestEngine {
-    public req: XpresserHttp.Request;
-    public res: express.Response;
+    public req: Http.Request;
+    public res: Http.Response;
 
     public params: any;
     public locals: ObjectCollection;
 
     public bothData: any;
     public session: any;
-    public fn: XpresserHelpers.FN;
+    public fn: Helpers.FN;
     public customRenderer: () => string;
     public route: {
         name: string,
@@ -41,7 +41,7 @@ class RequestEngine {
      * @param {*} next
      * @param route
      */
-    constructor(req: XpresserHttp.Request, res: express.Response, next?: () => void, route?: any) {
+    constructor(req: Http.Request, res: Http.Response, next?: () => void, route?: any) {
         this.res = res;
         this.req = req;
 

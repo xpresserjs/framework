@@ -1,7 +1,7 @@
 import knex = require("knex");
-import {Xpresser} from "../../xpresser";
+import {DollarSign} from "../../xpresser";
 
-declare let $: Xpresser;
+declare let $: DollarSign;
 
 class DB {
     public knex: knex;

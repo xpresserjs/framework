@@ -3,10 +3,10 @@ import moment = require("moment");
 
 const {Model} = require("objection");
 import ModelQueryBuilder = require("./Database/ModelQueryBuilder");
-import {Xpresser} from "../xpresser";
+import {DollarSign} from "../xpresser";
 
 declare let _: any;
-declare let $: Xpresser;
+declare let $: DollarSign;
 
 if ($.config.database.startOnBoot) {
     Model.knex($.db.knex);

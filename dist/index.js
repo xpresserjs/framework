@@ -31,7 +31,7 @@ const { Config, Options } = Configurations;
  * @constructor
  */
 const XpresserInit = (AppConfig, AppOptions) => {
-    // Set Xpresser Global Var: $
+    // Set DollarSign Global Var: $
     const $ = {};
     $.exit = (...args) => {
         return process.exit(...args);
@@ -72,7 +72,7 @@ const XpresserInit = (AppConfig, AppOptions) => {
     $.on = {};
     // Set ObjectCollection
     $.objectCollection = (obj) => new ObjectCollection(obj);
-    // Set $ (Xpresser) && _ (lodash) to globals.
+    // Set $ (DollarSign) && _ (lodash) to globals.
     // @ts-ignore
     global.$ = $;
     // @ts-ignore
@@ -88,12 +88,12 @@ const XpresserInit = (AppConfig, AppOptions) => {
     $.$config = $.objectCollection($.config);
     /**
      * Set $.options
-     * @type XpresserOptions
+     * @type Options
      */
     $.options = AppOptions;
     /**
      * Engine Data serves as the store
-     * for all data store by Xpresser files/components
+     * for all data stored by Xpresser files/components
      */
     const DataInMemory = {};
     $.engineData = $.objectCollection(DataInMemory);

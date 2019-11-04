@@ -1,9 +1,9 @@
 import fs = require("fs");
 import moment = require("moment");
 import PathHelper = require("../Helpers/Path");
-import {Xpresser} from "../../xpresser";
+import {DollarSign} from "../../xpresser";
 
-declare let $: Xpresser;
+declare let $: DollarSign;
 declare let _: any;
 
 const PluginLockDataPath: string = $.path.jsonConfigs("plugins-lock.json");

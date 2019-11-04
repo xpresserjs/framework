@@ -3,7 +3,7 @@
 /// <reference path="./types/helpers.d.ts" />
 /// <reference path="./xpresser.d.ts" />
 
-import {Xpresser, XpresserOptions} from "./xpresser";
+import {DollarSign, Options} from "./xpresser";
 
 /**
  * Initialize Xpresser
@@ -11,6 +11,6 @@ import {Xpresser, XpresserOptions} from "./xpresser";
  * @param options - Options
  * @constructor
  */
-declare function XpresserInit(config: object | string, options?: XpresserOptions): Xpresser;
+declare function XpresserInit(config: object | string, options?: Options): DollarSign;
 
 export = XpresserInit;

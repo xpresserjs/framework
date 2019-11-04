@@ -2,9 +2,9 @@ import fs = require("fs");
 import Path = require("../Helpers/Path");
 
 import ObjectCollection = require("object-collection/index");
-import {Xpresser} from "../../xpresser";
+import {DollarSign} from "../../xpresser";
 
-declare const $: Xpresser;
+declare const $: DollarSign;
 const DefinedEvents: object = {};
 const EventsPath = $.path.events();
 

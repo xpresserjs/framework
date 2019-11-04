@@ -1,10 +1,9 @@
 import BuildUrl = require("build-url");
-import fs = require("fs");
 import moment = require("moment");
-import {Xpresser} from "../xpresser";
+import {DollarSign} from "../xpresser";
 
 declare const _;
-declare const $: Xpresser;
+declare const $: DollarSign;
 
 /* HELPER FUNCTIONS */
 const helpers = {

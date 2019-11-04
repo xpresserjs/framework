@@ -1,5 +1,6 @@
+
 const {resolve} = require("path");
-import {XpresserController, XpresserHttp} from "../types/http";
+
 import Path = require("./Helpers/Path");
 import loadOnEvents = require("./Events/OnEventsLoader");
 
@@ -7,10 +8,13 @@ import express = require("express");
 
 import {createServer as createHttpServer} from "http";
 import {createServer as createHttpsServer} from "https";
-import {Xpresser} from "../xpresser";
+
+// Types
+import {Http, Controller as XpresserController} from "../types/http";
+import {DollarSign} from "../xpresser";
 
 declare let _: any;
-declare let $: Xpresser;
+declare let $: DollarSign;
 
 const paths = $.$config.get("paths");
 
@@ -156,7 +160,7 @@ if (useSession) {
 
 // Set local AppData
 $.app.locals.appData = {};
-$.app.use(async (req: XpresserHttp.Request, res: XpresserHttp.Response, next?: () => void) => {
+$.app.use(async (req: Http.Request, res: Http.Response, next?: () => void) => {
 
     // Convert Empty Strings to Null
     if (req.body && Object.keys(req.body).length) {
@@ -210,7 +214,7 @@ const afterExpressInit = (next: () => void) => {
     // Not Tinker? Require Controllers
     if (!$.options.isTinker) {
         $.controller = require("./Classes/Controller");
-        $.handler = (controller: XpresserController.ControllerObject) => new ControllerService(controller);
+        $.handler = (controller: XpresserController.Object) => new ControllerService(controller);
     }
 
     const $globalMiddlewareWrapper = ($middlewareFn: any) => {
@@ -266,7 +270,7 @@ const startHttpServer = (onSuccess = undefined, onError = undefined) => {
     /**
      * Add 404 error
      */
-    $.app.use((req: XpresserHttp.Request, res: XpresserHttp.Response, next: () => void) => {
+    $.app.use((req: Http.Request, res: Http.Response, next: () => void) => {
         const x = new RequestEngine(req, res, next);
         const error = new (require("./ErrorEngine"))(x);
         res.status(404);

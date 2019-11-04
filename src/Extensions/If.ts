@@ -1,6 +1,6 @@
-import {Xpresser} from "../../xpresser";
+import {DollarSign} from "../../xpresser";
 
-declare const $: Xpresser;
+declare const $: DollarSign;
 
 // ---------- IF Helpers ----------
 $.ifConsole = (isConsole: () => void, notConsole: () => void): void => {

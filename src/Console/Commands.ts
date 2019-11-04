@@ -1,6 +1,6 @@
-import {Xpresser} from "../../xpresser";
+import {DollarSign} from "../../xpresser";
 
-declare const $: Xpresser;
+declare const $: DollarSign;
 declare const _: any;
 
 import os = require("os");

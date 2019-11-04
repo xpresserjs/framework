@@ -1,7 +1,7 @@
 "use strict";
 /**
  * {{name}}
- * @type {ControllerService}
+ * @type {Xpresser.Controller.Object}
  */
 const {{name}} = {
     // Controller Name
@@ -9,7 +9,7 @@ const {{name}} = {
     // Controller Middlewares
     middlewares: {},
     // Controller Default Service Error Handler.
-    e: (x, error) => x.send({error}),
+    e: (http, error) => x.send({error}),
 
 
     /**

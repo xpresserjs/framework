@@ -1,9 +1,9 @@
 import Validator = require("object-validator-pro");
-import {Xpresser} from "../../xpresser";
+import {DollarSign} from "../../xpresser";
 
 const ovp = new Validator();
 
-declare let $: Xpresser;
+declare let $: DollarSign;
 
 ovp.setEventHandler({
     onEachError: (param, msg) => {

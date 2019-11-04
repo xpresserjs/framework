@@ -20,7 +20,7 @@ import XpresserRouter = require("@xpresser/router");
 
 // Import default config.
 import Configurations = require("./config");
-import {Xpresser, XpresserOptions} from "./xpresser";
+import {DollarSign, Options} from "./xpresser";
 
 // Use Lodash from ObjectCollection
 const _ = ObjectCollection._;
@@ -36,10 +36,10 @@ const {Config, Options} = Configurations;
  * @param AppOptions
  * @constructor
  */
-const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions): Xpresser => {
+const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarSign => {
 
-    // Set Xpresser Global Var: $
-    const $ = {} as Xpresser;
+    // Set DollarSign Global Var: $
+    const $ = {} as DollarSign;
 
     $.exit = (...args) => {
         return process.exit(...args);
@@ -88,7 +88,7 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
     // Set ObjectCollection
     $.objectCollection = (obj?) => new ObjectCollection(obj);
 
-    // Set $ (Xpresser) && _ (lodash) to globals.
+    // Set $ (DollarSign) && _ (lodash) to globals.
     // @ts-ignore
     global.$ = $;
     // @ts-ignore
@@ -108,13 +108,13 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: XpresserOptions):
 
     /**
      * Set $.options
-     * @type XpresserOptions
+     * @type Options
      */
     $.options = AppOptions;
 
     /**
      * Engine Data serves as the store
-     * for all data store by Xpresser files/components
+     * for all data stored by Xpresser files/components
      */
     const DataInMemory = {};
     $.engineData = $.objectCollection(DataInMemory);

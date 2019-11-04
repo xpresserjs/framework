@@ -5,9 +5,9 @@ import Pluralise = require("pluralize");
 import colors = require("../Objects/consoleColors.obj");
 
 import PathHelper = require("../Helpers/Path");
-import {Xpresser} from "../../xpresser";
+import {DollarSign} from "../../xpresser";
 
-declare let $: Xpresser;
+declare let $: DollarSign;
 declare let _: any;
 
 const isTinker = typeof $.options.isTinker === "boolean" && $.options.isTinker;

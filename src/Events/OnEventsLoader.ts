@@ -1,6 +1,6 @@
-import {Xpresser} from "../../xpresser";
+import {DollarSign} from "../../xpresser";
 
-declare const $: Xpresser;
+declare const $: DollarSign;
 
 const loadOnEvents = (name: string, done: () => void) => {
     const key = `on.${name}`;

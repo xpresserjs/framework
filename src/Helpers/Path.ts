@@ -1,8 +1,8 @@
 import PATH = require("path");
 import fs = require("fs");
-import {Xpresser} from "../../xpresser";
+import {DollarSign} from "../../xpresser";
 
-declare let $: Xpresser;
+declare let $: DollarSign;
 
 const pathHelpers = {
     base: "base://",

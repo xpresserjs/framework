@@ -6,12 +6,12 @@
  */
 import PathHelper = require("./Helpers/Path");
 import StringHelper = require("./Helpers/String");
-import {Xpresser, XpresserJsonSettings} from "../xpresser";
+import {DollarSign, JsonSettings} from "../xpresser";
 import ModelEngine = require("./ModelEngine");
 
-declare let $: Xpresser;
+declare let $: DollarSign;
 
-let Use = {} as XpresserJsonSettings.Use;
+let Use = {} as JsonSettings.Use;
 const PluginNamespaces = $.engineData.get("PluginEngine:namespaces", {});
 
 /**

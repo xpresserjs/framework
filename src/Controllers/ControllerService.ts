@@ -1,11 +1,10 @@
-import {XpresserController} from "../../types/http";
+import {Controller} from "../../types/http";
 
 declare const _: any;
 
 const $defaultController = {
     services: {},
 };
-
 
 class ControllerService {
     public controller: {
@@ -15,7 +14,7 @@ class ControllerService {
         },
     };
 
-    constructor($controller: XpresserController.ControllerObject | any) {
+    constructor($controller: Controller.Object | any) {
         if ($controller) {
             this.controller = $controller;
             this.controller.__extend__ = $defaultController;
@@ -28,7 +27,7 @@ class ControllerService {
      * Register controller services.
      * @param $services - object of services.
      */
-    public services($services: XpresserController.Services): this {
+    public services($services: Controller.Services): this {
         this.controller.__extend__.services = Object.assign(this.controller.__extend__.services || {}, $services);
         return this;
     }

@@ -8,8 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const http_1 = require("http");
 const ControllerServiceError = require("./ControllerServiceError");
+const http_1 = require("http");
 module.exports = (x, boot, requestServices, config, error) => __awaiter(void 0, void 0, void 0, function* () {
     const DefinedServices = config.services || {};
     const completedServices = {};
