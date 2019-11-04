@@ -9,7 +9,7 @@ const {{name}} = $.handler({
     // Controller Middlewares
     middlewares: {},
     // Controller Default Service Error Handler.
-    e: (x, error) => x.send({error}),
+    e: (http, error) => http.send({error}),
 
 
     /**

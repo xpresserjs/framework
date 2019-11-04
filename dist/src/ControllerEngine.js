@@ -371,11 +371,14 @@ const Controller = (route, method = null) => {
     if ($controller && route !== undefined) {
         if ($controller instanceof ControllerService) {
             const ctrl = $controller.controller;
-            if (typeof ctrl.middleware === "function") {
-                controllerMiddleware = ctrl.middleware({ use });
+            if (typeof ctrl.middlewares === "function") {
+                controllerMiddleware = ctrl.middlewares({ use });
+            }
+            else if (typeof ctrl.middlewares === "object") {
+                controllerMiddleware = ctrl.middlewares;
             }
         }
-        else if (typeof $controller.middleware === "function") {
+        else if (typeof $controller.middleware === "function" || typeof $controller.middlewares === "function") {
             controllerMiddleware = $controller.middleware({ use });
         }
     }
