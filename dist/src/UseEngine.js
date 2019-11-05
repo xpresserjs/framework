@@ -155,8 +155,8 @@ class UseEngine {
             const $pluginNamespace = $splitController[0];
             if (PluginNamespaces.hasOwnProperty($pluginNamespace)) {
                 const plugin = PluginNamespaces[$pluginNamespace];
-                if (plugin.hasOwnProperty("controllers")) {
-                    return plugin.controllers + "/" + $splitController[1];
+                if (plugin.paths && plugin.paths.hasOwnProperty("controllers")) {
+                    return plugin.paths.controllers + "/" + $splitController[1];
                 }
             }
         }
