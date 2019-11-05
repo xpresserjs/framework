@@ -142,11 +142,15 @@ const Commands = {
     },
     "migrate"(args) {
         const $config = $.$config.get("database.config", {});
+        const env = $.$config.get("env", "development");
         if (!Object.keys($config).length) {
             return $.logErrorAndExit("Database config not found.");
         }
+        if ($config.migrations && !$config.migrations.stub) {
+            $config.migrations.stub = $.path.engine("Factory/migration.js");
+        }
         const data = JSON.stringify({
-            [$.$config.get("env", "development")]: $config,
+            [env]: $config,
         }, null, 2);
         const fileContent = `module.exports = ${data};`;
         const filePath = $.path.base("knexfile.js");

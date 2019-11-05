@@ -45,11 +45,14 @@ class ProcessManager {
     }
 
     addCommandProcess($file, $command) {
-        let processes = this.currentData();
-        let $commands = $command.trim().split(' ');
-        let [, ...$afterFirstCommand] = $commands;
-        let $process = spawn($commands[0], $afterFirstCommand);
+        const processes = this.currentData();
+        const $commands = $command.trim().split(' ');
+        const [, ...$afterFirstCommand] = $commands;
+        const $process = spawn($commands[0], $afterFirstCommand);
 
+        $process.stdout.on('data', (msg) => {
+            console.log(msg.toString().trim())
+        });
 
         if (typeof processes[$file] === "undefined") {
             processes[$file] = []
