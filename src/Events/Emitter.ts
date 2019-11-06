@@ -21,7 +21,7 @@ export = (DefinedEvents: object) => {
             }
 
             if (typeof eventResult !== "undefined" && $payload.hasOwnProperty("callback")) {
-                if ($.fn.isPromise(eventResult)) {
+                if ($.utils.isPromise(eventResult)) {
                     eventResult
                         .then((result) => $payload.callback(result))
                         .catch((e) => $.logError(e));

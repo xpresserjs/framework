@@ -81,6 +81,10 @@ declare namespace Xpresser {
         /**
          * Xpresser Ex Util holder.
          * changed to $.utils
+         *
+         * @deprecated
+         * ToBeRemoved:v2.0
+         * Use $.utils instead
          */
         fn: Helpers.Util;
 

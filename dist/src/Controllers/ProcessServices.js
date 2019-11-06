@@ -31,7 +31,7 @@ module.exports = (x, boot, requestServices, config, error) => __awaiter(void 0, 
         else {
             serviceResult = DefinedServices[serviceKey](requestServices[serviceKey], options);
         }
-        if ($.fn.isPromise(serviceResult)) {
+        if ($.utils.isPromise(serviceResult)) {
             serviceResult = yield serviceResult;
         }
         if (serviceResult instanceof http_1.ServerResponse) {

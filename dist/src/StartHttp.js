@@ -43,13 +43,13 @@ $.app.use(express.static(paths.public, {
         const responseConfig = $.config.response;
         if ($.config.response.cacheFiles) {
             if (responseConfig.cacheIfMatch.length) {
-                const match = $.fn.findWordsInString(path, responseConfig.cacheIfMatch);
+                const match = $.utils.findWordsInString(path, responseConfig.cacheIfMatch);
                 if (match !== null && match.length) {
                     res.set("Cache-Control", "max-age=" + responseConfig.cacheMaxAge);
                 }
             }
             else if (responseConfig.cacheFileExtensions.length) {
-                const files = $.fn.extArrayRegex(responseConfig.cacheFileExtensions);
+                const files = $.utils.extArrayRegex(responseConfig.cacheFileExtensions);
                 const match = path.match(files);
                 if (match !== null && match.length) {
                     res.set("Cache-Control", "max-age=" + responseConfig.cacheMaxAge);

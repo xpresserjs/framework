@@ -48,7 +48,7 @@ $.app.use(
             const responseConfig = $.config.response;
             if ($.config.response.cacheFiles) {
                 if (responseConfig.cacheIfMatch.length) {
-                    const match = $.fn.findWordsInString(
+                    const match = $.utils.findWordsInString(
                         path,
                         responseConfig.cacheIfMatch,
                     );
@@ -56,7 +56,7 @@ $.app.use(
                         res.set("Cache-Control", "max-age=" + responseConfig.cacheMaxAge);
                     }
                 } else if (responseConfig.cacheFileExtensions.length) {
-                    const files = $.fn.extArrayRegex(responseConfig.cacheFileExtensions) as RegExp;
+                    const files = $.utils.extArrayRegex(responseConfig.cacheFileExtensions) as RegExp;
                     const match = path.match(files);
 
                     if (match !== null && match.length) {

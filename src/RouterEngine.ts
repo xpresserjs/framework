@@ -228,8 +228,8 @@ class RouterEngine {
             }
 
             if (parent.path) {
-                const routePath = $.fn.regExpSourceOrString(route.path);
-                const parentPath = $.fn.regExpSourceOrString(parent.path);
+                const routePath = $.utils.regExpSourceOrString(route.path);
+                const parentPath = $.utils.regExpSourceOrString(parent.path);
 
                 if (route.path instanceof RegExp || parent.path instanceof RegExp) {
 

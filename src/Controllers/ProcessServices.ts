@@ -44,7 +44,7 @@ export = async (
             );
         }
 
-        if ($.fn.isPromise(serviceResult)) {
+        if ($.utils.isPromise(serviceResult)) {
             serviceResult = await serviceResult;
         }
 

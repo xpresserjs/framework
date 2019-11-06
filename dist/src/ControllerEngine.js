@@ -271,7 +271,7 @@ class ControllerEngine {
                             },
                         });
                     }
-                    if ($.fn.isPromise(boot)) {
+                    if ($.utils.isPromise(boot)) {
                         // noinspection ES6RedundantAwait
                         boot = yield boot;
                     }
@@ -295,7 +295,7 @@ class ControllerEngine {
                                 $return = yield ProcessServices(...processArgs);
                             }
                         }
-                        if ($.fn.isPromise($return)) {
+                        if ($.utils.isPromise($return)) {
                             $return = yield $return;
                         }
                         if (DebugControllerAction) {
