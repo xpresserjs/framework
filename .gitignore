@@ -7,3 +7,4 @@ dist/test.js
 storage
 .sqlite
 yarn.lock
+/test.js

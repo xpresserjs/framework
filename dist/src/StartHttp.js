@@ -102,8 +102,10 @@ if (useCors) {
 const useBodyParser = $.$config.get("server.use.bodyParser", true);
 if (useBodyParser) {
     const bodyParser = require("body-parser");
-    $.app.use(bodyParser.json());
-    $.app.use(bodyParser.urlencoded({ extended: true }));
+    const bodyParserJsonConfig = $.$config.get("packages.body-parser.json");
+    const bodyParserUrlEncodedConfig = $.$config.get("packages.body-parser.urlencoded", { extended: true });
+    $.app.use(bodyParser.json(bodyParserJsonConfig));
+    $.app.use(bodyParser.urlencoded(bodyParserUrlEncodedConfig));
 }
 /**
  * Session handled by knex
@@ -111,9 +113,9 @@ if (useBodyParser) {
  */
 const useSession = $.$config.get("session.startOnBoot", false);
 if (useSession) {
+    const session = require("express-session");
     const connectSessionKnex = require("connect-session-knex");
     const flash = require("express-flash");
-    const session = require("express-session");
     const KnexSessionStore = connectSessionKnex(session);
     const knexSessionConfig = {
         client: "sqlite3",
