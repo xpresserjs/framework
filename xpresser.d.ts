@@ -1,3 +1,4 @@
+import express = require("express");
 import ObjectValidatorPro = require("object-validator-pro");
 import ObjectCollection = require("object-collection");
 import XpresserRouter from "@xpresser/router/index";
@@ -77,11 +78,20 @@ declare namespace Xpresser {
         // Router Helper
         router: XpresserRouter;
 
-        // Register Functions
-        fn: Helpers.FN;
+        /**
+         * Xpresser Ex Util holder.
+         * changed to $.utils
+         */
+        fn: Helpers.Util;
+
+        /**
+         * Utils holder.
+         * changed from $.fn to $.utils
+         */
+        utils: Helpers.Util;
 
         // Express App
-        app: import("express").Application;
+        app: express.Application;
 
         // Server Variables
         http: Server;

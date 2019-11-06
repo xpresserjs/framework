@@ -25,7 +25,7 @@ const pluginPathExistOrExit = (plugin, pluginPath, file) => {
         file = pluginPath + "/" + file;
     }
     else {
-        // $file is ResolvedPath
+        // file is ResolvedPath
         file = ResolvedRoutePath;
     }
     // If file or folder does not exists throw error.

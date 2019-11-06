@@ -37,34 +37,71 @@ declare namespace Xpresser {
             timeAgo(date: any, format?: string): string;
         }
 
-        interface FN {
-            extArrayRegex($array: any[]): RegExp;
+        interface Util {
+            extArrayRegex(arr: any[]): (RegExp | string);
 
-            findWordsInString($string: string, $keywords: string[]): string;
+            /**
+             * Find words in string
+             * @param str
+             * @param $keywords
+             */
+            findWordsInString(str: string, $keywords: string[]): RegExpMatchArray;
 
-            isPromise($promise: any): boolean;
+            /**
+             * Check if value is a promise
+             * @param value - value to check
+             * @return boolean
+             */
+            isPromise(value: any): boolean;
 
+            /**
+             * Check if value is an AsyncFunction
+             * @param value - value  to check
+             * @return boolean
+             */
+            isAsyncFn(value: any): boolean;
+
+            /**
+             * Generate Random string.
+             * @param length - Length of string to generate.
+             */
             randomStr(length: number): string;
 
-            regExpSourceOrString($string: string | RegExp): string;
+            /**
+             * Get Source of RegExp or return string if not regex
+             * @param str
+             */
+            regExpSourceOrString(str: string | RegExp): string;
         }
 
         interface Base64 {
             /**
              * Encode Str or Object
              * If Object, we will Json.stringify it
+             * @param str
              */
             encode(str: string | object): string;
 
             /**
              * Decode encoded text.
+             * @param str
              */
             decode(str: string): string;
 
             /**
              * Decode To Json Object
+             * @param str
+             * @deprecated
+             * Use decodeToObject instead.
+             * ToBeRemoved:v2.0
              */
             decodeToJson(str: string): object;
+
+            /**
+             * Decode To Json Object
+             * @param str
+             */
+            decodeToObject(str: string): object;
         }
     }
 }

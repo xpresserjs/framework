@@ -22,7 +22,7 @@ class RequestEngine {
 
     public bothData: any;
     public session: any;
-    public fn: Helpers.FN;
+    public fn: Helpers.Util;
     public customRenderer: () => string;
     public route: {
         name: string,

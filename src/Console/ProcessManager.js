@@ -44,7 +44,7 @@ class ProcessManager {
         return content.length ? JSON.parse(content) : {}
     }
 
-    addCommandProcess($file, $command) {
+    addCommandProcess(file, $command) {
         const processes = this.currentData();
         const $commands = $command.trim().split(' ');
         const [, ...$afterFirstCommand] = $commands;
@@ -54,11 +54,11 @@ class ProcessManager {
             console.log(msg.toString().trim())
         });
 
-        if (typeof processes[$file] === "undefined") {
-            processes[$file] = []
+        if (typeof processes[file] === "undefined") {
+            processes[file] = []
         }
 
-        processes[$file].push({
+        processes[file].push({
             id: $process.pid,
             command: $command
         });
@@ -67,16 +67,16 @@ class ProcessManager {
         fs.writeFileSync(this.database(), JSON.stringify(processes, null, 2))
     }
 
-    removeCommandProcess($file, $process) {
+    removeCommandProcess(file, $process) {
         $process = Number($process);
         let processes = this.currentData();
 
-        if (processes[$file] !== undefined) {
-            let processData = processes[$file];
+        if (processes[file] !== undefined) {
+            let processData = processes[file];
             for (let i = 0; i < processData.length; i++) {
                 const processDataItem = processData[i];
                 if (processDataItem.id === $process) {
-                    processes[$file].splice(i, 1);
+                    processes[file].splice(i, 1);
                     break;
                 }
             }
@@ -85,11 +85,11 @@ class ProcessManager {
         fs.writeFileSync(this.database(), JSON.stringify(processes, null, 2))
     }
 
-    endProcess($file, $process) {
+    endProcess(file, $process) {
         let processes = this.currentData();
 
-        if (processes[$file] !== undefined) {
-            let processData = processes[$file];
+        if (processes[file] !== undefined) {
+            let processData = processes[file];
 
             for (let i = 0; i < processData.length; i++) {
                 let processDataItem = processData[i];
@@ -98,7 +98,7 @@ class ProcessManager {
 
                     ps.kill(processDataItem.id, (err) => {
                         if (!err) {
-                            self.removeCommandProcess($file, processDataItem.id);
+                            self.removeCommandProcess(file, processDataItem.id);
                         }
                     });
 

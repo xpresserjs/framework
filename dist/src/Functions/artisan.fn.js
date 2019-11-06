@@ -38,8 +38,8 @@ module.exports = {
             $.logAndExit();
         }
     },
-    factory($file, $data = {}) {
-        const source = fs.readFileSync($file).toString();
+    factory(file, $data = {}) {
+        const source = fs.readFileSync(file).toString();
         const template = Handlebars.compile(source);
         return template($data);
     },

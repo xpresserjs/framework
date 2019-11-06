@@ -26,5 +26,8 @@ $.use = UseEngine;
 // Helpers
 const Helpers = require("./helpers");
 $.helpers = Helpers;
-// Assign Functions to $.fn
-$.fn = require("./Functions/x.fn");
+const Utils = require("./Functions/util.fn");
+// Assign Utils to $.fn
+$.fn = Utils;
+// Assign Utils to $.fn
+$.utils = Utils;

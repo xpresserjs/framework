@@ -30,7 +30,7 @@ const pluginPathExistOrExit = (plugin: string, pluginPath: string, file: string)
         // Merge plugin base path to file.
         file = pluginPath + "/" + file;
     } else {
-        // $file is ResolvedPath
+        // file is ResolvedPath
         file = ResolvedRoutePath;
     }
 

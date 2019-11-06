@@ -56,7 +56,7 @@ $.app.use(
                         res.set("Cache-Control", "max-age=" + responseConfig.cacheMaxAge);
                     }
                 } else if (responseConfig.cacheFileExtensions.length) {
-                    const files: RegExp = $.fn.extArrayRegex(responseConfig.cacheFileExtensions);
+                    const files = $.fn.extArrayRegex(responseConfig.cacheFileExtensions) as RegExp;
                     const match = path.match(files);
 
                     if (match !== null && match.length) {

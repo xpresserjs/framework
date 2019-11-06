@@ -33,6 +33,9 @@ $.use = UseEngine;
 import Helpers = require("./helpers");
 
 $.helpers = Helpers;
+import Utils = require("./Functions/util.fn");
 
-// Assign Functions to $.fn
-$.fn = require("./Functions/x.fn");
+// Assign Utils to $.fn
+$.fn = Utils;
+// Assign Utils to $.fn
+$.utils = Utils;

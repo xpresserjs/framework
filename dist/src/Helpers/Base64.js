@@ -21,8 +21,19 @@ const Base64 = {
     /**
      * Decode To Json Object
      * @param str
+     * @deprecated
+     * Use decodeToObject instead.
+     * ToBeRemoved:v2.0
      */
     decodeToJson(str = "") {
+        str = Base64.decode(str);
+        return JSON.parse(str);
+    },
+    /**
+     * Decode To Json Object
+     * @param str
+     */
+    decodeToObject(str = "") {
         str = Base64.decode(str);
         return JSON.parse(str);
     },
