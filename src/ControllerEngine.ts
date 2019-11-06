@@ -79,6 +79,9 @@ if (AutoLoadPaths && $.file.isDirectory(ServicesFolder)) {
     }
 }
 
+const isProduction = $.$config.get("env") === "production";
+const DebugControllerAction = !isProduction && $.config.debug.enabled && $.config.debug.controllerAction;
+
 // @ts-check
 class ControllerEngine {
 
@@ -167,7 +170,6 @@ class ControllerEngine {
      */
     public processController(route: any, controller: any | ControllerService, method, isPath?: boolean) {
 
-        const DebugControllerAction = !$.config.debug.enabled ? false : $.config.debug.controllerAction;
         let controllerName = (typeof controller.name === "string") ? controller.name : "__UNNAMED_CONTROLLER__";
         const controllerIsObject = typeof controller === "object";
         const controllerIsService = controller instanceof ControllerService;
