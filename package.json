@@ -25,7 +25,7 @@
     "express-flash": "^0.0.2",
     "express-session": "1.17.0",
     "fs-extra": "^8.1.0",
-    "handlebars": "4.5.1",
+    "handlebars": "4.5.2",
     "helmet": "3.21.2",
     "knex": "0.20.1",
     "mkdirp": "^0.5.1",
