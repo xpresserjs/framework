@@ -56,7 +56,7 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
     if (typeof AppConfig === "string") {
         const configFile = AppConfig;
         AppConfig = {};
-        if (fs.existsSync(configFile) && fs.lstatSync(configFile).isFile()) {
+        if (fs.existsSync(configFile)) {
 
             try {
                 AppConfig = require(configFile);
@@ -82,15 +82,18 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
     AppConfig = _.merge(Config, AppConfig);
     AppOptions = _.merge(Options, AppOptions);
 
-    // Initialize $.on for the first time.
+    // Initialize {$.on} for the first time.
     // @ts-ignore
     $.on = {};
-    // Set ObjectCollection
+
+    // Set {$.objectCollection}
     $.objectCollection = (obj?) => new ObjectCollection(obj);
 
-    // Set $ (DollarSign) && _ (lodash) to globals.
+    // Expose {$}(DollarSign) to globals.
     // @ts-ignore
     global.$ = $;
+
+    // Expose {_}(lodash) to globals.
     // @ts-ignore
     global._ = _;
 
