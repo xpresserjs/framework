@@ -32,7 +32,7 @@
     "moment": "^2.24.0",
     "object-collection": "^1.0.19",
     "object-validator-pro": "^1.0.19",
-    "objection": "^1.6.11",
+    "objection": "^2.0.1",
     "pluralize": "^8.0.0",
     "ps-node": "^0.1.6",
     "shelljs": "^0.8.3",
