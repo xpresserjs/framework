@@ -45,7 +45,7 @@ const XpresserInit = (AppConfig, AppOptions) => {
     if (typeof AppConfig === "string") {
         const configFile = AppConfig;
         AppConfig = {};
-        if (fs.existsSync(configFile) && fs.lstatSync(configFile).isFile()) {
+        if (fs.existsSync(configFile)) {
             try {
                 AppConfig = require(configFile);
                 // tslint:disable-next-line:max-line-length
@@ -67,14 +67,15 @@ const XpresserInit = (AppConfig, AppOptions) => {
     // Merge Config with DefaultConfig to replace missing values.
     AppConfig = _.merge(Config, AppConfig);
     AppOptions = _.merge(Options, AppOptions);
-    // Initialize $.on for the first time.
+    // Initialize {$.on} for the first time.
     // @ts-ignore
     $.on = {};
-    // Set ObjectCollection
+    // Set {$.objectCollection}
     $.objectCollection = (obj) => new ObjectCollection(obj);
-    // Set $ (DollarSign) && _ (lodash) to globals.
+    // Expose {$}(DollarSign) to globals.
     // @ts-ignore
     global.$ = $;
+    // Expose {_}(lodash) to globals.
     // @ts-ignore
     global._ = _;
     // Require $.file
