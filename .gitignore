@@ -2,7 +2,7 @@ node_modules
 .idea
 .env
 test.ts
-test
+tests/*
 dist/test.js
 storage
 .sqlite

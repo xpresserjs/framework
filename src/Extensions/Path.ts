@@ -108,7 +108,7 @@ $.path = {
     },
 };
 
-const XpresserEngine = $.path.engine("backend");
+const XpresserEngine = $.path.engine(".engine");
 if (!FS.existsSync(XpresserEngine)) {
 
     $.logError("Xpresser Engine not found in folder:");
