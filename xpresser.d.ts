@@ -1,7 +1,7 @@
 import express = require("express");
 import ObjectValidatorPro = require("object-validator-pro");
 import ObjectCollection = require("object-collection");
-import XpresserRouter from "@xpresser/router/index";
+import XpresserRouter from "@xpresser/router";
 import UseEngine = require("./src/UseEngine");
 import DB = require("./src/Database/Db");
 import {Server} from "net";
@@ -10,12 +10,12 @@ import RouterEngine = require("./src/RouterEngine");
 import Controller = require("./src/Classes/Controller");
 import {Controller as HttpController} from "./types/http";
 import {Helpers} from "./types/helpers";
-
 /*--- Declare Types ---*/
 type TodoFunction = (next?: any) => any;
 
 /*--- End Declare Types ---*/
 declare namespace Xpresser {
+    type Router = XpresserRouter;
     interface Options {
         autoBoot?: boolean;
         isConsole?: boolean;
