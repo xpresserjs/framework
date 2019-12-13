@@ -15,8 +15,6 @@ type TodoFunction = (next?: any) => any;
 
 /*--- End Declare Types ---*/
 declare namespace Xpresser {
-    type Router = XpresserRouter;
-
     interface Options {
         autoBoot?: boolean;
         isConsole?: boolean;
