@@ -16,7 +16,6 @@ try {
 // Import system required libraries
 import fs = require("fs");
 import ObjectCollection = require("object-collection");
-import XpresserRouter = require("@xpresser/router");
 
 // Import default config.
 import Configurations = require("./config");
@@ -162,6 +161,7 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
      * Add Router
      * @type {XpresserRouter}
      */
+    const XpresserRouter = require("@xpresser/router");
     $.router = new XpresserRouter();
 
     /**

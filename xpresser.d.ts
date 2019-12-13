@@ -1,7 +1,7 @@
 import express = require("express");
 import ObjectValidatorPro = require("object-validator-pro");
 import ObjectCollection = require("object-collection");
-import XpresserRouter from "@xpresser/router";
+import XpresserRouter = require("@xpresser/router");
 import UseEngine = require("./src/UseEngine");
 import DB = require("./src/Database/Db");
 import {Server} from "net";
@@ -16,6 +16,7 @@ type TodoFunction = (next?: any) => any;
 /*--- End Declare Types ---*/
 declare namespace Xpresser {
     type Router = XpresserRouter;
+
     interface Options {
         autoBoot?: boolean;
         isConsole?: boolean;
@@ -51,6 +52,7 @@ declare namespace Xpresser {
          */
         emitWithCallback(event: string, args: any[], callback: (eventResult) => any): void;
     }
+
 
     interface DollarSign {
         config: any;
