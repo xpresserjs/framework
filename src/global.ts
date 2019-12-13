@@ -2,7 +2,7 @@ import moment = require("moment");
 import Base64 = require("./Helpers/Base64");
 import {DollarSign} from "../xpresser";
 
-declare let $: DollarSign;
+declare const $: DollarSign;
 
 global.moment = moment;
 

@@ -1,7 +1,7 @@
 import PathHelper = require("./Helpers/Path");
 import {DollarSign} from "../xpresser";
 
-declare let $: DollarSign;
+declare const $: DollarSign;
 
 /**
  * PluginRoutes -  holds all plugins routes.

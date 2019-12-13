@@ -3,7 +3,7 @@ import {DollarSign} from "../../xpresser";
 
 const ovp = new Validator();
 
-declare let $: DollarSign;
+declare const $: DollarSign;
 
 ovp.setEventHandler({
     onEachError: (param, msg) => {

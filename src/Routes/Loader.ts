@@ -4,7 +4,7 @@ import RouterEngine = require("../RouterEngine");
 import Path = require("../Helpers/Path");
 import {DollarSign} from "../../xpresser";
 
-declare let $: DollarSign;
+declare const $: DollarSign;
 
 $.routerEngine = RouterEngine;
 const RouteFile = Path.resolve($.config.paths.routesFile);
@@ -23,7 +23,6 @@ if (fs.existsSync(RouteFile)) {
 // Import plugin routes
 const PluginData = $.engineData.get("PluginEngineData");
 const PluginRoutes = PluginData.routes;
-
 
 for (let i = 0; i < PluginRoutes.length; i++) {
     const pluginRoute = PluginRoutes[i];

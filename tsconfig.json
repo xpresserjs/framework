@@ -16,10 +16,11 @@
     "es2016"
   ],
   "files": [
-    "./types/node.d.ts",
     "./global.d.ts",
-    "./types/helpers.d.ts",
-    "./types/http.d.ts"
+    "./xpresser/index.d.ts",
+    "./xpresser/node.d.ts",
+    "./xpresser/helpers.d.ts",
+    "./xpresser/http.d.ts"
   ],
   "include": [
     "./**/*.ts"

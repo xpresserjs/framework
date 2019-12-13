@@ -2,7 +2,7 @@ import {Model, QueryBuilder} from "objection";
 
 const excludeAttrFromCount = ["order", "columns", "limit", "offset"];
 
-declare let _: any;
+declare const _: any;
 
 class ModelQueryBuilder extends QueryBuilder<Model> {
 

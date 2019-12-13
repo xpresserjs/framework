@@ -1,14 +1,14 @@
 import ejs = require("ejs");
 import fs = require("fs");
 
-import {Http} from "../types/http";
+import {Http} from "../xpresser/http";
 import requestHelpers = require("./Functions/request.fn");
 import ObjectCollection = require("object-collection");
 import {DollarSign} from "../xpresser";
-import {Helpers} from "../types/helpers";
+import {Helpers} from "../xpresser/helpers";
 
-declare let _: any;
-declare let $: DollarSign;
+declare const _: any;
+declare const $: DollarSign;
 
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
 const sessionStartOnBoot = $.$config.get("session.startOnBoot", false);

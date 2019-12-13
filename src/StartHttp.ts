@@ -10,11 +10,11 @@ import {createServer as createHttpServer} from "http";
 import {createServer as createHttpsServer} from "https";
 
 // Types
-import {Http, Controller as XpresserController} from "../types/http";
+import {Http, Controller as XpresserController} from "../xpresser/http";
 import {DollarSign} from "../xpresser";
 
-declare let _: any;
-declare let $: DollarSign;
+declare const _: any;
+declare const $: DollarSign;
 
 const paths = $.$config.get("paths");
 

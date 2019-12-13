@@ -1,8 +1,9 @@
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
-import {DollarSign} from "../xpresser";
+import { DollarSign } from "../xpresser";
 
-declare let $: DollarSign;
-declare let _: any;
+declare const $: DollarSign;
+declare const _: any;
+
 
 /**
  * @param {string} middlewarePath

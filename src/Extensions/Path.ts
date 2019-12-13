@@ -5,7 +5,7 @@ import {DollarSign} from "../../xpresser";
 
 const packageName: string = "xpresser";
 
-declare let $: DollarSign;
+declare const $: DollarSign;
 
 const paths = $.config.paths;
 const baseFiles = paths.base + "/";

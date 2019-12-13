@@ -5,8 +5,8 @@ const {Model} = require("objection");
 import ModelQueryBuilder = require("./Database/ModelQueryBuilder");
 import {DollarSign} from "../xpresser";
 
-declare let _: any;
-declare let $: DollarSign;
+declare const _: any;
+declare const $: DollarSign;
 
 if ($.config.database.startOnBoot) {
     Model.knex($.db.knex);

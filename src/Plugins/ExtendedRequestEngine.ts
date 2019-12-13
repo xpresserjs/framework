@@ -3,7 +3,7 @@ import {DollarSign} from "../../xpresser";
 import PathHelper = require("../Helpers/Path");
 import ObjectCollection from "object-collection";
 
-declare let $: DollarSign;
+declare const $: DollarSign;
 
 let ExtendedRequestEngine = RequestEngine;
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});

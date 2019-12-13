@@ -1,7 +1,7 @@
 import knex = require("knex");
 import {DollarSign} from "../../xpresser";
 
-declare let $: DollarSign;
+declare const $: DollarSign;
 
 class DB {
     public knex: knex;

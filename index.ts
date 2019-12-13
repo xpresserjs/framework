@@ -157,11 +157,11 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
     // Require Global
     require("./src/global");
 
+    const XpresserRouter = require("@xpresser/router");
     /**
      * Add Router
      * @type {XpresserRouter}
      */
-    const XpresserRouter = require("@xpresser/router");
     $.router = new XpresserRouter();
 
     /**

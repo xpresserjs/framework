@@ -1,7 +1,7 @@
-/// <reference path="./types/node.d.ts" />
-/// <reference path="./types/http.d.ts" />
-/// <reference path="./types/helpers.d.ts" />
-/// <reference path="./xpresser.d.ts" />
+/// <reference path="./xpresser/node.d.ts" />
+/// <reference path="./xpresser/http.d.ts" />
+/// <reference path="./xpresser/helpers.d.ts" />
+/// <reference path="./xpresser/index.d.ts" />
 
 import {DollarSign, Options} from "./xpresser";
 
@@ -12,5 +12,3 @@ import {DollarSign, Options} from "./xpresser";
  * @constructor
  */
 declare function XpresserInit(config: object | string, options?: Options): DollarSign;
-
-export = XpresserInit;

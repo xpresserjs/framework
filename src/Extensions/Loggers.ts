@@ -1,7 +1,7 @@
 const chalk = require("chalk");
 import {DollarSign} from "../../xpresser";
 
-declare let $: DollarSign;
+declare const $: DollarSign;
 declare let _;
 
 /**

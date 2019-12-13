@@ -4,8 +4,8 @@ import {DollarSign} from "../xpresser";
 
 const AllRoutesKey = "RouterEngine:allRoutes";
 
-declare let _: any;
-declare let $: DollarSign;
+declare const _: any;
+declare const $: DollarSign;
 
 const NameToRoute = {};
 const ProcessedRoutes = [];

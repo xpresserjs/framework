@@ -4,7 +4,7 @@ import {DollarSign} from "../xpresser";
 
 const {Commands, Artisan} = Console;
 
-declare let $: DollarSign;
+declare const $: DollarSign;
 
 // Get Command Arguments
 const args: any[] = process.argv.splice(3);

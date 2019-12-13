@@ -8,11 +8,11 @@ import ProcessServices = require("./Controllers/ProcessServices");
 import ObjectCollection from "object-collection";
 import {ServerResponse} from "http";
 
-import {Http} from "../types/http";
+import {Http} from "../xpresser/http";
 import {DollarSign} from "../xpresser";
 
-declare let _: any;
-declare let $: DollarSign;
+declare const _: any;
+declare const $: DollarSign;
 
 /**
  * AutoLoad Controller Services.

@@ -7,8 +7,8 @@ import colors = require("../Objects/consoleColors.obj");
 import PathHelper = require("../Helpers/Path");
 import {DollarSign} from "../../xpresser";
 
-declare let $: DollarSign;
-declare let _: any;
+declare const $: DollarSign;
+declare const _: any;
 
 const isTinker = typeof $.options.isTinker === "boolean" && $.options.isTinker;
 const FILE_EXTENSION = $.$config.get("project.fileExtension", ".js");

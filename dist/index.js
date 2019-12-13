@@ -122,11 +122,11 @@ const XpresserInit = (AppConfig, AppOptions) => {
     }
     // Require Global
     require("./src/global");
+    const XpresserRouter = require("@xpresser/router");
     /**
      * Add Router
      * @type {XpresserRouter}
      */
-    const XpresserRouter = require("@xpresser/router");
     $.router = new XpresserRouter();
     /**
      * Require Model Engine

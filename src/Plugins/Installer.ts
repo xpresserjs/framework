@@ -3,8 +3,8 @@ import moment = require("moment");
 import PathHelper = require("../Helpers/Path");
 import {DollarSign} from "../../xpresser";
 
-declare let $: DollarSign;
-declare let _: any;
+declare const $: DollarSign;
+declare const _: any;
 
 const PluginLockDataPath: string = $.path.jsonConfigs("plugins-lock.json");
 let PluginLockData = $.objectCollection();

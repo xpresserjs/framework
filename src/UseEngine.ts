@@ -9,7 +9,7 @@ import StringHelper = require("./Helpers/String");
 import {DollarSign, JsonSettings} from "../xpresser";
 import ModelEngine = require("./ModelEngine");
 
-declare let $: DollarSign;
+declare const $: DollarSign;
 
 let Use = {} as JsonSettings.Use;
 const PluginNamespaces = $.engineData.get("PluginEngine:namespaces", {});
