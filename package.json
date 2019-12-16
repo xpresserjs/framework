@@ -1,6 +1,6 @@
 {
   "name": "xpresser",
-  "version": "0.1.82",
+  "version": "0.1.77",
   "description": "Xpresser Framework for building scalable apps.",
   "main": "dist/main.js",
   "types": "global.d.ts",
