@@ -18,7 +18,7 @@ import fs = require("fs");
 import ObjectCollection = require("object-collection");
 
 // Import default config.
-import Configurations from "./config";
+import Configurations = require("./config");
 import { DollarSign, Options } from "./types";
 
 // Use Lodash from ObjectCollection

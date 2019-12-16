@@ -32,6 +32,10 @@ const { Config, Options } = Configurations;
 const XpresserInit = (AppConfig, AppOptions) => {
     // Set DollarSign Global Var: $
     const $ = {};
+    /**
+     * Exit Function
+     * alias to nodejs process.exit
+     */
     $.exit = (...args) => {
         return process.exit(...args);
     };
