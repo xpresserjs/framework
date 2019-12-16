@@ -7,7 +7,7 @@
 /**
  * ---------- TYPE DEFINITIONS ----------
  *
- * @typedef {import("types/types").Router} Xpresser.Router
- * @typedef {import("types/types/http").Http} Xpresser.Http
- * @typedef {import("types/types/http").Controller} Xpresser.Controller
+ * @typedef {import("xpresser/types").Router} Xpresser.Router
+ * @typedef {import("xpresser/types/http").Http} Xpresser.Http
+ * @typedef {import("xpresser/types/http").Controller} Xpresser.Controller
  */

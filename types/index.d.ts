@@ -7,20 +7,22 @@
  *~ Otherwise, delete this declaration..
  */
 import {Helpers} from "./helpers";
+import {Server} from "net";
 import express = require("express");
-import ObjectCollection = require("object-collection/index");
+import ObjectCollection = require("object-collection");
 import DB = require("../src/Database/Db");
 import UseEngine = require("../src/UseEngine");
-import XpresserRouter = require("@xpresser/router/index");
-import {Server} from "net";
-import RouterEngine from "../src/RouterEngine";
-import ModelEngine from "../src/ModelEngine";
-import Controller from "../src/Classes/Controller";
+import XpresserRouter = require("@xpresser/router");
+import RouterEngine = require("../src/RouterEngine");
+import ModelEngine = require("../src/ModelEngine");
+import Controller = require("../src/Classes/Controller");
+
 import {Controller as HttpController} from "./http";
+
+type TodoFunction = (next?: any) => any;
 
 declare namespace Xpresser {
     export type Router = XpresserRouter;
-    type TodoFunction = (next?: any) => any;
 
     /**
      * Xpresser Options
