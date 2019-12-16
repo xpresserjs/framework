@@ -90,7 +90,7 @@ declare namespace Xpresser {
         helpers: Helpers.Main;
 
         // Router Helper
-        router: Router;
+        router: XpresserRouter;
 
         /**
          * Xpresser Ex Util holder.
