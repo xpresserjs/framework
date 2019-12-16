@@ -7,7 +7,7 @@
  *~ Otherwise, delete this declaration..
  */
 import {Helpers} from "./helpers";
-import {Server} from "net";
+import Net =  require("net");
 import express = require("express");
 import ObjectCollection = require("object-collection");
 import DB = require("../src/Database/Db");
@@ -112,8 +112,8 @@ declare namespace Xpresser {
         app: express.Application;
 
         // Server Variables
-        http: Server;
-        https: Server;
+        http: Net.Server;
+        https: Net.Server;
 
         // Model Engine
         model: typeof ModelEngine;

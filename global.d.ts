@@ -12,3 +12,5 @@ import {DollarSign, Options} from "./types";
  * @constructor
  */
 declare function XpresserInit(config: object | string, options?: Options): DollarSign;
+
+export = XpresserInit;
