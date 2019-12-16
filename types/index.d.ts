@@ -8,10 +8,10 @@
  */
 import {Helpers} from "./helpers";
 import express = require("express");
-import ObjectCollection = require("object-collection");
+import ObjectCollection = require("object-collection/index");
 import DB = require("../src/Database/Db");
 import UseEngine = require("../src/UseEngine");
-import XpresserRouter = require("@xpresser/router");
+import XpresserRouter = require("@xpresser/router/index");
 import {Server} from "net";
 import RouterEngine from "../src/RouterEngine";
 import ModelEngine from "../src/ModelEngine";
@@ -30,7 +30,6 @@ declare namespace Xpresser {
         isConsole?: boolean;
         isTinker?: boolean;
     }
-
 
     /**
      * Xpresser EventEmitter
