@@ -3,7 +3,7 @@ import moment = require("moment");
 
 const {Model} = require("objection");
 import ModelQueryBuilder = require("./Database/ModelQueryBuilder");
-import {DollarSign} from "../index";
+import {DollarSign} from "../types";
 
 declare const _: any;
 declare const $: DollarSign;

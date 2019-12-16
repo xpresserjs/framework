@@ -1,5 +1,5 @@
 import Validator = require("object-validator-pro");
-import {DollarSign} from "../../index";
+import {DollarSign} from "../../types";
 
 const ovp = new Validator();
 

@@ -5,7 +5,7 @@ import Pluralise = require("pluralize");
 import colors = require("../Objects/consoleColors.obj");
 
 import PathHelper = require("../Helpers/Path");
-import {DollarSign} from "../../index";
+import {DollarSign} from "../../types";
 
 declare const $: DollarSign;
 declare const _: any;

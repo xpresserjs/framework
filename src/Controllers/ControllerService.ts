@@ -1,4 +1,4 @@
-import {Controller} from "../../xpresser/http";
+import {Controller} from "../../types/http";
 
 declare const _: any;
 

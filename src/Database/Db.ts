@@ -1,5 +1,5 @@
 import knex = require("knex");
-import {DollarSign} from "../../index";
+import {DollarSign} from "../../types";
 
 declare const $: DollarSign;
 

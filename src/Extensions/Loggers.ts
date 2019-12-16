@@ -1,5 +1,5 @@
 const chalk = require("chalk");
-import {DollarSign} from "../../index";
+import {DollarSign} from "../../types";
 
 declare const $: DollarSign;
 declare let _;

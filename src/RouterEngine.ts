@@ -1,6 +1,6 @@
 import MiddlewareEngine = require("./MiddlewareEngine");
 import XpresserRouter = require("@xpresser/router/index");
-import {DollarSign} from "../index";
+import {DollarSign} from "../types";
 
 const AllRoutesKey = "RouterEngine:allRoutes";
 

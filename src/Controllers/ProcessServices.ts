@@ -1,8 +1,8 @@
 import ControllerServiceError = require("./ControllerServiceError");
 
 // Import Types
-import {DollarSign} from "../../index";
-import {Http} from "../../xpresser/http";
+import {DollarSign} from "../../types";
+import {Http} from "../../types/http";
 import {ServerResponse} from "http";
 
 declare const $: DollarSign;

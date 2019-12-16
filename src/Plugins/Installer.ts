@@ -1,7 +1,7 @@
 import fs = require("fs");
 import moment = require("moment");
 import PathHelper = require("../Helpers/Path");
-import {DollarSign} from "../../index";
+import {DollarSign} from "../../types";
 
 declare const $: DollarSign;
 declare const _: any;

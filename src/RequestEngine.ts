@@ -1,11 +1,11 @@
 import ejs = require("ejs");
 import fs = require("fs");
 
-import {Http} from "../xpresser/http";
+import {Http} from "../types/http";
 import requestHelpers = require("./Functions/request.fn");
 import ObjectCollection = require("object-collection");
-import {DollarSign} from "../index";
-import {Helpers} from "../xpresser/helpers";
+import {DollarSign} from "../types";
+import {Helpers} from "../types/helpers";
 
 declare const _: any;
 declare const $: DollarSign;

@@ -1,9 +1,9 @@
-/// <reference path="./xpresser/node.d.ts" />
-/// <reference path="./xpresser/http.d.ts" />
-/// <reference path="./xpresser/helpers.d.ts" />
-/// <reference path="./index.d.ts" />
+/// <reference path="./types/node.d.ts" />
+/// <reference path="./types/http.d.ts" />
+/// <reference path="./types/helpers.d.ts" />
+/// <reference path="./types/index.d.ts" />
 
-import {DollarSign, Options} from "./index";
+import {DollarSign, Options} from "./types";
 
 /**
  * Initialize Xpresser
