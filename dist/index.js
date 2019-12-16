@@ -15,6 +15,7 @@ catch (e) {
 // Import system required libraries
 const fs = require("fs");
 const ObjectCollection = require("object-collection");
+const XpresserRouter = require("@xpresser/router");
 // Import default config.
 const Configurations = require("./config");
 // Use Lodash from ObjectCollection
@@ -122,7 +123,6 @@ const XpresserInit = (AppConfig, AppOptions) => {
     }
     // Require Global
     require("./src/global");
-    const XpresserRouter = require("@xpresser/router");
     /**
      * Add Router
      * @type {XpresserRouter}
