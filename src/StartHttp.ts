@@ -1,4 +1,3 @@
-
 const {resolve} = require("path");
 
 import Path = require("./Helpers/Path");

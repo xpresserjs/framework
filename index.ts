@@ -18,8 +18,8 @@ import fs = require("fs");
 import ObjectCollection = require("object-collection");
 
 // Import default config.
-import Configurations = require("./config");
-import {DollarSign, Options} from "./types";
+import Configurations from "./config";
+import { DollarSign, Options } from "./types";
 
 // Use Lodash from ObjectCollection
 const _ = ObjectCollection._;
@@ -27,7 +27,7 @@ const _ = ObjectCollection._;
 /**
  * Get default Config and Options from Configurations
  */
-const {Config, Options} = Configurations;
+const { Config, Options } = Configurations;
 
 /**
  * Initialize Xpresser;
@@ -40,6 +40,10 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
     // Set DollarSign Global Var: $
     const $ = {} as DollarSign;
 
+    /**
+     * Exit Function
+     * alias to nodejs process.exit
+     */
     $.exit = (...args) => {
         return process.exit(...args);
     };
