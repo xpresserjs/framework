@@ -8,8 +8,8 @@ import ProcessServices = require("./Controllers/ProcessServices");
 import ObjectCollection from "object-collection";
 import {ServerResponse} from "http";
 
-import {Http} from "../xpresser/http";
-import {DollarSign} from "../xpresser";
+import {Http} from "../types/http";
+import {DollarSign} from "../types";
 
 declare const _: any;
 declare const $: DollarSign;

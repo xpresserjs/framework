@@ -2,7 +2,7 @@ import fs = require("fs");
 import Path = require("../Helpers/Path");
 
 import ObjectCollection = require("object-collection/index");
-import {DollarSign} from "../../xpresser";
+import {DollarSign} from "../../types";
 
 declare const $: DollarSign;
 const DefinedEvents: object = {};

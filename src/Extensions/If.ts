@@ -1,4 +1,4 @@
-import {DollarSign} from "../../xpresser";
+import {DollarSign} from "../../types";
 
 declare const $: DollarSign;
 

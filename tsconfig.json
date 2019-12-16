@@ -17,10 +17,10 @@
   ],
   "files": [
     "./global.d.ts",
-    "./xpresser/index.d.ts",
-    "./xpresser/node.d.ts",
-    "./xpresser/helpers.d.ts",
-    "./xpresser/http.d.ts"
+    "./types/index.d.ts",
+    "./types/node.d.ts",
+    "./types/helpers.d.ts",
+    "./types/http.d.ts"
   ],
   "include": [
     "./**/*.ts"

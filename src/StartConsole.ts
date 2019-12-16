@@ -1,6 +1,6 @@
 import fs = require("fs");
 import Console = require("./Console/Commands");
-import {DollarSign} from "../xpresser";
+import {DollarSign} from "../types";
 
 const {Commands, Artisan} = Console;
 

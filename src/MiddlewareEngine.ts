@@ -1,5 +1,5 @@
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
-import { DollarSign } from "../xpresser";
+import { DollarSign } from "../types";
 
 declare const $: DollarSign;
 declare const _: any;
