@@ -46,5 +46,12 @@
     "ts-node-dev": "^1.0.0-pre.43",
     "tslint": "^5.20.0",
     "typescript": "3.7.3"
-  }
+  },
+  "keywords": [
+    "xpresser",
+    "xjs",
+    "xjs-cli",
+    "framework",
+    "expressjs"
+  ]
 }
