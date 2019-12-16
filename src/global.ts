@@ -1,6 +1,6 @@
 import moment = require("moment");
 import Base64 = require("./Helpers/Base64");
-import {DollarSign} from "../xpresser";
+import {DollarSign} from "../index";
 
 declare const $: DollarSign;
 

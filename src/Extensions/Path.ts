@@ -1,7 +1,7 @@
 import FS = require("fs");
 
 import Path = require("../Helpers/Path");
-import {DollarSign} from "../../xpresser";
+import {DollarSign} from "../../index";
 
 const packageName: string = "xpresser";
 

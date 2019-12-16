@@ -2,7 +2,7 @@
   "name": "xpresser",
   "version": "0.1.76",
   "description": "Xpresser Framework for building scalable apps.",
-  "main": "dist/index.js",
+  "main": "dist/main.js",
   "types": "global.d.ts",
   "scripts": {
     "prod": "tsc",

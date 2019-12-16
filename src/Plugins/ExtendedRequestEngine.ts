@@ -1,5 +1,5 @@
 import RequestEngine = require("../RequestEngine");
-import {DollarSign} from "../../xpresser";
+import {DollarSign} from "../../index";
 import PathHelper = require("../Helpers/Path");
 import ObjectCollection from "object-collection";
 

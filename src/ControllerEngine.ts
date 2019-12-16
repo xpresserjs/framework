@@ -9,7 +9,7 @@ import ObjectCollection from "object-collection";
 import {ServerResponse} from "http";
 
 import {Http} from "../xpresser/http";
-import {DollarSign} from "../xpresser";
+import {DollarSign} from "../index";
 
 declare const _: any;
 declare const $: DollarSign;

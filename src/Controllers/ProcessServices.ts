@@ -1,7 +1,7 @@
 import ControllerServiceError = require("./ControllerServiceError");
 
 // Import Types
-import {DollarSign} from "../../xpresser";
+import {DollarSign} from "../../index";
 import {Http} from "../../xpresser/http";
 import {ServerResponse} from "http";
 

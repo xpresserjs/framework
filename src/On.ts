@@ -1,5 +1,5 @@
 /* On Applications Event Engine */
-import {DollarSign} from "../xpresser";
+import {DollarSign} from "../index";
 
 declare const $: DollarSign;
 

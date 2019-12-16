@@ -1,6 +1,6 @@
 import BuildUrl = require("build-url");
 import moment = require("moment");
-import {DollarSign} from "../xpresser";
+import {DollarSign} from "../index";
 
 declare const _;
 declare const $: DollarSign;

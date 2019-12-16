@@ -1,6 +1,6 @@
 // Imported Immediately after events are registered.
 import events = require("events");
-import {DollarSign} from "../../xpresser";
+import {DollarSign} from "../../index";
 declare const $: DollarSign;
 
 export = (DefinedEvents: object) => {

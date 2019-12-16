@@ -4,7 +4,7 @@ import fs = require("fs");
 import {Http} from "../xpresser/http";
 import requestHelpers = require("./Functions/request.fn");
 import ObjectCollection = require("object-collection");
-import {DollarSign} from "../xpresser";
+import {DollarSign} from "../index";
 import {Helpers} from "../xpresser/helpers";
 
 declare const _: any;

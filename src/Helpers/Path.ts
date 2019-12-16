@@ -1,6 +1,6 @@
 import PATH = require("path");
 import fs = require("fs");
-import {DollarSign} from "../../xpresser";
+import {DollarSign} from "../../index";
 
 declare const $: DollarSign;
 

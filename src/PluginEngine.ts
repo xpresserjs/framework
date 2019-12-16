@@ -1,5 +1,5 @@
 import PathHelper = require("./Helpers/Path");
-import {DollarSign} from "../xpresser";
+import {DollarSign} from "../index";
 
 declare const $: DollarSign;
 

@@ -19,7 +19,7 @@ import ObjectCollection = require("object-collection");
 
 // Import default config.
 import Configurations = require("./config");
-import {DollarSign, Options} from "./xpresser";
+import {DollarSign, Options} from "./index";
 
 // Use Lodash from ObjectCollection
 const _ = ObjectCollection._;

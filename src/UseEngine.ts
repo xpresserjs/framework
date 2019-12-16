@@ -6,7 +6,7 @@
  */
 import PathHelper = require("./Helpers/Path");
 import StringHelper = require("./Helpers/String");
-import {DollarSign, JsonSettings} from "../xpresser";
+import {DollarSign, JsonSettings} from "../index";
 import ModelEngine = require("./ModelEngine");
 
 declare const $: DollarSign;

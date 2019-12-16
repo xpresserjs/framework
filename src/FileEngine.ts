@@ -1,6 +1,6 @@
 import fs = require("fs");
 import fse = require("fs-extra");
-import {DollarSign} from "../xpresser";
+import {DollarSign} from "../index";
 
 declare const $: DollarSign;
 

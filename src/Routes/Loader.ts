@@ -2,7 +2,7 @@ import fs = require("fs");
 import RouterEngine = require("../RouterEngine");
 
 import Path = require("../Helpers/Path");
-import {DollarSign} from "../../xpresser";
+import {DollarSign} from "../../index";
 
 declare const $: DollarSign;
 
