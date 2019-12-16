@@ -2,7 +2,7 @@ const fs = require('fs');
 const dotenv = require("dotenv");
 
 /**
- * Cast True/False to booleans
+ * Cast True/False to booleans.
  * @param env
  * @returns {*}
  */
