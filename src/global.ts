@@ -21,14 +21,6 @@ if ($.config.database.startOnBoot) {
     $.db = undefined;
 }
 
-// Use Engine
-import UseEngine = require("./UseEngine");
-
-/**
- * @type {UseEngine}
- */
-$.use = UseEngine;
-
 // Helpers
 import Helpers = require("./helpers");
 

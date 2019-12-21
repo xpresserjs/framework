@@ -17,7 +17,6 @@ try {
 import fs = require("fs");
 import ObjectCollection = require("object-collection");
 import XpresserRouter = require("@xpresser/router");
-
 // Import default config.
 import Configurations = require("./config");
 import {DollarSign, Options} from "./types";
@@ -163,6 +162,11 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
             // Save to EngineData
             $.engineData.set("UseDotJson", $useDotJson);
         }
+
+        /**
+         * @type {UseEngine}
+         */
+        $.use = require("./UseEngine");
 
         /**
          * Add Router

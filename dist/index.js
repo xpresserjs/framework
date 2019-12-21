@@ -129,6 +129,10 @@ const XpresserInit = (AppConfig, AppOptions) => {
             $.engineData.set("UseDotJson", $useDotJson);
         }
         /**
+         * @type {UseEngine}
+         */
+        $.use = require("./UseEngine");
+        /**
          * Add Router
          * @type {XpresserRouter}
          */

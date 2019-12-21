@@ -17,12 +17,6 @@ if ($.config.database.startOnBoot) {
 else {
     $.db = undefined;
 }
-// Use Engine
-const UseEngine = require("./UseEngine");
-/**
- * @type {UseEngine}
- */
-$.use = UseEngine;
 // Helpers
 const Helpers = require("./helpers");
 $.helpers = Helpers;
