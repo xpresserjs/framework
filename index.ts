@@ -97,6 +97,9 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
     // @ts-ignore
     global._ = _;
 
+    /* ------------- $.on Events Loader ------------- */
+    require("./src/On");
+
     // Require $.file
     require("./src/FileEngine");
 
@@ -138,52 +141,52 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
     // Include Extensions
     require("./src/Extensions/Path");
     require("./src/Extensions/If");
-
-    // Require Plugin Engine and load plugins
-    const PluginEngine = require("./src/PluginEngine");
-    const PluginData = PluginEngine.loadPlugins();
-
-    $.engineData.set("PluginEngineData", PluginData);
-
-    const $useDotJson = $.objectCollection();
-    const $useDotJsonPath = $.path.jsonConfigs("use.json");
-
-    if ($.file.exists($useDotJsonPath)) {
-        $useDotJson.merge(require($useDotJsonPath));
-
-        // Save to EngineData
-        $.engineData.set("UseDotJson", $useDotJson);
-    }
-
-    // Require Global
-    require("./src/global");
-
-    /**
-     * Add Router
-     * @type {XpresserRouter}
-     */
-    $.router = new XpresserRouter();
-
-    /**
-     * Require Model Engine
-     * @type {ModelEngine}
-     */
-    $.model = require("./src/ModelEngine");
-
-    $.ifNotConsole(() => {
-        /**
-         * Load Registered Events
-         */
-        require("./src/Events/Loader");
-    });
-
-    /* ------------- $.on Events Loader ------------- */
-    require("./src/On");
-
+    // Get OnEvents Loader.
     const loadOnEvents = require("./src/Events/OnEventsLoader");
 
-    $.boot = () => {
-        const BOOT = () => {
+    function afterStartEvents() {
+        // Require Plugin Engine and load plugins
+        const PluginEngine = require("./src/PluginEngine");
+        const PluginData = PluginEngine.loadPlugins();
+
+        $.engineData.set("PluginEngineData", PluginData);
+
+        const $useDotJson = $.objectCollection();
+        const $useDotJsonPath = $.path.jsonConfigs("use.json");
+
+        if ($.file.exists($useDotJsonPath)) {
+            $useDotJson.merge(require($useDotJsonPath));
+
+            // Save to EngineData
+            $.engineData.set("UseDotJson", $useDotJson);
+        }
+
+        // Require Global
+        require("./src/global");
+
+        /**
+         * Add Router
+         * @type {XpresserRouter}
+         */
+        $.router = new XpresserRouter();
+
+        /**
+         * Require Model Engine
+         * @type {ModelEngine}
+         */
+        $.model = require("./src/ModelEngine");
+
+        $.ifNotConsole(() => {
+            /**
+             * Load Registered Events
+             */
+            require("./src/Events/Loader");
+        });
+
+        /**
+         * Load on.boot Events
+         */
+        loadOnEvents("boot", () => {
             /**
              * XjsCliConfig.require_only
              * This config is only used by xpresser cron.
@@ -196,14 +199,14 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
                     require("./src/StartHttp");
                 });
             }
-        };
+        });
+    }
 
+    $.boot = () => {
         /**
-         * Load on.boot Events
+         * Load on.start Events
          */
-
-        loadOnEvents("boot", BOOT);
-
+        return loadOnEvents("start", afterStartEvents);
     };
 
     /**

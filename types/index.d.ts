@@ -229,10 +229,18 @@ declare namespace Xpresser {
             events(): object;
 
             /**
+             * Add `on.start` middleware.
+             *
+             * This middleware will run when xpresser starts.
+             * They are the first in the cycle.
+             * @param todo
+             */
+            start(todo: TodoFunction | TodoFunction[]): void;
+
+            /**
              * Add `on.boot` middleware.
              *
              * This middleware will run when xpresser boots.
-             * They are the first in the cycle.
              * @param todo
              */
             boot(todo: TodoFunction | TodoFunction[]): void;

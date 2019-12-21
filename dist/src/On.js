@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const OnEvents = {
+    start: [],
     boot: [],
     expressInit: [],
     bootServer: [],
@@ -30,6 +31,9 @@ const AddToEvents = (name, todo) => {
 $.on = {
     events() {
         return OnEvents;
+    },
+    start(todo) {
+        return AddToEvents("start", todo);
     },
     boot(todo) {
         return AddToEvents("boot", todo);
