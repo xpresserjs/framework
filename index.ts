@@ -166,7 +166,7 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
         /**
          * @type {UseEngine}
          */
-        $.use = require("./UseEngine");
+        $.use = require("./src/UseEngine");
 
         /**
          * Add Router

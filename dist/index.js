@@ -131,7 +131,7 @@ const XpresserInit = (AppConfig, AppOptions) => {
         /**
          * @type {UseEngine}
          */
-        $.use = require("./UseEngine");
+        $.use = require("./src/UseEngine");
         /**
          * Add Router
          * @type {XpresserRouter}
