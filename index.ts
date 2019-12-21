@@ -141,6 +141,9 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
     // Include Extensions
     require("./src/Extensions/Path");
     require("./src/Extensions/If");
+    // Require Global
+    require("./src/global");
+
     // Get OnEvents Loader.
     const loadOnEvents = require("./src/Events/OnEventsLoader");
 
@@ -160,9 +163,6 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
             // Save to EngineData
             $.engineData.set("UseDotJson", $useDotJson);
         }
-
-        // Require Global
-        require("./src/global");
 
         /**
          * Add Router
