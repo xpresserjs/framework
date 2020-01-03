@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require("fs");
 const dotenv = require("dotenv");
 
 /**
@@ -23,9 +23,9 @@ const castBooleans = (env) => {
 };
 
 /**
- *
- * @param path
- * @param config
+ * Load .env file
+ * @param path - path to .env file.
+ * @param config - env options.
  * @returns {*}
  */
 module.exports = (path, config = {
