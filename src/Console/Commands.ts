@@ -12,7 +12,6 @@ import Artisan = require("../Functions/artisan.fn");
 const artisanConfig = $.config.artisan;
 import colors = require("../Objects/consoleColors.obj");
 import PathHelper = require("../Helpers/Path");
-import {config} from "dotenv";
 
 const logThis = Artisan.logThis;
 const logThisAndExit = Artisan.logThisAndExit;

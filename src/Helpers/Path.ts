@@ -123,7 +123,9 @@ const PathHelper = {
 
             return array;
         } else {
-            return files + $.config.project.fileExtension;
+            const ext = $.config.project.fileExtension || ".js";
+            const hasExtInName = files.substr(-ext.length) === ext;
+            return hasExtInName ? files : files + ext;
         }
     },
 

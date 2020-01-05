@@ -1,8 +1,10 @@
 import fs = require("fs");
 import Console = require("./Console/Commands");
+import PathHelper = require("./Helpers/Path");
 import {DollarSign} from "../types";
 
-const {Commands, Artisan} = Console;
+const {Commands, Artisan}: { Commands: object, Artisan: object } = Console;
+const DefinedCommands = {};
 
 declare const $: DollarSign;
 
@@ -15,68 +17,81 @@ if (args[2] === "--from-tinker") {
 }
 
 // Require Artisan helper Functions
-const argCommand: string = args[0];
+let argCommand: string = args[0];
+
+// return error if no command is defined.
 if (typeof argCommand === "undefined") {
     $.logErrorAndExit("No command provided!");
 }
 
-// Load Plugin CLi Extensions
-const PluginData = $.engineData.get("PluginEngine:namespaces", {});
-const plugins = Object.keys(PluginData);
+// Trim argCommand
+argCommand = argCommand.trim();
 
-for (const plugin of plugins) {
-    const $plugin: object = PluginData[plugin];
+/**
+ * If default commands does not have `argCommand`
+ * Then assume this command:
+ * 1. is a plugin command, so load plugins commands
+ * 2. is a job.
+ */
+if (!Commands.hasOwnProperty(argCommand)) {
 
-    if ($plugin.hasOwnProperty("commands")) {
-        const commands = $plugin["commands"];
-        const commandKeys = Object.keys(commands);
+    /**
+     * load plugins commands first since defined jobs may call plugin commands.
+     */
+    const PluginData = $.engineData.get("PluginEngine:namespaces", {});
+    const plugins = Object.keys(PluginData);
 
-        for (const command of commandKeys) {
-            Commands[command] = commands[command];
-        }
-    }
-}
+    for (const plugin of plugins) {
+        const $plugin: object = PluginData[plugin];
 
-// Load Jobs
-const DefinedCommands = {};
-const loadJobs = (path) => {
-    if (fs.existsSync(path)) {
-        const jobFiles = fs.readdirSync(path);
+        if ($plugin.hasOwnProperty("commands")) {
+            const commands = $plugin["commands"];
+            const commandKeys = Object.keys(commands);
 
-        for (let i = 0; i < jobFiles.length; i++) {
-            const jobFile = jobFiles[i];
-            const jobFullPath = path + "/" + jobFile;
-
-            if (fs.lstatSync(jobFullPath).isDirectory()) {
-                loadJobs(jobFullPath);
-            } else if (fs.lstatSync(jobFullPath).isFile()) {
-
-                const job = require(jobFullPath);
-                if (typeof job !== "object") {
-                    $.logErrorAndExit("Job: {" + jobFile + "} did not return object!");
-
-                    if (job.hasOwnProperty("command") || !job.hasOwnProperty("handler")) {
-                        $.logErrorAndExit("Job: {" + jobFile + "} is not structured properly!");
-                    }
-                }
-
-                const jobCommand = "@" + job.command;
-                DefinedCommands[jobCommand] = job;
+            for (const command of commandKeys) {
+                Commands[command] = commands[command];
             }
         }
     }
-};
 
+    // Load Job if command has `@` sign before it.
+    if (argCommand.substr(0, 1) === "@") {
+        argCommand = argCommand.substr(1);
+        let jobPath = $.path.backend(`jobs/${argCommand}`);
+        // Add project extension if not exists.
+        jobPath = PathHelper.addProjectFileExtension(jobPath);
+
+        // Check if job file exists
+        if (!fs.existsSync(jobPath)) {
+            $.logErrorAndExit(`Job File: (${jobPath}) does  not exists.`);
+        }
+
+        /**
+         * Require Job and read its configurations.
+         */
+        const job = require(jobPath);
+        if (typeof job !== "object") {
+            $.logErrorAndExit("Job: {" + jobPath + "} did not return object!");
+
+            if (!job.hasOwnProperty("handler")) {
+                $.logErrorAndExit("Job: {" + jobPath + "} is not structured properly!");
+            }
+        }
+
+        DefinedCommands[argCommand] = job;
+    }
+}
+
+/**
+ * JobHelper
+ *
+ *  A class whose instance is passed as the last argument in job handler functions.
+ */
 const JobHelper = {
     end() {
         $.exit();
     },
 };
-
-if (argCommand.substr(0, 1) === "@") {
-    const jobPath = $.path.backend("jobs");
-    loadJobs(jobPath);
-}
 
 if (typeof Commands[argCommand] === "undefined" && typeof DefinedCommands[argCommand] === "undefined") {
 
@@ -93,6 +108,7 @@ if (typeof Commands[argCommand] === "undefined" && typeof DefinedCommands[argCom
     if (typeof Commands[argCommand] === "function") {
         // Run Command
         Commands[argCommand](args, JobHelper);
+
     } else if (typeof Commands[argCommand] === "string") {
 
         const command = require(Commands[argCommand]);
@@ -101,6 +117,10 @@ if (typeof Commands[argCommand] === "undefined" && typeof DefinedCommands[argCom
     } else if (typeof DefinedCommands[argCommand] === "object") {
 
         const command: {
+            use?: {
+                events: boolean,
+                routes: boolean,
+            },
             command: string,
             schedule?: string,
             handler: (...args) => (any | void),
@@ -110,11 +130,21 @@ if (typeof Commands[argCommand] === "undefined" && typeof DefinedCommands[argCom
             $.logAndExit(`Command: {${argCommand}} has no handler method`);
         }
 
-        // Load Events
-        require("./Events/Loader");
-        // Process Routes
-        require("./Routes/Loader");
-        $.routerEngine.processRoutes($.router.routes);
+        if (command.use && typeof command.use === "object") {
+            const {use} = command;
+
+            // Load Events if use.events
+            if (use.events) {
+                require("./Events/Loader");
+            }
+
+            // Load and Process Routes if use.routes
+            if (use.routes) {
+                require("./Routes/Loader");
+                // Register Routes
+                $.routerEngine.processRoutes($.router.routes);
+            }
+        }
 
         // Run Command
         command.handler(args, JobHelper);
