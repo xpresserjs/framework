@@ -34,7 +34,6 @@
     "object-validator-pro": "^1.0.19",
     "objection": "^2.0.3",
     "pluralize": "^8.0.0",
-    "ps-node": "^0.1.6",
     "shelljs": "^0.8.3",
     "sqlite3": "^4.1.0"
   },

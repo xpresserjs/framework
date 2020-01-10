@@ -49,31 +49,21 @@ if (!Commands.hasOwnProperty(argCommand)) {
         jobPath = PathHelper.addProjectFileExtension(jobPath);
         // Check if job file exists
         if (!fs.existsSync(jobPath)) {
-            $.logErrorAndExit(`Job File: (${jobPath}) does  not exists.`);
+            $.logErrorAndExit(`Job: (${argCommand}) does  not exist.`);
         }
         /**
          * Require Job and read its configurations.
          */
         const job = require(jobPath);
         if (typeof job !== "object") {
-            $.logErrorAndExit("Job: {" + jobPath + "} did not return object!");
+            $.logErrorAndExit("Job: {" + argCommand + "} did not return object!");
             if (!job.hasOwnProperty("handler")) {
-                $.logErrorAndExit("Job: {" + jobPath + "} is not structured properly!");
+                $.logErrorAndExit("Job: {" + argCommand + "} is not structured properly!");
             }
         }
         DefinedCommands[argCommand] = job;
     }
 }
-/**
- * JobHelper
- *
- *  A class whose instance is passed as the last argument in job handler functions.
- */
-const JobHelper = {
-    end() {
-        $.exit();
-    },
-};
 if (typeof Commands[argCommand] === "undefined" && typeof DefinedCommands[argCommand] === "undefined") {
     if ($.options.isTinker) {
         $.log(`Console Command not found: {${argCommand}}`);
@@ -83,6 +73,19 @@ if (typeof Commands[argCommand] === "undefined" && typeof DefinedCommands[argCom
     }
 }
 else {
+    /**
+     * JobHelper
+     *
+     *  A class whose instance is passed as the last argument in job handler functions.
+     */
+    const JobHelper = {
+        end(silent = false) {
+            if (!silent) {
+                $.log(`Job: (${argCommand}) ran at: ${$.helpers.now()}`);
+            }
+            return process.exit();
+        },
+    };
     // Send only command args to function
     args.splice(0, 1);
     if (typeof Commands[argCommand] === "function") {
@@ -112,6 +115,14 @@ else {
             }
         }
         // Run Command
-        command.handler(args, JobHelper);
+        try {
+            command.handler(args, JobHelper);
+        }
+        catch (e) {
+            $.logPerLine([
+                { error: `Error in command: {${argCommand}}` },
+                { errorAndExit: e.stack },
+            ]);
+        }
     }
 }

@@ -3,14 +3,12 @@
  *  Job: {{name}}
  */
 module.exports = {
-    command: "{{command}}",
     // Job Handler
     handler(args, job) {
         // Your Job Here
 
 
-        // End of job
-        $.log(`JOB: ${this.command} was executed at ${$.helpers.now()}`);
-        job.end();
+        // End current job process.
+        return job.end();
     }
 };
