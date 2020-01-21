@@ -29,7 +29,8 @@ const castBooleans = (env) => {
  * @returns {*}
  */
 module.exports = (path, config = {
-    castBoolean: true
+    castBoolean: true,
+    required: [],
 }) => {
 
     if (!fs.existsSync(path)) {
@@ -40,9 +41,35 @@ module.exports = (path, config = {
         path = path + "/.env";
     }
 
+    /**
+     * Get parsed env variables
+     * @type {{}}
+     */
     const env = dotenv.config({path}).parsed;
 
     if (config.castBoolean) castBooleans(env);
+
+    /**
+     * Check if required environment variables exists
+     * else throw error.
+     */
+    const required = config.required;
+    if (required && Array.isArray(required) && required.length) {
+
+        const missing = [];
+        for (const key of required) {
+            if (!env.hasOwnProperty(key)) missing.push(key);
+        }
+
+        if (missing.length) {
+            console.log(); // spacing
+            console.error('The following ENV variables are REQUIRED but not found.');
+            console.log(missing);
+            console.log(); // spacing
+
+            return process.exit(); // stop process
+        }
+    }
 
     return env;
 };
