@@ -19,7 +19,7 @@
     "chalk": "^3.0.0",
     "connect-session-knex": "^1.4.0",
     "cors": "^2.8.5",
-    "dotenv": "8.2.0",
+    "dotenv": "^8.2.0",
     "ejs": "^3.0.1",
     "express": "^4.17.1",
     "express-flash": "^0.0.2",
