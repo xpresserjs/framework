@@ -10,7 +10,7 @@ const castBooleans = (env) => {
     const envKeys = Object.keys(env);
     for (let i = 0; i < envKeys.length; i++) {
         const envKey = envKeys[i];
-        const envVal = env[envKey];
+        const envVal = env[envKey].toLowerCase();
 
         if (envVal === 'true') {
             env[envKey] = true;
@@ -45,9 +45,9 @@ module.exports = (path, config = {
      * Get parsed env variables
      * @type {{}}
      */
-    const env = dotenv.config({path}).parsed;
+    let env = dotenv.config({path}).parsed;
 
-    if (config.castBoolean) castBooleans(env);
+    if (config.castBoolean) env = castBooleans(env);
 
     /**
      * Check if required environment variables exists
