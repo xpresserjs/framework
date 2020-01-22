@@ -19,7 +19,7 @@ const XpresserRouter = require("@xpresser/router");
 // Import default config.
 const Configurations = require("./config");
 // Use Lodash from ObjectCollection
-const _ = ObjectCollection._;
+const _ = ObjectCollection.getLodash();
 /**
  * Get default Config and Options from Configurations
  */

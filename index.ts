@@ -22,7 +22,7 @@ import Configurations = require("./config");
 import {DollarSign, Options} from "./types";
 
 // Use Lodash from ObjectCollection
-const _ = ObjectCollection._;
+const _ = ObjectCollection.getLodash();
 
 /**
  * Get default Config and Options from Configurations

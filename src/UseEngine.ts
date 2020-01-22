@@ -142,9 +142,9 @@ class UseEngine {
      * Use Model
      * @param {string} model
      * @param {boolean} [handleError=true]
-     * @return {ModelEngine}
+     * @return {*}
      */
-    public static model(model, handleError = true): typeof ModelEngine {
+    public static model(model, handleError = true): any {
         const fullPath = PathHelper.resolve($.config.paths.models) + "/{file}" + $.config.project.fileExtension;
         const [hasPath, realPath] = fileExistsInPath(model, fullPath);
 
