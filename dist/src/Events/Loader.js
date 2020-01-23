@@ -34,6 +34,7 @@ if (fs.existsSync(EventsPath)) {
                         $.logPerLine([
                             { error: `Error in ${shortPath}` },
                             { errorAndExit: e },
+                            { errorAndExit: e.stack },
                         ]);
                     }
                     if (typeof event === "object") {
