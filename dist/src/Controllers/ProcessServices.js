@@ -34,13 +34,12 @@ module.exports = (x, boot, requestServices, config, error) => __awaiter(void 0, 
         if ($.utils.isPromise(serviceResult)) {
             serviceResult = yield serviceResult;
         }
-        if (serviceResult instanceof http_1.ServerResponse) {
-            break;
-        }
         // Run user defined error
         if (serviceResult instanceof ControllerServiceError && error) {
             serviceResult = error(x, ...serviceResult.args);
-            break;
+        }
+        if (serviceResult instanceof http_1.ServerResponse) {
+            return serviceResult;
         }
         // Add ServiceKey to completed service keys.
         completedServices[serviceKey] = serviceResult;

@@ -48,14 +48,13 @@ export = async (
             serviceResult = await serviceResult;
         }
 
-        if (serviceResult instanceof ServerResponse) {
-            break;
-        }
-
         // Run user defined error
         if (serviceResult instanceof ControllerServiceError && error) {
             serviceResult = error(x, ...serviceResult.args);
-            break;
+        }
+
+        if (serviceResult instanceof ServerResponse) {
+            return serviceResult;
         }
 
         // Add ServiceKey to completed service keys.
