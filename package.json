@@ -43,7 +43,7 @@
     "@types/node": "13.7.1",
     "ts-node-dev": "^1.0.0-pre.43",
     "tslint": "^6.0.0",
-    "typescript": "3.7.5"
+    "typescript": "3.8.2"
   },
   "keywords": [
     "xpresser",
