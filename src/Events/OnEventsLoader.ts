@@ -5,9 +5,8 @@ declare const $: DollarSign;
 const loadOnEvents = (name: string, done: () => void) => {
     const key = `on.${name}`;
     const onEvents: any[] = $.on.events()[name];
-    // $.logAndExit(onEvents, done);
-    if (onEvents.length) {
 
+    if (onEvents.length) {
         onEvents.push(done);
 
         $.engineData.set(key, 0);

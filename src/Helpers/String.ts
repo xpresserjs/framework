@@ -20,7 +20,7 @@ const self = {
 
     withoutSuffix: (str: string, suffix: string) => {
         if (self.hasSuffix(str, suffix)) {
-            str = str.substr(0, str.length - suffix.length)
+            str = str.substr(0, str.length - suffix.length);
         }
         return str;
     },
