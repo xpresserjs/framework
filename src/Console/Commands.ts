@@ -136,7 +136,7 @@ const Commands = {
         }
 
         if (typeof table === "undefined") {
-            table = _.snakeCase(name);
+            table = _.snakeCase(PathHelper.path().basename(name));
         }
 
         if (artisanConfig.singleModelName) {

@@ -178,8 +178,13 @@ class PluginEngine {
                 const cliCommands = require(cliCommandsPath);
                 if (cliCommands && Array.isArray(cliCommands)) {
                     for (const command of cliCommands) {
-                        const commandCode = command.command.split(" ")[0];
-                        pluginData.commands[commandCode] = pluginPathExistOrExit(plugin, commandPath, command.file);
+                        let commandAction = command['action'];
+
+                        if (!commandAction) {
+                            commandAction = command.command.split(" ")[0];
+                        }
+
+                        pluginData.commands[commandAction] = pluginPathExistOrExit(plugin, commandPath, command.file);
                     }
                 }
             }
@@ -222,6 +227,19 @@ class PluginEngine {
             }
 
             pluginData.extends = extensionData;
+        }
+
+
+        // check if plugin uses index file.
+        if ($data.get('use_index', false)) {
+            const indexFilePath: void | string = pluginPathExistOrExit(plugin, path, 'index.js');
+
+            if (indexFilePath) {
+                const {run} = require(indexFilePath);
+
+                // Run (Run Function)
+                if (run) run(pluginData);
+            }
         }
 
         // return processed Plugin Data

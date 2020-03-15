@@ -13,8 +13,12 @@ const pathHelpers = {
     public: "public://",
 };
 
-const PathHelper = {
-    resolve($path: string | string[], $resolve: boolean = true): string {
+class PathHelper {
+    static path() {
+        return PATH;
+    }
+
+    static resolve($path: string | string[], $resolve: boolean = true): string {
 
         if (Array.isArray($path)) {
             for (let i = 0; i < $path.length; i++) {
@@ -46,9 +50,9 @@ const PathHelper = {
 
         return $resolve ? PATH.resolve($path) : $path;
 
-    },
+    }
 
-    helperToPath([$helper, $path]: string[]): string {
+    static helperToPath([$helper, $path]: string[]): string {
         if ($helper === "base") {
             return $.config.paths.base + "/" + $path;
         } else if ($helper === "npm") {
@@ -61,7 +65,7 @@ const PathHelper = {
 
             return $.path.base(`${$helper}/${$path}`);
         }
-    },
+    }
 
     /**
      * Get path in storage/framework folder.
@@ -75,14 +79,14 @@ const PathHelper = {
             path = path.substr(1);
         }
         return $.path.storage("framework/" + path);
-    },
+    }
 
     /**
      * Makes a dir if it does not exist.
      * @param $path
      * @param $isFile
      */
-    makeDirIfNotExist($path: string, $isFile = false) {
+    static makeDirIfNotExist($path: string, $isFile = false) {
         if ($isFile === true) {
             $path = PATH.dirname($path);
         }
@@ -96,7 +100,7 @@ const PathHelper = {
         }
 
         return $path;
-    },
+    }
 
     /**
      * Adds project extension to a string or array of strings
@@ -108,7 +112,7 @@ const PathHelper = {
      * @param files
      * @param clone
      */
-    addProjectFileExtension(files: string | string[], clone = false): string[] | string {
+    static addProjectFileExtension(files: string | string[], clone = false): string[] | string {
         if (Array.isArray(files)) {
             let array;
             if (clone) {
@@ -127,7 +131,7 @@ const PathHelper = {
             const hasExtInName = files.substr(-ext.length) === ext;
             return hasExtInName ? files : files + ext;
         }
-    },
+    }
 
     /**
      * Adds project extension to a string or array of strings
@@ -139,7 +143,7 @@ const PathHelper = {
      * @param files
      * @param clone
      */
-    removeProjectFileExtension(files: string | string[], clone = false) {
+    static removeProjectFileExtension(files: string | string[], clone = false) {
         if (Array.isArray(files)) {
             let array;
             if (clone) {
@@ -156,7 +160,7 @@ const PathHelper = {
         } else {
             return files.substr(0, files.length - $.config.project.fileExtension.length);
         }
-    },
-};
+    }
+}
 
 export = PathHelper;

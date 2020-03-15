@@ -14,9 +14,9 @@ const FILE_EXTENSION = $.$config.get("project.fileExtension", ".js");
 const afterLastSlash = (str) => {
     if (typeof str === "string" && str.includes("/")) {
         const parts = str.split("/");
-        return parts[parts.length - 1];
+        return _.upperFirst(parts[parts.length - 1]);
     }
-    return str;
+    return _.upperFirst(str);
 };
 module.exports = {
     logThis(...args) {
@@ -49,7 +49,6 @@ module.exports = {
             $factory = $for[1];
             $for = $for[0];
         }
-        $name = _.upperFirst($name);
         if (!fs.existsSync($to)) {
             PathHelper.makeDirIfNotExist($to);
         }
@@ -58,13 +57,40 @@ module.exports = {
                 $name = $name + _.upperFirst($for);
             }
         }
+        if ($name.includes('/')) {
+            const names = $name.split('/');
+            const lastPath = _.upperFirst(names.pop());
+            names.push(lastPath);
+            $name = names.join('/');
+        }
+        else {
+            $name = _.upperFirst($name);
+        }
         $to = $to + "/" + $name + FILE_EXTENSION;
         if (fs.existsSync($to)) {
             return this.logThisAndExit($name + " already exists!");
         }
         PathHelper.makeDirIfNotExist($to, true);
-        const $from = $.path.engine("Factory/" + ($factory || $for) + ".hbs");
-        $data = _.extend({}, { name: afterLastSlash($name) }, $data);
+        /**
+         * Get factory file from config or use default
+         */
+        const factoryName = $factory || $for;
+        let $from = $.path.engine("Factory/" + factoryName + ".hbs");
+        let customFactoryFile = $.$config.get(`artisan.factory.${factoryName}`);
+        if (customFactoryFile) {
+            if (!customFactoryFile.includes('.hbs')) {
+                return this.logThisAndExit(`Custom factory file defined for ${factoryName} is not a (.hbs) file`);
+            }
+            customFactoryFile = PathHelper.resolve(customFactoryFile);
+            if (!$.file.exists(customFactoryFile)) {
+                return this.logThisAndExit(`Custom factory file defined for ${factoryName} does not exist.`);
+            }
+            $from = customFactoryFile;
+        }
+        /**
+         * Append needed data
+         */
+        $data['name'] = afterLastSlash($name);
         fs.writeFileSync($to, this.factory($from, $data));
         this.logThis($name + " created successfully.");
         this.logThis("located @ " + $to.replace($.path.base(), ""));

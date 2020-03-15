@@ -98,7 +98,7 @@ const Commands = {
             return logThis("Model name not defined!");
         }
         if (typeof table === "undefined") {
-            table = _.snakeCase(name);
+            table = _.snakeCase(PathHelper.path().basename(name));
         }
         if (artisanConfig.singleModelName) {
             name = Artisan.singular(name);
