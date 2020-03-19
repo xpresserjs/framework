@@ -174,12 +174,6 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
          */
         $.router = new XpresserRouter();
 
-        /**
-         * Require Model Engine
-         * @type {ModelEngine}
-         */
-        $.model = require("./src/ModelEngine");
-
         $.ifNotConsole(() => {
             /**
              * Load Registered Events

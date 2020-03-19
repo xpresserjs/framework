@@ -3,7 +3,7 @@ node_modules
 .env
 test.ts
 tests/*
-dist/test.js
+dist
 storage
 .sqlite
 yarn.lock

@@ -10,11 +10,9 @@ import {Helpers} from "./helpers";
 import Net =  require("net");
 import express = require("express");
 import ObjectCollection = require("object-collection");
-import DB = require("../src/Database/Db");
 import UseEngine = require("../src/UseEngine");
 import XpresserRouter = require("@xpresser/router");
 import RouterEngine = require("../src/RouterEngine");
-import ModelEngine = require("../src/ModelEngine");
 import Controller = require("../src/Classes/Controller");
 
 import {Controller as HttpController} from "./http";
@@ -77,12 +75,6 @@ declare namespace Xpresser {
         // Base64 Encoder
         base64: Helpers.Base64;
 
-        // Object validator
-        ovp: any;
-
-        // Database
-        db: DB;
-
         // Use Engine
         use: typeof UseEngine;
 
@@ -114,9 +106,6 @@ declare namespace Xpresser {
         // Server Variables
         http: Net.Server;
         https: Net.Server;
-
-        // Model Engine
-        model: typeof ModelEngine;
 
         // Router Engine
         routerEngine: typeof RouterEngine;

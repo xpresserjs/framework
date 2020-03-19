@@ -165,8 +165,8 @@ class PluginEngine {
             pluginData.paths.controllers = controllerPath;
         }
 
-        // check if plugin use.json has paths.Commands
-        if ($data.has("paths.commands")) {
+        // check if plugin use.json has paths.Commands only if console
+        if ($.options.isConsole && $data.has("paths.commands")) {
             let commandPath = $data.get("paths.commands");
             commandPath = pluginPathExistOrExit(plugin, path, commandPath);
             pluginData.paths.commands = commandPath;
