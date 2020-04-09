@@ -4,8 +4,6 @@ import ControllerServiceError = require("../src/Controllers/ControllerServiceErr
 import ControllerService = require("../src/Controllers/ControllerService");
 
 declare namespace Xpresser {
-    type Http = RequestEngine;
-
     namespace Http {
         interface Request extends express.Request {
             session: object;
@@ -15,6 +13,10 @@ declare namespace Xpresser {
         interface Response extends express.Response {
             [name: string]: any;
         }
+    }
+
+    // tslint:disable-next-line:no-empty-interface
+    interface Http extends RequestEngine {
     }
 
     namespace Controller {
@@ -97,6 +99,7 @@ declare namespace Xpresser {
 
         class Class {
             public static middleware(helpers?: { use?: MethodWithBoot }): object;
+
             public static boot(http: Http, error?: () => (any | void)): object;
         }
     }
