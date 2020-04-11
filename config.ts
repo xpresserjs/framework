@@ -61,12 +61,20 @@ const ServerConfig = {
     poweredBy: true,
 
     /**
+     * Enable if you want public folder to be served
+     */
+    servePublicFolder: true,
+
+    /**
      * Xpresser comes with a few packages for security,
      * You can enable or disable them here.
+     * ['bodyParser', 'session', 'helmet']
      */
     use: {
-        // Enable helmet
-        helmet: false,
+        // Use BodyParser,
+        bodyParser: true,
+        // Enable Session
+        session: false
     },
 };
 
@@ -155,7 +163,7 @@ const Config = {
 
     // Session Configurations
     session: {
-        startOnBoot: false,
+        startOnBoot: true,
         secret: "!XpresserSecretKey!",
         cookie: {
             path: ServerConfig.root,

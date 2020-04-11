@@ -41,31 +41,38 @@ if ($.config.server.poweredBy) {
     $.app.disable("x-powered-by");
 }
 
-$.app.use(
-    express.static(paths.public, {
-        setHeaders(res, path) {
-            const responseConfig = $.config.response;
-            if ($.config.response.cacheFiles) {
-                if (responseConfig.cacheIfMatch.length) {
-                    const match = $.utils.findWordsInString(
-                        path,
-                        responseConfig.cacheIfMatch,
-                    );
-                    if (match !== null && match.length) {
-                        res.set("Cache-Control", "max-age=" + responseConfig.cacheMaxAge);
-                    }
-                } else if (responseConfig.cacheFileExtensions.length) {
-                    const files = $.utils.extArrayRegex(responseConfig.cacheFileExtensions) as RegExp;
-                    const match = path.match(files);
+/**
+ * Serve Public folder as static
+ */
+const servePublicFolder = $.$config.get("server.servePublicFolder", false);
+if (servePublicFolder) {
+    $.app.use(
+        express.static(paths.public, {
+            setHeaders(res, path) {
+                const responseConfig = $.config.response;
+                if (responseConfig.cacheFiles) {
+                    if (responseConfig.cacheIfMatch.length) {
+                        const match = $.utils.findWordsInString(
+                            path,
+                            responseConfig.cacheIfMatch,
+                        );
+                        if (match !== null && match.length) {
+                            res.set("Cache-Control", "max-age=" + responseConfig.cacheMaxAge);
+                        }
+                    } else if (responseConfig.cacheFileExtensions.length) {
+                        const files = $.utils.extArrayRegex(responseConfig.cacheFileExtensions) as RegExp;
+                        const match = path.match(files);
 
-                    if (match !== null && match.length) {
-                        res.set("Cache-Control", "max-age=" + responseConfig.cacheMaxAge);
+                        if (match !== null && match.length) {
+                            res.set("Cache-Control", "max-age=" + responseConfig.cacheMaxAge);
+                        }
                     }
                 }
-            }
-        },
-    }),
-);
+            },
+        }),
+    );
+}
+
 
 /**
  * Helmet helps you secure your Express apps by setting various HTTP headers. It’s not a silver bullet,
@@ -82,6 +89,7 @@ if (useHelmet) {
     const helmet = require("helmet");
     const helmetConfig = $.$config.get("packages.helmet.config", undefined);
     $.app.use(helmet(helmetConfig));
+    $.log('Using Helmet')
 }
 
 /**
@@ -120,45 +128,50 @@ if (useBodyParser) {
     $.app.use(bodyParser.urlencoded(bodyParserUrlEncodedConfig));
 }
 
-/**
- * Session handled by knex
- * Disabled on default
- */
-const useSession = $.$config.get("session.startOnBoot", false);
-if (useSession) {
+const useSession = $.$config.get("server.use.session", false);
+const startSessionOnBoot = $.$config.get("session.startOnBoot", false);
 
-    const session = require("express-session");
-    const connectSessionKnex = require("connect-session-knex");
-    const flash = require("express-flash");
+if (useSession && startSessionOnBoot) {
+    /**
+     * Session handled by Knex
+     * Disabled on default
+     */
+    if (startSessionOnBoot) {
 
-    const KnexSessionStore = connectSessionKnex(session);
-    const knexSessionConfig = {
-        client: "sqlite3",
-        connection: {
-            filename: $.path.base("sessions.sqlite"),
-        },
-        useNullAsDefault: true,
-    };
+        const session = require("express-session");
+        const connectSessionKnex = require("connect-session-knex");
+        const flash = require("express-flash");
 
-    const sessionFilePath = knexSessionConfig.connection.filename;
-    if (!$.file.exists(sessionFilePath)) {
-        Path.makeDirIfNotExist(sessionFilePath, true);
+        const KnexSessionStore = connectSessionKnex(session);
+        const knexSessionConfig = {
+            client: "sqlite3",
+            connection: {
+                filename: $.path.base("sessions.sqlite"),
+            },
+            useNullAsDefault: true,
+        };
+
+        const sessionFilePath = knexSessionConfig.connection.filename;
+        if (!$.file.exists(sessionFilePath)) {
+            Path.makeDirIfNotExist(sessionFilePath, true);
+        }
+
+        const store = new KnexSessionStore({
+            knex: require("knex")(knexSessionConfig),
+            tablename: "sessions",
+        });
+
+        const sessionConfig = _.extend({}, $.config.session, {
+            store,
+        });
+
+        $.app.use(session(sessionConfig));
+
+        // Use Flash
+        $.app.use(flash());
     }
-
-    const store = new KnexSessionStore({
-        knex: require("knex")(knexSessionConfig),
-        tablename: "sessions",
-    });
-
-    const sessionConfig = _.extend({}, $.config.session, {
-        store,
-    });
-
-    $.app.use(session(sessionConfig));
-
-    // Use Flash
-    $.app.use(flash());
 }
+
 
 // Set local AppData
 $.app.locals.appData = {};
@@ -308,8 +321,8 @@ const startHttpServer = (onSuccess = undefined, onError = undefined) => {
             const domain = $.config.server.domain;
             const baseUrl = $.helpers.url();
 
-            $.log("Server started.");
             $.log(`Domain: ${domain} | Port: ${port} | BaseUrl: ${baseUrl}`);
+            $.log(`Server started @ (${(new Date()).toUTCString()})`);
             $.log();
 
             if (typeof onSuccess === "function") {

@@ -11,7 +11,7 @@ const loadOnEvents = (name: string, done: () => void) => {
 
         $.engineData.set(key, 0);
 
-        const next = async () => {
+        const next = () => {
             const currentIndex = $.engineData.get(key, 0);
             const nextIndex = currentIndex + 1;
             $.engineData.set(key, nextIndex);

@@ -292,8 +292,6 @@ class ControllerEngine {
                 console.time(timeLogKey);
             }
 
-            // Get `x` from RequestEngine
-
             try {
                 // Run static boot method if found in controller
                 let boot = {};

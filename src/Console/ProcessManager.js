@@ -28,24 +28,6 @@ class ProcessManager {
         $process.stdout.on('data', (msg) => {
             console.log(msg.toString().trim())
         });
-
-        /**
-         * @deprecated - No need storing process ids.
-         */
-        /*if (typeof processes[file] === "undefined") {
-            processes[file] = []
-        }
-
-        processes[file].push({
-            id: $process.pid,
-            command: $command
-        });
-
-
-        fs.writeFileSync(
-            this.database(),
-            JSON.stringify(processes, null, 2)
-        )*/
     }
 }
 

@@ -95,7 +95,10 @@ declare namespace Xpresser {
             [name: string]: any | Method | MethodWithServices;
         }
 
-        type Handler = ControllerService;
+        // tslint:disable-next-line:no-empty-interface
+        interface Handler extends ControllerService{
+
+        }
 
         class Class {
             public static middleware(helpers?: { use?: MethodWithBoot }): object;
