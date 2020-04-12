@@ -49,12 +49,18 @@ const Commands = {
         }
 
         if (search === 'ctrl') search = 'controller';
+        if(search === 'method' && query) query = query.toUpperCase();
 
         let data = [];
 
         data = $.routerEngine.allProcessedRoutes();
         data.map((e) => {
             e.method = e.method.toUpperCase();
+
+            if (!e.controller) e.controller = '';
+            if (!e.name) e.name = null;
+
+            e.controller = e.controller.replace('@', '.');
         })
 
         const searchResults = [];
@@ -65,7 +71,7 @@ const Commands = {
                     return $.exit()
                 }
 
-                if (route[search].includes(query)) {
+                if (route[search] && route[search].includes(query)) {
                     searchResults.push(route)
                 }
             }
