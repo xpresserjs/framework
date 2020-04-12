@@ -111,6 +111,12 @@ if (typeof Commands[argCommand] === "undefined" && typeof DefinedCommands[argCom
 
     if (typeof Commands[argCommand] === "function") {
         // Run Command
+        if (argCommand === 'routes') {
+            require("./Routes/Loader");
+            // Register Routes
+            $.routerEngine.processRoutes($.router.routes);
+        }
+
         Commands[argCommand](args, JobHelper);
 
     } else if (typeof Commands[argCommand] === "string") {

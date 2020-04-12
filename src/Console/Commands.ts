@@ -5,7 +5,6 @@ declare const _: any;
 
 import os = require("os");
 import fs = require("fs");
-import shellJs = require("shelljs");
 
 import Artisan = require("../Functions/artisan.fn");
 
@@ -29,13 +28,61 @@ const removeSlashAtEnd = (str: string) => {
 };
 
 const Commands = {
-    "install"([$plugin]) {
+    install([$plugin]) {
         if ($plugin === "undefined") {
             return logThis("Plugin not specified!");
         }
 
         const PluginInstaller = require("../Plugins/Installer");
         PluginInstaller($plugin);
+    },
+
+    /**
+     * List routes in this project
+     * @param search
+     * @param query
+     */
+    routes([search, query]) {
+        if (search && !query) {
+            query = search;
+            search = 'path';
+        }
+
+        if (search === 'ctrl') search = 'controller';
+
+        let data = [];
+
+        data = $.routerEngine.allProcessedRoutes();
+        data.map((e) => {
+            e.method = e.method.toUpperCase();
+        })
+
+        const searchResults = [];
+        if (search) {
+            for (const route of data) {
+                if (!route.hasOwnProperty(search)) {
+                    console.log(colors.fgRed, `Routes table has no column named: (${search}), ACCEPTED: (method | path | controller | name)`)
+                    return $.exit()
+                }
+
+                if (route[search].includes(query)) {
+                    searchResults.push(route)
+                }
+            }
+        }
+
+        data = search ? searchResults : data
+        let message = `Total Routes: ${data.length}`;
+        if (search) message = `Found Routes: ${data.length} WHERE {column: ${search}, query: ${query}}`;
+
+
+        if (data.length) {
+            console.log(colors.fgCyan);
+            console.table(data);
+        }
+        console.log(colors.fgYellow, message)
+        console.log()
+
     },
     "make:job"(args: string[]) {
         const job = args[0];
