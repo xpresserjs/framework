@@ -1,7 +1,7 @@
 import RequestEngine = require("../RequestEngine");
 import {DollarSign} from "../../types";
 import PathHelper = require("../Helpers/Path");
-import ObjectCollection from "object-collection";
+import ObjectCollection = require("object-collection");
 
 declare const $: DollarSign;
 
@@ -12,13 +12,13 @@ const useDotJson: ObjectCollection = $.engineData.get("UseDotJson");
 /**
  * Extend RequestEngine
  */
-const ExtendRequestEngineUsing = ($extender) => {
+const ExtendRequestEngineUsing = ($extender: ($class: any) => any) => {
     if (typeof $extender === "function") {
         ExtendedRequestEngine = $extender(ExtendedRequestEngine);
     }
 };
 
-const RequireOrFail = ($RequestEngine, $plugin = undefined) => {
+const RequireOrFail = ($RequestEngine: any, $plugin?: any) => {
     try {
         $RequestEngine = PathHelper.resolve($RequestEngine);
         const $requestEngine = require($RequestEngine);

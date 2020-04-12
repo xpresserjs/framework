@@ -21,7 +21,7 @@ export = {
         return new RegExp(regex, "g");
     },
 
-    findWordsInString(str: string, keywords: []): RegExpMatchArray {
+    findWordsInString(str: string, keywords: []): RegExpMatchArray | null {
         if (!keywords.length) {
             return null;
         }

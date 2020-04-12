@@ -7,9 +7,12 @@
     "sourceMap": false,
     "outDir": "dist",
     "declaration": false,
+    "downlevelIteration": true,
     "types": [
       "node",
-      "express"
+      "express",
+      "fs-extra",
+      "lodash"
     ]
   },
   "lib": [

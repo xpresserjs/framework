@@ -10,6 +10,7 @@ import {ServerResponse} from "http";
 
 import {Http} from "../types/http";
 import {DollarSign} from "../types";
+import {StringToAnyKeyObject} from "./CustomTypes";
 
 declare const _: any;
 declare const $: DollarSign;
@@ -23,8 +24,8 @@ const ServicesFolder = $.path.controllers("services");
 const ServicesInMemory = $.objectCollection();
 
 // If use.json has autoload config and services folder exists in controllers folder.
-const LoadServicesInDirectory = ($folder, $files = undefined) => {
-    let ServicesFolderFiles = [];
+const LoadServicesInDirectory = ($folder: string, $files?: string[]) => {
+    let ServicesFolderFiles: any[] = [];
 
     if (Array.isArray($files)) {
         ServicesFolderFiles = $files;
@@ -90,15 +91,15 @@ class ControllerEngine {
      * @param {string} method
      * @param {object} route
      */
-    public static getMiddlewares($middleware: object, method: string, route: any) {
+    public static getMiddlewares($middleware: StringToAnyKeyObject, method: string, route: any) {
 
         const middlewareKeys = Object.keys($middleware);
         const middlewares = [];
 
         for (let i = 0; i < middlewareKeys.length; i++) {
             let middleware = middlewareKeys[i];
-            let middlewareFile = [];
-            let middlewareMethod = $middleware[middleware];
+            let middlewareFile: any[] = [];
+            let middlewareMethod: string = $middleware[middleware];
 
             if (middleware.substr(0, 1) === "@") {
                 const oldMiddlewareMethod = middlewareMethod;
@@ -150,7 +151,9 @@ class ControllerEngine {
         return middlewares;
     }
 
-    public controller: () => void;
+    public controller(): void {
+        // Empty Function
+    };
 
     /**
      * @param route
@@ -168,13 +171,13 @@ class ControllerEngine {
      * @param {string} method
      * @param isPath
      */
-    public processController(route: any, controller: any | ControllerService, method, isPath?: boolean) {
+    public processController(route: any, controller: any | ControllerService, method: any, isPath?: boolean) {
 
         let controllerName = (typeof controller.name === "string") ? controller.name : "__UNNAMED_CONTROLLER__";
         const controllerIsObject = typeof controller === "object";
         const controllerIsService = controller instanceof ControllerService;
-        const $handlerArguments = [];
-        let errorHandler = null;
+        const $handlerArguments: any[] = [];
+        let errorHandler: any = null;
         const handlerArguments = () => _.clone($handlerArguments);
 
         // If controller is an instance of handler then get the handler.
@@ -198,7 +201,7 @@ class ControllerEngine {
 
                 const DefinedServices = config.services || {};
                 const serviceKeys = Object.keys(actions);
-                const services = {};
+                const services: StringToAnyKeyObject = {};
 
                 for (const service of serviceKeys) {
                     const serviceIsDefined = DefinedServices.hasOwnProperty(service);
@@ -283,7 +286,7 @@ class ControllerEngine {
             const http = new RequestEngine(req, res, undefined, route);
             // Log Time if `DebugControllerAction` is true
             let timeLogKey = "";
-            const mockErrorHandler = (...args) => {
+            const mockErrorHandler = (...args: any[]) => {
                 return errorHandler(http, ...args);
             };
 
@@ -374,7 +377,7 @@ class ControllerEngine {
  * @param {string | Object | Function} route
  * @param {string |null} method
  */
-const Controller = (route, method = null) => {
+const Controller = (route: any, method: any = null) => {
     let $controller: any = undefined;
     let controllerPath = null;
     let isPath = false;
@@ -415,8 +418,8 @@ const Controller = (route, method = null) => {
         return $.logErrorAndExit("Controller not found!");
     }
 
-    const use = (middlewareFn) => {
-        return async (req, res, next) => {
+    const use = (middlewareFn: any) => {
+        return async (req: any, res: any, next: any) => {
             return middlewareFn(new RequestEngine(req, res, next, route));
         };
     };

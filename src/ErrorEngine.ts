@@ -1,18 +1,18 @@
 import RequestEngine = require("./RequestEngine");
 
 class ErrorEngine {
-    public x: RequestEngine;
+    public http: RequestEngine;
 
-    constructor(x) {
-        this.x = x;
+    constructor(http: RequestEngine) {
+        this.http = http;
     }
 
-    public view(data, status = 500) {
-        this.x.res.status(500);
-        return this.x.renderViewFromEngine("__errors/index", data);
+    public view(data: any, status = 500) {
+        this.http.res.status(500);
+        return this.http.renderViewFromEngine("__errors/index", data);
     }
 
-    public controllerMethodNotFound(e, method = "", controller = "") {
+    public controllerMethodNotFound(e: any, method = "", controller = "") {
         method = `<code> {${method}} </code>`;
         if (controller.length) {
             controller = `<code>{${controller}}</code>`;
@@ -26,7 +26,7 @@ class ErrorEngine {
         return this.view({error});
     }
 
-    public pageNotFound(req) {
+    public pageNotFound(req: any) {
         const error = {
             title: `404 Error!`,
             message: `<code>${req.method}: ${req.url}</code> <br><br> Route not found!`,

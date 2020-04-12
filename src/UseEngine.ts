@@ -7,6 +7,7 @@
 import PathHelper = require("./Helpers/Path");
 import StringHelper = require("./Helpers/String");
 import {DollarSign, JsonSettings} from "../types";
+import {StringToAnyKeyObject} from "./CustomTypes";
 
 declare const $: DollarSign;
 
@@ -28,10 +29,10 @@ Use = $.engineData.get(
 if (typeof Use.middlewares === "object") {
     const MiddlewareSuffix = "Middleware";
     const useMiddlewares = Use.middlewares;
-    const middlewareKeys = Object.keys(useMiddlewares);
+    const middlewareKeys: string[] = Object.keys(useMiddlewares);
 
     for (let i = 0; i < middlewareKeys.length; i++) {
-        const middlewareKey = middlewareKeys[i];
+        const middlewareKey: string = middlewareKeys[i];
 
         let middleware = useMiddlewares[middlewareKey];
         const extension = $.config.project.fileExtension;
@@ -74,7 +75,7 @@ $.engineData.set(
 );
 
 // Functions
-function parsePath(path, data = {}) {
+function parsePath(path: string, data: StringToAnyKeyObject = {}) {
     const dataKeys = Object.keys(data);
 
     if (dataKeys.length) {
@@ -86,7 +87,7 @@ function parsePath(path, data = {}) {
     return path;
 }
 
-function fileExistsInPath(file, path, suffix = "") {
+function fileExistsInPath(file: string, path: string, suffix = ""): [boolean, string] {
 
     if (suffix.length) {
         const hasSuffix = file.substr(-suffix.length) === suffix;
@@ -115,7 +116,7 @@ class UseEngine {
      * @param handleError
      * @return {boolean|*}
      */
-    public static package($package, handleError = true) {
+    public static package($package: string, handleError = true) {
         try {
             return require($package);
         } catch (e) {
@@ -128,7 +129,7 @@ class UseEngine {
      * @param {string} path
      * @return {*}
      */
-    public static file(path) {
+    public static file(path: string) {
         const fullPath = $.path.backend("{file}" + $.config.project.fileExtension);
         const [hasPath, realPath] = fileExistsInPath(path, fullPath);
         if (!hasPath) {
@@ -143,7 +144,7 @@ class UseEngine {
      * @param {boolean} [handleError=true]
      * @return {*}
      */
-    public static model(model, handleError = true): any {
+    public static model(model: string, handleError = true): any {
         const fullPath = PathHelper.resolve($.config.paths.models) + "/{file}" + $.config.project.fileExtension;
         const [hasPath, realPath] = fileExistsInPath(model, fullPath);
 
@@ -161,7 +162,7 @@ class UseEngine {
      * @param {boolean} [suffix=true]
      * @return {boolean|*}
      */
-    public static middleware(middleware, handleError = true, suffix = true) {
+    public static middleware(middleware:string, handleError = true, suffix = true) {
         if (typeof Use.middlewares === "object") {
             const useMiddlewares = Use.middlewares;
             const middleWithoutSuffix = StringHelper.withoutSuffix(middleware, "Middleware");

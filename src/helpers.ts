@@ -2,7 +2,7 @@ import BuildUrl = require("build-url");
 import moment = require("moment");
 import {DollarSign} from "../types";
 
-declare const _;
+declare const _: any;
 declare const $: DollarSign;
 
 /* HELPER FUNCTIONS */
@@ -55,7 +55,7 @@ const helpers = {
      * @param {Object|boolean} $query
      * @param {boolean} $includeUrl
      */
-    route($route, $keys = [], $query = {}, $includeUrl = true) {
+    route($route: string, $keys = [], $query = {}, $includeUrl = true) {
 
         if (typeof $query === "boolean") {
             $includeUrl = $query;
@@ -81,7 +81,7 @@ const helpers = {
 
                 if (Array.isArray(HasKeys) && HasKeys.length) {
                     let counter = 0;
-                    const replacer = (...args) => {
+                    const replacer = (...args: any[]) => {
                         if (args[0] === "*" && !$keys.length) {
                             counter++;
                             return "*";
@@ -105,7 +105,7 @@ const helpers = {
      * @param {string} $config - Config key
      * @param {*} $default - Default return value if config is not found.
      */
-    config($config, $default = undefined) {
+    config($config: string, $default = undefined) {
         return _.get($.config, $config, $default);
     },
 
@@ -113,7 +113,7 @@ const helpers = {
      * Laravel Mix Helper
      * @param {string} file - Public path to file.
      */
-    mix(file) {
+    mix(file: string) {
         let mix;
         const localVariableName = "laravelMixManifest";
         if (file.substr(0, 1) !== "/") {
@@ -175,7 +175,7 @@ const helpers = {
         return newArray;
     },
 
-    randomInteger(min, max) {
+    randomInteger(min: number, max: number) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     },
 

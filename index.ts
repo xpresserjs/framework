@@ -96,6 +96,12 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
     // @ts-ignore
     global._ = _;
 
+    /**
+     * Get Xjs Cli Config
+     */
+    const CliConfig: any = (global as any)["XjsCliConfig"];
+
+
     /* ------------- $.on Events Loader ------------- */
     require("./src/On");
 
@@ -127,7 +133,7 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
     const LaunchType = process.argv[2];
     $.engineData.set("LaunchType", LaunchType);
 
-    if (typeof global["XjsCliConfig"] !== "undefined" || LaunchType === "cli") {
+    if (typeof CliConfig !== "undefined" || LaunchType === "cli") {
         $.options.isConsole = true;
     }
 
@@ -190,7 +196,7 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
              * This config is only used by xpresser cron.
              * Used to load your main file without booting it
              */
-            if (!(typeof global["XjsCliConfig"] !== "undefined" && global["XjsCliConfig"]["require_only"])) {
+            if (!(typeof CliConfig !== "undefined" && CliConfig["require_only"])) {
                 $.ifConsole(() => {
                     require("./src/StartConsole");
                 }, () => {

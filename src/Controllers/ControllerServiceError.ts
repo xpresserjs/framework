@@ -1,7 +1,7 @@
 class ControllerServiceError {
     public args: any[];
 
-    constructor(args) {
+    constructor(args: any[]) {
         this.args = args;
     }
 }

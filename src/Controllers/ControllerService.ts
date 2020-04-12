@@ -28,7 +28,8 @@ class ControllerService {
      * @param $services - object of services.
      */
     public services($services: Controller.Services): this {
-        this.controller.__extend__.services = Object.assign(this.controller.__extend__.services || {}, $services);
+        // @ts-ignore
+        this.controller.__extend__.services = Object.assign(this.controller.__extend__.services as object || {}, $services);
         return this;
     }
 

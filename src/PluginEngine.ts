@@ -1,5 +1,6 @@
 import PathHelper = require("./Helpers/Path");
-import {DollarSign} from "../types";
+import  {DollarSign} from "../types";
+import {StringToAnyKeyObject} from "./CustomTypes";
 
 declare const $: DollarSign;
 
@@ -11,7 +12,7 @@ const pluginRoutes = [] as any[];
 /**
  * PluginNamespaceToData - Holds plugin data using namespaces as keys.
  */
-const PluginNamespaceToData = {};
+const PluginNamespaceToData: StringToAnyKeyObject = {};
 
 /**
  * Check if plugin file exists or throw error.
@@ -220,7 +221,7 @@ class PluginEngine {
 
         // check if plugin use.json has extends
         if ($data.has("extends")) {
-            const extensionData = {};
+            const extensionData: StringToAnyKeyObject = {};
             if ($data.has("extends.RequestEngine")) {
                 const extenderPath = $data.get("extends.RequestEngine");
                 extensionData["RequestEngine"] = pluginPathExistOrExit(plugin, path, extenderPath);

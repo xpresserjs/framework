@@ -1,4 +1,4 @@
-import ejs = require("ejs");
+const ejs = require("ejs");
 import fs = require("fs");
 
 import {Http} from "../types/http";
@@ -23,7 +23,6 @@ class RequestEngine {
     public bothData: any;
     public session: any;
     public fn: Helpers.Util;
-    public customRenderer: () => string;
     public route: {
         name: string,
         method: string,
@@ -69,11 +68,12 @@ class RequestEngine {
         this.fn = _.extend({}, $.helpers, requestHelpers(this));
     }
 
+    public customRenderer(...args: any[]): string { return ""}
     /**
      * Request Next Function
      */
-    public next() {
-        return null;
+    public next(): void {
+        // Next block is empty
     }
 
     /**
@@ -91,7 +91,7 @@ class RequestEngine {
      * @returns {*}
      * @deprecated
      */
-    public get(key, $default) {
+    public get(key: string, $default?: any) {
         if (this.bothData.hasOwnProperty(key)) {
             return this.bothData[key];
         }
@@ -133,7 +133,7 @@ class RequestEngine {
      * @param pluck
      * @returns {*}
      */
-    public all(pluck = []) {
+    public all(pluck: any[] = []) {
         const all = _.extend({}, this.req.query, this.req.body);
         if (pluck.length) {
             return _.pick(all, pluck);
@@ -185,7 +185,7 @@ class RequestEngine {
      * @param {boolean} proceed
      * @param {number} status
      */
-    public sayToApi(message, proceed = true, status = 200) {
+    public sayToApi(message: string, proceed = true, status = 200) {
         return this.toApi({
             __say: message,
         }, proceed, status);
@@ -197,7 +197,7 @@ class RequestEngine {
      * @param {boolean} proceed
      * @param {number} status
      */
-    public sayToApiFalse(message, proceed = false, status = 200) {
+    public sayToApiFalse(message: string, proceed = false, status = 200) {
         return this.toApi({
             __say: message,
         }, proceed, status);
@@ -227,11 +227,11 @@ class RequestEngine {
      * @param {Array|string} keys
      * @returns {*}
      */
-    public redirectToRoute(route, keys = []) {
+    public redirectToRoute(route: string, keys = []) {
         return this.redirect($.helpers.route(route, keys));
     }
 
-    public viewData(file) {
+    public viewData(file: string) {
         const localsConfig = $.config.template.locals;
         const all = localsConfig.all;
 
@@ -282,13 +282,13 @@ class RequestEngine {
      * @param useEjs
      * @returns {*}
      */
-    public view(file, data = {}, fullPath: boolean = false, useEjs = false) {
+    public view(file: string, data = {}, fullPath: boolean = false, useEjs = false) {
 
         /**
          * Express Default Renderer
          * @param args
          */
-        const defaultRender = (...args) => {
+        const defaultRender = (...args: any[]) => {
             // @ts-ignore
             return this.res.render(...args);
         };
@@ -348,6 +348,7 @@ class RequestEngine {
             ));
         } else {
             try {
+                // @ts-ignore
                 return Render(...arguments);
             } catch (e) {
                 $.logError(e.stack);
@@ -362,7 +363,7 @@ class RequestEngine {
      * @return {*}
      * @alias
      */
-    public renderView(...args) {
+    public renderView(...args: any[]) {
         // @ts-ignore
         return this.view(...args);
     }
@@ -373,7 +374,7 @@ class RequestEngine {
      * @return {*}
      * @alias
      */
-    public render(...args) {
+    public render(...args: any[]) {
         // @ts-ignore
         return this.view(...args);
     }
@@ -384,7 +385,7 @@ class RequestEngine {
      * @param {Object} data
      * @returns {*}
      */
-    public renderViewFromEngine(file, data) {
+    public renderViewFromEngine(file: string, data: any) {
 
         const view = $.path.engine("backend/views/" + file);
         return this.renderView(view, data, true, true);
@@ -397,7 +398,7 @@ class RequestEngine {
      * @param {*} value
      * @returns {RequestEngine}
      */
-    public with(data, value = null) {
+    public with(data: any, value = null) {
         if (typeof data === "string") {
             this.req.flash(data, value);
         } else {

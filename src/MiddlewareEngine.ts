@@ -10,7 +10,7 @@ declare const _: any;
  * @param {*} action
  * @param route
  */
-const MiddlewareEngine = (middlewarePath: any, action?, route?): any => {
+const MiddlewareEngine = (middlewarePath: any, action?: any, route?: any): any => {
 
     /**
      * if middleware has a dot sing we check if it is project extension file
@@ -56,7 +56,7 @@ const MiddlewareEngine = (middlewarePath: any, action?, route?): any => {
     /**
      * Return Parsed Middleware
      */
-    return async (req, res, next) => {
+    return async (req: any, res: any, next: any) => {
         const request = new RequestEngine(req, res, next, route);
         if (typeof middleware === "function") {
             return middleware(request);

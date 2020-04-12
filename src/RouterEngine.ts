@@ -1,14 +1,15 @@
 import MiddlewareEngine = require("./MiddlewareEngine");
 import XpresserRouter = require("@xpresser/router/index");
 import {DollarSign} from "../types";
+import {StringToAnyKeyObject} from "./CustomTypes";
 
 const AllRoutesKey = "RouterEngine:allRoutes";
 
 declare const _: any;
 declare const $: DollarSign;
 
-const NameToRoute = {};
-const ProcessedRoutes = [];
+const NameToRoute: StringToAnyKeyObject = {};
+const ProcessedRoutes: any[] = [];
 
 class RouterEngine {
     /**
@@ -36,7 +37,7 @@ class RouterEngine {
      * Get All Processed Routes
      * @returns {*}
      */
-    public static allProcessedRoutes($format?, $key: string = "path") {
+    public static allProcessedRoutes($format?: string, $key: string = "path") {
         if ($format === "array") {
             const routesArray = [];
             for (let i = 0; i < ProcessedRoutes.length; i++) {
@@ -74,7 +75,8 @@ class RouterEngine {
     public static namedRoutes(format = false) {
         if (format !== false) {
             const names = Object.keys(NameToRoute);
-            const newFormat = {};
+            const newFormat: StringToAnyKeyObject = {};
+
             for (let i = 0; i < names.length; i++) {
                 const name = names[i];
                 const route = NameToRoute[name];
@@ -106,7 +108,7 @@ class RouterEngine {
         }
 
         const names = Object.keys(NameToRoute);
-        const newRoutes = {};
+        const newRoutes: StringToAnyKeyObject = {};
 
         for (let i = 0; i < names.length; i++) {
             const name = names[i];
@@ -134,7 +136,7 @@ class RouterEngine {
 
         const routes = RouterEngine.nameToPath();
         const names = Object.keys(routes);
-        const newRoutes = {};
+        const newRoutes: StringToAnyKeyObject = {};
 
         for (let i = 0; i < names.length; i++) {
             const name = names[i];
@@ -150,7 +152,7 @@ class RouterEngine {
      * @param routes
      * @param parent
      */
-    public static processRoutes(routes = null, parent: any = {}) {
+    public static processRoutes(routes: any = null, parent: any = {}) {
         const Controller = require("./ControllerEngine");
 
         if (!Array.isArray(routes)) {
@@ -282,7 +284,7 @@ class RouterEngine {
 
             if (typeof route.children !== "undefined" && Array.isArray(route.children)) {
                 if (canRegisterRoutes) {
-                    const RegisterMiddleware = (middleware) => {
+                    const RegisterMiddleware = (middleware: string) => {
                         const PathMiddleware = MiddlewareEngine(middleware);
                         if (PathMiddleware) {
                             $.app.use(route.path, PathMiddleware);
@@ -290,7 +292,7 @@ class RouterEngine {
                     };
 
                     if (Array.isArray(route.middleware)) {
-                        route.middleware.forEach((element) => {
+                        route.middleware.forEach((element: any) => {
                             RegisterMiddleware(element);
                         });
                     } else if (typeof route.middleware === "string") {
@@ -307,6 +309,7 @@ class RouterEngine {
 
                 if (canRegisterRoutes) {
                     const controller = Controller(route);
+                    // @ts-ignore
                     $.app[route.method](route.path, controller.middlewares, controller.method);
                 }
             }

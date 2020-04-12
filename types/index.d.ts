@@ -18,6 +18,7 @@ import Controller = require("../src/Classes/Controller");
 import {Controller as HttpController} from "./http";
 
 type TodoFunction = (next?: any) => any;
+type StringToAnyKeyObject = {[key: string]: any}
 
 declare namespace Xpresser {
     export type Router = XpresserRouter;
@@ -215,7 +216,7 @@ declare namespace Xpresser {
             /**
              * Returns events object.
              */
-            events(): object;
+            events(): StringToAnyKeyObject;
 
             /**
              * Add `on.start` middleware.
@@ -263,6 +264,8 @@ declare namespace Xpresser {
              * @param todo
              */
             https(todo: TodoFunction | TodoFunction[]): void;
+
+            [key: string]: any
         };
 
         /*----------------- PATH FUNCTIONS ------------------- */
@@ -399,7 +402,7 @@ declare namespace Xpresser {
      */
     export namespace JsonSettings {
         interface Use {
-            middlewares?: object;
+            middlewares?: StringToAnyKeyObject;
         }
     }
 }

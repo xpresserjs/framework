@@ -175,7 +175,7 @@ if (useSession && startSessionOnBoot) {
 
 // Set local AppData
 $.app.locals.appData = {};
-$.app.use(async (req: Http.Request, res: Http.Response, next?: () => void) => {
+$.app.use(async (req: any, res: any, next: () => void) => {
 
     // Convert Empty Strings to Null
     if (req.body && Object.keys(req.body).length) {
@@ -233,7 +233,7 @@ const afterExpressInit = (next: () => void) => {
     }
 
     const $globalMiddlewareWrapper = ($middlewareFn: any) => {
-        return async (res, req, next) => {
+        return async (res: any, req: any, next: any) => {
             const x = new RequestEngine(res, req, next);
             return $middlewareFn(x);
         };
@@ -278,14 +278,14 @@ const afterExpressInit = (next: () => void) => {
  * StartHttpServer
  * Http server starts here.
  */
-const startHttpServer = (onSuccess = undefined, onError = undefined) => {
+const startHttpServer = (onSuccess?: () => any, onError?: () => any) => {
 
     $.routerEngine.processRoutes($.router.routes);
 
     /**
      * Add 404 error
      */
-    $.app.use((req: Http.Request, res: Http.Response, next: () => void) => {
+    $.app.use((req: any, res: any, next: () => void) => {
         const x = new RequestEngine(req, res, next);
         const error = new (require("./ErrorEngine"))(x);
         res.status(404);
@@ -301,7 +301,7 @@ const startHttpServer = (onSuccess = undefined, onError = undefined) => {
     $.http = createHttpServer($.app);
     const port = $.$config.get("server.port", 80);
 
-    $.http.on("error", (err) => {
+    $.http.on("error", (err: any) => {
         if (err["errno"] === "EADDRINUSE") {
             return $.logErrorAndExit(`Port ${err["port"]} is already in use.`);
         }

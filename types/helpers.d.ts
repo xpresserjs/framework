@@ -45,7 +45,7 @@ declare namespace Xpresser {
              * @param str
              * @param $keywords
              */
-            findWordsInString(str: string, $keywords: string[]): RegExpMatchArray;
+            findWordsInString(str: string, $keywords: string[]): RegExpMatchArray | null;
 
             /**
              * Check if value is a promise

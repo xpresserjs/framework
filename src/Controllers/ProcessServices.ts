@@ -4,6 +4,7 @@ import ControllerServiceError = require("./ControllerServiceError");
 import {DollarSign} from "../../types";
 import {Http} from "../../types/http";
 import {ServerResponse} from "http";
+import {StringToAnyKeyObject} from "../CustomTypes";
 
 declare const $: DollarSign;
 
@@ -14,10 +15,10 @@ export = async (
     config: {
         services?: object,
     },
-    error: (...args) => any,
+    error: (...args: any[]) => any,
 ) => {
-    const DefinedServices = config.services || {};
-    const completedServices = {};
+    const DefinedServices: StringToAnyKeyObject = config.services || {};
+    const completedServices: StringToAnyKeyObject = {};
     const serviceKeys = Object.keys(requestServices);
 
     for (const serviceKey of serviceKeys) {
@@ -25,7 +26,7 @@ export = async (
             boot,
             http: x,
             services: completedServices,
-            error: (...args) => {
+            error: (...args: any[]) => {
                 return new ControllerServiceError(args);
             },
         };

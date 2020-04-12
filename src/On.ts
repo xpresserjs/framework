@@ -3,7 +3,7 @@ import {DollarSign} from "../types";
 
 declare const $: DollarSign;
 
-const OnEvents = {
+const OnEvents: {[key: string]: any[]} = {
     start: [],
     boot: [],
     expressInit: [],
@@ -19,7 +19,7 @@ const OnEvents = {
  * @param todo
  * @constructor
  */
-const AddToEvents = (name, todo) => {
+const AddToEvents = (name: any, todo: any) => {
     if (Array.isArray(todo)) {
         for (const key in todo) {
             if (todo.hasOwnProperty(key)) {

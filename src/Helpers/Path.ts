@@ -153,7 +153,7 @@ class PathHelper {
             }
             for (let i = 0; i < array.length; i++) {
                 const file = array[i];
-                array[i] = this.removeProjectFileExtension(file);
+                array[i] = this.removeProjectFileExtension(file) as string;
             }
 
             return array;

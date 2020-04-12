@@ -5,7 +5,7 @@ import ObjectCollection = require("object-collection/index");
 import {DollarSign} from "../../types";
 
 declare const $: DollarSign;
-const DefinedEvents: object = {};
+const DefinedEvents: StringToAnyKeyObject = {};
 const EventsPath = $.path.events();
 
 if (fs.existsSync(EventsPath)) {
@@ -78,5 +78,6 @@ if (fs.existsSync(EventsPath)) {
 
 // Import Emitter
 import EventsEmitter = require("./Emitter");
+import {StringToAnyKeyObject} from "../CustomTypes";
 // Set global $.events to Emitter
 $.events = EventsEmitter(DefinedEvents);

@@ -2,7 +2,7 @@ const chalk = require("chalk");
 import {DollarSign} from "../../types";
 
 declare const $: DollarSign;
-declare let _;
+declare let _: any;
 
 /**
  * Log Function
@@ -77,6 +77,7 @@ $.logPerLine = ($logs = [], $spacePerLine= false) => {
         } else if (typeof $log === "object") {
             const key = Object.keys($log)[0];
 
+            // @ts-ignore
             $["log" + _.upperFirst(key)]($log[key]);
 
         } else {

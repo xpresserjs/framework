@@ -1,7 +1,9 @@
-export =  (x) => {
+import {Http} from "../../types/http";
+
+export =  (http: Http) => {
     return {
-        currentViewIs(path, ifTrue = undefined, ifFalse = undefined) {
-            const currentView = x.res.locals.ctx.$currentView;
+        currentViewIs(path: string, ifTrue = undefined, ifFalse = undefined) {
+            const currentView = http.res.locals.cthttp.$currentView;
             const check = currentView === path;
 
             if (check === true && ifTrue !== undefined) { return ifTrue; }
@@ -10,8 +12,8 @@ export =  (x) => {
             return check;
         },
 
-        old(key, $default = "") {
-            const value = x.res.locals.ctx.$flash["old:" + key];
+        old(key: string, $default = "") {
+            const value = http.res.locals.cthttp.$flash["old:" + key];
             if (typeof value !== "undefined") {
                 return value;
             }
@@ -19,13 +21,13 @@ export =  (x) => {
             return $default;
         },
 
-        pushToScriptsStack(scriptPath) {
-            if (!Array.isArray("string")) {
+        pushToScriptsStack(scriptPath: string | string[]) {
+            if (!Array.isArray(scriptPath)) {
                 scriptPath = [scriptPath];
             }
 
             for (let i = 0; i < scriptPath.length; i++) {
-                x.res.locals.ctx.$stackedScripts.push(scriptPath[i]);
+                http.res.locals.cthttp.$stackedScripts.push(scriptPath[i]);
             }
 
             return "";
@@ -35,15 +37,11 @@ export =  (x) => {
 
             let scripts = "";
 
-            for (let i = 0; i < x.res.locals.ctx.$stackedScripts.length; i++) {
-                scripts += '<script src="' + x.res.locals.ctx.$stackedScripts[i] + '"></script>';
+            for (let i = 0; i < http.res.locals.cthttp.$stackedScripts.length; i++) {
+                scripts += '<script src="' + http.res.locals.cthttp.$stackedScripts[i] + '"></script>';
             }
 
             return scripts;
-        },
-
-        auth() {
-            return x.authUser();
         },
     };
 };
