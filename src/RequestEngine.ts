@@ -68,7 +68,11 @@ class RequestEngine {
         this.fn = _.extend({}, $.helpers, requestHelpers(this));
     }
 
-    public customRenderer(...args: any[]): string { return ""}
+    /**
+     * If User has customRenderer then use it.
+     */
+    public customRenderer: (...args: any[]) => string
+
     /**
      * Request Next Function
      */
