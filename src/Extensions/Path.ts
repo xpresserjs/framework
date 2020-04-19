@@ -82,6 +82,16 @@ $.path = {
         return returnRequire ? require(controller) : controller;
     },
 
+    middlewares: (path: string = "", returnRequire: boolean = false): string | any => {
+        if (path[0] === "/") {
+            path = path.substr(1);
+        }
+
+        const middleware = Path.resolve([$.config.paths.middlewares, path]);
+
+        return returnRequire ? require(middleware) : middleware;
+    },
+
     models: (path: string = "", returnRequire: boolean = false): string | any => {
         if (path[0] === "/") {
             path = path.substr(1);

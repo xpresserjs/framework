@@ -24,6 +24,34 @@ const $useDotJson = $.engineData.get("UseDotJson");
 $.app = express();
 
 /**
+ * Set Express View Engine from config
+ */
+const template = $.config.template;
+
+if (typeof template.engine === "function") {
+
+    $.app.engine(template.extension, template.engine);
+    $.app.set("view engine", template.extension);
+
+} else {
+    if (typeof template.use === "string") {
+
+        $.app.use($.use.package(template.use));
+
+    } else if (typeof template.use === "function") {
+
+        $.app.use(template.use);
+
+    } else {
+
+        $.app.set("view engine", template.engine);
+
+    }
+}
+
+$.app.set("views", $.path.views());
+
+/**
  * If {server.poweredBy=true}
  * Set X-Powered-By to Xpresser.
  * Else
@@ -173,6 +201,48 @@ if (useSession && startSessionOnBoot) {
 }
 
 
+import RequestEngine = require("./Plugins/ExtendedRequestEngine");
+import ControllerService = require("./Controllers/ControllerService");
+
+/**
+ * Maintenance Middleware
+ */
+const isUnderMaintenance = $.file.exists($.path.base('.maintenance'))
+if (isUnderMaintenance) {
+    $.logError(`App is under Maintenance!`);
+
+    /**
+     * Get maintenance middleware
+     */
+    let maintenanceMiddleware: any = $.$config.get('server.maintenanceMiddleware');
+    maintenanceMiddleware = $.path.middlewares(maintenanceMiddleware);
+
+    /**
+     * Check if maintenance middleware exists
+     * if true require
+     */
+    const maintenanceMiddlewareExists = $.file.exists(maintenanceMiddleware);
+    if (maintenanceMiddlewareExists) maintenanceMiddleware = require(maintenanceMiddleware);
+
+    $.app.use((req: any, res: any, next: any) => {
+        // Get RequestEngine instance
+        const http = new RequestEngine(req, res, next);
+
+        // Use maintenanceMiddleware if it exists
+        if (maintenanceMiddlewareExists) return maintenanceMiddleware(http);
+
+        // Or use default view.
+        return http.newError().view({
+            error: {
+                title: 'Maintenance Mood!',
+                // message: `App is under maintenance`,
+                log: 'We will be right back shortly!',
+            },
+        }, 200);
+    });
+}
+
+
 // Set local AppData
 $.app.locals.appData = {};
 $.app.use(async (req: any, res: any, next: () => void) => {
@@ -191,40 +261,9 @@ $.app.use(async (req: any, res: any, next: () => void) => {
 });
 
 /**
- * Set Express View Engine from config
- */
-const template = $.config.template;
-
-if (typeof template.engine === "function") {
-
-    $.app.engine(template.extension, template.engine);
-    $.app.set("view engine", template.extension);
-
-} else {
-    if (typeof template.use === "string") {
-
-        $.app.use($.use.package(template.use));
-
-    } else if (typeof template.use === "function") {
-
-        $.app.use(template.use);
-
-    } else {
-
-        $.app.set("view engine", template.engine);
-
-    }
-}
-
-$.app.set("views", $.path.views());
-
-/**
  *  AfterExpressInit Function
  *  This function happens immediately after on.expressInit events are completed.
  */
-import RequestEngine = require("./Plugins/ExtendedRequestEngine");
-import ControllerService = require("./Controllers/ControllerService");
-
 const afterExpressInit = (next: () => void) => {
     // Not Tinker? Require Controllers
     if (!$.options.isTinker) {
@@ -286,15 +325,13 @@ const startHttpServer = (onSuccess?: () => any, onError?: () => any) => {
      * Add 404 error
      */
     $.app.use((req: any, res: any, next: () => void) => {
-        const x = new RequestEngine(req, res, next);
-        const error = new (require("./ErrorEngine"))(x);
         res.status(404);
 
         // respond with json
         if (req.xhr) {
             return res.send({error: "Not found"});
         } else {
-            return error.pageNotFound(req);
+            return (new RequestEngine(req, res, next)).newError().pageNotFound();
         }
     });
 

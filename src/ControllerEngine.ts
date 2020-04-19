@@ -1,5 +1,4 @@
 import express = require("express");
-import ErrorEngine = require("./ErrorEngine");
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 import MiddlewareEngine = require("./MiddlewareEngine");
 import ControllerService = require("./Controllers/ControllerService");
@@ -303,8 +302,7 @@ class ControllerEngine {
                     try {
                         boot = controller.boot(http, mockErrorHandler);
                     } catch (e) {
-                        const error = new ErrorEngine(http);
-                        return error.view({
+                        return http.newError().view({
                             error: {
                                 // tslint:disable-next-line:max-line-length
                                 message: `Error in Controller Boot Method:  <code>${controllerName}</code>`,
@@ -356,8 +354,7 @@ class ControllerEngine {
                             }
                         }
                     } catch (e) {
-                        const error = new ErrorEngine(http);
-                        return error.view({
+                        return http.newError().view({
                             error: {
                                 // tslint:disable-next-line:max-line-length
                                 message: `Error in Controller:  <code>${controllerName}</code>, Method: <code>${m}</code>`,

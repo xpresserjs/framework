@@ -4,6 +4,13 @@ const DefaultTimestamp = "YYYY-MM-DD H:mm:ss";
  * Server Related configurations.
  */
 const ServerConfig = {
+
+    /**
+     * Middleware to handle server under maintenance mood
+     *
+     * if not found default is used.
+     */
+    maintenanceMiddleware: "MaintenanceMiddleware.js",
     /**
      * Server Port for http connections
      */

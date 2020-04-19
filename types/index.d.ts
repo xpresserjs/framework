@@ -301,6 +301,13 @@ declare namespace Xpresser {
             controllers(path?: string, returnRequire?: boolean): string | any;
 
             /**
+             * Get path Middleware folder
+             * @param path
+             * @param returnRequire
+             */
+            middlewares(path?: string, returnRequire?: boolean): string | any;
+
+            /**
              * Get path in Framework view folder
              */
             views(path?: string): string;
