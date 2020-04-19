@@ -8,7 +8,7 @@ class ErrorEngine {
     }
 
     public view(data: any, status = 500) {
-        this.http.res.status(500);
+        this.http.res.status(status);
         return this.http.renderViewFromEngine("__errors/index", data);
     }
 
@@ -26,7 +26,8 @@ class ErrorEngine {
         return this.view({error});
     }
 
-    public pageNotFound(req: any) {
+    public pageNotFound() {
+        const req = this.http.req;
         const error = {
             title: `404 Error!`,
             message: `<code>${req.method}: ${req.url}</code> <br><br> Route not found!`,

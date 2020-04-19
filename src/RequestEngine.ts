@@ -1,10 +1,12 @@
-const ejs = require("ejs");
 import fs = require("fs");
 
-import {Http} from "../types/http";
-import requestHelpers = require("./Functions/request.fn");
+const ejs = require("ejs");
 import ObjectCollection = require("object-collection");
+import requestHelpers = require("./Functions/request.fn");
+import ErrorEngine = require("./ErrorEngine");
+
 import {DollarSign} from "../types";
+import {Http} from "../types/http";
 import {Helpers} from "../types/helpers";
 
 declare const _: any;
@@ -71,7 +73,16 @@ class RequestEngine {
     /**
      * If User has customRenderer then use it.
      */
+        // @ts-ignore
     public customRenderer: (...args: any[]) => string
+
+
+    /**
+     * Returns an instance of ErrorEngine
+     */
+    newError(): ErrorEngine {
+        return new ErrorEngine(this)
+    }
 
     /**
      * Request Next Function
