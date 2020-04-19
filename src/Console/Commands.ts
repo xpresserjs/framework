@@ -27,7 +27,38 @@ const removeSlashAtEnd = (str: string) => {
     return str;
 };
 
+/**
+ * Path to maintenance file
+ */
+const maintenanceFile = $.path.base('.maintenance');
+
+
 const Commands = {
+    up() {
+        if (!fs.existsSync(maintenanceFile)) {
+            return $.logAndExit('App is already up')
+        }
+
+        fs.unlinkSync(maintenanceFile);
+
+        $.log('App is now up!');
+        $.logAndExit('Reload your server if you have an active instance already running.')
+    },
+
+    down() {
+        if (fs.existsSync(maintenanceFile)) {
+            return $.logAndExit('App is already down')
+        }
+
+        fs.writeFileSync(maintenanceFile, JSON.stringify({
+            date: (new Date()).toUTCString()
+        }));
+
+        $.log('App is now in maintenance mood!');
+        $.logAndExit('Reload your server if you have an active instance already running.')
+
+    },
+
     install([$plugin]) {
         if ($plugin === "undefined") {
             return logThis("Plugin not specified!");
@@ -49,7 +80,7 @@ const Commands = {
         }
 
         if (search === 'ctrl') search = 'controller';
-        if(search === 'method' && query) query = query.toUpperCase();
+        if (search === 'method' && query) query = query.toUpperCase();
 
         let data = [];
 
