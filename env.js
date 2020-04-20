@@ -1,5 +1,6 @@
 const fs = require("fs");
-const dotenv = require("dotenv");
+const dotEnv = require("dotenv");
+const dotEnvExpand = require("dotenv-expand")
 
 /**
  * Cast True/False to booleans.
@@ -25,13 +26,16 @@ const castBooleans = (env) => {
 /**
  * Load .env file
  * @param path - path to .env file.
- * @param config - env options.
+ * @param {{castBoolean: boolean, required: []}} config - env options.
  * @returns {*}
  */
-module.exports = (path, config = {
-    castBoolean: true,
-    required: [],
-}) => {
+module.exports = (path, config = {}) => {
+    config = {
+        castBoolean: true,
+        required: [],
+        ...config
+    };
+
 
     if (!fs.existsSync(path)) {
         throw new Error(`Env file: {${path}} does not exists!`);
@@ -45,7 +49,8 @@ module.exports = (path, config = {
      * Get parsed env variables
      * @type {{}}
      */
-    let env = dotenv.config({path}).parsed;
+    let env = dotEnvExpand(dotEnv.config({path})).parsed;
+
 
     if (config.castBoolean) env = castBooleans(env);
 
