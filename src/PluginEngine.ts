@@ -106,7 +106,7 @@ class PluginEngine {
                             // Throw any error from processing and stop xpresser.
                             $.logPerLine([
                                 {error: plugin},
-                                {error: e.message},
+                                {error: e.stack},
                                 {errorAndExit: ""},
                             ], true);
                         }
