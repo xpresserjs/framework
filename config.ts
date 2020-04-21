@@ -170,7 +170,7 @@ const Config = {
 
     // Session Configurations
     session: {
-        startOnBoot: true,
+        startOnBoot: false,
         secret: "!XpresserSecretKey!",
         cookie: {
             path: ServerConfig.root,
