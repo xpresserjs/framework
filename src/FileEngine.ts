@@ -90,7 +90,7 @@ $.file = {
      * @param $options
      */
     read($path: string, $options?: { encoding?: string, flag?: string }): string | Buffer | false {
-        return  $.file.get($path, $options);
+        return $.file.get($path, $options);
     },
 
     /**
@@ -98,10 +98,11 @@ $.file = {
      * @param $path
      * @param $options
      */
-    readDirectory($path: string, $options?: { encoding?: string,
+    readDirectory($path: string, $options?: {
+        encoding?: string,
         writeFileTypes?: string,
     }): string[] | Buffer[] | false {
-        return  this.getDirectory($path, $options);
+        return this.getDirectory($path, $options);
     },
 
     /**
@@ -197,4 +198,41 @@ $.file = {
             }
         }
     },
+
+    readJson($path: string) {
+        /**
+         * Check if path exists
+         */
+        if (!fs.existsSync($path)) {
+            throw Error(`RequireJson: Path (${$path}) does not exists.`);
+        }
+
+        try {
+            const file = fs.readFileSync($path).toString();
+            return JSON.parse(file);
+        } catch (e) {
+            throw Error(`RequireJson: Error parsing json file (${$path})`);
+        }
+    },
+
+    saveToJson($path: string, $content: any, $options = {}) {
+        $options = Object.assign({
+            checkIfFileExists: true,
+            replacer: null,
+            space: 2
+        }, $options)
+        /**
+         * Check if path exists
+         */
+        if ($options.checkIfFileExists && !fs.existsSync($path)) {
+            throw Error(`SaveToJson: Path (${$path}) does not exists.`);
+        }
+
+        try {
+            fs.writeFileSync($path, JSON.stringify($content, $options.replacer, $options.space))
+            return true;
+        } catch (e) {
+            throw Error(`RequireJson: Error saving data to json file (${$path})`);
+        }
+    }
 };

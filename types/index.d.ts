@@ -7,7 +7,7 @@
  *~ Otherwise, delete this declaration..
  */
 import {Helpers} from "./helpers";
-import Net =  require("net");
+import Net = require("net");
 import express = require("express");
 import ObjectCollection = require("object-collection");
 import UseEngine = require("../src/UseEngine");
@@ -18,7 +18,8 @@ import Controller = require("../src/Classes/Controller");
 import {Controller as HttpController} from "./http";
 
 type TodoFunction = (next?: any) => any;
-type StringToAnyKeyObject = {[key: string]: any}
+type StringToAnyKeyObject = { [key: string]: any }
+type NumberToAnyKeyObject = { [key: number]: any }
 
 declare namespace Xpresser {
     export type Router = XpresserRouter;
@@ -209,6 +210,26 @@ declare namespace Xpresser {
              * @param $deleteDirectories
              */
             delete($path: string | string[], $returnList?, $deleteDirectories?): boolean | string[];
+
+
+            /**
+             * Requires a json file by reading file and parsing to json.
+             * Throws error if file does not exists
+             */
+            readJson($path: string): StringToAnyKeyObject | NumberToAnyKeyObject | any[];
+
+            /**
+             * Save content to a json file.
+             * saveToJson uses JSON.stringify() to parse object to string before saving to file.
+             * @param $path - Path of file to save to
+             * @param $content - Content to save to file
+             * @param $options
+             */
+            saveToJson($path: string, $content: StringToAnyKeyObject | NumberToAnyKeyObject | any[], $options?: {
+                checkIfFileExists?: boolean,
+                replacer?: (this: any, key: string, value: any) => any,
+                space?: number
+            }): boolean;
         };
 
         /*----------------- ON FUNCTIONS ------------------- */

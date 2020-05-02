@@ -133,7 +133,7 @@ class UseEngine {
         const fullPath = $.path.backend("{file}" + $.config.project.fileExtension);
         const [hasPath, realPath] = fileExistsInPath(path, fullPath);
         if (!hasPath) {
-            return $.logErrorAndExit(`File ${realPath} does not exist!`);
+            throw Error(`File ${realPath} does not exist!`);
         }
         return require(realPath);
     }
@@ -150,7 +150,11 @@ class UseEngine {
 
         if (!hasPath) {
             // @ts-ignore
-            return !handleError ? false : $.logErrorAndExit(`Model ${realPath} does not exists`);
+            if (!handleError) {
+                return false
+            } else {
+                throw new Error(`Model ${realPath} does not exists`);
+            }
         }
         return require(realPath);
     }
@@ -162,7 +166,7 @@ class UseEngine {
      * @param {boolean} [suffix=true]
      * @return {boolean|*}
      */
-    public static middleware(middleware:string, handleError = true, suffix = true) {
+    public static middleware(middleware: string, handleError = true, suffix = true) {
         if (typeof Use.middlewares === "object") {
             const useMiddlewares = Use.middlewares;
             const middleWithoutSuffix = StringHelper.withoutSuffix(middleware, "Middleware");
