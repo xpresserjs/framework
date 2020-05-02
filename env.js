@@ -41,8 +41,15 @@ module.exports = (path, config = {}) => {
         throw new Error(`Env file: {${path}} does not exists!`);
     }
 
+    let isDir = false;
     if (fs.lstatSync(path).isDirectory()) {
         path = path + "/.env";
+        isDir = true;
+    }
+
+    // Recheck env
+    if (isDir && !fs.existsSync(path)) {
+        throw new Error(`Env file: {${path}} does not exists!`);
     }
 
     /**
