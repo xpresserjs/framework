@@ -12,6 +12,7 @@ export = (DefinedEvents: StringToAnyKeyObject) => {
         payload: any[],
         callback?: (eventResult: any) => any,
     }) => {
+        console.log('EVENT:', $payload)
         if (DefinedEvents.hasOwnProperty($payload.event)) {
 
             let eventResult = undefined;

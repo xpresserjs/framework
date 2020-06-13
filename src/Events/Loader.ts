@@ -40,7 +40,7 @@ if (fs.existsSync(EventsPath)) {
                     } catch (e) {
                         $.logPerLine([
                             {error: `Error in ${shortPath}`},
-                            {errorAndExit: e},
+                            {error: e},
                             {errorAndExit: e.stack},
                         ]);
                     }
