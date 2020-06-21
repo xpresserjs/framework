@@ -2,6 +2,7 @@
 import events = require("events");
 import {DollarSign} from "../../types";
 import {StringToAnyKeyObject} from "../CustomTypes";
+
 declare const $: DollarSign;
 
 export = (DefinedEvents: StringToAnyKeyObject) => {
@@ -12,9 +13,7 @@ export = (DefinedEvents: StringToAnyKeyObject) => {
         payload: any[],
         callback?: (eventResult: any) => any,
     }) => {
-        console.log('EVENT:', $payload)
         if (DefinedEvents.hasOwnProperty($payload.event)) {
-
             let eventResult = undefined;
             try {
                 eventResult = DefinedEvents[$payload.event](...$payload.payload);
@@ -26,12 +25,12 @@ export = (DefinedEvents: StringToAnyKeyObject) => {
                 if ($.utils.isPromise(eventResult)) {
                     eventResult
                         .then((result: any) => {
-                            if($payload.callback) $payload.callback(result);
+                            if ($payload.callback) $payload.callback(result);
                         })
                         .catch((e: any) => $.logError(e));
                 } else {
                     try {
-                        if($payload.callback) $payload.callback(eventResult);
+                        if ($payload.callback) $payload.callback(eventResult);
                     } catch (e) {
                         $.logError(e);
                     }
