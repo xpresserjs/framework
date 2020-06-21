@@ -317,7 +317,11 @@ class ControllerEngine {
                     }
                 }
 
-                if (!(boot instanceof ServerResponse)) {
+                if (boot instanceof ServerResponse) {
+                    if (DebugControllerAction) {
+                        console.timeEnd(timeLogKey);
+                    }
+                } else {
                     try {
 
                         let $return;
