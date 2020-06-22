@@ -1,5 +1,4 @@
 import ControllerServiceError = require("./ControllerServiceError");
-
 // Import Types
 import {DollarSign} from "../../types";
 import {Http} from "../../types/http";
@@ -8,8 +7,14 @@ import {StringToAnyKeyObject} from "../CustomTypes";
 
 declare const $: DollarSign;
 
+/**
+ * This functions loops through all defined services,
+ * Runs them and add any data returned to the services object.
+ *
+ * Each service gets the data returned by the previous service object.
+ */
 export = async (
-    x: Http.Request,
+    http: Http.Request,
     boot: any,
     requestServices: any,
     config: {
@@ -17,27 +22,33 @@ export = async (
     },
     error: (...args: any[]) => any,
 ) => {
+
+    // List of services defined in this controller
     const DefinedServices: StringToAnyKeyObject = config.services || {};
+    // Holds data of each completed service
     const completedServices: StringToAnyKeyObject = {};
     const serviceKeys = Object.keys(requestServices);
 
+    // Each service error handler.
+    const serviceErrorHandler = (...args: any[]) => {
+        return new ControllerServiceError(args);
+    };
+
+    // loop through services.
     for (const serviceKey of serviceKeys) {
         const options = {
             boot,
-            http: x,
+            http,
             services: completedServices,
-            error: (...args: any[]) => {
-                return new ControllerServiceError(args);
-            },
+            error: serviceErrorHandler
         };
 
+        // Service action [function | string]
         const action = DefinedServices[serviceKey];
         let serviceResult: any | ControllerServiceError;
 
         if (Array.isArray(action)) {
-            serviceResult = action[0](
-                options,
-            );
+            serviceResult = action[0](options);
         } else {
             serviceResult = DefinedServices[serviceKey](
                 requestServices[serviceKey],
@@ -51,9 +62,10 @@ export = async (
 
         // Run user defined error
         if (serviceResult instanceof ControllerServiceError && error) {
-            serviceResult = error(x, ...serviceResult.args);
+            serviceResult = error(http, ...serviceResult.args);
         }
 
+        // if a service returns ServerResponse then stop loop and return that response.
         if (serviceResult instanceof ServerResponse) {
             return serviceResult;
         }

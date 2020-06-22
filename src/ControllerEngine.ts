@@ -244,7 +244,6 @@ class ControllerEngine {
             *
             * Else it will be a request handler.
             * */
-
             if (isPath) {
                 return controller(express.Router());
             } else if (typeof controller.extendsMainController !== "boolean") {
