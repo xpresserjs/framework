@@ -88,10 +88,14 @@ const Commands = {
         data.map((e) => {
             e.method = e.method.toUpperCase();
 
+            if (typeof e.controller === "string")
+                e.controller = e.controller.replace('@', '.');
+
             if (!e.controller) e.controller = '';
+
             if (!e.name) e.name = null;
 
-            e.controller = e.controller.replace('@', '.');
+
         })
 
         const searchResults = [];
