@@ -74,7 +74,7 @@ $.file = {
      * @param $path
      * @param $options
      */
-    get($path: string, $options?: { encoding?: string, flag?: string }): string | Buffer | false {
+    get($path: string, $options?: { encoding?: null, flag?: string } | null): string | Buffer | false {
         const fileExists = $.file.exists($path);
 
         if (!fileExists) {
@@ -111,7 +111,7 @@ $.file = {
      * @param $options
      */
     getDirectory($path: string, $options?: {
-        encoding?: string,
+        encoding?: null,
         writeFileTypes?: string,
     }): string[] | Buffer[] | false {
         const fileExists = $.file.exists($path);

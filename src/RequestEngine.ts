@@ -114,6 +114,15 @@ class RequestEngine {
     }
 
     /**
+     * Set response status
+     * @param code
+     */
+    public status(code: number) {
+        this.res.status(code);
+        return this;
+    }
+
+    /**
      * Request Query Data
      * @param [key]
      * @param [$default]
