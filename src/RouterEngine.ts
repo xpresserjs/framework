@@ -1,5 +1,5 @@
 import MiddlewareEngine = require("./MiddlewareEngine");
-import XpresserRouter = require("@xpresser/router/index");
+import XpresserRouter = require("@xpresser/router");
 import {DollarSign} from "../types";
 import {StringToAnyKeyObject} from "./CustomTypes";
 
