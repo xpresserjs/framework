@@ -280,8 +280,8 @@ class ControllerEngine {
             errorHandler = () => false;
         }
 
-        return async (req: Http.Request, res: Http.Response) => {
-            const http = new RequestEngine(req, res, undefined, route);
+        return async (req: Http.Request, res: Http.Response, next: any) => {
+            const http = new RequestEngine(req, res, next, route);
             // Log Time if `DebugControllerAction` is true
             let timeLogKey = "";
             const mockErrorHandler = (...args: any[]) => {
