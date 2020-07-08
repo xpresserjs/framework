@@ -310,6 +310,9 @@ const afterExpressInit = (next: () => void) => {
 
     require("./Routes/Loader");
 
+    // Process routes
+    $.routerEngine.processRoutes($.router.routes);
+
     next();
 };
 
@@ -318,9 +321,6 @@ const afterExpressInit = (next: () => void) => {
  * Http server starts here.
  */
 const startHttpServer = (onSuccess?: () => any, onError?: () => any) => {
-
-    $.routerEngine.processRoutes($.router.routes);
-
     /**
      * Add 404 error
      */
