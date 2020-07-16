@@ -28,7 +28,7 @@
     "helmet": "^3.23.3",
     "knex": "^0.21.1",
     "moment": "^2.26.0",
-    "object-collection": "^1.0.25",
+    "object-collection": "^1.0.26",
     "pluralize": "^8.0.0",
     "shelljs": "^0.8.4",
     "sqlite3": "^4.2.0"
