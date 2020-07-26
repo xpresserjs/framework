@@ -8,8 +8,7 @@ class ErrorEngine {
     }
 
     public view(data: any, status = 500) {
-        this.http.res.status(status);
-        return this.http.renderViewFromEngine("__errors/index", data);
+        return this.http.status(status).renderViewFromEngine("__errors/index", data);
     }
 
     public controllerMethodNotFound(e: any, method = "", controller = "") {
