@@ -23,7 +23,7 @@ const loadOnEvents = (name: string, done?: () => void) => {
 
         return onEvents[0](next);
     } else {
-        return done();
+        return done ? done() : false;
     }
 };
 
