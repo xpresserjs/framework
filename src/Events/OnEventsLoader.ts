@@ -2,7 +2,7 @@ import {DollarSign} from "../../types";
 
 declare const $: DollarSign;
 
-const loadOnEvents = (name: string, done: () => void) => {
+const loadOnEvents = (name: string, done?: () => void) => {
     const key = `on.${name}`;
     const onEvents: any[] = $.on.events()[name];
 

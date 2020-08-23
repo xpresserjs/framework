@@ -358,18 +358,25 @@ const startHttpServer = (onSuccess?: () => any, onError?: () => any) => {
             const domain = $.config.server.domain;
             const baseUrl = $.helpers.url();
 
+            // $.engineData
+            const ServerStarted = new Date();
+            const getServerUptime = () => global.moment(ServerStarted).fromNow();
             $.log(`Domain: ${domain} | Port: ${port} | BaseUrl: ${baseUrl}`);
-            $.log(`Server started @ (${(new Date()).toUTCString()})`);
-            $.log();
+            $.log(`Server started @ (${ServerStarted.toUTCString()})`);
+
+            $.engineData.set({ServerStarted, getServerUptime})
+
+
+            if ($.$config.has("server.ssl.enabled") && $.config.server.ssl.enabled === true) {
+                startHttpsServer();
+            } else {
+                loadOnEvents('serverBooted')
+            }
 
             if (typeof onSuccess === "function") {
                 onSuccess();
             }
         });
-
-        if ($.$config.has("server.ssl.enabled") && $.config.server.ssl.enabled === true) {
-            startHttpsServer();
-        }
     });
 };
 
@@ -417,7 +424,9 @@ const startHttpsServer = () => {
      */
     loadOnEvents("https", () => {
         $.https.listen(httpsPort, () => {
-            $.log("Ssl Enabled.");
+            $.logSuccess("Ssl Enabled.");
+
+            loadOnEvents('serverBooted')
         });
     });
 };

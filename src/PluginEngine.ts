@@ -1,6 +1,7 @@
 import PathHelper = require("./Helpers/Path");
 import  {DollarSign} from "../types";
 import {StringToAnyKeyObject} from "./CustomTypes";
+import chalk = require("chalk");
 
 declare const $: DollarSign;
 
@@ -99,7 +100,7 @@ class PluginEngine {
                              * If {log.plugins.enabled===true} then display log
                              */
                             if ($.$config.get("log.plugins.enabled", true)) {
-                                $.logIfNotConsole(`Using plugin --> {${$data.namespace}}`);
+                                $.ifNotConsole(() => $.logSuccess(`Using Plugin --> {${$data.namespace}}`));
                             }
 
                         } catch (e) {

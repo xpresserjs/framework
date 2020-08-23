@@ -127,8 +127,12 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
      * Engine Data serves as the store
      * for all data stored by Xpresser files/components
      */
-    const DataInMemory = {};
-    $.engineData = $.objectCollection(DataInMemory);
+    $.engineData = $.objectCollection({});
+    /**
+     * Store serves as the store
+     * for the application
+     */
+    $.store = $.objectCollection({});
 
     const LaunchType = process.argv[2];
     $.engineData.set("LaunchType", LaunchType);
@@ -139,13 +143,18 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
 
     // Include Loggers
     require("./src/Extensions/Loggers");
-
-    $.logIfNotConsole(`${PackageDotJson.name} v${PackageDotJson.version}`);
-    $.logIfNotConsole(`Starting ${$.config.name}...`);
-
-    // Include Extensions
-    require("./src/Extensions/Path");
+    // Include If extensions
     require("./src/Extensions/If");
+
+
+    // Log if not console
+    $.ifNotConsole(() => {
+        $.log(`${PackageDotJson.name} version ${PackageDotJson.version}`);
+        $.log(`Starting ${$.config.name}...`);
+    })
+
+    // Include Path Extensions
+    require("./src/Extensions/Path");
     // Require Global
     require("./src/global");
 

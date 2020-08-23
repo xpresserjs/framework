@@ -10,6 +10,7 @@ const OnEvents: {[key: string]: any[]} = {
     bootServer: [],
     http: [],
     https: [],
+    serverBooted: []
 };
 
 /**
@@ -59,5 +60,9 @@ $.on = {
 
     https(todo) {
         return AddToEvents("https", todo);
+    },
+
+    serverBooted(todo) {
+        return AddToEvents("serverBooted", todo);
     },
 };

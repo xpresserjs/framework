@@ -73,6 +73,8 @@ declare namespace Xpresser {
 
         // Stores Engine Data
         engineData: ObjectCollection;
+        // Serves as store for user
+        store: ObjectCollection;
 
         // Base64 Encoder
         base64: Helpers.Base64;
@@ -281,10 +283,17 @@ declare namespace Xpresser {
 
             /**
              * Add `on.https` middleware.
-             * This middleware runs after `$.http` is available.
+             * This middleware runs after `$.https` is available.
              * @param todo
              */
             https(todo: TodoFunction | TodoFunction[]): void;
+
+            /**
+             * Add `on.serverBooted` middleware.
+             * This middleware runs after `server has booted` is available.
+             * @param todo
+             */
+            serverBooted(todo: TodoFunction | TodoFunction[]): void;
 
             [key: string]: any
         };
@@ -374,6 +383,11 @@ declare namespace Xpresser {
          * Log Info
          */
         logInfo(...args): void;
+
+        /**
+         * Log Info
+         */
+        logSuccess(...args): void;
 
         /**
          * Log only if not Console

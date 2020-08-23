@@ -32,6 +32,18 @@ $.logInfo = (...args) => {
     return console.log(...args);
 };
 
+$.logSuccess = (...args) => {
+    if (!args.length) { return console.log(""); }
+
+    args.unshift("✔✔");
+
+    if (args.length === 2 && typeof args[1] === "string") {
+        return console.log(chalk.greenBright(...args));
+    }
+
+    return console.log(...args);
+};
+
 $.logIfNotConsole = (...args) => {
     if (!$.options.isConsole) {
         $.log(...args);
