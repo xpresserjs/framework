@@ -228,6 +228,7 @@ const Config = {
 };
 
 const Options = {
+    requireOnly: false,
     autoBoot: false,
     isConsole: false,
     isTinker: false,

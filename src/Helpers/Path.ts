@@ -104,7 +104,7 @@ class PathHelper {
 
     /**
      * Adds project extension to a string or array of strings
-     *
+     * @example
      * e.g if project extension is `.js`
      * ['server', 'app', 'test']
      *
@@ -135,7 +135,7 @@ class PathHelper {
 
     /**
      * Adds project extension to a string or array of strings
-     *
+     * @example
      * e.g if project extension is `.js`
      * ['server.js', 'app.js', 'test.js']
      *

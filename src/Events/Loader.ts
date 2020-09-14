@@ -1,3 +1,4 @@
+import {StringToAnyKeyObject} from "../CustomTypes";
 import fs = require("fs");
 import Path = require("../Helpers/Path");
 
@@ -78,6 +79,5 @@ if (fs.existsSync(EventsPath)) {
 
 // Import Emitter
 import EventsEmitter = require("./Emitter");
-import {StringToAnyKeyObject} from "../CustomTypes";
 // Set global $.events to Emitter
 $.events = EventsEmitter(DefinedEvents);

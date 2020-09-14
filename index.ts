@@ -32,7 +32,7 @@ const {Config, Options} = Configurations;
 /**
  * Initialize Xpresser;
  * @param AppConfig
- * @param AppOptions
+ * @param {Options} AppOptions
  * @constructor
  */
 const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarSign => {
@@ -205,7 +205,7 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
              * This config is only used by xpresser cron.
              * Used to load your main file without booting it
              */
-            if (!(typeof CliConfig !== "undefined" && CliConfig["require_only"])) {
+            if (!AppOptions.requireOnly) {
                 $.ifConsole(() => {
                     require("./src/StartConsole");
                 }, () => {
@@ -216,6 +216,13 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
     }
 
     $.boot = () => {
+        // Prevents `$.boot()` booting twice
+        if ($.engineData.has('hasBooted'))
+            return false;
+
+        // Set HasBooted in engine data
+        $.engineData.set('hasBooted', true);
+
         /**
          * Load on.start Events
          */

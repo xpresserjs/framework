@@ -21,8 +21,7 @@ const ExtendRequestEngineUsing = ($extender: ($class: any) => any) => {
 const RequireOrFail = ($RequestEngine: any, $plugin?: any) => {
     try {
         $RequestEngine = PathHelper.resolve($RequestEngine);
-        const $requestEngine = require($RequestEngine);
-        ExtendRequestEngineUsing($requestEngine);
+        ExtendRequestEngineUsing(require($RequestEngine));
     } catch (e) {
         $.logPerLine([
             $plugin === undefined ? {} : {error: `Error in plugin: ${$plugin}`},

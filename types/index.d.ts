@@ -28,6 +28,7 @@ declare namespace Xpresser {
      * Xpresser Options
      */
     export interface Options {
+        requireOnly?: boolean;
         autoBoot?: boolean;
         isConsole?: boolean;
         isTinker?: boolean;
