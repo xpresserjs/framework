@@ -10,7 +10,6 @@ const DefinedEvents: StringToAnyKeyObject = {};
 const EventsPath = $.path.events();
 
 if (fs.existsSync(EventsPath)) {
-    $.logIfNotConsole("Loading Events...");
 
     // Load all event files
     const $useDotJson: ObjectCollection = $.engineData.get("UseDotJson");
