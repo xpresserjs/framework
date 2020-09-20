@@ -167,69 +167,67 @@ class PluginEngine {
             pluginData.paths.controllers = controllerPath;
         }
 
-        // check if plugin use.json has paths.Commands only if console
-        if ($.options.isConsole && $data.has("paths.commands")) {
-            let commandPath = $data.get("paths.commands");
-            commandPath = pluginPathExistOrExit(plugin, path, commandPath);
-            pluginData.paths.commands = commandPath;
 
-            const cliCommandsPath = path + "/cli-commands.json";
+        $.ifNotConsole(() => {
+            // check if plugin use.json has paths.views
+            if ($data.has("paths.views")) {
+                let viewsPath = $data.get("paths.views");
+                viewsPath = pluginPathExistOrExit(plugin, path, viewsPath);
+                pluginData.paths.views = viewsPath;
+            }
 
-            if ($.file.isFile(cliCommandsPath)) {
-                pluginData.commands = {};
-                const cliCommands = require(cliCommandsPath);
-                if (cliCommands && Array.isArray(cliCommands)) {
-                    for (const command of cliCommands) {
-                        let commandAction = command['action'];
+            // check if plugin use.json has paths.middlewares
+            if ($data.has("paths.middlewares")) {
+                let middlewarePath = $data.get("paths.middlewares");
+                middlewarePath = pluginPathExistOrExit(plugin, path, middlewarePath);
+                pluginData.paths.middlewares = middlewarePath;
+            }
 
-                        if (!commandAction) {
-                            commandAction = command.command.split(" ")[0];
+            // check if plugin use.json has extends
+            if ($data.has("extends")) {
+                const extensionData: StringToAnyKeyObject = {};
+                if ($data.has("extends.RequestEngine")) {
+                    const extenderPath = $data.get("extends.RequestEngine");
+                    extensionData["RequestEngine"] = pluginPathExistOrExit(plugin, path, extenderPath);
+                }
+
+                pluginData.extends = extensionData;
+            }
+
+        });
+
+        $.ifIsConsole(() => {
+
+            if ($data.has('publishable')) {
+                pluginData.publishable = $data.get('publishable')
+            }
+
+            // check if plugin use.json has paths.Commands only if console
+            if ($data.has("paths.commands")) {
+                let commandPath = $data.get("paths.commands");
+                commandPath = pluginPathExistOrExit(plugin, path, commandPath);
+                pluginData.paths.commands = commandPath;
+
+                const cliCommandsPath = path + "/cli-commands.json";
+
+                if ($.file.isFile(cliCommandsPath)) {
+                    pluginData.commands = {};
+
+                    const cliCommands = require(cliCommandsPath);
+                    if (cliCommands && Array.isArray(cliCommands)) {
+                        for (const command of cliCommands) {
+                            let commandAction = command['action'];
+
+                            if (!commandAction) {
+                                commandAction = command.command.split(" ")[0];
+                            }
+
+                            pluginData.commands[commandAction] = pluginPathExistOrExit(plugin, commandPath, command.file);
                         }
-
-                        pluginData.commands[commandAction] = pluginPathExistOrExit(plugin, commandPath, command.file);
                     }
                 }
             }
-        }
-
-        // check if plugin use.json has paths.views
-        if ($data.has("paths.views")) {
-            let viewsPath = $data.get("paths.views");
-            viewsPath = pluginPathExistOrExit(plugin, path, viewsPath);
-            pluginData.paths.views = viewsPath;
-        }
-
-        // check if plugin use.json has paths.views
-        // if ($data.has("paths.migrations")) {
-        //     let migrationPath = $data.get("paths.migrations");
-        //     migrationPath = pluginPathExistOrExit(plugin, path, migrationPath);
-        //     pluginData.paths.migrations = migrationPath;
-        // }
-
-        // check if plugin use.json has paths.models
-        if ($data.has("paths.models")) {
-            let modelPath = $data.get("paths.models");
-            modelPath = pluginPathExistOrExit(plugin, path, modelPath);
-            pluginData.paths.models = modelPath;
-        }
-
-        // check if plugin use.json has paths.middlewares
-        if ($data.has("paths.middlewares")) {
-            let middlewarePath = $data.get("paths.middlewares");
-            middlewarePath = pluginPathExistOrExit(plugin, path, middlewarePath);
-            pluginData.paths.middlewares = middlewarePath;
-        }
-
-        // check if plugin use.json has extends
-        if ($data.has("extends")) {
-            const extensionData: StringToAnyKeyObject = {};
-            if ($data.has("extends.RequestEngine")) {
-                const extenderPath = $data.get("extends.RequestEngine");
-                extensionData["RequestEngine"] = pluginPathExistOrExit(plugin, path, extenderPath);
-            }
-
-            pluginData.extends = extensionData;
-        }
+        });
 
 
         // check if plugin uses index file.

@@ -5,6 +5,7 @@ declare const _: any;
 
 import os = require("os");
 import fs = require("fs");
+import fse = require("fs-extra");
 
 import Artisan = require("../Functions/artisan.fn");
 
@@ -13,6 +14,7 @@ import colors = require("../Objects/consoleColors.obj");
 import PathHelper = require("../Helpers/Path");
 
 const logThis = Artisan.logThis;
+const logSuccess = $.logSuccess;
 const logThisAndExit = Artisan.logThisAndExit;
 
 /**
@@ -279,6 +281,40 @@ const Commands = {
 
         return $.exit();
     },
+
+    publish([plugin, folder]: string[]) {
+        const config = $.engineData.get(`PluginEngine:namespaces[${plugin}]`);
+
+        if (!config) {
+            $.logErrorAndExit(`No plugin namespaced {${plugin}} registered in your project`)
+        }
+
+        const publishable = config.publishable;
+        if (!publishable)
+            $.logErrorAndExit(`Plugin: {${plugin}} does not have any publishable`);
+
+        const publishableFactory = publishable[folder];
+
+        if (!publishableFactory)
+            $.logErrorAndExit(`Plugin: {${plugin}} does not have any publishable folder named (${folder})`);
+
+        if (folder.toLowerCase() === 'configs') {
+            const from = config.path + '/' + publishableFactory;
+            if (!fs.existsSync(from))
+                $.logErrorAndExit(`Folder {${publishableFactory}} does not exists in plugin (${plugin}) directory.`)
+
+            const to = $.path.configs(config.namespace)
+            PathHelper.makeDirIfNotExist(to);
+
+            // Copy Folders
+            fse.copy(from, to, {overwrite: false, recursive: true})
+                .then(() => logThis('Publish completed!'))
+                .catch(err => {
+                    $.logError('An error occurred while publishing the folder.')
+                    return $.logAndExit(err)
+                })
+        }
+    }
 };
 
 export = {Commands, Artisan};
