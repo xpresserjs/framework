@@ -122,22 +122,6 @@ const Config = {
     // Server Configuration
     server: ServerConfig,
 
-    // Database Configuration
-    database: {
-        startOnBoot: false,
-        timestampFormat: DefaultTimestamp,
-        config: {
-            client: "sqlite",
-            connection: {
-                filename: "database.sqlite",
-            },
-            migrations: {
-                tableName: "migrations",
-            },
-            useNullAsDefault: true,
-        },
-    },
-
     // Date Configurations
     date: {
         format: DefaultTimestamp,

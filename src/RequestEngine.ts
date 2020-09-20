@@ -338,9 +338,11 @@ class RequestEngine {
                 const $pluginNamespace = _.upperFirst($splitFile[0]);
 
                 if (PluginNameSpaces.hasOwnProperty($pluginNamespace)) {
-                    if (typeof PluginNameSpaces[$pluginNamespace].views === "string") {
+                    const pluginNamespaceData = new ObjectCollection(PluginNameSpaces[$pluginNamespace])
+                    const pluginViewsPath: string = pluginNamespaceData.get('paths.views', undefined);
 
-                        file = PluginNameSpaces[$pluginNamespace].views + "/" + $splitFile[1];
+                    if (pluginViewsPath && typeof pluginViewsPath === "string") {
+                        file = pluginViewsPath + "/" + $splitFile[1];
 
                         $.engineData.path("RequestEngine:views").set($filePath, file);
                     }

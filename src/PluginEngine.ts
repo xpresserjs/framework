@@ -1,5 +1,5 @@
 import PathHelper = require("./Helpers/Path");
-import  {DollarSign} from "../types";
+import {DollarSign} from "../types";
 import {StringToAnyKeyObject} from "./CustomTypes";
 import chalk = require("chalk");
 
@@ -200,11 +200,11 @@ class PluginEngine {
         }
 
         // check if plugin use.json has paths.views
-        if ($data.has("paths.migrations")) {
-            let migrationPath = $data.get("paths.migrations");
-            migrationPath = pluginPathExistOrExit(plugin, path, migrationPath);
-            pluginData.paths.migrations = migrationPath;
-        }
+        // if ($data.has("paths.migrations")) {
+        //     let migrationPath = $data.get("paths.migrations");
+        //     migrationPath = pluginPathExistOrExit(plugin, path, migrationPath);
+        //     pluginData.paths.migrations = migrationPath;
+        // }
 
         // check if plugin use.json has paths.models
         if ($data.has("paths.models")) {
