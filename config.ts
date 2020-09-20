@@ -150,6 +150,7 @@ const Config = {
         middlewares: "backend://middlewares",
         views: "backend://views",
         jsonConfigs: "backend://",
+        configs: "backend://configs"
     },
 
     // Session Configurations

@@ -352,6 +352,11 @@ declare namespace Xpresser {
              * Get json in json configs folder
              */
             jsonConfigs(path?: string): string;
+
+            /**
+             * Get path in configs folder
+             */
+            configs(path?: string): string;
         };
 
         /* --------------- Boot Function ------------------- */

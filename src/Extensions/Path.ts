@@ -116,6 +116,17 @@ $.path = {
         }
         return Path.resolve([$.config.paths.jsonConfigs, path]);
     },
+
+
+    configs: (path: string = "", returnRequire: boolean = false): string | any => {
+        if (path[0] === "/") {
+            path = path.substr(1);
+        }
+
+        const config = Path.resolve([$.config.paths.configs, path]);
+
+        return returnRequire ? require(config) : config;
+    },
 };
 
 /**
