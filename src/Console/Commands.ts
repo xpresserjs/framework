@@ -49,7 +49,7 @@ const Commands = {
 
     down() {
         if (fs.existsSync(maintenanceFile)) {
-            return $.logAndExit('App is already down')
+            return $.logAndExit('App is already down.')
         }
 
         fs.writeFileSync(maintenanceFile, JSON.stringify({
