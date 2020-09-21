@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "es6",
+    "moduleResolution": "node",
+    "sourceMap": false,
+    "outDir": "dist",
+    "declaration": false,
+    "downlevelIteration": true,
+    "types": [
+      "node",
+      "express",
+      "fs-extra",
+      "lodash"
+    ]
+  },
+  "lib": [
+    "es2016"
+  ],
+  "files": [
+    "./global.d.ts",
+    "./types/index.d.ts",
+    "./types/node.d.ts",
+    "./types/helpers.d.ts",
+    "./types/http.d.ts"
+  ],
+  "include": [
+    "./**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

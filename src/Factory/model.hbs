@@ -1,0 +1,21 @@
+/**
+* {{name}} Model
+* @class
+* @extends $.model
+*/
+class {{name}} extends $.baseModel {
+
+    /**
+    * Name of model database table name.
+    * @method tableName
+    * @returns {string}
+    */
+    static get tableName() {
+        return "{{table}}";
+    }
+
+}
+
+{{name}}.prototype.$hidden = [];
+
+module.exports = {{name}};

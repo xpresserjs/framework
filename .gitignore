@@ -1,0 +1,10 @@
+node_modules
+.idea
+.env
+test.ts
+tests/*
+dist
+storage
+.sqlite
+yarn.lock
+/test.js
