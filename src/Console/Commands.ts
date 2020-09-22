@@ -308,7 +308,7 @@ const Commands = {
 
             // Copy Folders
             fse.copy(from, to, {overwrite: false, recursive: true})
-                .then(() => logThisAndExit('Publish completed!'))
+                .then(() => $.logAndExit('Publish completed!'))
                 .catch(err => {
                     $.logError('An error occurred while publishing the folder.')
                     return $.logAndExit(err)
