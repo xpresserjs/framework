@@ -13,7 +13,7 @@ declare const _: any;
 declare const $: DollarSign;
 
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
-const sessionStartOnBoot = $.$config.get("session.startOnBoot", false);
+const useFlash = $.$config.get("server.use.flash", false);
 
 class RequestEngine {
     public req: Http.Request;
@@ -266,7 +266,7 @@ class RequestEngine {
         ctx.$route = this.route;
         ctx.$currentView = file;
 
-        if (sessionStartOnBoot) {
+        if (useFlash) {
             ctx.$flash = this.req.flash();
         }
 

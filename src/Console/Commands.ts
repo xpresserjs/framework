@@ -30,7 +30,7 @@ const removeSlashAtEnd = (str: string) => {
 };
 
 /**
- * Path to maintenance file
+ * PathHelper to maintenance file
  */
 const maintenanceFile = $.path.base('.maintenance');
 

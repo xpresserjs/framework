@@ -1,6 +1,6 @@
 const {resolve} = require("path");
 
-import Path = require("./Helpers/Path");
+import PathHelper = require("./Helpers/Path");
 import loadOnEvents = require("./Events/OnEventsLoader");
 
 import express = require("express");
@@ -157,18 +157,21 @@ if (useBodyParser) {
 }
 
 const useSession = $.$config.get("server.use.session", false);
-const startSessionOnBoot = $.$config.get("session.startOnBoot", false);
 
-if (useSession && startSessionOnBoot) {
+if (useSession) {
+    const session = require("express-session");
+    const useDefault = $.$config.get("session.useDefault", false);
+
+    if ($.$config.has("session.startOnBoot")) {
+        $.logError('Config Warning: {session.startOnBoot} is deprecated, use {session.useDefault} instead.')
+    }
+
     /**
      * Session handled by Knex
      * Disabled on default
      */
-    if (startSessionOnBoot) {
-
-        const session = require("express-session");
+    if (useDefault) {
         const connectSessionKnex = require("connect-session-knex");
-        const flash = require("express-flash");
 
         const KnexSessionStore = connectSessionKnex(session);
         const knexSessionConfig = {
@@ -181,7 +184,7 @@ if (useSession && startSessionOnBoot) {
 
         const sessionFilePath = knexSessionConfig.connection.filename;
         if (!$.file.exists(sessionFilePath)) {
-            Path.makeDirIfNotExist(sessionFilePath, true);
+            PathHelper.makeDirIfNotExist(sessionFilePath, true);
         }
 
         const store = new KnexSessionStore({
@@ -194,12 +197,39 @@ if (useSession && startSessionOnBoot) {
         });
 
         $.app.use(session(sessionConfig));
+    }
 
-        // Use Flash
+    /**
+     * Check for custom session handler
+     */
+    let useCustomHandler = $.$config.get('session.useCustomHandler', false)
+    if (useCustomHandler !== false) {
+        if (typeof useCustomHandler !== 'string') {
+            $.logErrorAndExit(`Config: {session.useCustomHandler} only accepts false or path to session handler file.`)
+        }
+
+        useCustomHandler = PathHelper.resolve(useCustomHandler);
+        if (!$.file.exists(useCustomHandler)) {
+            $.logErrorAndExit(`useCustomHandler File not found: {${useCustomHandler}}`)
+        }
+
+        const handler = require(useCustomHandler);
+        if (typeof handler !== "function") {
+            $.logErrorAndExit(`useCustomHandler File must return a function: {${useCustomHandler}}`);
+        }
+
+        $.app.use(handler(session));
+    }
+
+    /**
+     * Express Flash
+     */
+    const useFlash = $.$config.get('server.use.flash', false);
+    if (useFlash) {
+        const flash = require("express-flash");
         $.app.use(flash());
     }
 }
-
 
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 import ControllerService = require("./Controllers/ControllerService");
@@ -288,7 +318,7 @@ const afterExpressInit = (next: () => void) => {
                 $middleware += $.config.project.fileExtension;
             }
 
-            $middleware = Path.resolve($middleware);
+            $middleware = PathHelper.resolve($middleware);
 
             try {
 

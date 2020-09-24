@@ -153,7 +153,7 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
         $.log(`Starting ${$.config.name}...`);
     })
 
-    // Include Path Extensions
+    // Include PathHelper Extensions
     require("./src/Extensions/Path");
     // Require Global
     require("./src/global");

@@ -81,7 +81,9 @@ const ServerConfig = {
         // Use BodyParser,
         bodyParser: true,
         // Enable Session
-        session: false
+        session: false,
+        // Enable Flash
+        flash: false,
     },
 };
 
@@ -155,7 +157,9 @@ const Config = {
 
     // Session Configurations
     session: {
-        startOnBoot: false,
+        useDefault: false,
+        // PathHelper to custom handler or false
+        useCustomHandler: false,
         secret: "!XpresserSecretKey!",
         cookie: {
             path: ServerConfig.root,

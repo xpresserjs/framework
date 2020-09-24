@@ -128,7 +128,7 @@ $.file = {
      *
      * if $returnList is true and $path is an array,
      * the list of files found will be returned.
-     * @param {string|string[]} $path - Path or Paths to find.
+     * @param {string|string[]} $path - PathHelper or Paths to find.
      * @param {boolean} $returnList - Return list of found files in array.
      */
     exists($path: string | string[], $returnList = false): boolean | string[] {
