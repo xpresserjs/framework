@@ -158,7 +158,7 @@ const Config = {
     // Session Configurations
     session: {
         useDefault: false,
-        // PathHelper to custom handler or false
+        // Path custom handler or false
         useCustomHandler: false,
         secret: "!XpresserSecretKey!",
         cookie: {

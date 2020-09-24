@@ -115,7 +115,7 @@ class RouterEngine {
             newRoutes[name] = NameToRoute[name][returnKey];
         }
 
-        if (returnKey !== "PathHelper.ts") {
+        if (returnKey !== "path") {
             return newRoutes;
         }
 
@@ -164,15 +164,15 @@ class RouterEngine {
             let nameWasGenerated = false;
 
             /*
-            * If Route has children (meaning it is a Group/PathHelper),
+            * If Route has children (meaning it is a Group/Path),
             * and also has a parent with children, it extends the parent.
             *
-            * This means if a child of a route is a Group/PathHelper and does not have controller set
+            * This means if a child of a route is a Group/Path and does not have controller set
             * it automatically inherits the parent controller
             *
             * e.g
             * Route.path('/api', () => {
-            *   // Another PathHelper here
+            *   // Another Path here
             *
             *   Route.path('user', ()=> {
             *       // Some Routes

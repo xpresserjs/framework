@@ -198,7 +198,7 @@ declare namespace Xpresser {
              *
              * if $returnList is true and $path is an array,
              * the list of files found will be returned.
-             * @param {string|string[]} $path - PathHelper or Paths to find.
+             * @param {string|string[]} $path - Path or Paths to find.
              * @param {boolean} $returnList - Return list of found files in array.
              */
             exists($path: string | string[], $returnList?): boolean | string[];
@@ -208,7 +208,7 @@ declare namespace Xpresser {
              *
              * if $returnList is true and $path is an array,
              * the list of files found will be returned.
-             * @param {string|string[]} $path - PathHelper or Paths to find.
+             * @param {string|string[]} $path - Path or Paths to find.
              * @param {boolean} $returnList - Return list of found files in array.
              * @param $deleteDirectories
              */
@@ -224,7 +224,7 @@ declare namespace Xpresser {
             /**
              * Save content to a json file.
              * saveToJson uses JSON.stringify() to parse object to string before saving to file.
-             * @param $path - PathHelper of file to save to
+             * @param $path - Path of file to save to
              * @param $content - Content to save to file
              * @param $options
              */
