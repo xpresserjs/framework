@@ -77,6 +77,16 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
         }
     }
 
+    /**
+     * Check if config {paths.base} exists in user defined config.
+     */
+    const noBaseFolderDefinedError = `No base folder defined in config {paths.base}`;
+    if (!AppConfig.hasOwnProperty('paths')) {
+        $.logErrorAndExit(noBaseFolderDefinedError);
+    } else if (!AppConfig['paths'].hasOwnProperty('base')) {
+        $.logErrorAndExit(noBaseFolderDefinedError);
+    }
+
     // Merge Config with DefaultConfig to replace missing values.
     AppConfig = _.merge(Config, AppConfig);
     AppOptions = _.merge(Options, AppOptions);
