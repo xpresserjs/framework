@@ -117,7 +117,7 @@ if (useHelmet) {
     const helmet = require("helmet");
     const helmetConfig = $.$config.get("packages.helmet.config", undefined);
     $.app.use(helmet(helmetConfig));
-    $.log('Using Helmet')
+    $.logSuccess('Using {Helmet}')
 }
 
 /**
@@ -392,10 +392,7 @@ const startHttpServer = (onSuccess?: () => any, onError?: () => any) => {
             const ServerStarted = new Date();
             const getServerUptime = () => global.moment(ServerStarted).fromNow();
             $.log(`Domain: ${domain} | Port: ${port} | BaseUrl: ${baseUrl}`);
-            $.log(`Server started @ (${ServerStarted.toUTCString()})`);
-
-            $.engineData.set({ServerStarted, getServerUptime})
-
+            $.log(`Server started - ${ServerStarted.toString()}`);
 
             if ($.$config.has("server.ssl.enabled") && $.config.server.ssl.enabled === true) {
                 startHttpsServer();

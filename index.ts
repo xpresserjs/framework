@@ -82,9 +82,19 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
      */
     const noBaseFolderDefinedError = `No base folder defined in config {paths.base}`;
     if (!AppConfig.hasOwnProperty('paths')) {
-        $.logErrorAndExit(noBaseFolderDefinedError);
+        console.log(noBaseFolderDefinedError);
+        $.exit()
     } else if (!AppConfig['paths'].hasOwnProperty('base')) {
-        $.logErrorAndExit(noBaseFolderDefinedError);
+        console.log(noBaseFolderDefinedError);
+        $.exit()
+    }
+
+    /**
+     * Check if env exist in config
+     */
+    if (!AppConfig.hasOwnProperty('env')) {
+        console.log(`Config {env} is missing, options: (development | production | others)`)
+        $.exit();
     }
 
     // Merge Config with DefaultConfig to replace missing values.
@@ -161,7 +171,15 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
     $.ifNotConsole(() => {
         $.log(`${PackageDotJson.name} version ${PackageDotJson.version}`);
         $.log(`Starting ${$.config.name}...`);
-    })
+    });
+
+    /**
+     * Change timezone if timezone is defined.
+     */
+    const timezone = $.$config.get('date.timezone');
+    if (timezone) {
+        process.env.TZ = timezone;
+    }
 
     // Include PathHelper Extensions
     require("./src/Extensions/Path");

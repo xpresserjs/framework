@@ -126,6 +126,7 @@ const Config = {
 
     // Date Configurations
     date: {
+        timezone: null,
         format: DefaultTimestamp,
     },
 
