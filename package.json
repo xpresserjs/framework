@@ -26,7 +26,7 @@
     "fs-extra": "^9.0.1",
     "handlebars": "^4.7.6",
     "helmet": "^4.1.1",
-    "knex": "^0.21.5",
+    "knex": "^0.21.6",
     "moment": "^2.29.0",
     "object-collection": "^1.0.29",
     "pluralize": "^8.0.0",
