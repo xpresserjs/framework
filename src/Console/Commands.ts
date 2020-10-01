@@ -12,9 +12,10 @@ import Artisan = require("../Functions/artisan.fn");
 const artisanConfig = $.config.artisan;
 import colors = require("../Objects/consoleColors.obj");
 import PathHelper = require("../Helpers/Path");
+import {parseControllerString} from "../Functions/internals.fn";
 
 const logThis = Artisan.logThis;
-const logSuccess = $.logSuccess;
+// const logSuccess = $.logSuccess;
 const logThisAndExit = Artisan.logThisAndExit;
 
 /**
@@ -90,8 +91,11 @@ const Commands = {
         data.map((e) => {
             e.method = e.method.toUpperCase();
 
-            if (typeof e.controller === "string")
-                e.controller = e.controller.replace('@', '.');
+            if (typeof e.controller === "string"){
+                const {controller, method} = parseControllerString(e.controller);
+                e.controller = `${controller}.${method}`;
+            }
+
 
             if (!e.controller) e.controller = '';
 

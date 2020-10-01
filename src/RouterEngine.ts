@@ -2,6 +2,8 @@ import MiddlewareEngine = require("./MiddlewareEngine");
 import XpresserRouter = require("@xpresser/router");
 import {DollarSign} from "../types";
 import {StringToAnyKeyObject} from "./CustomTypes";
+import {parseControllerString} from "./Functions/internals.fn";
+import {split} from "ts-node";
 
 const AllRoutesKey = "RouterEngine:allRoutes";
 
@@ -257,9 +259,8 @@ class RouterEngine {
             }
 
             if (typeof route.controller === "string" && route.controller.includes("@")) {
-                const split = route.controller.split("@");
-                let controller = split[0];
-                const method = split[1];
+               let {method, controller} = parseControllerString(route.controller);
+
 
                 let controllerPath = $.use.controller(controller + $.config.project.fileExtension);
 
@@ -269,7 +270,7 @@ class RouterEngine {
                         controllerPath = $.use.controller(controller + "Controller" + $.config.project.fileExtension);
 
                         if (!$.file.exists(controllerPath)) {
-                            $.logErrorAndExit("Controller: " + split.join("@") + " not found");
+                            $.logErrorAndExit("Controller: " + [controller, method].join("@") + " not found");
                         }
 
                         controller = controller + "Controller";

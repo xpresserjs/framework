@@ -204,14 +204,14 @@ $.file = {
          * Check if path exists
          */
         if (!fs.existsSync($path)) {
-            throw Error(`RequireJson: Path (${$path}) does not exists.`);
+            throw Error(`$.file.readJson: Path (${$path}) does not exists.`);
         }
 
         try {
             const file = fs.readFileSync($path).toString();
             return JSON.parse(file);
         } catch (e) {
-            throw Error(`RequireJson: Error parsing json file (${$path})`);
+            throw Error(`$.file.readJson: Error parsing json file (${$path})`);
         }
     },
 
@@ -225,14 +225,15 @@ $.file = {
          * Check if path exists
          */
         if ($options.checkIfFileExists && !fs.existsSync($path)) {
-            throw Error(`SaveToJson: Path (${$path}) does not exists.`);
+            throw Error(`$.file.saveToJson: Path (${$path}) does not exists.`);
         }
 
         try {
             fs.writeFileSync($path, JSON.stringify($content, $options.replacer, $options.space))
             return true;
         } catch (e) {
-            throw Error(`RequireJson: Error saving data to json file (${$path})`);
+            console.log(e);
+            throw Error(`$.file.saveToJson: Error saving data to json file (${$path})`);
         }
     }
 };

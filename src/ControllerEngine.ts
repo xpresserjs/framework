@@ -10,6 +10,7 @@ import {ServerResponse} from "http";
 import {Http} from "../types/http";
 import {DollarSign} from "../types";
 import {StringToAnyKeyObject} from "./CustomTypes";
+import {parseControllerString} from "./Functions/internals.fn";
 
 declare const _: any;
 declare const $: DollarSign;
@@ -396,10 +397,10 @@ const Controller = (route: any, method: any = null) => {
     }
 
     if (typeof $controller === "string" && $controller.includes("@")) {
-        const split = $controller.split("@");
+        const controllerAndMethod = parseControllerString($controller);
 
-        $controller = split[0];
-        method = split[1];
+        $controller = controllerAndMethod.controller;
+        method = controllerAndMethod.method;
 
         controllerPath = $.use.controller($controller + $.config.project.fileExtension);
 
