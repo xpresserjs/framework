@@ -199,11 +199,11 @@ $.file = {
         }
     },
 
-    readJson($path: string) {
+    readJson($path: string, fileExists = false) {
         /**
          * Check if path exists
          */
-        if (!fs.existsSync($path)) {
+        if (!fileExists && !fs.existsSync($path)) {
             throw Error(`$.file.readJson: Path (${$path}) does not exists.`);
         }
 
