@@ -99,18 +99,14 @@ const Config = {
         // If set to false all debuggers are disabled
         enabled: true,
 
-        /**
-         * Enable showing controller action on every request.
-         */
+        // Enable showing controller action on every request.
         controllerAction: true,
     },
 
     // Log Configurations
     log: {
         // Log enabled Plugins on boot
-        plugins: {
-            enabled: true,
-        },
+        plugins: true
     },
 
     /**

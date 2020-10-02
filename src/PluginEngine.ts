@@ -1,7 +1,6 @@
 import PathHelper = require("./Helpers/Path");
 import {DollarSign} from "../types";
 import {StringToAnyKeyObject} from "./CustomTypes";
-import chalk = require("chalk");
 
 declare const $: DollarSign;
 
@@ -58,6 +57,8 @@ class PluginEngine {
      * Load plugins and process their use.json,
      */
     public static loadPlugins() {
+        // get logs.plugins config.
+        const logPlugins = $.$config.get("log.plugins", true);
         // Hold Plugins
         let plugins = [] as any[];
         // Get plugins.json path.
@@ -97,9 +98,9 @@ class PluginEngine {
                             $.engineData.set("PluginEngine:namespaces", PluginNamespaceToData);
 
                             /**
-                             * If {log.plugins.enabled===true} then display log
+                             * If {log.plugins===true} then display log
                              */
-                            if ($.$config.get("log.plugins.enabled", true)) {
+                            if (logPlugins) {
                                 $.ifNotConsole(() => $.logSuccess(`Using Plugin --> {${$data.namespace}}`));
                             }
 
@@ -112,6 +113,13 @@ class PluginEngine {
                             ], true);
                         }
                     }
+                }
+
+                if (!logPlugins) {
+                    const pluginsLength = plugins.length
+                    $.ifNotConsole(
+                        () => $.logSuccess(`Using (${pluginsLength}) ${pluginsLength === 1 ? 'plugin' : 'plugins'}`)
+                    );
                 }
             }
         }
