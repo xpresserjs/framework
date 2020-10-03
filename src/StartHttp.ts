@@ -394,6 +394,12 @@ const startHttpServer = (onSuccess?: () => any, onError?: () => any) => {
             $.log(`Domain: ${domain} | Port: ${port} | BaseUrl: ${baseUrl}`);
             $.log(`Server started - ${ServerStarted.toString()}`);
 
+            // Save values to engineData
+            $.engineData.set({
+                ServerStarted,
+                getServerUptime
+            })
+
             if ($.$config.has("server.ssl.enabled") && $.config.server.ssl.enabled === true) {
                 startHttpsServer();
             } else {
