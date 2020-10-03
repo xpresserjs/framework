@@ -20,6 +20,9 @@ const paths = $.$config.get("paths");
 /////////////
 // Load Use.json Data
 const $useDotJson = $.engineData.get("UseDotJson");
+// Check if under maintenance
+const isUnderMaintenance = $.file.exists($.path.base('.maintenance'))
+
 
 $.app = express();
 
@@ -73,7 +76,7 @@ if ($.config.server.poweredBy) {
  * Serve Public folder as static
  */
 const servePublicFolder = $.$config.get("server.servePublicFolder", false);
-if (servePublicFolder) {
+if (!isUnderMaintenance && servePublicFolder) {
     $.app.use(
         express.static(paths.public, {
             setHeaders(res, path) {
@@ -237,7 +240,6 @@ import ControllerService = require("./Controllers/ControllerService");
 /**
  * Maintenance Middleware
  */
-const isUnderMaintenance = $.file.exists($.path.base('.maintenance'))
 if (isUnderMaintenance) {
     $.logError(`App is under Maintenance!`);
 
