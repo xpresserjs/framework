@@ -321,6 +321,7 @@ const afterExpressInit = (next: () => void) => {
             }
 
             $middleware = PathHelper.resolve($middleware);
+            // console.log($middleware)
 
             try {
 

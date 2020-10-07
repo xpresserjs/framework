@@ -42,9 +42,10 @@ if (typeof Use.middlewares === "object") {
         }
 
         let middlewareRealPath = PathHelper.resolve(middleware);
-
         let hasMiddleware = false;
-        if ($.file.exists(middlewareRealPath + extension)) {
+        if ($.file.exists(middlewareRealPath)) {
+            hasMiddleware = true;
+        } else if ($.file.exists(middlewareRealPath + extension)) {
             hasMiddleware = true;
         } else {
             if ($.file.exists(middlewareRealPath + MiddlewareSuffix + extension)) {
@@ -84,6 +85,7 @@ function parsePath(path: string, data: StringToAnyKeyObject = {}) {
             path = path.replace(`{${dataKey}}`, data[dataKey]);
         }
     }
+
     return path;
 }
 
@@ -97,7 +99,8 @@ function fileExistsInPath(file: string, path: string, suffix = ""): [boolean, st
         }
     }
 
-    const fullPath = parsePath(path, {file});
+    let fullPath = parsePath(path, {file});
+    fullPath = PathHelper.resolve(fullPath);
 
     if (!$.file.exists(fullPath)) {
         file = StringHelper.upperFirst(file);
@@ -145,7 +148,9 @@ class UseEngine {
      * @return {*}
      */
     public static model(model: string, handleError = true): any {
-        const fullPath = PathHelper.resolve($.config.paths.models) + "/{file}" + $.config.project.fileExtension;
+        let fullPath = PathHelper.resolve($.config.paths.models) + "/{file}";
+        fullPath = PathHelper.addProjectFileExtension(fullPath) as string;
+
         const [hasPath, realPath] = fileExistsInPath(model, fullPath);
 
         if (!hasPath) {

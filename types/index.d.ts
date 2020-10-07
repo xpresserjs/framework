@@ -367,6 +367,17 @@ declare namespace Xpresser {
         /* --------------- Boot Function ------------------- */
         boot(): void;
 
+
+        /**
+         * Configure project for typescript.
+         */
+        typescriptInit(): void;
+
+        /**
+         * Check if project is typescript
+         */
+        isTypescript(): boolean;
+
         /**
          * Same as `process.exit`
          */

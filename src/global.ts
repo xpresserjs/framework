@@ -18,5 +18,6 @@ import Utils = require("./Functions/util.fn");
 
 // Assign Utils to $.fn
 $.fn = Utils;
+
 // Assign Utils to $.fn
 $.utils = Utils;

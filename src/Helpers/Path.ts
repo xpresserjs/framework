@@ -31,6 +31,10 @@ class PathHelper {
             $path = $path.join("/");
         }
 
+        if ($.isTypescript() && $path.includes('.js.ts')) {
+            $path = $path.replace('.js.ts', '.js');
+        }
+
         if ($path.indexOf("://") >= 0) {
             const $splitPath: any[] = $path.split("://");
 
@@ -49,7 +53,6 @@ class PathHelper {
         }
 
         return $resolve ? PATH.resolve($path) : $path;
-
     }
 
     static helperToPath([$helper, $path]: string[]): string {
@@ -120,15 +123,20 @@ class PathHelper {
             } else {
                 array = files;
             }
+
             for (let i = 0; i < array.length; i++) {
                 const file = array[i];
-                array[i] = file + $.config.project.fileExtension;
+                array[i] = PathHelper.addProjectFileExtension(file) as string;
             }
 
             return array;
         } else {
-            const ext = $.config.project.fileExtension || ".js";
+            const jsExt = ".js";
+            const ext = $.config.project.fileExtension || jsExt;
             const hasExtInName = files.substr(-ext.length) === ext;
+            if (ext !== jsExt && !hasExtInName && files.substr(-jsExt.length) === jsExt) {
+                return files;
+            }
             return hasExtInName ? files : files + ext;
         }
     }

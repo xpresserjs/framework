@@ -184,6 +184,25 @@ const XpresserInit = (AppConfig: object | string, AppOptions: Options = {}): Dol
         process.env.TZ = timezone;
     }
 
+    // Set $.typescriptInit
+    $.typescriptInit = () => {
+        // Set Project extension
+        $.$config.set('project.fileExtension', '.ts');
+
+        if (!$.file.exists($.path.engine())) {
+            try {
+                $.config.paths.npm = require.resolve('xpresser').replace('xpresser/dist/index.js', '')
+            } catch (e) {
+                $.logError('Path to xpresser engine files maybe missing, point {config.paths.npm} to your node_modules folder.')
+            }
+        }
+    }
+
+    // Set $.isTypeScript
+    $.isTypescript = () => {
+        return $.$config.get('project.fileExtension') === ".ts";
+    }
+
     // Include PathHelper Extensions
     require("./src/Extensions/Path");
     // Require Global
