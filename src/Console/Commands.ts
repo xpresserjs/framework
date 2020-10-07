@@ -85,7 +85,7 @@ const Commands = {
         if (search === 'ctrl') search = 'controller';
         if (search === 'method' && query) query = query.toUpperCase();
 
-        let data = [];
+        let data: any[] = [];
 
         data = $.routerEngine.allProcessedRoutes();
         data.map((e) => {
