@@ -35,7 +35,7 @@ const {Config, Options} = Configurations;
  * @param {Options} AppOptions
  * @constructor
  */
-const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarSign => {
+const XpresserInit = (AppConfig: object | string, AppOptions: Options = {}): DollarSign => {
 
     // Set DollarSign Global Var: $
     const $ = {} as DollarSign;
@@ -84,9 +84,12 @@ const XpresserInit = (AppConfig: object | string, AppOptions?: Options): DollarS
     if (!AppConfig.hasOwnProperty('paths')) {
         console.log(noBaseFolderDefinedError);
         $.exit()
-    } else if (!AppConfig['paths'].hasOwnProperty('base')) {
-        console.log(noBaseFolderDefinedError);
-        $.exit()
+    } else {
+        // @ts-ignore
+        if (!AppConfig['paths'].hasOwnProperty('base')) {
+            console.log(noBaseFolderDefinedError);
+            $.exit()
+        }
     }
 
     /**

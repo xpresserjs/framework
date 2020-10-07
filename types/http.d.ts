@@ -25,7 +25,7 @@ declare namespace Xpresser {
             http?: Http;
             boot?: any;
             services?: any;
-            error?: (...args) => ControllerServiceError;
+            error?: (...args: any[]) => ControllerServiceError;
         }
 
         interface Services {
@@ -64,7 +64,7 @@ declare namespace Xpresser {
              * @param http
              * @param args
              */
-            e?: (http: Http, ...args) => (any | void);
+            e?: (http: Http, ...args: any[]) => (any | void);
 
             /**
              * Register Middlewares

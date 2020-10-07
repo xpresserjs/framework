@@ -43,7 +43,7 @@ declare namespace Xpresser {
          * @param event
          * @param payload
          */
-        emit(event: string, ...payload): void;
+        emit(event: string, ...payload: any[]): void;
 
         /**
          * Emit Event after some seconds.
@@ -53,7 +53,7 @@ declare namespace Xpresser {
          * @param event
          * @param payload
          */
-        emitAfter(time: number, event: string, ...payload): void;
+        emitAfter(time: number, event: string, ...payload: any[]): void;
 
         /**
          * Emit event with callback.
@@ -64,7 +64,7 @@ declare namespace Xpresser {
          * @param args
          * @param callback
          */
-        emitWithCallback(event: string, args: any[], callback: (eventResult) => any): void;
+        emitWithCallback(event: string, args: any[], callback: (eventResult: any) => any): void;
     }
 
     export interface DollarSign {
@@ -164,14 +164,14 @@ declare namespace Xpresser {
              * @param $path
              * @param $options
              */
-            get($path: string, $options?: { encoding?: string, flag?: string }): string | Buffer | false;
+            get($path: string, $options?: { encoding?: null, flag?: string }): string | Buffer | false;
 
             /**
              * Get/Read File
              * @param $path
              * @param $options
              */
-            read($path: string, $options?: { encoding?: string, flag?: string }): string | Buffer | false;
+            read($path: string, $options?: { encoding?: null, flag?: string }): string | Buffer | false;
 
             /**
              * Get Directory
@@ -179,7 +179,7 @@ declare namespace Xpresser {
              * @param $options
              */
             getDirectory($path: string, $options?: {
-                encoding?: string,
+                encoding?: null,
                 writeFileTypes?: string,
             }): string[] | Buffer[] | false;
 
@@ -189,7 +189,7 @@ declare namespace Xpresser {
              * @param $options
              */
             readDirectory($path: string, $options?: {
-                encoding?: string,
+                encoding?: null,
                 writeFileTypes?: string,
             }): string[] | Buffer[] | false;
 
@@ -201,7 +201,7 @@ declare namespace Xpresser {
              * @param {string|string[]} $path - Path or Paths to find.
              * @param {boolean} $returnList - Return list of found files in array.
              */
-            exists($path: string | string[], $returnList?): boolean | string[];
+            exists($path: string | string[], $returnList?: boolean): boolean | string[];
 
             /**
              * Check if a path or an array of paths exists.
@@ -212,7 +212,7 @@ declare namespace Xpresser {
              * @param {boolean} $returnList - Return list of found files in array.
              * @param $deleteDirectories
              */
-            delete($path: string | string[], $returnList?, $deleteDirectories?): boolean | string[];
+            delete($path: string | string[], $returnList?: boolean, $deleteDirectories?: boolean): boolean | string[];
 
 
             /**
@@ -383,46 +383,46 @@ declare namespace Xpresser {
         /**
          * Log
          */
-        log(...args): void;
+        log(...args: any[]): void;
 
         /**
          * Log Info
          */
-        logInfo(...args): void;
+        logInfo(...args: any[]): void;
 
         /**
          * Log Info
          */
-        logSuccess(...args): void;
+        logSuccess(...args: any[]): void;
 
 
         /**
          * Log Info
          */
-        logWarning(...args): void;
+        logWarning(...args: any[]): void;
 
         /**
          * Log only if not Console
          */
-        logIfNotConsole(...args): void;
+        logIfNotConsole(...args: any[]): void;
 
         /**
          * Log and exit
          * @param args
          */
-        logAndExit(...args): void;
+        logAndExit(...args: any[]): void;
 
         /**
          * Log Error
          * @param args
          */
-        logError(...args): void;
+        logError(...args: any[]): void;
 
         /**
          * Log Error And Exit
          * @param args
          */
-        logErrorAndExit(...args): void;
+        logErrorAndExit(...args: any[]): void;
 
         /**
          * Log Per Line

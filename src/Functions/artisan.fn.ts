@@ -7,6 +7,7 @@ import colors = require("../Objects/consoleColors.obj");
 
 import PathHelper = require("../Helpers/Path");
 import {DollarSign} from "../../types";
+import {StringToAnyKeyObject} from "../CustomTypes";
 
 declare const $: DollarSign;
 declare const _: any;
@@ -19,7 +20,7 @@ const FILE_EXTENSION = $.$config.get("project.fileExtension", ".js");
  * @param str
  */
 const afterLastSlash = (str: string) => {
-    if (typeof str === "string" && str.includes("/")) {
+    if (str.includes("/")) {
         const parts = str.split("/");
         return _.upperFirst(parts[parts.length - 1]);
     }
@@ -28,7 +29,7 @@ const afterLastSlash = (str: string) => {
 };
 
 export = {
-    logThis(...args) {
+    logThis(...args: any[]) {
         if (isTinker) {
             args.unshift(colors.fgMagenta);
         } else {
@@ -40,7 +41,7 @@ export = {
         return $.log(...args);
     },
 
-    logThisAndExit(...args) {
+    logThisAndExit(...args: any[]) {
         if (isTinker) {
             return this.logThis(...args);
         } else {
@@ -49,17 +50,17 @@ export = {
         }
     },
 
-    factory(file, $data = {}) {
+    factory(file: string, $data = {}) {
         const source = fs.readFileSync(file).toString();
         const template = Handlebars.compile(source);
         return template($data);
     },
 
-    copyFromFactoryToApp($for: string | string[], $name: string, $to: string, $data = {}, addPrefix = true) {
-        let $factory: string;
+    copyFromFactoryToApp($for: string | string[], $name: string, $to: string, $data: StringToAnyKeyObject = {}, addPrefix = true) {
+        let $factory;
 
         if (Array.isArray($for)) {
-            $factory = $for[1];
+            $factory = $for[1] as string;
             $for = $for[0];
         }
 
@@ -93,7 +94,7 @@ export = {
         /**
          * Get factory file from config or use default
          */
-        const factoryName: string = $factory || $for;
+        const factoryName: string = $factory ? $factory : $for;
         let $from = $.path.engine("Factory/" + factoryName + ".hbs");
 
         let customFactoryFile: string = $.$config.get(`artisan.factory.${factoryName}`);
@@ -122,20 +123,20 @@ export = {
         this.logThis("located @ " + $to.replace($.path.base(), ""));
     },
 
-    copyFolder($from, $to) {
+    copyFolder($from: string, $to: string) {
         fse.copySync($from, $to);
         $.logAndExit("Views folder published successful.");
     },
 
-    pluralize(str = "") {
+    pluralize(str = ""): string {
         if (!str.trim().length) {
-            return Pluralise;
+            return str;
         }
 
         return Pluralise(str);
     },
 
-    singular(str) {
+    singular(str: string) {
         return Pluralise.singular(str);
     },
 };

@@ -2,9 +2,10 @@ import fs = require("fs");
 import Console = require("./Console/Commands");
 import PathHelper = require("./Helpers/Path");
 import {DollarSign} from "../types";
+import {StringToAnyKeyObject} from "./CustomTypes";
 
-const {Commands, Artisan}: { Commands: object, Artisan: object } = Console;
-const DefinedCommands = {};
+const {Commands, Artisan}: { Commands: StringToAnyKeyObject, Artisan: StringToAnyKeyObject } = Console;
+const DefinedCommands: StringToAnyKeyObject = {};
 
 declare const $: DollarSign;
 
@@ -42,10 +43,10 @@ if (!Commands.hasOwnProperty(argCommand)) {
     const plugins = Object.keys(PluginData);
 
     for (const plugin of plugins) {
-        const $plugin: object = PluginData[plugin];
+        const $plugin: StringToAnyKeyObject = PluginData[plugin];
 
         if ($plugin.hasOwnProperty("commands")) {
-            const commands = $plugin["commands"];
+            const commands: StringToAnyKeyObject = $plugin["commands"];
             const commandKeys = Object.keys(commands);
 
             for (const command of commandKeys) {
@@ -133,7 +134,7 @@ if (typeof Commands[argCommand] === "undefined" && typeof DefinedCommands[argCom
             },
             command: string,
             schedule?: string,
-            handler: (...args) => (any | void),
+            handler: (...args: any[]) => (any | void),
         } = DefinedCommands[argCommand];
 
         if (typeof command.handler !== "function") {

@@ -62,7 +62,7 @@ const Commands = {
 
     },
 
-    install([$plugin]) {
+    install([$plugin]: string[]) {
         if ($plugin === "undefined") {
             return logThis("Plugin not specified!");
         }
@@ -76,7 +76,7 @@ const Commands = {
      * @param search
      * @param query
      */
-    routes([search, query]) {
+    routes([search, query]: string[]) {
         if (search && !query) {
             query = search;
             search = 'path';
@@ -304,6 +304,7 @@ const Commands = {
 
 
         folder = folder.toLowerCase();
+        // @ts-ignore
         if (typeof $.path[folder] !== "function")
             return $.logErrorAndExit(`Publish does not support any publishable folder named (${folder})`);
 
@@ -312,6 +313,7 @@ const Commands = {
         if (!fs.existsSync(from))
             $.logErrorAndExit(`Folder {${publishableFactory}} does not exists in plugin (${plugin}) directory.`)
 
+        // @ts-ignore
         const to = $.path[folder](config.namespace)
         PathHelper.makeDirIfNotExist(to);
 

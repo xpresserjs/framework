@@ -8,6 +8,7 @@
     "outDir": "dist",
     "declaration": false,
     "downlevelIteration": true,
+    "strict": true,
     "types": [
       "node",
       "express",

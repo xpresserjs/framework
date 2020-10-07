@@ -85,11 +85,10 @@ $.file = {
     },
 
     /**
-     *
      * @param $path
      * @param $options
      */
-    read($path: string, $options?: { encoding?: string, flag?: string }): string | Buffer | false {
+    read($path: string, $options?: { encoding?: null, flag?: string }): string | Buffer | false {
         return $.file.get($path, $options);
     },
 
@@ -99,7 +98,7 @@ $.file = {
      * @param $options
      */
     readDirectory($path: string, $options?: {
-        encoding?: string,
+        encoding?: null,
         writeFileTypes?: string,
     }): string[] | Buffer[] | false {
         return this.getDirectory($path, $options);
@@ -221,14 +220,14 @@ $.file = {
             replacer: null,
             space: 2
         }, $options)
-        /**
-         * Check if path exists
-         */
+
+        // @ts-ignore
         if ($options.checkIfFileExists && !fs.existsSync($path)) {
             throw Error(`$.file.saveToJson: Path (${$path}) does not exists.`);
         }
 
         try {
+            // @ts-ignore
             fs.writeFileSync($path, JSON.stringify($content, $options.replacer, $options.space))
             return true;
         } catch (e) {

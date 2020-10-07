@@ -17,7 +17,7 @@ if (fs.existsSync(PluginLockDataPath)) {
     PluginLockData = $.objectCollection(lockData);
 }
 
-export = ($plugin) => {
+export = ($plugin: string) => {
     // Get all loaded plugin namespace
     const $pluginNamespaces = $.engineData.get("PluginEngine:namespaces", {});
     const $pluginNamespaceKeys = Object.keys($pluginNamespaces);
