@@ -38,12 +38,13 @@ $.path = {
     /**
      * @param {string} path
      * @param {boolean} returnRequire
+     * @param refresh
      */
-    engine: (path: string = "", returnRequire = false): string | any => {
+    engine: (path: string = "", returnRequire = false, refresh = false): string | any => {
         const dataKey = "XpresserPath";
         let EnginePath: string;
 
-        if ($.engineData.has(dataKey)) {
+        if (!refresh && $.engineData.has(dataKey)) {
             EnginePath = $.engineData.get(dataKey);
         } else {
             if (typeof paths.engine === "string") {
@@ -58,6 +59,7 @@ $.path = {
         if (path[0] === "/") {
             path = path.substr(1);
         }
+
         const engine = EnginePath + path;
         return returnRequire ? require(engine) : engine;
     },

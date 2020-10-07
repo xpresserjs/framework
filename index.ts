@@ -202,6 +202,7 @@ const XpresserInit = (AppConfig: object | string, AppOptions: Options = {}): Dol
         if (!$.file.exists($.path.engine())) {
             try {
                 $.config.paths.npm = $.path.node_modules();
+                $.path.engine('', false, true);
             } catch (e) {
                 $.logError('Path to xpresser engine files maybe missing, point {config.paths.npm} to your node_modules folder.')
             }

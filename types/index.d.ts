@@ -319,7 +319,7 @@ declare namespace Xpresser {
             /**
              * Get path in Framework src folder
              */
-            engine(path?: string, returnRequire?: boolean): string | any;
+            engine(path?: string, returnRequire?: boolean, refresh?: boolean): string | any;
 
             /**
              * Get path in Events Folder
