@@ -164,6 +164,11 @@ const XpresserInit = (AppConfig: object | string, AppOptions: Options = {}): Dol
         $.options.isConsole = true;
     }
 
+    // Set $.isTypeScript
+    $.isTypescript = () => {
+        return $.$config.get('project.fileExtension') === ".ts";
+    }
+
     // Include Loggers
     require("./src/Extensions/Loggers");
     // Include If extensions
@@ -184,6 +189,11 @@ const XpresserInit = (AppConfig: object | string, AppOptions: Options = {}): Dol
         process.env.TZ = timezone;
     }
 
+    // Include PathHelper Extensions
+    require("./src/Extensions/Path");
+    // Require Global
+    require("./src/global");
+
     // Set $.typescriptInit
     $.typescriptInit = () => {
         // Set Project extension
@@ -191,22 +201,12 @@ const XpresserInit = (AppConfig: object | string, AppOptions: Options = {}): Dol
 
         if (!$.file.exists($.path.engine())) {
             try {
-                $.config.paths.npm = require.resolve('xpresser').replace('xpresser/dist/index.js', '')
+                $.config.paths.npm = $.path.node_modules();
             } catch (e) {
                 $.logError('Path to xpresser engine files maybe missing, point {config.paths.npm} to your node_modules folder.')
             }
         }
     }
-
-    // Set $.isTypeScript
-    $.isTypescript = () => {
-        return $.$config.get('project.fileExtension') === ".ts";
-    }
-
-    // Include PathHelper Extensions
-    require("./src/Extensions/Path");
-    // Require Global
-    require("./src/global");
 
     // Get OnEvents Loader.
     const loadOnEvents = require("./src/Events/OnEventsLoader");
