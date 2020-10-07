@@ -127,6 +127,10 @@ $.path = {
 
         return returnRequire ? require(config) : config;
     },
+
+    node_modules(){
+        return require.resolve('xpresser').replace('xpresser/dist/index.js', '');
+    }
 };
 
 /**

@@ -357,6 +357,11 @@ declare namespace Xpresser {
              * Get path in configs folder
              */
             configs(path?: string): string;
+
+            /**
+             * Get current node_modules directory.
+             */
+            node_modules(): string;
         };
 
         /* --------------- Boot Function ------------------- */
