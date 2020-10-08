@@ -116,7 +116,7 @@ declare namespace Xpresser {
         routerEngine: typeof RouterEngine;
 
         // Controller
-        controller: Controller;
+        controller: typeof Controller;
 
         // Events
         events: EventEmitter;
@@ -371,7 +371,7 @@ declare namespace Xpresser {
         /**
          * Configure project for typescript.
          */
-        typescriptInit(): void;
+        initializeTypescript(filename: string, run?: (isNode: boolean) => void): void;
 
         /**
          * Check if project is typescript

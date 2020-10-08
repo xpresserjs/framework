@@ -1,0 +1,27 @@
+import Xpresser, {Http} from "xpresser/types/http";
+
+/**
+ * {{name}}
+ */
+const {{name}}: Xpresser.Controller.Object = {
+    // Controller Name
+    name: "{{name}}",
+
+    // Controller Default Error Handler.
+    e: (http: Http, error: any) => http.send({error}),
+
+
+    /**
+     * Example controller action.
+     * @param {Http} http
+     */
+    action(http: Http) {
+        return http.send({
+            route: http.route
+        });
+    },
+
+};
+
+
+export = {{name}};

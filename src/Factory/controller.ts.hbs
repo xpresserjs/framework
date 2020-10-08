@@ -1,0 +1,25 @@
+import {DollarSign} from "xpresser/types";
+import {Http} from "xpresser/types/http";
+
+declare const $: DollarSign;
+
+/**
+ * {{name}}
+ * @class
+ * @extends $.controller
+ */
+class {{name}} extends $.controller {
+
+    /**
+     * Example controller action.
+     * @param {Http} http
+     */
+    action(http: Http) {
+        return http.send({
+            route: http.route
+        });
+    }
+
+}
+
+export = {{name}};

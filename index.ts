@@ -104,6 +104,7 @@ const XpresserInit = (AppConfig: object | string, AppOptions: Options = {}): Dol
     AppConfig = _.merge(Config, AppConfig);
     AppOptions = _.merge(Options, AppOptions);
 
+
     // Initialize {$.on} for the first time.
     // @ts-ignore
     $.on = {};
@@ -123,13 +124,6 @@ const XpresserInit = (AppConfig: object | string, AppOptions: Options = {}): Dol
      * Get Xjs Cli Config
      */
     const CliConfig: any = (global as any)["XjsCliConfig"];
-
-
-    /* ------------- $.on Events Loader ------------- */
-    require("./src/On");
-
-    // Require $.file
-    require("./src/FileEngine");
 
     // Set Config to AppConfig
     $.config = AppConfig;
@@ -169,6 +163,28 @@ const XpresserInit = (AppConfig: object | string, AppOptions: Options = {}): Dol
         return $.$config.get('project.fileExtension') === ".ts";
     }
 
+
+    // Set Engine Path
+    const enginePath = $.$config.get('paths.engine');
+    if (!enginePath) {
+        let dirName = __dirname;
+
+        /**
+         * Check if xpresser dist folder if being used
+         */
+        if (dirName.substr(-5) === '/dist') {
+            dirName = dirName.substr(0, dirName.length - 5)
+        }
+
+        $.$config.set('paths.engine', `${dirName}/src/`);
+    }
+
+    /* ------------- $.on Events Loader ------------- */
+    require("./src/On");
+
+    // Require $.file
+    require("./src/FileEngine");
+
     // Include Loggers
     require("./src/Extensions/Loggers");
     // Include If extensions
@@ -193,21 +209,6 @@ const XpresserInit = (AppConfig: object | string, AppOptions: Options = {}): Dol
     require("./src/Extensions/Path");
     // Require Global
     require("./src/global");
-
-    // Set $.typescriptInit
-    $.typescriptInit = () => {
-        // Set Project extension
-        $.$config.set('project.fileExtension', '.ts');
-
-        if (!$.file.exists($.path.engine())) {
-            try {
-                $.config.paths.npm = $.path.node_modules();
-                $.path.engine('', false, true);
-            } catch (e) {
-                $.logError('Path to xpresser engine files maybe missing, point {config.paths.npm} to your node_modules folder.')
-            }
-        }
-    }
 
     // Get OnEvents Loader.
     const loadOnEvents = require("./src/Events/OnEventsLoader");

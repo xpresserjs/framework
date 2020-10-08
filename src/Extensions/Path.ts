@@ -130,8 +130,16 @@ $.path = {
         return returnRequire ? require(config) : config;
     },
 
-    node_modules(){
-        return require.resolve('xpresser').replace('xpresser/dist/index.js', '');
+    node_modules(path: string = ""): string {
+        let currentNodeModules: string;
+
+        try {
+            currentNodeModules = require.resolve('xpresser').replace('xpresser/dist/index.js', '');
+        } catch (e) {
+            currentNodeModules = Path.resolve([$.config.paths.npm, path])
+        }
+
+        return currentNodeModules + path;
     }
 };
 

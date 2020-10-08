@@ -14,10 +14,15 @@ $.base64 = Base64;
 import Helpers = require("./helpers");
 
 $.helpers = Helpers;
+
 import Utils = require("./Functions/util.fn");
+import {initializeTypescriptFn} from "./Functions/internals.fn";
 
 // Assign Utils to $.fn
 $.fn = Utils;
 
 // Assign Utils to $.fn
 $.utils = Utils;
+
+// Set $.typescriptInit
+$.initializeTypescript = initializeTypescriptFn;

@@ -31,8 +31,21 @@ class PathHelper {
             $path = $path.join("/");
         }
 
-        if ($.isTypescript() && $path.includes('.js.ts')) {
-            $path = $path.replace('.js.ts', '.js');
+        // Replace .js.js to .js
+        if ($path.includes('.js.js')) {
+            $path = $path.replace('.js.js', '.js');
+        }
+
+        if ($.isTypescript()) {
+            // Replace .js.ts to .js
+            if ($path.includes('.js.ts')) {
+                $path = $path.replace('.js.ts', '.js');
+            }
+
+            // Replace .ts.js to .ts
+            if ($path.includes('.ts.js')) {
+                $path = $path.replace('.js.js', '.ts');
+            }
         }
 
         if ($path.indexOf("://") >= 0) {
@@ -113,9 +126,10 @@ class PathHelper {
      *
      * => ['server.js', 'app.js', 'test.js']
      * @param files
+     * @param useExtension
      * @param clone
      */
-    static addProjectFileExtension(files: string | string[], clone = false): string[] | string {
+    static addProjectFileExtension(files: string | string[], useExtension?: string | undefined, clone = false): string[] | string {
         if (Array.isArray(files)) {
             let array;
             if (clone) {
@@ -131,12 +145,28 @@ class PathHelper {
 
             return array;
         } else {
+            // default file extension
             const jsExt = ".js";
-            const ext = $.config.project.fileExtension || jsExt;
+            // if custom extension is defined use it else use defined project extension.
+            useExtension = (useExtension && useExtension.length) ? useExtension : $.config.project.fileExtension;
+            // if not useExtension use jsExt
+            const ext = useExtension ? useExtension : jsExt;
+            // check and store if path has extension
             const hasExtInName = files.substr(-ext.length) === ext;
-            if (ext !== jsExt && !hasExtInName && files.substr(-jsExt.length) === jsExt) {
+
+            if (
+                // ext is not same with jsExt (i.e maybe .ts)
+                ext !== jsExt &&
+                // And ext was not found in name
+                !hasExtInName &&
+                // And ext is .js
+                files.substr(-jsExt.length) === jsExt
+            ) {
+                // return path un-modified.
                 return files;
             }
+
+            // Else add extension to name;
             return hasExtInName ? files : files + ext;
         }
     }

@@ -11,6 +11,7 @@ import {Http} from "../types/http";
 import {DollarSign} from "../types";
 import {StringToAnyKeyObject} from "./CustomTypes";
 import {parseControllerString} from "./Functions/internals.fn";
+import PathHelper from "./Helpers/Path";
 
 declare const _: any;
 declare const $: DollarSign;
@@ -402,7 +403,7 @@ const Controller = (route: any, method: any = null) => {
         $controller = controllerAndMethod.controller;
         method = controllerAndMethod.method;
 
-        controllerPath = $.use.controller($controller + $.config.project.fileExtension);
+        controllerPath = $.use.controller(PathHelper.addProjectFileExtension($controller) as string);
 
         $controller = require(controllerPath);
     }

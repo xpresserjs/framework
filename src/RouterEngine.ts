@@ -3,7 +3,7 @@ import XpresserRouter = require("@xpresser/router");
 import {DollarSign} from "../types";
 import {StringToAnyKeyObject} from "./CustomTypes";
 import {parseControllerString} from "./Functions/internals.fn";
-import {split} from "ts-node";
+import PathHelper from "./Helpers/Path";
 
 const AllRoutesKey = "RouterEngine:allRoutes";
 
@@ -12,6 +12,7 @@ declare const $: DollarSign;
 
 const NameToRoute: StringToAnyKeyObject = {};
 const ProcessedRoutes: any[] = [];
+const ControllerStringCache: StringToAnyKeyObject = {};
 
 class RouterEngine {
     /**
@@ -259,26 +260,55 @@ class RouterEngine {
             }
 
             if (typeof route.controller === "string" && route.controller.includes("@")) {
-               let {method, controller} = parseControllerString(route.controller);
+                // tslint:disable-next-line:prefer-const
+                let {method, controller} = parseControllerString(route.controller);
+                const controllerCacheKey = controller;
 
+                if (ControllerStringCache.hasOwnProperty(controllerCacheKey)) {
+                    route.controller = ControllerStringCache[controllerCacheKey] + "@" + method;
+                } else {
+                    let isTypescriptButUsingJsExtension = false;
 
-                let controllerPath = $.use.controller(controller + $.config.project.fileExtension);
+                    let controllerPath = $.use.controller(
+                        PathHelper.addProjectFileExtension(controller) as string
+                    );
 
-                if (!$.file.exists(controllerPath)) {
+                    if (!$.file.exists(controllerPath)) {
+                        if (!controller.includes("Controller")) {
 
-                    if (!controller.toLowerCase().includes("controller")) {
-                        controllerPath = $.use.controller(controller + "Controller" + $.config.project.fileExtension);
+                            controllerPath = $.use.controller(
+                                PathHelper.addProjectFileExtension(controller + "Controller") as string
+                            );
 
-                        if (!$.file.exists(controllerPath)) {
-                            $.logErrorAndExit("Controller: " + [controller, method].join("@") + " not found");
+                            if (!$.file.exists(controllerPath)) {
+                                /**
+                                 * Check If is using typescript and plugin requires a js file.
+                                 */
+                                controllerPath = $.use.controller(
+                                    PathHelper.addProjectFileExtension(controller + "Controller", '.js') as string
+                                );
+
+                                if ($.isTypescript() && $.file.exists(controllerPath)) {
+                                    isTypescriptButUsingJsExtension = true;
+                                }
+
+                                if (!isTypescriptButUsingJsExtension) {
+                                    $.logError("Controller: " + [controller, method].join("@") + " not found");
+                                    $.logErrorAndExit('Path:', controllerPath)
+                                }
+                            }
+
+                            controller = controller + "Controller";
                         }
-
-                        controller = controller + "Controller";
-
                     }
-                }
 
-                route.controller = controller + "@" + method;
+                    if (isTypescriptButUsingJsExtension) {
+                        controller = controller + '.js';
+                    }
+
+                    ControllerStringCache[controllerCacheKey] = controller;
+                    route.controller = controller + "@" + method;
+                }
             }
 
             const canRegisterRoutes = $.app && (!$.options.isTinker && !$.options.isConsole);
