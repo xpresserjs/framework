@@ -49,7 +49,7 @@ const MiddlewareEngine = (middlewarePath: any, action?: any, route?: any): any =
         }
 
         if (typeof middleware[action] === "undefined") {
-            return $.logErrorAndExit("Method {" + action + "} not found in middleware: " + middlewarePath);
+            return $.logErrorAndExit("MethodWithHttp {" + action + "} not found in middleware: " + middlewarePath);
         }
     }
 

@@ -14,7 +14,7 @@ class {{name}} extends $.controller {
      * Example controller action.
      * @param {Http} http
      */
-    action(http: Http) {
+    action(http: Http): Http.Response {
         return http.send({
             route: http.route
         });

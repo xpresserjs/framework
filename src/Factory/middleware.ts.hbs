@@ -1,0 +1,15 @@
+import {Http} from "xpresser/types/http";
+
+/**
+ * {{name}}
+ */
+export = {
+
+    // Default middleware action
+    allow(http: Http): any {
+        // run check here
+
+        return http.next();
+    }
+
+};

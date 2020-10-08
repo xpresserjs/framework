@@ -50,7 +50,19 @@ export = {
         }
     },
 
+
     factory(file: string, $data = {}) {
+
+        /**
+         * If app is Typescript then check if `.ts.hbs` of same file exists.
+         */
+        if ($.isTypescript()) {
+            const tsFile = file.replace('.hbs', '.ts.hbs');
+            if (fs.existsSync(tsFile)) {
+                file = tsFile;
+            }
+        }
+
         const source = fs.readFileSync(file).toString();
         const template = Handlebars.compile(source);
         return template($data);
@@ -74,7 +86,7 @@ export = {
             }
         }
 
-        if($name.includes('/')){
+        if ($name.includes('/')) {
             const names = $name.split('/');
             const lastPath = _.upperFirst(names.pop());
             names.push(lastPath);
@@ -117,6 +129,7 @@ export = {
          * Append needed data
          */
         $data['name'] = afterLastSlash($name);
+
         fs.writeFileSync($to, this.factory($from, $data));
 
         this.logThis($name + " created successfully.");

@@ -1,0 +1,25 @@
+import {Http} from "xpresser/types/http";
+import {DollarSign} from "xpresser/types";
+
+declare const $: DollarSign;
+/**
+ * {{name}}
+ */
+const {{name}} = $.handler({
+    // Controller Name
+    name: "{{name}}",
+
+    // Default Error Handler.
+    e: (http: Http, error: any) => http.send({error}),
+
+    /**
+     * Action Example.
+     */
+    index: {respond: "Hello World"},
+});
+
+{{name}}.services({
+    respond: (message: string) => ({message}),
+});
+
+export = {{name}};

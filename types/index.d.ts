@@ -464,7 +464,7 @@ declare namespace Xpresser {
          * Controller Request ControllerService
          * @param controller
          */
-        handler(controller: HttpController.Object | any): HttpController.Handler;
+        handler(controller: HttpController.Object): HttpController.Handler;
     }
 
     /*~ If there are types, properties, or methods inside dotted names

@@ -22,10 +22,10 @@ declare namespace Xpresser {
     namespace Controller {
 
         interface ServiceContext {
-            http?: Http;
-            boot?: any;
-            services?: any;
-            error?: (...args: any[]) => ControllerServiceError;
+            http: Http;
+            boot: any;
+            services: any;
+            error: (...args: any[]) => ControllerServiceError;
         }
 
         interface Services {
@@ -34,20 +34,20 @@ declare namespace Xpresser {
              * @param options - option passed to service in controller method.
              * @param context - Your current request and services context
              */
-            [name: string]: (options: any, context?: ServiceContext) => (any | void);
+            [name: string]: (options: any, context: ServiceContext) => (any | void);
         }
 
-        type Method = (http?: Http) => (any | void);
-        type BootMethod = (http?: Http, error?: () => (any | void)) => object;
-        type MethodWithBoot = (http?: Http, boot?: any, error?: () => (any | void)) => (any | void);
-        type MethodInlineService = (context?: ServiceContext) => (any | void);
+        type MethodWithHttp = (http: Http) => (any | void);
+        type BootMethod = (http: Http, error: () => (any | void)) => object;
+        type MethodWithBoot = (http: Http, boot: any, error: () => (any | void)) => (any | void);
+        type InlineServiceMethod = (context: ServiceContext) => (any | void);
 
         interface MethodWithServices {
             // Controller Service
-            [name: string]: MethodInlineService | any;
+            [name: string]: InlineServiceMethod | any;
         }
 
-        interface Object {
+        type Object = {
             // Name of Controller.
             name?: string;
             /**
@@ -71,7 +71,7 @@ declare namespace Xpresser {
              * @param helpers
              */
             middleware?: (helpers?: {
-                use: Method,
+                use: MethodWithHttp,
             }) => object;
 
             /**
@@ -90,13 +90,10 @@ declare namespace Xpresser {
              * inlineService({boot});
              */
             boot?: BootMethod;
-
-            // Controller Method
-            [name: string]: any | Method | MethodWithServices;
-        }
+        } | { [name: string]: MethodWithHttp | MethodWithServices }
 
         // tslint:disable-next-line:no-empty-interface
-        interface Handler extends ControllerService{
+        interface Handler extends ControllerService {
 
         }
 
