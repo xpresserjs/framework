@@ -114,8 +114,9 @@ class RequestEngine {
      * @param [$default]
      * @returns {*|ObjectCollection}
      */
-    public query(): ObjectCollection
-    public query(key?: string | undefined, $default?: any): any | ObjectCollection {
+    public query(key: string | undefined, $default?: any): any;
+    public query(key?: string | undefined, $default?: any): ObjectCollection;
+    public query(key: string | undefined, $default: any): any {
         if (key === undefined) {
             return $.objectCollection(this.req.query);
         } else if (this.req.query.hasOwnProperty(key)) {
@@ -130,8 +131,9 @@ class RequestEngine {
      * @param [$default]
      * @returns {*|ObjectCollection}
      */
-    public body(): ObjectCollection
-    public body(key?: string | undefined, $default?: any): any {
+    public body(key: string | undefined, $default?: any): any;
+    public body(key?: string | undefined, $default?: any): ObjectCollection;
+    public body(key: string | undefined, $default: any): any {
         if (key === undefined) {
             return $.objectCollection(this.req.body);
         } else if (this.req.body.hasOwnProperty(key)) {
