@@ -5,7 +5,3 @@ declare namespace NodeJS {
         moment: any;
     }
 }
-/**
- * Make Declaration public
- */
-declare namespace Xpresser {}
