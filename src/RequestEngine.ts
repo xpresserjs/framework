@@ -95,29 +95,15 @@ class RequestEngine {
      * Response Send
      * @param body
      */
-    public send(body: any) {
+    public send(body: any): Http.Response {
         return this.res.send(body);
-    }
-
-    /**
-     * get Request Data
-     * @param key
-     * @param $default
-     * @returns {*}
-     * @deprecated
-     */
-    public get(key: string, $default?: any) {
-        if (this.bothData.hasOwnProperty(key)) {
-            return this.bothData[key];
-        }
-        return $default;
     }
 
     /**
      * Set response status
      * @param code
      */
-    public status(code: number) {
+    public status(code: number): this {
         this.res.status(code);
         return this;
     }
@@ -128,6 +114,7 @@ class RequestEngine {
      * @param [$default]
      * @returns {*|ObjectCollection}
      */
+    public query(): ObjectCollection
     public query(key?: string | undefined, $default?: any): any | ObjectCollection {
         if (key === undefined) {
             return $.objectCollection(this.req.query);
@@ -143,7 +130,8 @@ class RequestEngine {
      * @param [$default]
      * @returns {*|ObjectCollection}
      */
-    public body(key?: string | undefined, $default?: any): any | ObjectCollection {
+    public body(): ObjectCollection
+    public body(key?: string | undefined, $default?: any): any {
         if (key === undefined) {
             return $.objectCollection(this.req.body);
         } else if (this.req.body.hasOwnProperty(key)) {
@@ -166,22 +154,12 @@ class RequestEngine {
     }
 
     /**
-     * Pluck data from Request data
-     * @param items
-     * @returns {*}
-     * @deprecated
-     */
-    public pluck(items: any[] = []) {
-        return this.all(items);
-    }
-
-    /**
      * To API format
      * @param {*} data
      * @param {boolean} proceed
      * @param {number} status
      */
-    public toApi(data: any = {}, proceed = true, status = 200) {
+    public toApi(data: any = {}, proceed = true, status = 200): Http.Response {
         const d = {proceed} as any;
 
         if (data.hasOwnProperty("__say")) {
@@ -199,7 +177,7 @@ class RequestEngine {
      * @param {object} data
      * @param {number} status
      */
-    public toApiFalse(data: object = {}, status: number = 200) {
+    public toApiFalse(data: object = {}, status: number = 200): Http.Response {
         return this.toApi(data, false, status);
     }
 
@@ -209,7 +187,7 @@ class RequestEngine {
      * @param {boolean} proceed
      * @param {number} status
      */
-    public sayToApi(message: string, proceed = true, status = 200) {
+    public sayToApi(message: string, proceed = true, status = 200): Http.Response {
         return this.toApi({
             __say: message,
         }, proceed, status);
@@ -221,7 +199,7 @@ class RequestEngine {
      * @param {boolean} proceed
      * @param {number} status
      */
-    public sayToApiFalse(message: string, proceed = false, status = 200) {
+    public sayToApiFalse(message: string, proceed = false, status = 200): Http.Response {
         return this.toApi({
             __say: message,
         }, proceed, status);
@@ -232,7 +210,7 @@ class RequestEngine {
      * @param {string} path
      * @returns {*}
      */
-    public redirect(path = "/") {
+    public redirect(path = "/"): any {
         this.res.redirect(path);
         return this.res.end();
     }
@@ -240,7 +218,7 @@ class RequestEngine {
     /**
      * Redirect Back
      */
-    public redirectBack() {
+    public redirectBack(): any {
         const backURL = this.req.header("Referer") || "/";
         return this.redirect(backURL);
     }
@@ -251,7 +229,7 @@ class RequestEngine {
      * @param {Array|string} keys
      * @returns {*}
      */
-    public redirectToRoute(route: string, keys = []) {
+    public redirectToRoute(route: string, keys = []): any {
         return this.redirect($.helpers.route(route, keys));
     }
 
@@ -306,7 +284,7 @@ class RequestEngine {
      * @param useEjs
      * @returns {*}
      */
-    public view(file: string, data = {}, fullPath: boolean = false, useEjs = false) {
+    public view(file: string, data = {}, fullPath: boolean = false, useEjs = false): any {
 
         /**
          * Express Default Renderer
@@ -389,7 +367,7 @@ class RequestEngine {
      * @return {*}
      * @alias
      */
-    public renderView(...args: any[]) {
+    public renderView(...args: any[]): any {
         // @ts-ignore
         return this.view(...args);
     }
@@ -400,7 +378,7 @@ class RequestEngine {
      * @return {*}
      * @alias
      */
-    public render(...args: any[]) {
+    public render(...args: any[]): any {
         // @ts-ignore
         return this.view(...args);
     }
@@ -411,7 +389,7 @@ class RequestEngine {
      * @param {Object} data
      * @returns {*}
      */
-    public renderViewFromEngine(file: string, data: any) {
+    public renderViewFromEngine(file: string, data: any): any {
 
         const view = $.path.engine("backend/views/" + file);
         return this.renderView(view, data, true, true);
@@ -424,7 +402,7 @@ class RequestEngine {
      * @param {*} value
      * @returns {RequestEngine}
      */
-    public with(data: any, value = null) {
+    public with(data: any, value = null): this {
         if (typeof data === "string") {
             this.req.flash(data, value);
         } else {
@@ -442,7 +420,7 @@ class RequestEngine {
      * Return old values to view after redirect
      * @returns {RequestEngine}
      */
-    public withOld() {
+    public withOld(): this {
         const data = this.all();
         const dataKeys = Object.keys(data);
 

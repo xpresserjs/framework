@@ -39,13 +39,6 @@ export function initializeTypescriptFn(filename: string, run?: (isNode: boolean)
 
 
     if (!isTypeScriptFile) {
-
-        /**
-         * Check for routes file.
-         *
-         * In most cases when using typescript your routes file will still be 'routesFile.ts'
-         * even after build, This fixes that.
-         */
         const routesFile = $.$config.get('paths.routesFile');
         if (routesFile.includes('.ts')) {
             $.$config.set('paths.routesFile', routesFile.replace('.ts', '.js'))
