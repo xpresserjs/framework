@@ -15,9 +15,7 @@ declare namespace Xpresser {
         }
     }
 
-    // tslint:disable-next-line:no-empty-interface
-    interface Http extends RequestEngine {
-    }
+    type Http = RequestEngine
 
     namespace Controller {
 

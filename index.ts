@@ -35,7 +35,7 @@ const {Config, Options} = Configurations;
  * @param {Options} AppOptions
  * @constructor
  */
-const XpresserInit = (AppConfig: object | string, AppOptions: Options = {}): DollarSign => {
+const xpresser = (AppConfig: object | string, AppOptions: Options = {}): DollarSign => {
 
     // Set DollarSign Global Var: $
     const $ = {} as DollarSign;
@@ -291,4 +291,4 @@ const XpresserInit = (AppConfig: object | string, AppOptions: Options = {}): Dol
     return $;
 };
 
-export = XpresserInit;
+export = xpresser;

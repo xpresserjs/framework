@@ -10,5 +10,8 @@ declare namespace NodeJS {
 /**
  * Make Declaration public
  */
-declare namespace Xpresser {}
-declare namespace xpresser {}
+declare namespace xpresser {
+    type useNamespace_Xpresser_Instead = boolean
+}
+declare namespace Xpresser {
+}

@@ -4,10 +4,6 @@ import {DollarSign} from "../../types";
 declare const $: DollarSign;
 declare let _: any;
 
-/**
- * Log Function
- * @param {*} args
- */
 $.log = (...args) => {
     if (!args.length) { return console.log(""); }
 
@@ -81,9 +77,6 @@ $.logError = (...args) => {
     }
 };
 
-/**
- * @param args
- */
 $.logErrorAndExit = (...args) => {
     return $.logError(...args, true);
 };

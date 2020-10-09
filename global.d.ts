@@ -1,15 +1,9 @@
 /// <reference path="./types/node.d.ts" />
-/// <reference path="./types/http.d.ts" />
 /// <reference path="./types/helpers.d.ts" />
+/// <reference path="./types/http.d.ts" />
 /// <reference path="./types/index.d.ts" />
 
 import {DollarSign, Options} from "./types";
-
-/**
- * Make Declaration public
- */
-declare namespace xpresser {}
-
 
 /**
  * Initialize Xpresser

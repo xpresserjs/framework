@@ -11,7 +11,7 @@ import {StringToAnyKeyObject} from "./CustomTypes";
 
 declare const $: DollarSign;
 
-let Use = {} as JsonSettings.Use;
+let Use: JsonSettings.Use;
 const PluginNamespaces = $.engineData.get("PluginEngine:namespaces", {});
 
 /**
