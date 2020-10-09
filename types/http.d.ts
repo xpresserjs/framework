@@ -4,9 +4,7 @@ import ControllerServiceError = require("../src/Controllers/ControllerServiceErr
 import ControllerService = require("../src/Controllers/ControllerService");
 
 declare namespace Xpresser {
-    interface Http extends RequestEngine {
-        end(): string
-    }
+    class Http extends RequestEngine {}
 
     namespace Http {
         interface Request extends express.Request {
