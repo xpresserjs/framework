@@ -15,7 +15,7 @@ export function parseControllerString(controllerString: string) {
     }
 }
 
-export function initializeTypescriptFn(filename: string, run?: (isNode: boolean) => void) {
+export function initializeTypescriptFn(filename: string, run?: (isNode: boolean) => void): DollarSign {
 
     if (!filename) throw Error(`isTypescript: requires __filename as argument.`);
 
@@ -51,4 +51,6 @@ export function initializeTypescriptFn(filename: string, run?: (isNode: boolean)
     if (typeof run === "function") {
         run(!isTypeScriptFile);
     }
+
+    return $;
 }

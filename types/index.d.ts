@@ -371,7 +371,7 @@ declare namespace Xpresser {
         /**
          * Configure project for typescript.
          */
-        initializeTypescript(filename: string, run?: (isNode: boolean) => void): void;
+        initializeTypescript(filename: string, run?: (isNode: boolean) => void): DollarSign;
 
         /**
          * Check if project is typescript
