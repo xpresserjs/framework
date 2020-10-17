@@ -114,8 +114,8 @@ class RequestEngine {
      * @param [$default]
      * @returns {*|ObjectCollection}
      */
-    public query(key: string | undefined, $default?: any): any;
     public query(key?: string | undefined, $default?: any): ObjectCollection;
+    public query(key: string | undefined, $default?: any): any;
     public query(key: string | undefined, $default: any): any {
         if (key === undefined) {
             return $.objectCollection(this.req.query);
@@ -131,8 +131,8 @@ class RequestEngine {
      * @param [$default]
      * @returns {*|ObjectCollection}
      */
-    public body(key: string | undefined, $default?: any): any;
     public body(key?: string | undefined, $default?: any): ObjectCollection;
+    public body(key: string | undefined, $default?: any): any;
     public body(key: string | undefined, $default: any): any {
         if (key === undefined) {
             return $.objectCollection(this.req.body);
