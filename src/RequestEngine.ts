@@ -8,6 +8,7 @@ import ErrorEngine = require("./ErrorEngine");
 import {DollarSign} from "../types";
 import {Http} from "../types/http";
 import {Helpers} from "../types/helpers";
+import {StringToAnyKeyObject} from "./CustomTypes";
 
 declare const _: any;
 declare const $: DollarSign;
@@ -114,9 +115,7 @@ class RequestEngine {
      * @param [$default]
      * @returns {*|ObjectCollection}
      */
-    public query(key?: string | undefined, $default?: any): ObjectCollection;
-    public query(key: string | undefined, $default?: any): any;
-    public query(key: string | undefined, $default: any): any {
+    public query(key?: string | undefined, $default?: any): ObjectCollection | any {
         if (key === undefined) {
             return $.objectCollection(this.req.query);
         } else if (this.req.query.hasOwnProperty(key)) {
@@ -129,17 +128,38 @@ class RequestEngine {
      * Request Body Data
      * @param [key]
      * @param [$default]
+     * @example
+     * const body = http.body('inputName', 'defaultValue');
+     * const body = http.body(); // collection
      * @returns {*|ObjectCollection}
      */
-    public body(key?: string | undefined, $default?: any): ObjectCollection;
-    public body(key: string | undefined, $default?: any): any;
-    public body(key: string | undefined, $default: any): any {
+    public body(key?: string | undefined, $default?: any): ObjectCollection | any {
         if (key === undefined) {
             return $.objectCollection(this.req.body);
         } else if (this.req.body.hasOwnProperty(key)) {
             return this.req.body[key];
         }
         return $default;
+    }
+
+
+    /**
+     * Return any request engine path as collection.
+     * @example
+     * const body = http.toCollection('req.body');
+     * const query = http.toCollection('req.query');
+     * const session = http.toCollection('session');
+     * @param path
+     */
+    public toCollection(path: string): ObjectCollection {
+        // @ts-ignore
+        const data: StringToAnyKeyObject | undefined = this[path];
+
+        if (data === undefined || typeof data !== 'object') {
+            throw TypeError(`${path} not found in request engine or not an object.`);
+        }
+
+        return $.objectCollection();
     }
 
     /**
