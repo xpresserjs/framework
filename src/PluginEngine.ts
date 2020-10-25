@@ -239,8 +239,17 @@ class PluginEngine {
 
 
         // check if plugin uses index file.
-        if ($data.get('use_index', false)) {
-            const indexFilePath: void | string = pluginPathExistOrExit(plugin, path, 'index.js');
+        const useIndex = $data.get('use_index', false);
+        if (useIndex) {
+
+            /**
+             * Check for typescript plugins.
+             *
+             * If in typescript mode we check for base file.
+             */
+            const isCustomFile = typeof useIndex === "string";
+            const pluginIndexFile = isCustomFile ? useIndex : 'index.js';
+            const indexFilePath: void | string = pluginPathExistOrExit(plugin, path, pluginIndexFile);
 
             if (indexFilePath) {
                 const {run} = require(indexFilePath);
