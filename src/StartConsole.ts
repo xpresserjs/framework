@@ -1,9 +1,10 @@
 import fs = require("fs");
 import Console = require("./Console/Commands");
 import PathHelper = require("./Helpers/Path");
+import JobHelper = require("./Console/JobHelper");
+
 import {DollarSign} from "../types";
 import {StringToAnyKeyObject} from "./CustomTypes";
-import JobHelper from "./Console/JobHelper";
 
 const {Commands, Artisan}: { Commands: StringToAnyKeyObject, Artisan: StringToAnyKeyObject } = Console;
 const DefinedCommands: StringToAnyKeyObject = {};
