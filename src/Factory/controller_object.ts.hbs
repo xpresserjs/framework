@@ -12,9 +12,10 @@ const {{name}}: Xpresser.Controller.Object = {
 
 
     /**
-     * Example controller action.
-     * @param {Http} http
-     */
+    * Example Action.
+    * @param {Http} http - Current Http Instance
+    * @returns {*}
+    */
     action(http: Http): Http.Response {
         return http.send({
             route: http.route

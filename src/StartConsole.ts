@@ -3,6 +3,7 @@ import Console = require("./Console/Commands");
 import PathHelper = require("./Helpers/Path");
 import {DollarSign} from "../types";
 import {StringToAnyKeyObject} from "./CustomTypes";
+import JobHelper from "./Console/JobHelper";
 
 const {Commands, Artisan}: { Commands: StringToAnyKeyObject, Artisan: StringToAnyKeyObject } = Console;
 const DefinedCommands: StringToAnyKeyObject = {};
@@ -92,20 +93,7 @@ if (typeof Commands[argCommand] === "undefined" && typeof DefinedCommands[argCom
     }
 
 } else {
-    /**
-     * JobHelper
-     *
-     *  A class whose instance is passed as the last argument in job handler functions.
-     */
-    const JobHelper = {
-        end(silent = false) {
-            if (!silent) {
-                $.log(`Job: (${argCommand}) ran at: ${$.helpers.now()}`);
-            }
-
-            return process.exit();
-        },
-    };
+    const jobHelper = new JobHelper(argCommand);
 
     // Send only command args to function
     args.splice(0, 1);
@@ -118,12 +106,12 @@ if (typeof Commands[argCommand] === "undefined" && typeof DefinedCommands[argCom
             $.routerEngine.processRoutes($.router.routes);
         }
 
-        Commands[argCommand](args, JobHelper);
+        Commands[argCommand](args, jobHelper);
 
     } else if (typeof Commands[argCommand] === "string") {
 
         const command = require(Commands[argCommand]);
-        command(args, {artisan: Artisan, helper: JobHelper});
+        command(args, {artisan: Artisan, helper: jobHelper});
 
     } else if (typeof DefinedCommands[argCommand] === "object") {
 
@@ -159,7 +147,7 @@ if (typeof Commands[argCommand] === "undefined" && typeof DefinedCommands[argCom
 
         // Run Command
         try {
-            command.handler(args, JobHelper);
+            command.handler(args, jobHelper);
         } catch (e) {
             $.logPerLine([
                 {error: `Error in command: {${argCommand}}`},

@@ -5,17 +5,19 @@
 const {{name}} = {
     // Controller Name
     name: "{{name}}",
-    // Controller Middlewares
-    middlewares: {},
+
     // Controller Default Service Error Handler.
     e: (http, error) => http.send({error}),
 
 
     /**
-     * Example Method.
+     * Example Action.
+     * @param {Xpresser.http} http - Current Http Instance
      * @returns {*}
      */
-    index: () =>  "Hello World",
+    action(http){
+        return http.send("Hello World");
+    },
 };
 
 
