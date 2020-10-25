@@ -461,7 +461,6 @@ const startHttpsServer = () => {
     loadOnEvents("https", () => {
         $.https.listen(httpsPort, () => {
             $.logSuccess("Ssl Enabled.");
-
             loadOnEvents('serverBooted')
         });
     });

@@ -121,7 +121,7 @@ if (typeof Commands[argCommand] === "undefined" && typeof DefinedCommands[argCom
                 events: boolean,
                 routes: boolean,
             },
-            command: string,
+            command?: string,
             schedule?: string,
             handler: (...args: any[]) => (any | void),
         } = DefinedCommands[argCommand];

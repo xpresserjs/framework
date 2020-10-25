@@ -3,15 +3,15 @@ import {DollarSign} from "../../types";
 declare const $: DollarSign;
 
 class JobHelper {
-    public job: string | null = null;
+    public name: string | null = null;
 
-    constructor(job: string) {
-        if (job) this.job = job;
+    constructor(name: string) {
+        if (name) this.name = name;
     }
 
-    public end(silent = false) {
+    public end(silent: boolean = false) {
         if (!silent) {
-            $.log(`Job: (${this.job}) ran at: ${$.helpers.now()}`);
+            $.log(`Job: (${this.name}) ran at: ${$.helpers.now()}`);
         }
 
         return $.exit();
