@@ -411,7 +411,7 @@ class RequestEngine {
      * @param {Object} data
      * @returns {*}
      */
-    public renderViewFromEngine(file: string, data: any): any {
+    public renderViewFromEngine(file: string, data?: any): any {
 
         const view = $.path.engine("backend/views/" + file);
         return this.renderView(view, data, true, true);
