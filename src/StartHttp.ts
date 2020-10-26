@@ -1,4 +1,5 @@
-const {resolve} = require("path");
+import {resolve} from "path";
+import os from "os";
 
 import PathHelper = require("./Helpers/Path");
 import loadOnEvents = require("./Events/OnEventsLoader");
@@ -15,7 +16,9 @@ import {DollarSign} from "../types";
 declare const _: any;
 declare const $: DollarSign;
 
+const isProduction = $.$config.get("env") === "production";
 const paths = $.$config.get("paths");
+
 
 /////////////
 // Load Use.json Data
@@ -114,7 +117,6 @@ if (!isUnderMaintenance && servePublicFolder) {
  *  By default helmet is enabled only in production,
  *  if you don't define a config @ {server.use.helmet}
  */
-const isProduction = $.$config.get("env") === "production";
 const useHelmet = $.$config.get("server.use.helmet", isProduction);
 if (useHelmet) {
     const helmet = require("helmet");
@@ -236,6 +238,7 @@ if (useSession) {
 
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 import ControllerService = require("./Controllers/ControllerService");
+import {getLocalExternalIp} from "./Functions/inbuilt.fn";
 
 /**
  * Maintenance Middleware
@@ -390,20 +393,30 @@ const startHttpServer = (onSuccess?: () => any, onError?: () => any) => {
         $.http.listen(port, () => {
             const domain = $.config.server.domain;
             const baseUrl = $.helpers.url();
+            const lanIp = getLocalExternalIp()
 
             // $.engineData
             const ServerStarted = new Date();
             const getServerUptime = () => global.moment(ServerStarted).fromNow();
             $.log(`Domain: ${domain} | Port: ${port} | BaseUrl: ${baseUrl}`);
+
+            /**
+             * Show Lan Ip in development mood
+             */
+            if (!isProduction && lanIp)
+                $.log(`Network: http://${lanIp}:${port}/`);
+
             $.log(`Server started - ${ServerStarted.toString()}`);
 
             // Save values to engineData
             $.engineData.set({
                 ServerStarted,
-                getServerUptime
+                getServerUptime,
+                lanIp
             })
 
-            if ($.$config.has("server.ssl.enabled") && $.config.server.ssl.enabled === true) {
+            const hasSslEnabled = $.$config.get("server.ssl.enabled", false);
+            if (hasSslEnabled) {
                 startHttpsServer();
             } else {
                 loadOnEvents('serverBooted')

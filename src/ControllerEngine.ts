@@ -301,20 +301,14 @@ class ControllerEngine {
 
                 if (typeof controller.boot === "function") {
                     try {
-                        boot = controller.boot(http, mockErrorHandler);
+                        boot = await controller.boot(http, mockErrorHandler);
                     } catch (e) {
                         return http.newError().view({
                             error: {
-                                // tslint:disable-next-line:max-line-length
                                 message: `Error in Controller Boot Method:  <code>${controllerName}</code>`,
                                 log: e.stack,
                             },
                         });
-                    }
-
-                    if ($.utils.isPromise(boot)) {
-                        // noinspection ES6RedundantAwait
-                        boot = await boot;
                     }
                 }
 
@@ -324,26 +318,28 @@ class ControllerEngine {
                     }
                 } else {
                     try {
-
                         let $return;
                         const typeOfControllerMethod = typeof useController[method];
 
                         if (typeof method === "function") {
-                            $return = method(http, boot, mockErrorHandler);
+
+                            $return = await method(http, mockErrorHandler, boot);
+
                         } else if (typeof method === "string") {
+
                             if (typeOfControllerMethod === "function") {
-                                $return = useController[method](http, boot, mockErrorHandler);
+
+                                $return = await useController[method](http, boot, mockErrorHandler);
+
                             } else if (typeOfControllerMethod === "object") {
+
                                 const processArgs = handlerArguments();
                                 processArgs.unshift(boot);
                                 processArgs.unshift(http);
                                 // @ts-ignore
                                 $return = await ProcessServices(...processArgs);
-                            }
-                        }
 
-                        if ($.utils.isPromise($return)) {
-                            $return = await $return;
+                            }
                         }
 
                         if (DebugControllerAction) {
@@ -380,6 +376,7 @@ class ControllerEngine {
  * @param {string |null} method
  */
 const Controller = (route: any, method: any = null) => {
+
     let $controller: any = undefined;
     let controllerPath = null;
     let isPath = false;
@@ -444,7 +441,6 @@ const Controller = (route: any, method: any = null) => {
 
     let middlewares = [];
     if (controllerMiddleware) {
-        // noinspection JSObjectNullOrUndefined
         middlewares = ControllerEngine.getMiddlewares(controllerMiddleware, method, route);
     }
 

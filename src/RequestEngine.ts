@@ -7,7 +7,6 @@ import ErrorEngine = require("./ErrorEngine");
 
 import {DollarSign} from "../types";
 import {Http} from "../types/http";
-import {Helpers} from "../types/helpers";
 import {StringToAnyKeyObject} from "./CustomTypes";
 
 declare const _: any;
@@ -20,12 +19,10 @@ class RequestEngine {
     public req: Http.Request;
     public res: Http.Response;
 
-    public params: any;
-    public locals: ObjectCollection;
+    public params: StringToAnyKeyObject;
+    public store: ObjectCollection;
 
-    public bothData: any;
-    public session: any;
-    public fn: Helpers.Util;
+    public session: StringToAnyKeyObject;
     public route: {
         name: string,
         method: string,
@@ -47,35 +44,24 @@ class RequestEngine {
         this.res = res;
         this.req = req;
 
-        if (typeof next === "function") {
-            this.next = next;
-        }
+        if (typeof next === "function") this.next = next;
 
-        if (route) {
-            this.route = {
-                name: route.name || "",
-                method: route.method || "",
-                controller: typeof route.controller === "string"
-                    ? route.controller : "",
-            };
-        }
+        if (route) this.route = {
+            name: route.name || "",
+            method: route.method || "",
+            controller: typeof route.controller === "string"
+                ? route.controller : "",
+        };
 
-        if (req.params) {
-            this.params = req.params;
-        }
-
-        this.session = req.session;
-        this.bothData = this.all();
-        this.locals = $.objectCollection(res.locals);
-
-        this.fn = _.extend({}, $.helpers, requestHelpers(this));
+        this.params = req.params || {};
+        this.session = req.session || {};
+        this.store = $.objectCollection(res.locals || {});
     }
 
     /**
      * If User has customRenderer then use it.
      */
-        // @ts-ignore
-    public customRenderer: (...args: any[]) => string
+    public customRenderer!: (...args: any[]) => string
 
 
     /**
@@ -261,7 +247,7 @@ class RequestEngine {
 
         let ctx: any;
 
-        ctx = _.extend({}, this.fn);
+        ctx = _.extend({}, $.helpers, requestHelpers(this));
 
         ctx.$route = this.route;
         ctx.$currentView = file;

@@ -48,16 +48,12 @@ export = async (
         let serviceResult: any | ControllerServiceError;
 
         if (Array.isArray(action)) {
-            serviceResult = action[0](options);
+            serviceResult = await action[0](options);
         } else {
-            serviceResult = DefinedServices[serviceKey](
+            serviceResult = await DefinedServices[serviceKey](
                 requestServices[serviceKey],
                 options,
             );
-        }
-
-        if ($.utils.isPromise(serviceResult)) {
-            serviceResult = await serviceResult;
         }
 
         // Run user defined error

@@ -6,8 +6,8 @@ export =  (http: Http) => {
             const currentView = http.res.locals.ctx.$currentView;
             const check = currentView === path;
 
-            if (check === true && ifTrue !== undefined) { return ifTrue; }
-            if (check === false && ifFalse !== undefined) { return ifFalse; }
+            if (check && ifTrue !== undefined) { return ifTrue; }
+            if (!check && ifFalse !== undefined) { return ifFalse; }
 
             return check;
         },
