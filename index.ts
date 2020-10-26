@@ -213,10 +213,10 @@ const xpresser = (AppConfig: object | string, AppOptions: Options = {}): DollarS
     // Get OnEvents Loader.
     const loadOnEvents = require("./src/Events/OnEventsLoader");
 
-    function afterStartEvents() {
+    async function afterStartEvents() {
         // Require Plugin Engine and load plugins
         const PluginEngine = require("./src/PluginEngine");
-        const PluginData = PluginEngine.loadPlugins();
+        const PluginData = await PluginEngine.loadPlugins();
 
         $.engineData.set("PluginEngineData", PluginData);
 
@@ -247,24 +247,6 @@ const xpresser = (AppConfig: object | string, AppOptions: Options = {}): DollarS
              */
             require("./src/Events/Loader");
         });
-
-        /**
-         * Load on.boot Events
-         */
-        loadOnEvents("boot", () => {
-            /**
-             * XjsCliConfig.require_only
-             * This config is only used by xpresser cron.
-             * Used to load your main file without booting it
-             */
-            if (!AppOptions.requireOnly) {
-                $.ifConsole(() => {
-                    require("./src/StartConsole");
-                }, () => {
-                    require("./src/StartHttp");
-                });
-            }
-        });
     }
 
     $.boot = () => {
@@ -278,7 +260,27 @@ const xpresser = (AppConfig: object | string, AppOptions: Options = {}): DollarS
         /**
          * Load on.start Events
          */
-        return loadOnEvents("start", afterStartEvents);
+        return loadOnEvents("start", () => {
+            afterStartEvents().then(() => {
+                /**
+                 * Load on.boot Events
+                 */
+                loadOnEvents("boot", () => {
+                    /**
+                     * XjsCliConfig.require_only
+                     * This config is only used by xpresser cron.
+                     * Used to load your main file without booting it
+                     */
+                    if (!AppOptions.requireOnly) {
+                        $.ifConsole(() => {
+                            require("./src/StartConsole");
+                        }, () => {
+                            require("./src/StartHttp");
+                        });
+                    }
+                });
+            })
+        });
     };
 
     /**

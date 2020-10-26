@@ -56,7 +56,7 @@ class PluginEngine {
     /**
      * Load plugins and process their use.json,
      */
-    public static loadPlugins() {
+    public static async loadPlugins() {
         // get logs.plugins config.
         const logPlugins = $.$config.get("log.plugins", true);
         // Hold Plugins
@@ -92,7 +92,7 @@ class PluginEngine {
 
                             const $data = PluginEngine.loadPluginUseData(plugin, $pluginPath);
                             // tslint:disable-next-line:max-line-length
-                            PluginNamespaceToData[$data.namespace] = PluginEngine.usePlugin(plugin, $pluginPath, $data);
+                            PluginNamespaceToData[$data.namespace] = await PluginEngine.usePlugin(plugin, $pluginPath, $data);
 
                             // Save to engineData
                             $.engineData.set("PluginEngine:namespaces", PluginNamespaceToData);
@@ -147,7 +147,7 @@ class PluginEngine {
      * @param path
      * @param data
      */
-    public static usePlugin(plugin: string, path: string, data: object) {
+    public static async usePlugin(plugin: string, path: string, data: object) {
         const $data = $.objectCollection(data);
         let pluginData: any;
 
@@ -253,9 +253,9 @@ class PluginEngine {
 
             if (indexFilePath) {
                 const {run} = require(indexFilePath);
-
-                // Run (Run Function)
-                if (run) run(pluginData);
+                if (run) {
+                    await run(pluginData);
+                }
             }
         }
 
