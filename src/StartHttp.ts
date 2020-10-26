@@ -406,7 +406,11 @@ const startHttpServer = (onSuccess?: () => any, onError?: () => any) => {
             if (!isProduction && lanIp)
                 $.log(`Network: http://${lanIp}:${port}/`);
 
-            $.log(`Server started - ${ServerStarted.toString()}`);
+            /**
+             * Show Server Started Time only on production
+             */
+            if (isProduction)
+                $.log(`Server started - ${ServerStarted.toString()}`);
 
             // Save values to engineData
             $.engineData.set({
