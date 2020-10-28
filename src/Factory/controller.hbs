@@ -13,6 +13,14 @@ class {{name}} extends $.controller {
         return {}
     }
 
+    /**
+    * Example Action
+    * @param {Xpresser.Http} http
+    */
+    action(http){
+        return http.send("Hello World")
+    }
+
 }
 
 

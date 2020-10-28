@@ -8,10 +8,10 @@ declare const $: DollarSign;
 export = (DefinedEvents: StringToAnyKeyObject) => {
     const EventEmitter = new events.EventEmitter();
 
-    EventEmitter.on("runEvent", ($payload: {
+    EventEmitter.on("runEvent", async ($payload: {
         event: string,
         payload: any[],
-        callback?: (eventResult: any) => any,
+        callback?: (eventResult: any) => any | void,
     }) => {
         if (DefinedEvents.hasOwnProperty($payload.event)) {
             let eventResult = undefined;
@@ -21,19 +21,11 @@ export = (DefinedEvents: StringToAnyKeyObject) => {
                 $.logError(e);
             }
 
-            if (typeof eventResult !== "undefined" && $payload.hasOwnProperty("callback")) {
-                if ($.utils.isPromise(eventResult)) {
-                    eventResult
-                        .then((result: any) => {
-                            if ($payload.callback) $payload.callback(result);
-                        })
-                        .catch((e: any) => $.logError(e));
-                } else {
-                    try {
-                        if ($payload.callback) $payload.callback(eventResult);
-                    } catch (e) {
-                        $.logError(e);
-                    }
+            if (typeof eventResult !== "undefined" && $payload["callback"]) {
+                try {
+                    await $payload.callback(eventResult);
+                } catch (e) {
+                    $.logError(e);
                 }
             }
         }

@@ -166,7 +166,7 @@ const helpers = {
      */
     randomArray(length = 5) {
         let i = 0;
-        const newArray = [];
+        const newArray: number[] = [];
         while (i < length) {
             newArray.push(i);
             i++;

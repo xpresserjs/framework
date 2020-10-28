@@ -7,12 +7,12 @@ const {{name}} = {
     name: "{{name}}",
 
     // Controller Default Service Error Handler.
-    e: (http, error) => http.send({error}),
+    e: (http, error) => http.status(401).send({error}),
 
 
     /**
      * Example Action.
-     * @param {Xpresser.http} http - Current Http Instance
+     * @param {Xpresser.Http} http - Current Http Instance
      * @returns {*}
      */
     action(http){

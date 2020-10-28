@@ -79,31 +79,61 @@ class PluginEngine {
             }
 
             if (Array.isArray(plugins) && plugins.length) {
+
+                const pluginPaths = {};
+                const pluginData = {};
+
+                /**
+                 * We want to log all plugin names before loading them.
+                 * Just in any case plugins have logs it does not interfere with the plugin names list.
+                 */
+                $.ifNotConsole(() => {
+                    if (logPlugins) {
+                        for (const plugin of plugins) {
+                            // get plugin real path.
+                            const $pluginPath: string = pluginPaths[plugin] = PathHelper.resolve(plugin);
+
+                            try {
+                                const $data = pluginData[plugin] = PluginEngine.loadPluginUseData(plugin, $pluginPath);
+                                /**
+                                 * If {log.plugins===true} then display log
+                                 */
+                                $.logSuccess(`Using Plugin --> {${$data.namespace}}`);
+                            } catch (e) {
+                                // Throw any error from processing and stop xpresser.
+                                $.logPerLine([
+                                    {error: plugin},
+                                    {error: e.stack},
+                                    {errorAndExit: ""},
+                                ], true);
+                            }
+                        }
+                    } else {
+                        const pluginsLength = plugins.length
+                        $.ifNotConsole(
+                            () => $.logSuccess(`Using (${pluginsLength}) ${pluginsLength === 1 ? 'plugin' : 'plugins'}`)
+                        );
+                    }
+                });
+
+
                 /**
                  * Loop through plugins found and process them using PluginEngine.loadPluginUseData
                  */
                 for (const plugin of plugins) {
                     if (plugin.length) {
                         // get plugin real path.
-                        const $pluginPath: string = PathHelper.resolve(plugin);
+                        const $pluginPath: string = pluginPaths[plugin] || PathHelper.resolve(plugin);
 
                         // Try processing plugin use.json
                         try {
 
-                            const $data = PluginEngine.loadPluginUseData(plugin, $pluginPath);
+                            const $data = pluginData[plugin] || PluginEngine.loadPluginUseData(plugin, $pluginPath);
                             // tslint:disable-next-line:max-line-length
                             PluginNamespaceToData[$data.namespace] = await PluginEngine.usePlugin(plugin, $pluginPath, $data);
 
                             // Save to engineData
                             $.engineData.set("PluginEngine:namespaces", PluginNamespaceToData);
-
-                            /**
-                             * If {log.plugins===true} then display log
-                             */
-                            if (logPlugins) {
-                                $.ifNotConsole(() => $.logSuccess(`Using Plugin --> {${$data.namespace}}`));
-                            }
-
                         } catch (e) {
                             // Throw any error from processing and stop xpresser.
                             $.logPerLine([
@@ -113,13 +143,6 @@ class PluginEngine {
                             ], true);
                         }
                     }
-                }
-
-                if (!logPlugins) {
-                    const pluginsLength = plugins.length
-                    $.ifNotConsole(
-                        () => $.logSuccess(`Using (${pluginsLength}) ${pluginsLength === 1 ? 'plugin' : 'plugins'}`)
-                    );
                 }
             }
         }

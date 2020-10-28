@@ -95,10 +95,10 @@ class ControllerEngine {
     public static getMiddlewares($middleware: StringToAnyKeyObject, method: string, route: any) {
 
         const middlewareKeys = Object.keys($middleware);
-        const middlewares = [];
+        const middlewares: any[] = [];
 
         for (let i = 0; i < middlewareKeys.length; i++) {
-            let middleware = middlewareKeys[i];
+            let middleware: any = middlewareKeys[i];
             let middlewareFile: any[] = [];
             let middlewareMethod: string = $middleware[middleware];
 
@@ -378,7 +378,7 @@ class ControllerEngine {
 const Controller = (route: any, method: any = null) => {
 
     let $controller: any = undefined;
-    let controllerPath = null;
+    let controllerPath: string | null = null;
     let isPath = false;
     let isObjectController = false;
 
@@ -400,7 +400,7 @@ const Controller = (route: any, method: any = null) => {
         $controller = controllerAndMethod.controller;
         method = controllerAndMethod.method;
 
-        controllerPath = $.use.controller(PathHelper.addProjectFileExtension($controller) as string);
+        controllerPath = $.use.controller(PathHelper.addProjectFileExtension($controller) as string) as string;
 
         $controller = require(controllerPath);
     }
@@ -439,7 +439,7 @@ const Controller = (route: any, method: any = null) => {
         }
     }
 
-    let middlewares = [];
+    let middlewares: any[] = [];
     if (controllerMiddleware) {
         middlewares = ControllerEngine.getMiddlewares(controllerMiddleware, method, route);
     }

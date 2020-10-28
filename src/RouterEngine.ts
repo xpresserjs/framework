@@ -42,7 +42,8 @@ class RouterEngine {
      */
     public static allProcessedRoutes($format?: string, $key: string = "path") {
         if ($format === "array") {
-            const routesArray = [];
+            const routesArray: any[] = [];
+
             for (let i = 0; i < ProcessedRoutes.length; i++) {
 
                 const processedRoute = ProcessedRoutes[i];
@@ -58,7 +59,7 @@ class RouterEngine {
 
             return routesArray;
         } else if ($format === "key") {
-            const routesArray = [];
+            const routesArray: any[] = [];
 
             for (let i = 0; i < ProcessedRoutes.length; i++) {
                 const processedRoute = ProcessedRoutes[i];

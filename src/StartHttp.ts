@@ -1,6 +1,4 @@
 import {resolve} from "path";
-import os from "os";
-
 import PathHelper = require("./Helpers/Path");
 import loadOnEvents = require("./Events/OnEventsLoader");
 
@@ -10,7 +8,7 @@ import {createServer as createHttpServer} from "http";
 import {createServer as createHttpsServer} from "https";
 
 // Types
-import {Http, Controller as XpresserController} from "../types/http";
+import {Controller as XpresserController} from "../types/http";
 import {DollarSign} from "../types";
 
 declare const _: any;
@@ -238,7 +236,6 @@ if (useSession) {
 
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 import ControllerService = require("./Controllers/ControllerService");
-import {getLocalExternalIp} from "./Functions/inbuilt.fn";
 
 /**
  * Maintenance Middleware
@@ -392,8 +389,8 @@ const startHttpServer = (onSuccess?: () => any, onError?: () => any) => {
     loadOnEvents("http", () => {
         $.http.listen(port, () => {
             const domain = $.config.server.domain;
-            const baseUrl = $.helpers.url();
-            const lanIp = getLocalExternalIp()
+            const baseUrl = $.helpers.url()
+            const lanIp = $.engineData.get("lanIp");
 
             // $.engineData
             const ServerStarted = new Date();

@@ -104,7 +104,7 @@ const Commands = {
 
         })
 
-        const searchResults = [];
+        const searchResults: any = [];
         if (search) {
             for (const route of data) {
                 if (!route.hasOwnProperty(search)) {

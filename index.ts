@@ -1,3 +1,5 @@
+import {getLocalExternalIp} from "./src/Functions/inbuilt.fn";
+
 /**
  * Importing Package.json
  *
