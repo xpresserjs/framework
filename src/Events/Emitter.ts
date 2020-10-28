@@ -21,7 +21,7 @@ export = (DefinedEvents: StringToAnyKeyObject) => {
                 $.logError(e);
             }
 
-            if (typeof eventResult !== "undefined" && $payload["callback"]) {
+            if ($payload["callback"]) {
                 try {
                     await $payload.callback(eventResult);
                 } catch (e) {
