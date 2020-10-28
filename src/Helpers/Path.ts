@@ -199,6 +199,15 @@ class PathHelper {
             return files.substr(0, files.length - $.config.project.fileExtension.length);
         }
     }
+
+
+    /**
+     * Get extension of path.
+     */
+    static getExtension(path: string, withDot: boolean = true): string | undefined {
+        const dots = path.split('.');
+        return dots.length > 1 ? ((withDot ? '.' : '') + dots.pop()) : undefined;
+    }
 }
 
 export = PathHelper;

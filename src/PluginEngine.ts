@@ -233,6 +233,10 @@ class PluginEngine {
                 pluginData.publishable = $data.get('publishable')
             }
 
+            if ($data.has('importable')) {
+                pluginData.publishable = $data.get('importable')
+            }
+
             // check if plugin use.json has paths.Commands only if console
             if ($data.has("paths.commands")) {
                 let commandPath = $data.get("paths.commands");

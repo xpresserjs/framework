@@ -91,7 +91,7 @@ const Commands = {
         data.map((e) => {
             e.method = e.method.toUpperCase();
 
-            if (typeof e.controller === "string"){
+            if (typeof e.controller === "string") {
                 const {controller, method} = parseControllerString(e.controller);
                 e.controller = `${controller}.${method}`;
             }
@@ -286,40 +286,55 @@ const Commands = {
         return $.exit();
     },
 
-    publish([plugin, folder, overwrite]: string[]) {
+    import([plugin, folder, overwrite]: string[]) {
         const config = $.engineData.get(`PluginEngine:namespaces[${plugin}]`);
 
         if (!config)
             return $.logErrorAndExit(`No plugin namespaced {${plugin}} registered in your project`);
 
 
-        const publishable = config.publishable;
-        if (!publishable)
-            return $.logErrorAndExit(`Plugin: {${plugin}} does not have any publishable`);
+        const importable = config.importable || config.publishable;
+        if (!importable)
+            return $.logErrorAndExit(`Plugin: {${plugin}} does not have any importables`);
 
 
-        const publishableFactory = publishable[folder];
-        if (!publishableFactory)
-            return $.logErrorAndExit(`Plugin: {${plugin}} does not have any publishable folder named (${folder})`);
+        const importableFactory = importable[folder];
+        if (!importableFactory)
+            return $.logErrorAndExit(`Plugin: {${plugin}} does not have any importable folder named (${folder})`);
 
 
         folder = folder.toLowerCase();
         // @ts-ignore
         if (typeof $.path[folder] !== "function")
-            return $.logErrorAndExit(`Publish does not support any publishable folder named (${folder})`);
+            return $.logErrorAndExit(`Import does not support any importable folder named (${folder})`);
 
 
-        const from = config.path + '/' + publishableFactory;
+        const from = config.path + '/' + importableFactory;
         if (!fs.existsSync(from))
-            $.logErrorAndExit(`Folder {${publishableFactory}} does not exists in plugin (${plugin}) directory.`)
+            $.logErrorAndExit(`File/Folder {${importableFactory}} does not exists in plugin (${plugin}) directory.`)
 
         // @ts-ignore
-        const to = $.path[folder](config.namespace)
-        PathHelper.makeDirIfNotExist(to);
+        let to: string = $.path[folder](_.kebabCase(config.namespace))
+
+        if ($.file.isFile(from)) {
+            const ext = PathHelper.getExtension(from);
+            if (ext) to += ext;
+
+            PathHelper.makeDirIfNotExist(to, true);
+        } else {
+            PathHelper.makeDirIfNotExist(to);
+        }
 
         // Copy Folders
         fse.copy(from, to, {overwrite: overwrite === 'overwrite', recursive: true})
-            .then(() => $.logAndExit('Publish completed!'))
+            .then(() => {
+                const base = $.path.base();
+
+                $.logInfo(`From: (${from.replace(base, '')})`)
+                $.logInfo(`To: (${to.replace(base, '')})`)
+
+                $.logAndExit('Publish completed!')
+            })
             .catch(err => {
                 $.logError('An error occurred while publishing the folder.')
                 return $.logAndExit(err)
