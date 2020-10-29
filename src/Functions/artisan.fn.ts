@@ -13,7 +13,7 @@ declare const $: DollarSign;
 declare const _: any;
 
 const isTinker = typeof $.options.isTinker === "boolean" && $.options.isTinker;
-const FILE_EXTENSION = $.$config.get("project.fileExtension", ".js");
+const FILE_EXTENSION = $.config.get("project.fileExtension", ".js");
 
 /**
  * Get the string after the last forward slash.
@@ -109,7 +109,7 @@ export = {
         const factoryName: string = $factory ? $factory : $for;
         let $from = $.path.engine("Factory/" + factoryName + ".hbs");
 
-        let customFactoryFile: string = $.$config.get(`artisan.factory.${factoryName}`);
+        let customFactoryFile: string = $.config.get(`artisan.factory.${factoryName}`);
 
         if (customFactoryFile) {
             if (!customFactoryFile.includes('.hbs')) {

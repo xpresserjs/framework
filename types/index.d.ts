@@ -68,8 +68,14 @@ declare namespace Xpresser {
     }
 
     export interface DollarSign {
-        config: any;
+        config: ObjectCollection;
         options: Options;
+
+        /**
+         * Does same thing current $.config does.
+         * @deprecated since (v 0.2.94)
+         * @remove at (v 1.0.0)
+         */
         $config: ObjectCollection;
 
         // Stores Engine Data

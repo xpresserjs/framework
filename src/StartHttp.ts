@@ -14,8 +14,8 @@ import {DollarSign} from "../types";
 declare const _: any;
 declare const $: DollarSign;
 
-const isProduction = $.$config.get("env") === "production";
-const paths = $.$config.get("paths");
+const isProduction = $.config.get("env") === "production";
+const paths = $.config.get("paths");
 
 
 /////////////
@@ -30,7 +30,7 @@ $.app = express();
 /**
  * Set Express View Engine from config
  */
-const template = $.config.template;
+const template = $.config.get('template');
 
 if (typeof template.engine === "function") {
 
@@ -61,10 +61,10 @@ $.app.set("views", $.path.views());
  * Else
  * Disable poweredBy header.
  */
-if ($.config.server.poweredBy) {
-    $.app.use((req, res, next) => {
+if ($.config.get('server.poweredBy')) {
+    $.app.use((_req, res, next) => {
         res.set("X-Powered-By", "Xpresser");
-        if ($.config.response.overrideServerName) {
+        if ($.config.get('response.overrideServerName')) {
             res.set("Server", "Xpresser");
         }
         next();
@@ -76,12 +76,12 @@ if ($.config.server.poweredBy) {
 /**
  * Serve Public folder as static
  */
-const servePublicFolder = $.$config.get("server.servePublicFolder", false);
+const servePublicFolder = $.config.get("server.servePublicFolder", false);
 if (!isUnderMaintenance && servePublicFolder) {
     $.app.use(
         express.static(paths.public, {
             setHeaders(res, path) {
-                const responseConfig = $.config.response;
+                const responseConfig = $.config.get('response');
                 if (responseConfig.cacheFiles) {
                     if (responseConfig.cacheIfMatch.length) {
                         const match = $.utils.findWordsInString(
@@ -115,10 +115,10 @@ if (!isUnderMaintenance && servePublicFolder) {
  *  By default helmet is enabled only in production,
  *  if you don't define a config @ {server.use.helmet}
  */
-const useHelmet = $.$config.get("server.use.helmet", isProduction);
+const useHelmet = $.config.get("server.use.helmet", isProduction);
 if (useHelmet) {
     const helmet = require("helmet");
-    const helmetConfig = $.$config.get("packages.helmet.config", undefined);
+    const helmetConfig = $.config.get("packages.helmet.config", undefined);
     $.app.use(helmet(helmetConfig));
     $.logSuccess('Using {Helmet}')
 }
@@ -133,10 +133,10 @@ if (useHelmet) {
  * By default Cors is disabled,
  * if you don't define a config @ {server.use.cors}
  */
-const useCors = $.$config.get("server.use.cors", false);
+const useCors = $.config.get("server.use.cors", false);
 if (useCors) {
     const cors = require("cors");
-    const corsConfig = $.$config.get("packages.cors.config", undefined);
+    const corsConfig = $.config.get("packages.cors.config", undefined);
     $.app.use(cors(corsConfig));
 }
 
@@ -149,23 +149,23 @@ if (useCors) {
  *
  * BodyParser is enabled by default
  */
-const useBodyParser = $.$config.get("server.use.bodyParser", true);
+const useBodyParser = $.config.get("server.use.bodyParser", true);
 if (useBodyParser) {
     const bodyParser = require("body-parser");
-    const bodyParserJsonConfig = $.$config.get("packages.body-parser.json");
-    const bodyParserUrlEncodedConfig = $.$config.get("packages.body-parser.urlencoded", {extended: true});
+    const bodyParserJsonConfig = $.config.get("packages.body-parser.json");
+    const bodyParserUrlEncodedConfig = $.config.get("packages.body-parser.urlencoded", {extended: true});
 
     $.app.use(bodyParser.json(bodyParserJsonConfig));
     $.app.use(bodyParser.urlencoded(bodyParserUrlEncodedConfig));
 }
 
-const useSession = $.$config.get("server.use.session", false);
+const useSession = $.config.get("server.use.session", false);
 
 if (useSession) {
     const session = require("express-session");
-    const useDefault = $.$config.get("session.useDefault", false);
+    const useDefault = $.config.get("session.useDefault", false);
 
-    if ($.$config.has("session.startOnBoot")) {
+    if ($.config.has("session.startOnBoot")) {
         $.logError('Config Warning: {session.startOnBoot} is deprecated, use {session.useDefault} instead.')
     }
 
@@ -195,7 +195,7 @@ if (useSession) {
             tablename: "sessions",
         });
 
-        const sessionConfig = _.extend({}, $.config.session, {
+        const sessionConfig = _.extend({}, $.config.get('session'), {
             store,
         });
 
@@ -205,7 +205,7 @@ if (useSession) {
     /**
      * Check for custom session handler
      */
-    let useCustomHandler = $.$config.get('session.useCustomHandler', false)
+    let useCustomHandler = $.config.get('session.useCustomHandler', false)
     if (useCustomHandler !== false) {
         if (typeof useCustomHandler !== 'string') {
             $.logErrorAndExit(`Config: {session.useCustomHandler} only accepts false or path to session handler file.`)
@@ -227,7 +227,7 @@ if (useSession) {
     /**
      * Express Flash
      */
-    const useFlash = $.$config.get('server.use.flash', false);
+    const useFlash = $.config.get('server.use.flash', false);
     if (useFlash) {
         const flash = require("express-flash");
         $.app.use(flash());
@@ -246,7 +246,7 @@ if (isUnderMaintenance) {
     /**
      * Get maintenance middleware
      */
-    let maintenanceMiddleware: any = $.$config.get('server.maintenanceMiddleware');
+    let maintenanceMiddleware: any = $.config.get('server.maintenanceMiddleware');
     maintenanceMiddleware = $.path.middlewares(maintenanceMiddleware);
 
     /**
@@ -277,7 +277,7 @@ if (isUnderMaintenance) {
 
 // Set local AppData
 $.app.locals.appData = {};
-$.app.use(async (req: any, res: any, next: () => void) => {
+$.app.use(async (req: any, _res: any, next: () => void) => {
 
     // Convert Empty Strings to Null
     if (req.body && Object.keys(req.body).length) {
@@ -311,17 +311,17 @@ const afterExpressInit = (next: () => void) => {
     };
 
     if ($useDotJson.has("globalMiddlewares")) {
+        const projectFileExtension = $.config.get('project.fileExtension');
         const $middlewares = $useDotJson.get("globalMiddlewares");
 
         for (let i = 0; i < $middlewares.length; i++) {
             let $middleware = $middlewares[i];
 
-            if ($middleware.substr(-3) !== $.config.project.fileExtension) {
-                $middleware += $.config.project.fileExtension;
+            if ($middleware.substr(-3) !== projectFileExtension) {
+                $middleware += projectFileExtension;
             }
 
             $middleware = PathHelper.resolve($middleware);
-            // console.log($middleware)
 
             try {
 
@@ -369,7 +369,7 @@ const startHttpServer = (onSuccess?: () => any, onError?: () => any) => {
     });
 
     $.http = createHttpServer($.app);
-    const port = $.$config.get("server.port", 80);
+    const port = $.config.get("server.port", 80);
 
     $.http.on("error", (err: any) => {
         if (err["errno"] === "EADDRINUSE") {
@@ -388,7 +388,7 @@ const startHttpServer = (onSuccess?: () => any, onError?: () => any) => {
      */
     loadOnEvents("http", () => {
         $.http.listen(port, () => {
-            const domain = $.config.server.domain;
+            const domain = $.config.get('server.domain');
             const baseUrl = $.helpers.url()
             const lanIp = $.engineData.get("lanIp");
 
@@ -416,7 +416,7 @@ const startHttpServer = (onSuccess?: () => any, onError?: () => any) => {
                 lanIp
             })
 
-            const hasSslEnabled = $.$config.get("server.ssl.enabled", false);
+            const hasSslEnabled = $.config.get("server.ssl.enabled", false);
             if (hasSslEnabled) {
                 startHttpsServer();
             } else {
@@ -435,13 +435,13 @@ const startHttpServer = (onSuccess?: () => any, onError?: () => any) => {
  * Https Server starts here.
  */
 const startHttpsServer = () => {
-    const httpsPort = $.$config.get("server.ssl.port", 443);
+    const httpsPort = $.config.get("server.ssl.port", 443);
 
-    if (!$.$config.has("server.ssl.files")) {
+    if (!$.config.has("server.ssl.files")) {
         $.logErrorAndExit("Ssl enabled but has no {server.ssl.files} config found.");
     }
 
-    const files = $.$config.get("server.ssl.files");
+    const files = $.config.get("server.ssl.files");
 
     if (typeof files.key !== "string" || typeof files.cert !== "string") {
         $.logErrorAndExit("Config {server.ssl.files} not configured properly!");

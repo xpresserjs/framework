@@ -69,16 +69,16 @@ class PathHelper {
     }
 
     static helperToPath([$helper, $path]: string[]): string {
+        const config: any = $.config.get('paths');
+
         if ($helper === "base") {
-            return $.config.paths.base + "/" + $path;
+            return config.base + "/" + $path;
         } else if ($helper === "npm") {
-            return PathHelper.resolve([$.config.paths.npm, $path]);
+            return PathHelper.resolve([config.npm, $path]);
         } else {
-
-            if ($.$config.has("paths." + $helper)) {
-                return PathHelper.resolve([$.$config.get("paths." + $helper), $path]);
+            if (config[$helper]) {
+                return PathHelper.resolve([config[$helper], $path]);
             }
-
             return $.path.base(`${$helper}/${$path}`);
         }
     }
@@ -148,7 +148,7 @@ class PathHelper {
             // default file extension
             const jsExt = ".js";
             // if custom extension is defined use it else use defined project extension.
-            useExtension = (useExtension && useExtension.length) ? useExtension : $.config.project.fileExtension;
+            useExtension = (useExtension && useExtension.length) ? useExtension : $.config.get('project.fileExtension')
             // if not useExtension use jsExt
             const ext = useExtension ? useExtension : jsExt;
             // check and store if path has extension
@@ -196,7 +196,7 @@ class PathHelper {
 
             return array;
         } else {
-            return files.substr(0, files.length - $.config.project.fileExtension.length);
+            return files.substr(0, files.length - $.config.get('project.fileExtension').length);
         }
     }
 

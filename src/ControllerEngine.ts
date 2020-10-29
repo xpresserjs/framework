@@ -81,8 +81,9 @@ if (AutoLoadPaths && $.file.isDirectory(ServicesFolder)) {
     }
 }
 
-const isProduction = $.$config.get("env") === "production";
-const DebugControllerAction = !isProduction && $.config.debug.enabled && $.config.debug.controllerAction;
+const isProduction = $.config.get("env") === "production";
+const debug = $.config.get('debug', {})
+const DebugControllerAction = !isProduction && debug.enabled && debug.controllerAction;
 
 // @ts-check
 class ControllerEngine {

@@ -7,7 +7,7 @@ import {DollarSign} from "../../types";
 declare const $: DollarSign;
 
 $.routerEngine = RouterEngine;
-const RouteFile = Path.resolve($.config.paths.routesFile);
+const RouteFile = Path.resolve($.config.get('paths.routesFile'));
 
 if (fs.existsSync(RouteFile)) {
     try {

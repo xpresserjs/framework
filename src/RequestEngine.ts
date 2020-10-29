@@ -13,7 +13,7 @@ declare const _: any;
 declare const $: DollarSign;
 
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
-const useFlash = $.$config.get("server.use.flash", false);
+const useFlash = $.config.get("server.use.flash", false);
 
 class RequestEngine {
     public req: Http.Request;
@@ -242,7 +242,7 @@ class RequestEngine {
     }
 
     public viewData(file: string) {
-        const localsConfig = $.config.template.locals;
+        const localsConfig = $.config.get('template.locals');
         const all = localsConfig.all;
 
         let ctx: any;
@@ -292,7 +292,7 @@ class RequestEngine {
      * @param useEjs
      * @returns {*}
      */
-    public view(file: string, data = {}, fullPath: boolean = false, useEjs = false): any {
+    public view(file: string, data = {}, fullPath: boolean = false, useEjs: boolean = false): any {
 
         /**
          * Express Default Renderer
@@ -325,7 +325,7 @@ class RequestEngine {
 
                 if (PluginNameSpaces.hasOwnProperty($pluginNamespace)) {
                     const pluginNamespaceData = new ObjectCollection(PluginNameSpaces[$pluginNamespace])
-                    const pluginViewsPath: string = pluginNamespaceData.get('paths.views', undefined);
+                    const pluginViewsPath: any = pluginNamespaceData.get('paths.views', undefined);
 
                     if (pluginViewsPath && typeof pluginViewsPath === "string") {
                         file = pluginViewsPath + "/" + $splitFile[1];
@@ -339,7 +339,7 @@ class RequestEngine {
         /**
          * Set file extension.
          */
-        const path = file + "." + (useEjs ? "ejs" : $.config.template.extension);
+        const path = file + "." + (useEjs ? "ejs" : $.config.get('template.extension'));
 
         // Get xpresser view data
         this.viewData($filePath);

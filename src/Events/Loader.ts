@@ -68,7 +68,7 @@ if (fs.existsSync(EventsPath)) {
     };
 
     $.ifConsole(() => {
-        if ($.config.artisan.loadEvents) {
+        if ($.config.get('artisan.loadEvents')) {
             readEventsDirectory(EventsPath);
         }
     }, () => {

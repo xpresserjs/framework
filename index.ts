@@ -127,14 +127,16 @@ const xpresser = (AppConfig: object | string, AppOptions: Options = {}): DollarS
      */
     const CliConfig: any = (global as any)["XjsCliConfig"];
 
-    // Set Config to AppConfig
-    $.config = AppConfig;
+    /**
+     * Set Config to object-collection of AppConfig
+     */
+    $.config = $.objectCollection(AppConfig as object);
 
     /**
      * Set $.$config to an instance of ObjectCollection
      * To enable access and modify apps config.
      */
-    $.$config = $.objectCollection($.config);
+    $.$config = $.objectCollection({});
 
     /**
      * Set $.options
@@ -162,12 +164,12 @@ const xpresser = (AppConfig: object | string, AppOptions: Options = {}): DollarS
 
     // Set $.isTypeScript
     $.isTypescript = () => {
-        return $.$config.get('project.fileExtension') === ".ts";
+        return $.config.get('project.fileExtension') === ".ts";
     }
 
 
     // Set Engine Path
-    const enginePath = $.$config.get('paths.engine');
+    const enginePath = $.config.get('paths.engine');
     if (!enginePath) {
         let dirName = __dirname;
 
@@ -178,7 +180,7 @@ const xpresser = (AppConfig: object | string, AppOptions: Options = {}): DollarS
             dirName = dirName.substr(0, dirName.length - 5)
         }
 
-        $.$config.set('paths.engine', `${dirName}/src/`);
+        $.config.set('paths.engine', `${dirName}/src/`);
     }
 
     /* ------------- $.on Events Loader ------------- */
@@ -196,13 +198,13 @@ const xpresser = (AppConfig: object | string, AppOptions: Options = {}): DollarS
     // Log if not console
     $.ifNotConsole(() => {
         $.log(`${PackageDotJson.name} version ${PackageDotJson.version}`);
-        $.log(`Starting ${$.config.name}...`);
+        $.log(`Starting ${$.config.get('name')}...`);
     });
 
     /**
      * Change timezone if timezone is defined.
      */
-    const timezone = $.$config.get('date.timezone');
+    const timezone = $.config.get('date.timezone');
     if (timezone) {
         process.env.TZ = timezone;
     }

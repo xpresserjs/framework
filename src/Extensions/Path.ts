@@ -1,5 +1,3 @@
-import FS = require("fs");
-
 import Path = require("../Helpers/Path");
 import {DollarSign} from "../../types";
 
@@ -7,7 +5,7 @@ const packageName: string = "xpresser";
 
 declare const $: DollarSign;
 
-const paths = $.config.paths;
+const paths = $.config.get('paths');
 const baseFiles = paths.base + "/";
 const backendFiles = Path.resolve(paths.backend);
 
@@ -32,7 +30,7 @@ $.path = {
         if (path[0] === "/") {
             path = path.substr(1);
         }
-        return $.path.base($.config.paths.storage + "/" + path);
+        return $.path.base(paths.storage + "/" + path);
     },
 
     /**
@@ -50,7 +48,7 @@ $.path = {
             if (typeof paths.engine === "string") {
                 EnginePath = Path.resolve(paths.engine) + "/";
             } else {
-                EnginePath = Path.resolve([$.config.paths.npm, packageName, "src"]) + "/";
+                EnginePath = Path.resolve([paths.npm, packageName, "src"]) + "/";
             }
 
             $.engineData.set(dataKey, EnginePath);
@@ -69,7 +67,7 @@ $.path = {
             path = path.substr(1);
         }
 
-        const event = Path.resolve([$.config.paths.events, path]);
+        const event = Path.resolve([paths.events, path]);
 
         return returnRequire ? require(event) : event;
     },
@@ -79,7 +77,7 @@ $.path = {
             path = path.substr(1);
         }
 
-        const controller = Path.resolve([$.config.paths.controllers, path]);
+        const controller = Path.resolve([paths.controllers, path]);
 
         return returnRequire ? require(controller) : controller;
     },
@@ -89,7 +87,7 @@ $.path = {
             path = path.substr(1);
         }
 
-        const middleware = Path.resolve([$.config.paths.middlewares, path]);
+        const middleware = Path.resolve([paths.middlewares, path]);
 
         return returnRequire ? require(middleware) : middleware;
     },
@@ -99,7 +97,7 @@ $.path = {
             path = path.substr(1);
         }
 
-        const model = Path.resolve([$.config.paths.models, path]);
+        const model = Path.resolve([paths.models, path]);
 
         return returnRequire ? require(model) : model;
     },
@@ -109,14 +107,14 @@ $.path = {
             path = path.substr(1);
         }
 
-        return Path.resolve([$.config.paths.views, path]);
+        return Path.resolve([paths.views, path]);
     },
 
     jsonConfigs: (path: string = "") => {
         if (path[0] === "/") {
             path = path.substr(1);
         }
-        return Path.resolve([$.config.paths.jsonConfigs, path]);
+        return Path.resolve([paths.jsonConfigs, path]);
     },
 
 
@@ -125,7 +123,7 @@ $.path = {
             path = path.substr(1);
         }
 
-        const config = Path.resolve([$.config.paths.configs, path]);
+        const config = Path.resolve([paths.configs, path]);
 
         return returnRequire ? require(config) : config;
     },
@@ -136,7 +134,7 @@ $.path = {
         try {
             currentNodeModules = require.resolve('xpresser').replace('xpresser/dist/index.js', '');
         } catch (e) {
-            currentNodeModules = Path.resolve([$.config.paths.npm, path])
+            currentNodeModules = Path.resolve([paths.npm, path])
         }
 
         return currentNodeModules + path;

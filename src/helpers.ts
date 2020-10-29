@@ -16,7 +16,7 @@ const helpers = {
      */
     url($path: string = "", $query: any = {}) {
         let url = "";
-        const server = $.config.server;
+        const server = $.config.get('server');
 
         if ($path.substr(0, 1) === "/") {
             $path = $path.substr(1);
@@ -32,7 +32,7 @@ const helpers = {
                 d = d + ":" + server.port;
             }
 
-            if ($.$config.get("server.ssl.enabled", false)) {
+            if ($.config.get("server.ssl.enabled", false)) {
                 p = "https";
             }
 
@@ -55,7 +55,7 @@ const helpers = {
      * @param {Object|boolean} $query
      * @param {boolean} $includeUrl
      */
-    route($route: string, $keys = [], $query = {}, $includeUrl = true) {
+    route($route: string, $keys: string | string[] = [], $query: object|boolean = {}, $includeUrl = true) {
 
         if (typeof $query === "boolean") {
             $includeUrl = $query;
@@ -186,7 +186,7 @@ const helpers = {
     // ---------------------------
 
     now() {
-        return moment().format($.config.date.format);
+        return moment().format($.config.get('date.format'));
     },
 
     today() {
@@ -198,7 +198,7 @@ const helpers = {
      */
     toDate(date?: any, format?: string): moment.Moment {
         if (!format) {
-            format = $.config.date.format;
+            format = $.config.get('date.format');
         }
 
         if (!date) {

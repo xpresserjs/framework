@@ -13,6 +13,7 @@ declare const $: DollarSign;
 
 let Use: JsonSettings.Use;
 const PluginNamespaces = $.engineData.get("PluginEngine:namespaces", {});
+const projectFileExtension = $.config.get('project.fileExtension');
 
 /**
  * UseEngine requires `use.json` in frameworks backend folder.
@@ -35,9 +36,8 @@ if (typeof Use.middlewares === "object") {
         const middlewareKey: string = middlewareKeys[i];
 
         let middleware = useMiddlewares[middlewareKey];
-        const extension = $.config.project.fileExtension;
 
-        if (middleware.substr(-3) === extension) {
+        if (middleware.substr(-3) === projectFileExtension) {
             middleware = middleware.substr(0, middleware.length - 3);
         }
 
@@ -45,10 +45,10 @@ if (typeof Use.middlewares === "object") {
         let hasMiddleware = false;
         if ($.file.exists(middlewareRealPath)) {
             hasMiddleware = true;
-        } else if ($.file.exists(middlewareRealPath + extension)) {
+        } else if ($.file.exists(middlewareRealPath + projectFileExtension)) {
             hasMiddleware = true;
         } else {
-            if ($.file.exists(middlewareRealPath + MiddlewareSuffix + extension)) {
+            if ($.file.exists(middlewareRealPath + MiddlewareSuffix + projectFileExtension)) {
                 middlewareRealPath = middlewareRealPath + MiddlewareSuffix;
                 hasMiddleware = true;
             }
@@ -133,7 +133,7 @@ class UseEngine {
      * @return {*}
      */
     public static file(path: string) {
-        const fullPath = $.path.backend("{file}" + $.config.project.fileExtension);
+        const fullPath = $.path.backend("{file}" + projectFileExtension);
         const [hasPath, realPath] = fileExistsInPath(path, fullPath);
         if (!hasPath) {
             throw Error(`File ${realPath} does not exist!`);
@@ -148,7 +148,7 @@ class UseEngine {
      * @return {*}
      */
     public static model(model: string, handleError = true): any {
-        let fullPath = PathHelper.resolve($.config.paths.models) + "/{file}";
+        let fullPath = PathHelper.resolve($.config.get('paths.models')) + "/{file}";
         fullPath = PathHelper.addProjectFileExtension(fullPath) as string;
 
         const [hasPath, realPath] = fileExistsInPath(model, fullPath);
@@ -181,7 +181,7 @@ class UseEngine {
             }
         }
 
-        const fullPath = $.path.backend("middlewares/{file}" + $.config.project.fileExtension);
+        const fullPath = $.path.backend("middlewares/{file}" + projectFileExtension);
 
         const [hasPath, realPath] = fileExistsInPath(middleware, fullPath, suffix ? "Middleware" : "");
 
@@ -192,7 +192,7 @@ class UseEngine {
         return require(realPath);
     }
 
-    public static controller(controller: string, handleError: boolean = true, suffix: boolean = true) {
+    public static controller(controller: string) {
 
         if (controller.indexOf("::") > 2) {
             const $splitController = controller.split("::");

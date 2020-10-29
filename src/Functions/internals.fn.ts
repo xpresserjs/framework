@@ -23,14 +23,14 @@ export function initializeTypescriptFn(filename: string, run?: (isNode: boolean)
 
     // Set Project extension
     if (isTypeScriptFile) {
-        $.$config.set('project.fileExtension', '.ts');
+        $.config.set('project.fileExtension', '.ts');
     }
 
     // Check for presser engine
-    if (!isTypeScriptFile && !$.file.exists(PathHelper.resolve($.config.paths.npm))) {
+    if (!isTypeScriptFile && !$.file.exists(PathHelper.resolve($.config.get('paths.npm')))) {
         // $.logError('Path to xpresser engine files maybe missing, point {config.paths.npm} to your node_modules folder.')
         try {
-            $.config.paths.npm = $.path.node_modules();
+            $.config.set('paths.npm', $.path.node_modules());
             $.path.engine('', false, true);
         } catch (e) {
             $.logError('Path to xpresser engine files maybe missing, point {config.paths.npm} to your node_modules folder.')
@@ -39,9 +39,9 @@ export function initializeTypescriptFn(filename: string, run?: (isNode: boolean)
 
 
     if (!isTypeScriptFile) {
-        const routesFile = $.$config.get('paths.routesFile');
+        const routesFile = $.config.get('paths.routesFile');
         if (routesFile.includes('.ts')) {
-            $.$config.set('paths.routesFile', routesFile.replace('.ts', '.js'))
+            $.config.set('paths.routesFile', routesFile.replace('.ts', '.js'))
         }
     }
 

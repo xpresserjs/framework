@@ -4,6 +4,7 @@ import {DollarSign} from "../types";
 declare const $: DollarSign;
 declare const _: any;
 
+const projectFileExtension = $.config.get('project.fileExtension', '').substr(1)
 
 /**
  * @param {string} middlewarePath
@@ -19,7 +20,7 @@ const MiddlewareEngine = (middlewarePath: any, action?: any, route?: any): any =
     if (middlewarePath.indexOf(".") > 0) {
         const m = middlewarePath.split(".");
 
-        if (m[1] !== $.config.project.fileExtension.substr(1)) {
+        if (m[1] !== projectFileExtension) {
             middlewarePath = m[0];
             action = m[1];
         }

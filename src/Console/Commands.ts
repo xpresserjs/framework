@@ -9,7 +9,7 @@ import fse = require("fs-extra");
 
 import Artisan = require("../Functions/artisan.fn");
 
-const artisanConfig = $.config.artisan;
+const artisanConfig = $.config.get('artisan', {});
 import colors = require("../Objects/consoleColors.obj");
 import PathHelper = require("../Helpers/Path");
 import {parseControllerString} from "../Functions/internals.fn";
@@ -215,7 +215,7 @@ const Commands = {
             return logThis("Middleware name not defined!");
         }
 
-        const middlewaresPath = PathHelper.resolve($.config.paths.middlewares);
+        const middlewaresPath = PathHelper.resolve($.config.get('paths.middlewares'));
         Artisan.copyFromFactoryToApp("middleware", middleware, middlewaresPath);
 
         return $.exit();
@@ -248,7 +248,7 @@ const Commands = {
     },
 
     "make:view"(args: string[]) {
-        const config = $.config.template;
+        const config = $.config.get('template');
         let name = args[0];
         let defaultContent = "";
 

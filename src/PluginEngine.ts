@@ -58,7 +58,7 @@ class PluginEngine {
      */
     public static async loadPlugins() {
         // get logs.plugins config.
-        const logPlugins = $.$config.get("log.plugins", true);
+        const logPlugins = $.config.get("log.plugins", true);
         // Hold Plugins
         let plugins = [] as any[];
         // Get plugins.json path.
@@ -94,7 +94,7 @@ class PluginEngine {
                             const $pluginPath: string = pluginPaths[plugin] = PathHelper.resolve(plugin);
 
                             try {
-                                const $data = pluginData[plugin] = PluginEngine.loadPluginUseData(plugin, $pluginPath);
+                                const $data = pluginData[plugin] = PluginEngine.loadPluginUseData($pluginPath);
                                 /**
                                  * If {log.plugins===true} then display log
                                  */
@@ -128,7 +128,7 @@ class PluginEngine {
                         // Try processing plugin use.json
                         try {
 
-                            const $data = pluginData[plugin] || PluginEngine.loadPluginUseData(plugin, $pluginPath);
+                            const $data = pluginData[plugin] || PluginEngine.loadPluginUseData($pluginPath);
                             // tslint:disable-next-line:max-line-length
                             PluginNamespaceToData[$data.namespace] = await PluginEngine.usePlugin(plugin, $pluginPath, $data);
 
@@ -156,7 +156,7 @@ class PluginEngine {
      * @param plugin
      * @param pluginPath
      */
-    public static loadPluginUseData(plugin: string, pluginPath: string) {
+    public static loadPluginUseData(pluginPath: string) {
         const data = require(pluginPath + "/use.json");
         if (!data.namespace) {
             throw new Error(`Cannot read property 'namespace'`);
