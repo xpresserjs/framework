@@ -55,7 +55,7 @@ const helpers = {
      * @param {Object|boolean} $query
      * @param {boolean} $includeUrl
      */
-    route($route: string, $keys: string | string[] = [], $query: object|boolean = {}, $includeUrl = true) {
+    route($route: string, $keys: string | string[] = [], $query: object | boolean = {}, $includeUrl = true) {
 
         if (typeof $query === "boolean") {
             $includeUrl = $query;
@@ -105,8 +105,8 @@ const helpers = {
      * @param {string} $config - Config key
      * @param {*} $default - Default return value if config is not found.
      */
-    config($config: string, $default = undefined) {
-        return _.get($.config, $config, $default);
+    config($config: string, $default?: any) {
+        return $.config.get($config, $default);
     },
 
     /**
@@ -137,13 +137,15 @@ const helpers = {
         return helpers.url(file);
     },
 
-    env: $.env,
+    env(key: string, $default?: any): any {
+        return $.env(key, $default);
+    },
 
     /**
      * Random string generator
      * @param {number} length - length of string.
      */
-    randomStr(length = 10) {
+    randomStr(length = 10): string {
         let i: number;
         let possible: string;
         let text: string;
@@ -164,7 +166,7 @@ const helpers = {
      * @param {number} length
      * @return {Array}
      */
-    randomArray(length = 5) {
+    randomArray(length = 5): number[] {
         let i = 0;
         const newArray: number[] = [];
         while (i < length) {
@@ -175,7 +177,7 @@ const helpers = {
         return newArray;
     },
 
-    randomInteger(min: number, max: number) {
+    randomInteger(min: number, max: number): number {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     },
 
@@ -185,12 +187,12 @@ const helpers = {
     // ---------------------------
     // ---------------------------
 
-    now() {
+    now(): string {
         return moment().format($.config.get('date.format'));
     },
 
-    today() {
-        return helpers.now();
+    today(): string {
+        return moment().format($.config.get('date.format'));
     },
 
     /**
