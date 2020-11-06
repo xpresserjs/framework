@@ -52,6 +52,10 @@ export = (DefinedEvents: StringToAnyKeyObject) => {
                 callback,
             });
         }
+
+        public static define(event: string, run: (...args: any[]) => void | any): void {
+            DefinedEvents[event] = run;
+        }
     }
 
     return EventsEmitter;

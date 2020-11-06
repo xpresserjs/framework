@@ -65,6 +65,19 @@ declare namespace Xpresser {
          * @param callback
          */
         emitWithCallback(event: string, args: any[], callback: (eventResult: any) => any): void;
+
+
+        /**
+         * Define Event.
+         * @param event
+         * @param run
+         *
+         * @example
+         * $.events.define('greet', () => $.logInfo('Hello!'));
+         * // Call
+         * $.events.emit('greet')
+         */
+        define(event: string, run: (...args: any[]) => void | any): void;
     }
 
     export interface DollarSign {
