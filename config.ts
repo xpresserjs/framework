@@ -175,7 +175,7 @@ const Config = {
 
         locals: {
             all: true,
-            get: false,
+            query: false,
             body: false,
             session: false,
             stackedScripts: false,

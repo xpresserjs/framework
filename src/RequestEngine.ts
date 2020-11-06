@@ -55,7 +55,9 @@ class RequestEngine {
 
         this.params = req.params || {};
         this.session = req.session || {};
-        this.store = $.objectCollection(res.locals || {});
+
+        if (!res.locals) res.locals = {};
+        this.store = $.objectCollection(res.locals);
     }
 
     /**
@@ -235,13 +237,20 @@ class RequestEngine {
      * Redirect to route
      * @param {string} route
      * @param {Array|string} keys
+     * @param query
+     * @param includeUrl
      * @returns {*}
      */
-    public redirectToRoute(route: string, keys = []): any {
-        return this.redirect($.helpers.route(route, keys));
+    public redirectToRoute(route: string, keys?: any[], query?: object | boolean, includeUrl?: boolean): any {
+        return this.redirect($.helpers.route(route, keys, query, includeUrl));
     }
 
-    public viewData(file: string) {
+    /**
+     * View Data
+     * @param file
+     * @private
+     */
+    private viewData(file: string) {
         const localsConfig = $.config.get('template.locals');
         const all = localsConfig.all;
 
@@ -259,28 +268,16 @@ class RequestEngine {
         ctx.$currentUrl = this.req.url;
 
         if (all) {
-
-            ctx.$get = this.req.query;
+            ctx.$query = this.req.query;
             ctx.$body = this.req.body;
             ctx.$stackedScripts = [];
             ctx.$session = this.session || {};
-
         } else {
-
-            if (localsConfig.stackedScripts) {
-                ctx.$stackedScripts = [];
-            }
-            if (localsConfig.session) {
-                ctx.$session = this.session || {};
-            }
-            if (localsConfig.get) {
-                ctx.$get = this.req.query;
-            }
-            if (localsConfig.body) {
-                ctx.$body = this.req.body;
-            }
+            if (localsConfig.stackedScripts) ctx.$stackedScripts = [];
+            if (localsConfig.session) ctx.$session = this.session || {};
+            if (localsConfig.query) ctx.$query = this.req.query;
+            if (localsConfig.body) ctx.$body = this.req.body;
         }
-
         this.res.locals["ctx"] = ctx;
     }
 

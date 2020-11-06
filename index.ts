@@ -1,5 +1,3 @@
-import {getLocalExternalIp} from "./src/Functions/inbuilt.fn";
-
 /**
  * Importing Package.json
  *
@@ -22,6 +20,7 @@ import XpresserRouter = require("@xpresser/router");
 // Import default config.
 import Configurations = require("./config");
 import {DollarSign, Options} from "./types";
+import { StringToAnyKeyObject } from "./src/CustomTypes";
 
 // Use Lodash from ObjectCollection
 const _ = ObjectCollection.getLodash();
@@ -37,7 +36,7 @@ const {Config, Options} = Configurations;
  * @param {Options} AppOptions
  * @constructor
  */
-const xpresser = (AppConfig: object | string, AppOptions: Options = {}): DollarSign => {
+const xpresser = (AppConfig: StringToAnyKeyObject | string, AppOptions: Options = {}): DollarSign => {
 
     // Set DollarSign Global Var: $
     const $ = {} as DollarSign;
@@ -103,8 +102,8 @@ const xpresser = (AppConfig: object | string, AppOptions: Options = {}): DollarS
     }
 
     // Merge Config with DefaultConfig to replace missing values.
-    AppConfig = _.merge(Config, AppConfig);
-    AppOptions = _.merge(Options, AppOptions);
+    AppConfig = _.merge(Config, AppConfig) as StringToAnyKeyObject;
+    AppOptions = _.merge(Options, AppOptions) as Options;
 
 
     // Initialize {$.on} for the first time.
@@ -112,7 +111,13 @@ const xpresser = (AppConfig: object | string, AppOptions: Options = {}): DollarS
     $.on = {};
 
     // Set {$.objectCollection}
-    $.objectCollection = (obj?) => new ObjectCollection(obj);
+    if (typeof AppConfig['ObjectCollection'] === "function") {
+        const OwnObjectCollection: any = AppConfig.ObjectCollection()
+        $.objectCollection = (obj?) => new OwnObjectCollection(obj) as ObjectCollection;
+    } else {
+        $.objectCollection = (obj?) => new ObjectCollection(obj);
+    }
+
 
     // Expose {$}(DollarSign) to globals.
     // @ts-ignore
