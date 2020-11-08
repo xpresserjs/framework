@@ -1,8 +1,9 @@
 import moment = require("moment");
 import Base64 = require("./Helpers/Base64");
-import {DollarSign} from "../types";
+import Deprecated = require("./Errors/Deprecated");
+import {getInstance} from "../index";
 
-declare const $: DollarSign;
+const $ = getInstance();
 declare const global: any;
 
 /**
@@ -12,7 +13,7 @@ declare const global: any;
  * @remove at (1.0.0)
  */
 global['moment'] = (...args: any[]) => {
-    console.log(`Deprecated: Using global xpresser (_) i.e lodash is deprecated. Please use $.modules.lodash() instead.`);
+    console.log(new Deprecated(`Using global xpresser (moment) is deprecated. Please use $.modules.moment() instead.`).stack);
     return moment(...args);
 };
 
@@ -43,5 +44,6 @@ $.initializeTypescript = initializeTypescriptFn;
  * Get lan Ip
  */
 import {getLocalExternalIp} from "./Functions/inbuilt.fn";
+
 $.engineData.set('lanIp', getLocalExternalIp());
 

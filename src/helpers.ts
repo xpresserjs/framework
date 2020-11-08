@@ -1,8 +1,8 @@
 import BuildUrl = require("build-url");
 import moment = require("moment");
-import {DollarSign} from "../types";
+import {getInstance} from "../index";
 
-declare const $: DollarSign;
+const $ = getInstance();
 
 /* HELPER FUNCTIONS */
 const helpers = {

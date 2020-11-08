@@ -1,9 +1,8 @@
 /* On Applications Event Engine */
-import {DollarSign} from "../types";
+import {getInstance} from "../index";
+const $ = getInstance();
 
-declare const $: DollarSign;
-
-const OnEvents: {[key: string]: any[]} = {
+const OnEvents: { [key: string]: any[] } = {
     start: [],
     boot: [],
     expressInit: [],

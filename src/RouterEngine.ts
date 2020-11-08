@@ -1,6 +1,6 @@
 import MiddlewareEngine = require("./MiddlewareEngine");
 import XpresserRouter = require("@xpresser/router");
-import {DollarSign} from "../types";
+import {getInstance} from "../index";
 import lodash from "lodash";
 import {StringToAnyKeyObject} from "./CustomTypes";
 import {parseControllerString} from "./Functions/internals.fn";
@@ -8,7 +8,8 @@ import PathHelper from "./Helpers/Path";
 
 const AllRoutesKey = "RouterEngine:allRoutes";
 
-declare const $: DollarSign;
+
+const $ = getInstance();
 
 const NameToRoute: StringToAnyKeyObject = {};
 const ProcessedRoutes: any[] = [];

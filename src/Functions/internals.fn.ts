@@ -1,7 +1,8 @@
-import {DollarSign} from "../../types";
 import PathHelper from "../Helpers/Path";
+import {getInstance} from "../../index";
+import {DollarSign} from "../../types";
 
-declare const $: DollarSign;
+const $ = getInstance();
 
 export function parseControllerString(controllerString: string) {
     const split = controllerString.split("@");

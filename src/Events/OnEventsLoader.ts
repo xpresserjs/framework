@@ -1,6 +1,6 @@
-import {DollarSign} from "../../types";
+import {getInstance} from "../../index";
 
-declare const $: DollarSign;
+const $ = getInstance();
 
 const loadOnEvents = (name: string, done?: () => void) => {
     const key = `on.${name}`;

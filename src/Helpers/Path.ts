@@ -1,8 +1,8 @@
 import PATH = require("path");
 import fs = require("fs");
-import {DollarSign} from "../../types";
+import {getInstance} from "../../index";
 
-declare const $: DollarSign;
+const $ = getInstance();
 
 const pathHelpers = {
     base: "base://",

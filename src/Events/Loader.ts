@@ -3,9 +3,9 @@ import fs = require("fs");
 import Path = require("../Helpers/Path");
 
 import ObjectCollection = require("object-collection/index");
-import {DollarSign} from "../../types";
+import {getInstance} from "../../index";
 
-declare const $: DollarSign;
+const $ = getInstance();
 const DefinedEvents: StringToAnyKeyObject = {};
 const EventsPath = $.path.events();
 

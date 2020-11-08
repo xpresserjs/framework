@@ -5,10 +5,10 @@ import Pluralise = require("pluralize");
 import colors = require("../Objects/consoleColors.obj");
 import lodash from "lodash";
 import PathHelper = require("../Helpers/Path");
-import {DollarSign} from "../../types";
 import {StringToAnyKeyObject} from "../CustomTypes";
+import {getInstance} from "../../index";
 
-declare const $: DollarSign;
+const $ = getInstance();
 
 const isTinker = typeof $.options.isTinker === "boolean" && $.options.isTinker;
 const FILE_EXTENSION = $.config.get("project.fileExtension", ".js");

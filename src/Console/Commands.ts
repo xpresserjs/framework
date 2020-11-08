@@ -1,8 +1,7 @@
-import {DollarSign} from "../../types";
 import lodash from "lodash";
+import {getInstance} from "../../index";
 
-
-declare const $: DollarSign;
+const $ = getInstance();
 
 import os = require("os");
 import fs = require("fs");
@@ -46,7 +45,7 @@ const Commands = {
         fs.unlinkSync(maintenanceFile);
 
         $.log('App is now up!');
-        $.logAndExit('Reload your server if you have an active instance already running.')
+        $.logAndExit('Reload your server if you have an active getInstance already running.')
     },
 
     down() {
@@ -59,7 +58,7 @@ const Commands = {
         }));
 
         $.log('App is now in maintenance mood!');
-        $.logAndExit('Reload your server if you have an active instance already running.')
+        $.logAndExit('Reload your server if you have an active getInstance already running.')
 
     },
 

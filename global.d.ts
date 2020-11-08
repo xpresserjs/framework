@@ -11,6 +11,16 @@ import {DollarSign, Options} from "./types";
  * @param options - Options
  * @constructor
  */
-declare function xpresser(config: object | string, options?: Options): DollarSign;
+declare function init(config: object | string, options?: Options): DollarSign;
 
-export = xpresser;
+/**
+ * Get Current Xpresser Instance.
+ * Use instead of global $
+ * @example
+ * const $ = global['$'];
+ * const $ = getInstance();
+ * @param [instanceId]
+ */
+declare function getInstance(instanceId?: string): DollarSign;
+
+export {init, getInstance}

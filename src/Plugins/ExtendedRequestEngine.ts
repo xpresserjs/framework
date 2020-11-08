@@ -1,9 +1,9 @@
 import RequestEngine = require("../RequestEngine");
-import {DollarSign} from "../../types";
+import {getInstance} from "../../index";
 import PathHelper = require("../Helpers/Path");
 import ObjectCollection = require("object-collection");
 
-declare const $: DollarSign;
+const $ = getInstance();
 
 let ExtendedRequestEngine = RequestEngine;
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});

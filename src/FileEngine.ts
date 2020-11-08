@@ -1,12 +1,12 @@
 import fs = require("fs");
 import fse = require("fs-extra");
-import {DollarSign} from "../types";
+import {getInstance} from "../index";
 
-declare const $: DollarSign;
+const $ = getInstance()
 
 $.file = {
     /**
-     * Return Node fs instance
+     * Return Node fs getInstance
      * @return {fs}
      */
     fs() {
@@ -14,7 +14,7 @@ $.file = {
     },
 
     /**
-     * Return Node fs-extra instance
+     * Return Node fs-extra getInstance
      * @return {fse}
      */
     fsExtra() {

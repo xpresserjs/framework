@@ -2,9 +2,9 @@ import fs = require("fs");
 import RouterEngine = require("../RouterEngine");
 
 import Path = require("../Helpers/Path");
-import {DollarSign} from "../../types";
+import {getInstance} from "../../index";
 
-declare const $: DollarSign;
+const $ = getInstance();
 
 $.routerEngine = RouterEngine;
 const RouteFile = Path.resolve($.config.get('paths.routesFile'));
@@ -29,7 +29,7 @@ for (let i = 0; i < PluginRoutes.length; i++) {
     const pluginRoute = PluginRoutes[i];
     const Routes = require(pluginRoute.path);
 
-    // Add to routes if returned value is instance of XpresserRouter
+    // Add to routes if returned value is getInstance of XpresserRouter
     if (
         typeof Routes === "object" &&
         (Routes.constructor && Routes.constructor.name === "XpresserRouter")

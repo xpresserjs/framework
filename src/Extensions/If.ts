@@ -1,6 +1,5 @@
-import {DollarSign} from "../../types";
-
-declare const $: DollarSign;
+import {getInstance} from "../../index";
+const $ = getInstance();
 
 // ---------- IF Helpers ----------
 $.ifConsole = (isConsole: () => void, notConsole: () => void): void => {

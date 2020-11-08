@@ -2,9 +2,9 @@ import fs = require("fs");
 import moment = require("moment");
 import PathHelper = require("../Helpers/Path");
 import lodash from "lodash";
-import {DollarSign} from "../../types";
+import {getInstance} from "../../index";
 
-declare const $: DollarSign;
+const $ = getInstance();
 
 const PluginLockDataPath: string = $.path.jsonConfigs("plugins-lock.json");
 let PluginLockData = $.objectCollection();

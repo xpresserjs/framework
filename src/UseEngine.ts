@@ -6,10 +6,11 @@
  */
 import PathHelper = require("./Helpers/Path");
 import StringHelper = require("./Helpers/String");
-import {DollarSign, JsonSettings} from "../types";
+import {JsonSettings} from "../types";
 import {StringToAnyKeyObject} from "./CustomTypes";
+import {getInstance} from "../index";
 
-declare const $: DollarSign;
+const $ = getInstance();
 
 let Use: JsonSettings.Use;
 const PluginNamespaces = $.engineData.get("PluginEngine:namespaces", {});

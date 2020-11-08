@@ -10,9 +10,9 @@ import {createServer as createHttpsServer} from "https";
 
 // Types
 import {Controller as XpresserController} from "../types/http";
-import {DollarSign} from "../types";
+import {getInstance} from "../index";
 
-declare const $: DollarSign;
+const $ = getInstance();
 
 const isProduction = $.config.get("env") === "production";
 const paths = $.config.get("paths");
@@ -257,7 +257,7 @@ if (isUnderMaintenance) {
     if (maintenanceMiddlewareExists) maintenanceMiddleware = require(maintenanceMiddleware);
 
     $.app.use((req: any, res: any, next: any) => {
-        // Get RequestEngine instance
+        // Get RequestEngine getInstance
         const http = new RequestEngine(req, res, next);
 
         // Use maintenanceMiddleware if it exists

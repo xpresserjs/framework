@@ -9,12 +9,12 @@ import lodash from "lodash";
 import {ServerResponse} from "http";
 
 import {Http} from "../types/http";
-import {DollarSign} from "../types";
 import {StringToAnyKeyObject} from "./CustomTypes";
 import {parseControllerString} from "./Functions/internals.fn";
 import PathHelper from "./Helpers/Path";
 
-declare const $: DollarSign;
+import {getInstance} from "../index";
+const $ = getInstance();
 
 
 /**
@@ -183,7 +183,7 @@ class ControllerEngine {
         let errorHandler: any = null;
         const handlerArguments = () => lodash.clone($handlerArguments);
 
-        // If controller is an instance of handler then get the handler.
+        // If controller is an getInstance of handler then get the handler.
         if (controllerIsObject && typeof method === "string") {
             if (controllerIsService) {
                 controller = controller.getClone();

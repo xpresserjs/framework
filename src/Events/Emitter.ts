@@ -1,9 +1,9 @@
 // Imported Immediately after events are registered.
 import events = require("events");
-import {DollarSign} from "../../types";
 import {StringToAnyKeyObject} from "../CustomTypes";
+import {getInstance} from "../../index";
 
-declare const $: DollarSign;
+const $ = getInstance();
 
 export = (DefinedEvents: StringToAnyKeyObject) => {
     const EventEmitter = new events.EventEmitter();

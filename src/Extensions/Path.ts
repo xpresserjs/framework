@@ -1,9 +1,8 @@
 import Path = require("../Helpers/Path");
-import {DollarSign} from "../../types";
+import {getInstance} from "../../index";
 
 const packageName: string = "xpresser";
-
-declare const $: DollarSign;
+const $ = getInstance();
 
 const paths = $.config.get('paths');
 const baseFiles = paths.base + "/";

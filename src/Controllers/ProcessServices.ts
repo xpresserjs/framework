@@ -1,11 +1,9 @@
 import ControllerServiceError = require("./ControllerServiceError");
 // Import Types
-import {DollarSign} from "../../types";
 import {Http} from "../../types/http";
 import {ServerResponse} from "http";
 import {StringToAnyKeyObject} from "../CustomTypes";
 
-declare const $: DollarSign;
 
 /**
  * This functions loops through all defined services,

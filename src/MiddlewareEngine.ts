@@ -1,8 +1,8 @@
 import lodash from "lodash";
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
-import {DollarSign} from "../types";
+import {getInstance} from "../index";
 
-declare const $: DollarSign;
+const $ = getInstance()
 
 const projectFileExtension = $.config.get('project.fileExtension', '').substr(1)
 

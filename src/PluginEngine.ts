@@ -1,8 +1,8 @@
 import PathHelper = require("./Helpers/Path");
-import {DollarSign} from "../types";
 import {StringToAnyKeyObject} from "./CustomTypes";
+import {getInstance} from "../index";
 
-declare const $: DollarSign;
+const $ = getInstance();
 
 /**
  * PluginRoutes -  holds all plugins routes.

@@ -1,11 +1,9 @@
 declare namespace NodeJS {
     interface Global {
         $: any;
-        _: any;
-        moment: any;
+        xpresserInstance(instanceId?: string): any;
     }
 }
-
 
 /**
  * Make Declaration public

@@ -1,11 +1,13 @@
 const chalk = require("chalk");
-import {DollarSign} from "../../types";
+import lodash from "lodash";
+import {getInstance} from "../../index";
 
-declare const $: DollarSign;
-declare let _: any;
+const $ = getInstance();
 
 $.log = (...args) => {
-    if (!args.length) { return console.log(""); }
+    if (!args.length) {
+        return console.log("");
+    }
 
     args.unshift(chalk.white("=>"));
 
@@ -17,7 +19,9 @@ $.log = (...args) => {
 };
 
 $.logInfo = (...args) => {
-    if (!args.length) { return console.log(""); }
+    if (!args.length) {
+        return console.log("");
+    }
 
     args.unshift("=>");
 
@@ -29,7 +33,9 @@ $.logInfo = (...args) => {
 };
 
 $.logSuccess = (...args) => {
-    if (!args.length) { return console.log(""); }
+    if (!args.length) {
+        return console.log("");
+    }
 
     args.unshift("✔✔");
 
@@ -41,7 +47,9 @@ $.logSuccess = (...args) => {
 };
 
 $.logWarning = (...args) => {
-    if (!args.length) { return console.log(""); }
+    if (!args.length) {
+        return console.log("");
+    }
 
     args.unshift("!!");
 
@@ -59,7 +67,9 @@ $.logIfNotConsole = (...args) => {
 };
 
 $.logAndExit = (...args) => {
-    if (args.length) { $.log(...args); }
+    if (args.length) {
+        $.log(...args);
+    }
     return $.exit();
 };
 
@@ -81,7 +91,7 @@ $.logErrorAndExit = (...args) => {
     return $.logError(...args, true);
 };
 
-$.logPerLine = ($logs = [], $spacePerLine= false) => {
+$.logPerLine = ($logs = [], $spacePerLine = false) => {
 
     console.log();
     for (let i = 0; i < $logs.length; i++) {
@@ -95,7 +105,7 @@ $.logPerLine = ($logs = [], $spacePerLine= false) => {
             const key = Object.keys($log)[0];
 
             // @ts-ignore
-            $["log" + _.upperFirst(key)]($log[key]);
+            $["log" + lodash.upperFirst(key)]($log[key]);
 
         } else {
             if (typeof $log === "string" && !$log.length) {
@@ -105,7 +115,9 @@ $.logPerLine = ($logs = [], $spacePerLine= false) => {
             }
         }
 
-        if ($spacePerLine) { $.log(); }
+        if ($spacePerLine) {
+            $.log();
+        }
     }
     console.log();
 };

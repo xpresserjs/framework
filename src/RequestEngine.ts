@@ -6,11 +6,13 @@ import requestHelpers = require("./Functions/request.fn");
 import ErrorEngine = require("./ErrorEngine");
 
 import lodash from "lodash";
-import {DollarSign} from "../types";
+
 import {Http} from "../types/http";
 import {StringToAnyKeyObject} from "./CustomTypes";
 
-declare const $: DollarSign;
+import {getInstance} from "../index";
+
+const $ = getInstance();
 
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
 const useFlash = $.config.get("server.use.flash", false);
@@ -67,7 +69,7 @@ class RequestEngine {
 
 
     /**
-     * Returns an instance of ErrorEngine
+     * Returns an getInstance of ErrorEngine
      */
     newError(): ErrorEngine {
         return new ErrorEngine(this)

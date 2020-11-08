@@ -1,34 +1,46 @@
-/**
- * Importing Package.json
- *
- * Since typescript is bundled in `dist` folder
- * package.json will be in the parent directory
- */
-
-let PackageDotJson: any = {};
-
-try {
-    PackageDotJson = require("./package.json");
-} catch (e) {
-    PackageDotJson = require("../package.json");
-}
-
-// Import system required libraries
-import fs = require("fs");
-import ObjectCollection = require("object-collection");
-import XpresserRouter = require("@xpresser/router");
-// Import default config.
-import Configurations = require("./config");
 import {DollarSign, Options} from "./types";
 import {StringToAnyKeyObject} from "./src/CustomTypes";
 
-// Use Lodash from ObjectCollection
-const lodash = ObjectCollection.getLodash();
+// Xpresser Instance Holder
+const instanceHolder: StringToAnyKeyObject = {};
+
 
 /**
- * Get default Config and Options from Configurations
+ * Get Xpresser Instance.
+ *
+ * if instanceId is not defined the first getInstance will be returned;
+ * @param instanceId
  */
-const {Config, Options} = Configurations;
+function getInstance(instanceId?: string): DollarSign {
+    if (instanceId === ':keys') return Object.keys(instanceHolder) as any;
+    if (instanceId === ':id') return require('./truth').instanceId;
+
+    if (instanceId) {
+        if (!instanceHolder.hasOwnProperty(instanceId))
+            throw new Error(`Xpresser instanceId: ${instanceId} not found!`);
+
+        return instanceHolder[instanceId];
+    } else {
+
+        // If $ is defined then return.
+        if (global.$) {
+            return global.$;
+        }
+
+        const truth = require("./truth");
+
+        if (truth && truth.instanceId) {
+            return instanceHolder[truth.instanceId];
+        }
+
+        const instances = Object.keys(instanceHolder);
+        if (!instances.length)
+            throw new Error(`No Xpresser instance defined found!`);
+
+        return instanceHolder[instances[0]];
+    }
+}
+
 
 /**
  * Initialize Xpresser;
@@ -36,14 +48,40 @@ const {Config, Options} = Configurations;
  * @param {Options} AppOptions
  * @constructor
  */
-const xpresser = (AppConfig: StringToAnyKeyObject | string, AppOptions: Options = {}): DollarSign => {
+function init(AppConfig: StringToAnyKeyObject | string, AppOptions: Options = {}): DollarSign {
 
-    // Set DollarSign Global Var: $
-    const $ = {} as DollarSign;
+    // Expose xpresserInstance as global function
+    if (!global.xpresserInstance) global.xpresserInstance = getInstance;
 
-    $.exit = (...args) => {
-        return process.exit(...args);
-    };
+    /**
+     * Require Modules only when this function is called.
+     * This is to avoid requiring un-needed packages when ever we run
+     * const {getInstance} = require('xpresser')
+     */
+    const Deprecated = require("./src/Errors/Deprecated");
+    const fs = require("fs");
+    const XpresserRouter = require("@xpresser/router");
+    // Import default config.
+    const {Config, Options} = require("./config");
+    const ObjectCollection = require("object-collection");
+    const {randomStr} = require('./src/Functions/inbuilt.fn')
+    const lodash = require("lodash");
+    const truth = require("./truth");
+
+
+    /**
+     * Importing Package.json
+     *
+     * Since typescript is bundled in `dist` folder
+     * package.json will be in the parent directory
+     */
+    let PackageDotJson: any = {};
+
+    try {
+        PackageDotJson = require("./package.json");
+    } catch (e) {
+        PackageDotJson = require("../package.json");
+    }
 
     if (AppConfig === undefined) {
         AppConfig = {};
@@ -52,6 +90,18 @@ const xpresser = (AppConfig: StringToAnyKeyObject | string, AppOptions: Options 
     if (AppOptions === undefined) {
         AppOptions = {};
     }
+
+    // Set Instance id to random string if not defined
+    if (!AppOptions['instanceId']) truth.instanceId = AppOptions['instanceId'] = randomStr(10);
+
+    console.log(truth.instanceId);
+
+    // Set DollarSign Global Var: $
+    const $ = instanceHolder[AppOptions['instanceId'] as string] = {} as DollarSign;
+
+    $.exit = (...args) => {
+        return process.exit(...args);
+    };
 
     if (typeof AppConfig === "string") {
         const configFile = AppConfig;
@@ -102,8 +152,8 @@ const xpresser = (AppConfig: StringToAnyKeyObject | string, AppOptions: Options 
     }
 
     // Merge Config with DefaultConfig to replace missing values.
-    AppConfig = lodash.merge(Config, AppConfig) as StringToAnyKeyObject;
-    AppOptions = lodash.merge(Options, AppOptions) as Options;
+    AppConfig = lodash.merge(lodash.clone(Config), AppConfig) as StringToAnyKeyObject;
+    AppOptions = lodash.merge(lodash.clone(Options), AppOptions) as Options;
 
 
     // Initialize {$.on} for the first time.
@@ -113,15 +163,14 @@ const xpresser = (AppConfig: StringToAnyKeyObject | string, AppOptions: Options 
     // Set {$.objectCollection}
     if (typeof AppConfig['ObjectCollection'] === "function") {
         const OwnObjectCollection: any = AppConfig.ObjectCollection()
-        $.objectCollection = (obj?) => new OwnObjectCollection(obj) as ObjectCollection;
+        $.objectCollection = (obj?) => new OwnObjectCollection(obj) as typeof ObjectCollection;
     } else {
         $.objectCollection = (obj?) => new ObjectCollection(obj);
     }
 
 
     // Expose {$}(DollarSign) to globals.
-    // @ts-ignore
-    global.$ = $;
+    if (AppOptions.exposeDollarSign) global.$ = $;
 
     /**
      * Expose {_}(lodash) to globals. (Stopped!!)
@@ -135,7 +184,7 @@ const xpresser = (AppConfig: StringToAnyKeyObject | string, AppOptions: Options 
      */
     global._ = new Proxy(lodash, {
         get: (_target, prop) => {
-            console.log(`Deprecated: Using global xpresser (_) i.e lodash is deprecated. Please use $.modules.lodash() instead.`);
+            console.log(new Deprecated('Using global xpresser (_) i.e lodash is deprecated. Please use $.modules.lodash() instead.').stack);
             return lodash[prop];
         }
     });
@@ -197,15 +246,12 @@ const xpresser = (AppConfig: StringToAnyKeyObject | string, AppOptions: Options 
 
     /* ------------- $.on Events Loader ------------- */
     require("./src/On");
-
     // Require $.file
     require("./src/FileEngine");
-
     // Include Loggers
     require("./src/Extensions/Loggers");
     // Include If extensions
     require("./src/Extensions/If");
-
 
     // Log if not console
     $.ifNotConsole(() => {
@@ -307,6 +353,8 @@ const xpresser = (AppConfig: StringToAnyKeyObject | string, AppOptions: Options 
     }
 
     return $;
-};
+}
 
-export = xpresser;
+export {init, getInstance}
+
+

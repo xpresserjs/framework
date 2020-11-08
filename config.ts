@@ -218,6 +218,8 @@ const Options = {
     autoBoot: false,
     isConsole: false,
     isTinker: false,
+    exposeDollarSign: true,
+    instanceId: undefined,
 };
 
 export = {Config, Options};

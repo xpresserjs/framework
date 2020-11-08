@@ -32,6 +32,8 @@ declare namespace Xpresser {
         autoBoot?: boolean;
         isConsole?: boolean;
         isTinker?: boolean;
+        exposeDollarSign?: boolean;
+        instanceId?: string;
     }
 
     /**
@@ -141,13 +143,13 @@ declare namespace Xpresser {
         // FileEngine
         file: {
             /**
-             * Return Node fs instance
+             * Return Node fs getInstance
              * @return {*}
              */
             fs(): any;
 
             /**
-             * Return Node fs-extra instance
+             * Return Node fs-extra getInstance
              * @return {*}
              */
             fsExtra(): any;
@@ -401,7 +403,7 @@ declare namespace Xpresser {
         exit(...args: any): void;
 
         /**
-         * Return new instance of object collection.
+         * Return new getInstance of object collection.
          * @param [obj]
          */
         objectCollection(obj?: object | any[]): ObjectCollection;
@@ -492,6 +494,11 @@ declare namespace Xpresser {
             middlewares?: StringToAnyKeyObject;
         }
     }
+
+    /**
+     * Export global xpresserInstance function as type
+     */
+    export type InstanceGetter = (instanceId?: string) => DollarSign;
 }
 
 export = Xpresser;

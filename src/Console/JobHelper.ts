@@ -1,6 +1,6 @@
-import {DollarSign} from "../../types";
+import {getInstance} from "../../index";
 
-declare const $: DollarSign;
+const $ = getInstance();
 
 class JobHelper {
     public name: string | null = null;
