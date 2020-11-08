@@ -3,6 +3,7 @@
 /// <reference path="./types/http.d.ts" />
 /// <reference path="./types/index.d.ts" />
 
+import ControllerClass from "./src/Classes/ControllerClass";
 import {DollarSign, Options} from "./types";
 
 /**
@@ -23,4 +24,4 @@ declare function init(config: object | string, options?: Options): DollarSign;
  */
 declare function getInstance(instanceId?: string): DollarSign;
 
-export {init, getInstance}
+export {init, getInstance, ControllerClass}

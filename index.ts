@@ -1,5 +1,6 @@
 import {DollarSign, Options} from "./types";
 import {StringToAnyKeyObject} from "./src/CustomTypes";
+import ControllerClass from "./src/Classes/ControllerClass";
 
 // Xpresser Instance Holder
 const instanceHolder: StringToAnyKeyObject = {};
@@ -93,8 +94,6 @@ function init(AppConfig: StringToAnyKeyObject | string, AppOptions: Options = {}
 
     // Set Instance id to random string if not defined
     if (!AppOptions['instanceId']) truth.instanceId = AppOptions['instanceId'] = randomStr(10);
-
-    console.log(truth.instanceId);
 
     // Set DollarSign Global Var: $
     const $ = instanceHolder[AppOptions['instanceId'] as string] = {} as DollarSign;
@@ -355,6 +354,6 @@ function init(AppConfig: StringToAnyKeyObject | string, AppOptions: Options = {}
     return $;
 }
 
-export {init, getInstance}
+export {init, getInstance, ControllerClass}
 
 

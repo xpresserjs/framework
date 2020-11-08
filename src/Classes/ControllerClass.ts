@@ -2,7 +2,7 @@
  * Controller
  * @class
  */
-class Controller {
+class ControllerClass {
     /**
      * Helper to detect if a variable inherits this controller.
      * @return {boolean}
@@ -12,4 +12,4 @@ class Controller {
     }
 }
 
-export = Controller;
+export = ControllerClass;

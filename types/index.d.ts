@@ -13,7 +13,7 @@ import ObjectCollection = require("object-collection");
 import UseEngine = require("../src/UseEngine");
 import XpresserRouter = require("@xpresser/router");
 import RouterEngine = require("../src/RouterEngine");
-import Controller = require("../src/Classes/Controller");
+import Controller = require("../src/Classes/ControllerClass");
 
 import {Controller as HttpController} from "./http";
 

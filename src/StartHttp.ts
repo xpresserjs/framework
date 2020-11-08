@@ -299,7 +299,7 @@ $.app.use(async (req: any, _res: any, next: () => void) => {
 const afterExpressInit = (next: () => void) => {
     // Not Tinker? Require Controllers
     if (!$.options.isTinker) {
-        $.controller = require("./Classes/Controller");
+        $.controller = require("./Classes/ControllerClass");
         $.handler = (controller: XpresserController.Object) => new ControllerService(controller);
     }
 
