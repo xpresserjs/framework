@@ -1,11 +1,10 @@
 import {LoDashStatic} from "lodash";
+import moment from "moment";
 
 declare namespace Xpresser {
     namespace Helpers {
         interface Main {
             urlBuilder: any;
-
-            lodash(): LoDashStatic
 
             url($path?: string, $query?: object): string;
 
@@ -106,6 +105,23 @@ declare namespace Xpresser {
              * @param str
              */
             decodeToObject(str: string): object;
+        }
+
+        interface Modules {
+            /**
+             * Lodash Package
+             */
+            lodash(): LoDashStatic;
+
+            /**
+             * Moment Package
+             */
+            moment(): typeof moment;
+
+            /**
+             * BuildUrl Package
+             */
+            buildUrl(): any
         }
     }
 }

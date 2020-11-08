@@ -124,8 +124,8 @@ const xpresser = (AppConfig: StringToAnyKeyObject | string, AppOptions: Options 
     global.$ = $;
 
     /**
-     * Expose {_}(lodash) to globals. (Stopped)
-     *
+     * Expose {_}(lodash) to globals. (Stopped!!)
+     * Use $.modules.lodash() instead
      * This practice was considered a bad practice and also interferes
      * with node repl _ variable.
      *
@@ -135,7 +135,7 @@ const xpresser = (AppConfig: StringToAnyKeyObject | string, AppOptions: Options 
      */
     global._ = new Proxy(lodash, {
         get: (_target, prop) => {
-            console.log(`Deprecated: Using global xpresser (_) i.e lodash is deprecated. Please use $.helpers.lodash() instead.`);
+            console.log(`Deprecated: Using global xpresser (_) i.e lodash is deprecated. Please use $.modules.lodash() instead.`);
             return lodash[prop];
         }
     });
@@ -149,12 +149,6 @@ const xpresser = (AppConfig: StringToAnyKeyObject | string, AppOptions: Options 
      * Set Config to object-collection of AppConfig
      */
     $.config = $.objectCollection(AppConfig as object);
-
-    /**
-     * Set $.$config to an instance of ObjectCollection
-     * To enable access and modify apps config.
-     */
-    $.$config = $.objectCollection({});
 
     /**
      * Set $.options

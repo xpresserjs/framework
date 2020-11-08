@@ -206,7 +206,7 @@ const Config = {
         }
     },
 
-    // Packages Configurations
+    // Modules Configurations
     packages: {},
 
     // Plugins Configurations

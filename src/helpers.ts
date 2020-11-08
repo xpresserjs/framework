@@ -1,20 +1,12 @@
 import BuildUrl = require("build-url");
 import moment = require("moment");
 import {DollarSign} from "../types";
-import lodash from "lodash";
 
 declare const $: DollarSign;
 
 /* HELPER FUNCTIONS */
 const helpers = {
     urlBuilder: BuildUrl,
-
-    /**
-     * Return lodash
-     */
-    lodash() {
-        return lodash;
-    },
 
     /**
      * Get full url of path

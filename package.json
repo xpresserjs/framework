@@ -16,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/express": "^4.17.7",
+    "@types/lodash": "^4.14.162",
     "@types/node": "^14.14.5",
     "@xpresser/router": "^1.0.13",
     "body-parser": "^1.19.0",
@@ -31,6 +32,7 @@
     "handlebars": "^4.7.6",
     "helmet": "^4.1.1",
     "knex": "^0.21.8",
+    "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "object-collection": "^1.0.30",
     "pluralize": "^8.0.0",
@@ -39,7 +41,6 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.2",
-    "@types/lodash": "^4.14.162",
     "@types/pluralize": "^0.0.29",
     "ts-node-dev": "^1.0.0",
     "tslint": "^6.1.3",

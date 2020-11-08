@@ -84,13 +84,6 @@ declare namespace Xpresser {
         config: ObjectCollection;
         options: Options;
 
-        /**
-         * Does same thing current $.config does.
-         * @deprecated since (v 0.2.94)
-         * @remove at (v 1.0.0)
-         */
-        $config: ObjectCollection;
-
         // Stores Engine Data
         engineData: ObjectCollection;
         // Serves as store for user
@@ -123,6 +116,11 @@ declare namespace Xpresser {
          * changed from $.fn to $.utils
          */
         utils: Helpers.Util;
+
+        /**
+         * Modules hold
+         */
+        modules: Helpers.Modules;
 
         // Express App
         app: express.Application;
