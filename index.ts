@@ -1,6 +1,7 @@
 import {DollarSign, Options} from "./types";
 import {StringToAnyKeyObject} from "./src/CustomTypes";
 import ControllerClass from "./src/Classes/ControllerClass";
+import XpresserRepl from "./src/XpresserRepl";
 
 // Xpresser Instance Holder
 const instanceHolder: StringToAnyKeyObject = {};
@@ -354,6 +355,6 @@ function init(AppConfig: StringToAnyKeyObject | string, AppOptions: Options = {}
     return $;
 }
 
-export {init, getInstance, ControllerClass}
+export {init, getInstance, ControllerClass, XpresserRepl}
 
 
