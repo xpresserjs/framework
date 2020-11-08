@@ -2,10 +2,12 @@ import {REPLServer} from "repl";
 
 class XpresserRepl {
     data: {
+        commandPrefix: string,
         configProvider: (() => any),
         xpresserProvider: null | (() => any),
         xpresserExtender: null | (() => any),
     } = {
+        commandPrefix: 'xpresser>',
         configProvider() {
             return {}
         },
@@ -20,14 +22,24 @@ class XpresserRepl {
         if (config) this.setConfigProvider(config);
     }
 
-    hasXpresserProvider() {
+    /**
+     * Check if repl has custom xpresser provider
+     */
+    hasXpresserProvider(): boolean {
         return typeof this.data.xpresserProvider === "function"
     }
 
+    /**
+     * Check if repl has custom xpresser extender
+     */
     hasXpresserExtender() {
         return typeof this.data.xpresserExtender === "function"
     }
 
+    /**
+     * Set repl ConfigProvider
+     * @param configProvider
+     */
     setConfigProvider(configProvider: string | (() => any)) {
 
         // Import Required Modules
@@ -45,14 +57,35 @@ class XpresserRepl {
         }
     }
 
+    /**
+     * Set repl XpresserProvider
+     * @param xpresserProvider
+     */
     setXpresserProvider(xpresserProvider: (() => any)) {
         this.data.xpresserProvider = xpresserProvider;
     }
 
+    /**
+     * Set Command Prefix
+     * @param commandPrefix
+     */
+    setCommandPrefix(commandPrefix: string) {
+        this.data.commandPrefix = commandPrefix;
+    }
+
+    /**
+     * Extend Xpresser Instance
+     * @param xpresserExtender
+     */
     extendXpresser(xpresserExtender) {
         this.data.xpresserExtender = xpresserExtender;
     }
 
+    /**
+     * Add Data to context
+     * @param key
+     * @param value
+     */
     addToContext(key, value) {
         if (typeof key === "string") {
             this.context[key] = value;
@@ -61,6 +94,9 @@ class XpresserRepl {
         }
     }
 
+    /**
+     * Try to Build Instance
+     */
     buildInstance() {
         const xpresser = require('xpresser');
         const config = this.data.configProvider();
@@ -77,6 +113,7 @@ class XpresserRepl {
      */
     start() {
         const repl = require('repl');
+        const chalk = require('chalk');
 
         // Holds xpresser instance i.e ($)
         let xpr;
@@ -97,7 +134,7 @@ class XpresserRepl {
         }
 
         // Log Welcome Message
-        xpr.log("Xpresser Repl...");
+        console.log(chalk.greenBright(`>>>>> Xpresser Repl!`));
 
         // If has xpresser extender, run it.
         if (this.hasXpresserExtender()) {
@@ -107,7 +144,7 @@ class XpresserRepl {
         // Start Repl on boot
         xpr.on.boot(() => {
             // Start Repl
-            const myRepl = repl.start("xpresser$ ");
+            const myRepl = repl.start(chalk.cyanBright(`${this.data.commandPrefix.trim()} `));
             myRepl.context.$ = xpr;
 
             // Add End helper
