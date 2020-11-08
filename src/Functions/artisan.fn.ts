@@ -1,16 +1,14 @@
 import fs = require("fs");
-
 import fse = require("fs-extra");
 import Handlebars = require("handlebars");
 import Pluralise = require("pluralize");
 import colors = require("../Objects/consoleColors.obj");
-
+import lodash from "lodash";
 import PathHelper = require("../Helpers/Path");
 import {DollarSign} from "../../types";
 import {StringToAnyKeyObject} from "../CustomTypes";
 
 declare const $: DollarSign;
-declare const _: any;
 
 const isTinker = typeof $.options.isTinker === "boolean" && $.options.isTinker;
 const FILE_EXTENSION = $.config.get("project.fileExtension", ".js");
@@ -22,10 +20,10 @@ const FILE_EXTENSION = $.config.get("project.fileExtension", ".js");
 const afterLastSlash = (str: string) => {
     if (str.includes("/")) {
         const parts = str.split("/");
-        return _.upperFirst(parts[parts.length - 1]);
+        return lodash.upperFirst(parts[parts.length - 1]);
     }
 
-    return _.upperFirst(str);
+    return lodash.upperFirst(str);
 };
 
 export = {
@@ -82,17 +80,17 @@ export = {
 
         if (!$name.toLowerCase().includes($for)) {
             if (addPrefix && $for !== "model") {
-                $name = $name + _.upperFirst($for);
+                $name = $name + lodash.upperFirst($for);
             }
         }
 
         if ($name.includes('/')) {
             const names = $name.split('/');
-            const lastPath = _.upperFirst(names.pop());
+            const lastPath = lodash.upperFirst(names.pop());
             names.push(lastPath);
             $name = names.join('/');
         } else {
-            $name = _.upperFirst($name);
+            $name = lodash.upperFirst($name);
         }
 
         $to = $to + "/" + $name + FILE_EXTENSION;

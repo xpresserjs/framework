@@ -1,6 +1,5 @@
 import {Controller} from "../../types/http";
-
-declare const _: any;
+import lodash from "lodash";
 
 const $defaultController = {
     services: {},
@@ -37,7 +36,7 @@ class ControllerService {
      * Clone current controller.
      */
     protected getClone(): any {
-        return _.cloneDeep(this.controller);
+        return lodash.cloneDeep(this.controller);
     }
 
 }

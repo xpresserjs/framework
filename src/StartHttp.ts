@@ -1,4 +1,5 @@
 import {resolve} from "path";
+import lodash from "lodash";
 import PathHelper = require("./Helpers/Path");
 import loadOnEvents = require("./Events/OnEventsLoader");
 
@@ -11,7 +12,6 @@ import {createServer as createHttpsServer} from "https";
 import {Controller as XpresserController} from "../types/http";
 import {DollarSign} from "../types";
 
-declare const _: any;
 declare const $: DollarSign;
 
 const isProduction = $.config.get("env") === "production";
@@ -195,7 +195,7 @@ if (useSession) {
             tablename: "sessions",
         });
 
-        const sessionConfig = _.extend({}, $.config.get('session'), {
+        const sessionConfig = lodash.extend({}, $.config.get('session'), {
             store,
         });
 

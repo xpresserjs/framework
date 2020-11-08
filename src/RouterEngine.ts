@@ -1,13 +1,13 @@
 import MiddlewareEngine = require("./MiddlewareEngine");
 import XpresserRouter = require("@xpresser/router");
 import {DollarSign} from "../types";
+import lodash from "lodash";
 import {StringToAnyKeyObject} from "./CustomTypes";
 import {parseControllerString} from "./Functions/internals.fn";
 import PathHelper from "./Helpers/Path";
 
 const AllRoutesKey = "RouterEngine:allRoutes";
 
-declare const _: any;
 declare const $: DollarSign;
 
 const NameToRoute: StringToAnyKeyObject = {};
@@ -30,7 +30,7 @@ class RouterEngine {
     public static addToRoutes(route: XpresserRouter) {
         if (typeof route.routes !== "undefined" && Array.isArray(route.routes)) {
             const allRoutes = $.router.routes;
-            $.router.routes = _.concat(allRoutes, route.routes);
+            $.router.routes = lodash.concat(allRoutes, route.routes);
 
             $.engineData.set(AllRoutesKey, $.router.routes);
         }
@@ -195,7 +195,7 @@ class RouterEngine {
                         route.as = parent.as + route.as;
                     }
 
-                    route = _.extend({}, parent, route);
+                    route = lodash.extend({}, parent, route);
                 }
 
             }
@@ -207,7 +207,7 @@ class RouterEngine {
                         nameFromController = nameFromController.split("@");
                         nameFromController = nameFromController[nameFromController.length - 1];
                     }
-                    route.name = _.snakeCase(nameFromController);
+                    route.name = lodash.snakeCase(nameFromController);
                     nameWasGenerated = true;
                 }
             }

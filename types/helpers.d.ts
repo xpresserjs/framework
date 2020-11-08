@@ -1,7 +1,11 @@
+import {LoDashStatic} from "lodash";
+
 declare namespace Xpresser {
     namespace Helpers {
         interface Main {
             urlBuilder: any;
+
+            lodash(): LoDashStatic
 
             url($path?: string, $query?: object): string;
 

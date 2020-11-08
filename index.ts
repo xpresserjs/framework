@@ -20,10 +20,10 @@ import XpresserRouter = require("@xpresser/router");
 // Import default config.
 import Configurations = require("./config");
 import {DollarSign, Options} from "./types";
-import { StringToAnyKeyObject } from "./src/CustomTypes";
+import {StringToAnyKeyObject} from "./src/CustomTypes";
 
 // Use Lodash from ObjectCollection
-const _ = ObjectCollection.getLodash();
+const lodash = ObjectCollection.getLodash();
 
 /**
  * Get default Config and Options from Configurations
@@ -102,8 +102,8 @@ const xpresser = (AppConfig: StringToAnyKeyObject | string, AppOptions: Options 
     }
 
     // Merge Config with DefaultConfig to replace missing values.
-    AppConfig = _.merge(Config, AppConfig) as StringToAnyKeyObject;
-    AppOptions = _.merge(Options, AppOptions) as Options;
+    AppConfig = lodash.merge(Config, AppConfig) as StringToAnyKeyObject;
+    AppOptions = lodash.merge(Options, AppOptions) as Options;
 
 
     // Initialize {$.on} for the first time.
@@ -123,9 +123,22 @@ const xpresser = (AppConfig: StringToAnyKeyObject | string, AppOptions: Options 
     // @ts-ignore
     global.$ = $;
 
-    // Expose {_}(lodash) to globals.
-    // @ts-ignore
-    global._ = _;
+    /**
+     * Expose {_}(lodash) to globals. (Stopped)
+     *
+     * This practice was considered a bad practice and also interferes
+     * with node repl _ variable.
+     *
+     * For now it will be proxied to show a warning anywhere used
+     * @deprecated since (v 0.2.98)
+     * @remove at (1.0.0)
+     */
+    global._ = new Proxy(lodash, {
+        get: (_target, prop) => {
+            console.log(`Deprecated: Using global xpresser (_) i.e lodash is deprecated. Please use $.helpers.lodash() instead.`);
+            return lodash[prop];
+        }
+    });
 
     /**
      * Get Xjs Cli Config

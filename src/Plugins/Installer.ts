@@ -1,10 +1,10 @@
 import fs = require("fs");
 import moment = require("moment");
 import PathHelper = require("../Helpers/Path");
+import lodash from "lodash";
 import {DollarSign} from "../../types";
 
 declare const $: DollarSign;
-declare const _: any;
 
 const PluginLockDataPath: string = $.path.jsonConfigs("plugins-lock.json");
 let PluginLockData = $.objectCollection();
@@ -100,7 +100,7 @@ export = ($plugin: string) => {
         for (let i = 0; i < $models.length; i++) {
             const $modelFile = $models[i];
             let $model = $models[i];
-            const $newModel = _.upperFirst($pluginData.namespace) + "/" + $model;
+            const $newModel = lodash.upperFirst($pluginData.namespace) + "/" + $model;
             $model = $pluginData.models + "/" + $model;
 
             const $newModelFullPath = $.path.models($newModel);

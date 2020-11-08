@@ -1,7 +1,8 @@
 import {DollarSign} from "../../types";
+import lodash from "lodash";
+
 
 declare const $: DollarSign;
-declare const _: any;
 
 import os = require("os");
 import fs = require("fs");
@@ -230,7 +231,7 @@ const Commands = {
         }
 
         if (typeof table === "undefined") {
-            table = _.snakeCase(PathHelper.path().basename(name));
+            table = lodash.snakeCase(PathHelper.path().basename(name));
         }
 
         if (artisanConfig.singleModelName) {
@@ -314,7 +315,7 @@ const Commands = {
             $.logErrorAndExit(`File/Folder {${importableFactory}} does not exists in plugin (${plugin}) directory.`)
 
         // @ts-ignore
-        let to: string = $.path[folder](_.kebabCase(config.namespace))
+        let to: string = $.path[folder](lodash.kebabCase(config.namespace))
 
         if ($.file.isFile(from)) {
             const ext = PathHelper.getExtension(from);

@@ -1,8 +1,8 @@
+import lodash from "lodash";
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 import {DollarSign} from "../types";
 
 declare const $: DollarSign;
-declare const _: any;
 
 const projectFileExtension = $.config.get('project.fileExtension', '').substr(1)
 
@@ -26,7 +26,7 @@ const MiddlewareEngine = (middlewarePath: any, action?: any, route?: any): any =
         }
     }
 
-    middlewarePath = _.upperFirst(middlewarePath);
+    middlewarePath = lodash.upperFirst(middlewarePath);
 
     /**
      * Get Middleware from path

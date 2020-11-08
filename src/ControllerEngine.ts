@@ -5,6 +5,7 @@ import ControllerService = require("./Controllers/ControllerService");
 import ProcessServices = require("./Controllers/ProcessServices");
 
 import ObjectCollection from "object-collection";
+import lodash from "lodash";
 import {ServerResponse} from "http";
 
 import {Http} from "../types/http";
@@ -13,8 +14,8 @@ import {StringToAnyKeyObject} from "./CustomTypes";
 import {parseControllerString} from "./Functions/internals.fn";
 import PathHelper from "./Helpers/Path";
 
-declare const _: any;
 declare const $: DollarSign;
+
 
 /**
  * AutoLoad Controller Services.
@@ -112,10 +113,10 @@ class ControllerEngine {
             if (typeof middleware === "string") {
                 if (middleware.indexOf(".") > 0) {
                     const m = middleware.split(".");
-                    m[0] = _.upperFirst(m[0]) + "Middleware";
+                    m[0] = lodash.upperFirst(m[0]) + "Middleware";
                     middlewareFile = m;
                 } else {
-                    middleware = _.upperFirst(middleware) + "Middleware";
+                    middleware = lodash.upperFirst(middleware) + "Middleware";
                     middlewareFile = [middleware, "allow"];
                 }
             }
@@ -180,7 +181,7 @@ class ControllerEngine {
         const controllerIsService = controller instanceof ControllerService;
         const $handlerArguments: any[] = [];
         let errorHandler: any = null;
-        const handlerArguments = () => _.clone($handlerArguments);
+        const handlerArguments = () => lodash.clone($handlerArguments);
 
         // If controller is an instance of handler then get the handler.
         if (controllerIsObject && typeof method === "string") {

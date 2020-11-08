@@ -5,11 +5,11 @@ import ObjectCollection = require("object-collection");
 import requestHelpers = require("./Functions/request.fn");
 import ErrorEngine = require("./ErrorEngine");
 
+import lodash from "lodash";
 import {DollarSign} from "../types";
 import {Http} from "../types/http";
 import {StringToAnyKeyObject} from "./CustomTypes";
 
-declare const _: any;
 declare const $: DollarSign;
 
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
@@ -156,9 +156,9 @@ class RequestEngine {
      * @returns {*}
      */
     public all(pluck: any[] = []) {
-        const all = _.extend({}, this.req.query, this.req.body);
+        const all = lodash.extend({}, this.req.query, this.req.body);
         if (pluck.length) {
-            return _.pick(all, pluck);
+            return lodash.pick(all, pluck);
         }
         return all;
     }
@@ -256,7 +256,7 @@ class RequestEngine {
 
         let ctx: any;
 
-        ctx = _.extend({}, $.helpers, requestHelpers(this));
+        ctx = lodash.extend({}, $.helpers, requestHelpers(this));
 
         ctx.$route = this.route;
         ctx.$currentView = file;
@@ -318,7 +318,7 @@ class RequestEngine {
 
             } else {
                 const $splitFile = file.split("::");
-                const $pluginNamespace = _.upperFirst($splitFile[0]);
+                const $pluginNamespace = lodash.upperFirst($splitFile[0]);
 
                 if (PluginNameSpaces.hasOwnProperty($pluginNamespace)) {
                     const pluginNamespaceData = new ObjectCollection(PluginNameSpaces[$pluginNamespace])
