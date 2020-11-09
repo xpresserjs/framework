@@ -1,24 +1,29 @@
 import {REPLServer} from "repl";
+import {DollarSign} from "../types";
+import {StringToAnyKeyObject} from "./CustomTypes";
+
+type FnWithDollarSignArgument = (xpresserInstance: DollarSign) => (void | any);
+type FnReturnsDollarSign = () => DollarSign;
+type OnReplStartFn = (replServer: REPLServer, $: DollarSign) => (void | any);
 
 class XpresserRepl {
+
     data: {
         commandPrefix: string,
         configProvider: (() => any),
-        xpresserProvider: null | (() => any),
-        xpresserExtender: null | (() => any),
+        xpresserProvider?: FnReturnsDollarSign,
+        xpresserExtender?: FnWithDollarSignArgument,
     } = {
         commandPrefix: 'xpresser>',
         configProvider() {
             return {}
         },
-        xpresserProvider: null,
-        xpresserExtender: null,
     }
 
     context: any = {};
-    server: REPLServer | null = null;
+    server!: REPLServer;
 
-    constructor(config: string) {
+    constructor(config?: string) {
         if (config) this.setConfigProvider(config);
     }
 
@@ -38,9 +43,17 @@ class XpresserRepl {
 
     /**
      * Set repl ConfigProvider
+     * @example
+     * // Provide relative path.
+     * repl.setConfigProvider('./path/to/config');
+     * // Or provide function that returns config
+     * repl.setConfigProvider(() => ({
+     *     env: process.env.NODE_ENV,
+     *     paths: {base: __dirname}
+     * }));
      * @param configProvider
      */
-    setConfigProvider(configProvider: string | (() => any)) {
+    setConfigProvider(configProvider: string | (() => any)): this {
 
         // Import Required Modules
         const fs = require('fs');
@@ -55,30 +68,63 @@ class XpresserRepl {
         } else if (typeof configProvider === "function") {
             this.data.configProvider = configProvider;
         }
+
+        return this;
     }
 
     /**
      * Set repl XpresserProvider
+     *
+     * In some cases you may have a special xpresser setup, you can pass a custom xpresser provider.
+     *
+     * The xpresser instance should not be booted. the repl class will boot it on
+     * `repl.start()`
+     *
+     * @example
+     * // Pass a function that returns an xpresser instance i.e DollarSign
+     * repl.setXpresserProvider(() => {
+     *     const {init} = require('xpresser');
+     *
+     *     return init({
+     *          // your xpresser config
+     *      }, {
+     *          requireOnly:true,
+     *          isConsole: true
+     *      });
+     * })
      * @param xpresserProvider
      */
-    setXpresserProvider(xpresserProvider: (() => any)) {
+    setXpresserProvider(xpresserProvider: FnReturnsDollarSign): this {
         this.data.xpresserProvider = xpresserProvider;
+        return this;
     }
 
     /**
      * Set Command Prefix
      * @param commandPrefix
      */
-    setCommandPrefix(commandPrefix: string) {
+    setCommandPrefix(commandPrefix: string): this {
         this.data.commandPrefix = commandPrefix;
+        return this;
     }
 
     /**
      * Extend Xpresser Instance
+     *
+     * This function gives you the opportunity to extend xpresser instance used before starting repl.
+     *
      * @param xpresserExtender
+     *
+     * @example
+     * repl.extendXpresser(($) => {
+     *     $.on.boot(() => {
+     *          $.logInfo('Log before repl start.')
+     *     })
+     * })
      */
-    extendXpresser(xpresserExtender) {
+    extendXpresser(xpresserExtender: FnWithDollarSignArgument): this {
         this.data.xpresserExtender = xpresserExtender;
+        return this;
     }
 
     /**
@@ -86,32 +132,34 @@ class XpresserRepl {
      * @param key
      * @param value
      */
-    addToContext(key, value) {
+    addToContext(key: string | StringToAnyKeyObject, value): this {
         if (typeof key === "string") {
             this.context[key] = value;
         } else if (typeof key === "object") {
             Object.assign(this.context, key)
         }
+
+        return this;
     }
 
     /**
      * Try to Build Instance
      */
-    buildInstance() {
-        const xpresser = require('xpresser');
+    buildInstance(): DollarSign {
+        const {init} = require('xpresser');
         const config = this.data.configProvider();
 
-        return xpresser.init(config, {
+        return init(config, {
             requireOnly: true,
             isConsole: true,
             exposeDollarSign: false
-        })
+        }) as DollarSign;
     }
 
     /**
-     * start repl
+     * Start repl
      */
-    start() {
+    start(onReplStart?: OnReplStartFn) {
         const repl = require('repl');
         const chalk = require('chalk');
 
@@ -153,11 +201,15 @@ class XpresserRepl {
                 xpr.exit();
             });
 
+            // Merge with this context
             Object.assign(myRepl.context, this.context);
-
 
             // Set Server to this instance.
             this.server = myRepl;
+
+            if (typeof onReplStart === "function") {
+                onReplStart(myRepl, xpr);
+            }
         })
 
         // Boot Xpresser

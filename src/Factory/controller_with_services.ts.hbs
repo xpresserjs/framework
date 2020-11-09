@@ -1,11 +1,8 @@
-import {Http} from "xpresser/types/http";
-import {DollarSign} from "xpresser/types";
-
-declare const $: DollarSign;
+import {getInstance} from "xpresser";
 /**
  * {{name}}
  */
-const {{name}} = $.handler({
+const {{name}} = getInstance().handler({
     // Controller Name
     name: "{{name}}",
 
