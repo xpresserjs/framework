@@ -1,12 +1,14 @@
+import path = require("path");
 import {REPLServer} from "repl";
 import {DollarSign} from "../types";
 import {StringToAnyKeyObject} from "./CustomTypes";
 
 type FnWithDollarSignArgument = (xpresserInstance: DollarSign) => (void | any);
 type FnReturnsDollarSign = () => DollarSign;
-type OnReplStartFn = (replServer: REPLServer, $: DollarSign) => (void | any);
 
 class XpresserRepl {
+
+    started: boolean = false;
 
     data: {
         commandPrefix: string,
@@ -20,7 +22,7 @@ class XpresserRepl {
         },
     }
 
-    context: any = {};
+    context: StringToAnyKeyObject = {};
     server!: REPLServer;
 
     constructor(config?: string) {
@@ -132,7 +134,11 @@ class XpresserRepl {
      * @param key
      * @param value
      */
-    addToContext(key: string | StringToAnyKeyObject, value): this {
+    addContext(key: string | StringToAnyKeyObject, value?: any): this {
+        if (this.started) {
+            throw Error(`addContext(): cannot be used after repl server has started, use replServer.context instead`);
+        }
+
         if (typeof key === "string") {
             this.context[key] = value;
         } else if (typeof key === "object") {
@@ -159,7 +165,7 @@ class XpresserRepl {
     /**
      * Start repl
      */
-    start(onReplStart?: OnReplStartFn) {
+    start(onReplStart?: FnWithDollarSignArgument) {
         const repl = require('repl');
         const chalk = require('chalk');
 
@@ -192,29 +198,98 @@ class XpresserRepl {
         // Start Repl on boot
         xpr.on.boot(() => {
             // Start Repl
-            const myRepl = repl.start(chalk.cyanBright(`${this.data.commandPrefix.trim()} `));
-            myRepl.context.$ = xpr;
+            this.server = repl.start(chalk.cyanBright(`${this.data.commandPrefix.trim()} `));
 
+            // Add DollarSign
+            this.server.context.$ = xpr;
             // Add End helper
-            myRepl.defineCommand('end', () => {
+            this.server.defineCommand('end', () => {
                 xpr.log("Goodbye! See you later...");
                 xpr.exit();
             });
 
-            // Merge with this context
-            Object.assign(myRepl.context, this.context);
-
-            // Set Server to this instance.
-            this.server = myRepl;
-
             if (typeof onReplStart === "function") {
-                onReplStart(myRepl, xpr);
+                onReplStart(xpr);
             }
+
+            // Merge with this context
+            Object.assign(this.server.context, this.context);
+
+            // Set repl to started
+            this.started = true;
         })
 
         // Boot Xpresser
         xpr.boot();
     }
+
+    /**
+     * Requires Files and adds then to context.
+     * @example
+     * repl.addContextFromFiles({
+     *     User: 'backend/models/User.js',
+     *     Mailer: 'backend/lib/Mailer.js'
+     * })
+     * @param files
+     * @param as
+     * @param interceptor
+     */
+    addContextFromFiles(files: { [contextName: string]: string }, as?: string | null, interceptor?: (context: any) => any): this {
+        const contentNames = Object.keys(files);
+        const context = {};
+
+        for (const contextName of contentNames) {
+            try {
+                const file = path.resolve(files[contextName])
+                context[contextName] = interceptor ? interceptor(require(file)) : require(file);
+            } catch (e) {
+                throw e
+            }
+        }
+
+        return as ? this.addContext(as, context) : this.addContext(context);
+    }
+
+    addContextFromFolder(folder: string, as?: string | null, extensions?: string[] | null, interceptor?: (context: any) => any) {
+        /**
+         * Import get all files helper
+         */
+        const {getAllFiles} = require("./Functions/inbuilt.fn");
+        const {camelCase} = require('lodash');
+
+        folder = path.resolve(folder);
+
+        // Allowed Extensions
+        let allowedExtensions = ['js', 'ts'];
+        if (extensions)
+            allowedExtensions = allowedExtensions.concat(extensions);
+
+        const files = getAllFiles(folder);
+        const context = {};
+
+        for (const file of files) {
+            const extension = file.split('.').pop();
+            if (allowedExtensions.includes(extension)) {
+                let shortFilePath = file.replace(folder, '');
+                shortFilePath = shortFilePath.substr(0, shortFilePath.length - `.${extension}`.length)
+
+                const contextName = capitalize(camelCase(shortFilePath));
+
+                try {
+                    context[contextName] = interceptor ? interceptor(require(file)) : require(file);
+                } catch (e) {
+                    throw e
+                }
+            }
+        }
+
+        return as ? this.addContext(as, context) : this.addContext(context);
+    }
+}
+
+const capitalize = (s) => {
+    if (typeof s !== 'string') return ''
+    return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
 export = XpresserRepl;
