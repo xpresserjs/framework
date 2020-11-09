@@ -252,6 +252,13 @@ declare namespace Xpresser {
                 replacer?: (this: any, key: string, value: any) => any,
                 space?: number
             }): boolean;
+
+            /**
+             * Makes a dir if it does not exist.
+             * @param $path
+             * @param $isFile
+             */
+            makeDirIfNotExist($path: string, $isFile?: boolean): any
         };
 
         /*----------------- ON FUNCTIONS ------------------- */

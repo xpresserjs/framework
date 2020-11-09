@@ -1,4 +1,5 @@
 import fs = require("fs");
+import PATH = require("path");
 import fse = require("fs-extra");
 import {getInstance} from "../index";
 
@@ -234,5 +235,26 @@ $.file = {
             console.log(e);
             throw Error(`$.file.saveToJson: Error saving data to json file (${$path})`);
         }
+    },
+
+    /**
+     * Makes a dir if it does not exist.
+     * @param $path
+     * @param $isFile
+     */
+    makeDirIfNotExist($path: string, $isFile = false) {
+        if ($isFile === true) {
+            $path = PATH.dirname($path);
+        }
+
+        if (!fs.existsSync($path)) {
+            try {
+                fs.mkdirSync($path, {recursive: true});
+            } catch (e) {
+                $.logErrorAndExit(e.message);
+            }
+        }
+
+        return $path;
     }
 };

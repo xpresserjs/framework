@@ -1,4 +1,5 @@
 import path = require("path");
+import fs = require("fs")
 import {REPLServer} from "repl";
 import {DollarSign} from "../types";
 import {StringToAnyKeyObject} from "./CustomTypes";
@@ -170,14 +171,14 @@ class XpresserRepl {
         const chalk = require('chalk');
 
         // Holds xpresser instance i.e ($)
-        let xpr;
+        let xpr: DollarSign;
 
         /**
          * if this repl has a custom xpresser provider,
          * load it, else try to build an instance.
          */
         if (this.hasXpresserProvider()) {
-            xpr = (this.data.xpresserProvider as any)();
+            xpr = (this.data.xpresserProvider as FnReturnsDollarSign)();
         } else {
             xpr = this.buildInstance();
         }
@@ -188,7 +189,14 @@ class XpresserRepl {
         }
 
         // Log Welcome Message
-        console.log(chalk.greenBright(`>>>>> Xpresser Repl!`));
+        console.log(chalk.gray('>>>>>>>>>> >>>>>>>>>> >>>>>>>>>> >>>>>>>>>> >>>>>>>>>>'))
+        console.log(chalk.white(`Xpresser Repl Session.`));
+        console.log()
+        console.log(`Name: ${chalk.yellow(xpr.config.get('name'))}`)
+        console.log(`Env: ${chalk.yellow(xpr.config.get('env'))}`)
+        console.log()
+        console.log(chalk.white(`Use ${chalk.whiteBright('.end')} to end repl session.`))
+        console.log(chalk.gray('<<<<<<<<<< <<<<<<<<<< <<<<<<<<<< <<<<<<<<<< <<<<<<<<<<'))
 
         // If has xpresser extender, run it.
         if (this.hasXpresserExtender()) {
@@ -198,15 +206,42 @@ class XpresserRepl {
         // Start Repl on boot
         xpr.on.boot(() => {
             // Start Repl
-            this.server = repl.start(chalk.cyanBright(`${this.data.commandPrefix.trim()} `));
+            this.server = repl.start({
+                prompt: chalk.cyanBright(`${this.data.commandPrefix.trim()} `),
+                useColors: true,
+                terminal: true,
+            });
+
+            const replHistory = xpr.path.storage('framework/.repl_history');
+            if (!fs.existsSync(replHistory)) {
+                xpr.file.makeDirIfNotExist(replHistory, true);
+            }
+
+            this.server.setupHistory(
+                replHistory,
+                (err) => {
+                    if (err) throw err;
+                }
+            );
 
             // Add DollarSign
             this.server.context.$ = xpr;
+
             // Add End helper
             this.server.defineCommand('end', () => {
                 xpr.log("Goodbye! See you later...");
                 xpr.exit();
             });
+
+            this.server.defineCommand('clearHistory', () => {
+                try {
+                    fs.unlinkSync(replHistory);
+                    xpr.log("History cleared, restart repl!");
+                    xpr.exit();
+                } catch (e) {
+                    console.log(e.stack)
+                }
+            })
 
             if (typeof onReplStart === "function") {
                 onReplStart(xpr);
