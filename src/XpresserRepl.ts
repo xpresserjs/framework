@@ -192,8 +192,8 @@ class XpresserRepl {
         console.log(chalk.gray('>>>>>>>>>> >>>>>>>>>> >>>>>>>>>> >>>>>>>>>> >>>>>>>>>>'))
         console.log(chalk.white(`Xpresser Repl Session.`));
         console.log()
-        console.log(`Name: ${chalk.yellow(xpr.config.get('name'))}`)
         console.log(`Env: ${chalk.yellow(xpr.config.get('env'))}`)
+        console.log(`Name: ${chalk.yellow(xpr.config.get('name'))}`)
         console.log()
         console.log(chalk.white(`Use ${chalk.whiteBright('.end')} to end repl session.`))
         console.log(chalk.gray('<<<<<<<<<< <<<<<<<<<< <<<<<<<<<< <<<<<<<<<< <<<<<<<<<<'))
