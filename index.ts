@@ -2,6 +2,7 @@ import {DollarSign, Options} from "./types";
 import {StringToAnyKeyObject} from "./src/CustomTypes";
 import ControllerClass from "./src/Classes/ControllerClass";
 import XpresserRepl from "./src/XpresserRepl";
+import XpresserRouter from "@xpresser/router";
 
 // Xpresser Instance Holder
 const instanceHolder: StringToAnyKeyObject = {};
@@ -41,6 +42,16 @@ function getInstance(instanceId?: string): DollarSign {
 
         return instanceHolder[instances[0]];
     }
+}
+
+
+/**
+ * Get Xpresser Instance Router.
+ * @param instanceId
+ * @returns {XpresserRouter}
+ */
+function getInstanceRouter(instanceId?: string): XpresserRouter {
+    return getInstance(instanceId).router;
 }
 
 
@@ -355,6 +366,6 @@ function init(AppConfig: StringToAnyKeyObject | string, AppOptions: Options = {}
     return $;
 }
 
-export {init, getInstance, ControllerClass, XpresserRepl}
+export {init, getInstance, getInstanceRouter, ControllerClass, XpresserRepl}
 
 
