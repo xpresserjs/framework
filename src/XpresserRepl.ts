@@ -158,8 +158,7 @@ class XpresserRepl {
 
         return init(config, {
             requireOnly: true,
-            isConsole: true,
-            exposeDollarSign: false
+            isConsole: true
         }) as DollarSign;
     }
 
