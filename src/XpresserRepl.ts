@@ -15,7 +15,7 @@ class XpresserRepl {
         commandPrefix: string,
         configProvider: (() => any),
         xpresserProvider?: FnReturnsDollarSign,
-        xpresserExtender?: FnWithDollarSignArgument,
+        beforeStart?: FnWithDollarSignArgument,
     } = {
         commandPrefix: 'xpresser>',
         configProvider() {
@@ -40,8 +40,8 @@ class XpresserRepl {
     /**
      * Check if repl has custom xpresser extender
      */
-    hasXpresserExtender() {
-        return typeof this.data.xpresserExtender === "function"
+    hasBeforeStartFn() {
+        return typeof this.data.beforeStart === "function"
     }
 
     /**
@@ -112,11 +112,11 @@ class XpresserRepl {
     }
 
     /**
-     * Extend Xpresser Instance
+     * Run a function before start
      *
      * This function gives you the opportunity to extend xpresser instance used before starting repl.
      *
-     * @param xpresserExtender
+     * @param run
      *
      * @example
      * repl.extendXpresser(($) => {
@@ -124,9 +124,10 @@ class XpresserRepl {
      *          $.logInfo('Log before repl start.')
      *     })
      * })
+     *
      */
-    extendXpresser(xpresserExtender: FnWithDollarSignArgument): this {
-        this.data.xpresserExtender = xpresserExtender;
+    beforeStart(run: FnWithDollarSignArgument): this {
+        this.data.beforeStart = run;
         return this;
     }
 
@@ -152,9 +153,9 @@ class XpresserRepl {
     /**
      * Try to Build Instance
      */
-    buildInstance(): DollarSign {
+    async buildInstance(): Promise<DollarSign> {
         const {init} = require('xpresser');
-        const config = this.data.configProvider();
+        const config = await this.data.configProvider();
 
         return init(config, {
             requireOnly: true,
@@ -165,9 +166,10 @@ class XpresserRepl {
     /**
      * Start repl
      */
-    start(onReplStart?: FnWithDollarSignArgument) {
+    async start(onReplStart?: FnWithDollarSignArgument): Promise<this> {
         const repl = require('repl');
         const chalk = require('chalk');
+        const _ = require('lodash');
 
         // Holds xpresser instance i.e ($)
         let xpr: DollarSign;
@@ -177,9 +179,9 @@ class XpresserRepl {
          * load it, else try to build an instance.
          */
         if (this.hasXpresserProvider()) {
-            xpr = (this.data.xpresserProvider as FnReturnsDollarSign)();
+            xpr = await (this.data.xpresserProvider as FnReturnsDollarSign)();
         } else {
-            xpr = this.buildInstance();
+            xpr = await this.buildInstance();
         }
 
         // Throw error if xpr is undefined for any unknown reason.
@@ -187,23 +189,31 @@ class XpresserRepl {
             throw Error('Xpresser instance is undefined!');
         }
 
-        // Log Welcome Message
-        console.log(chalk.gray('>>>>>>>>>> >>>>>>>>>> >>>>>>>>>> >>>>>>>>>> >>>>>>>>>>'))
-        console.log(chalk.white(`Xpresser Repl Session.`));
-        console.log()
-        console.log(`Env: ${chalk.yellow(xpr.config.get('env'))}`)
-        console.log(`Name: ${chalk.yellow(xpr.config.get('name'))}`)
-        console.log()
-        console.log(chalk.white(`Use ${chalk.whiteBright('.end')} to end repl session.`))
-        console.log(chalk.gray('<<<<<<<<<< <<<<<<<<<< <<<<<<<<<< <<<<<<<<<< <<<<<<<<<<'))
+        xpr.on.boot(async (next) => {
+            // Add DollarSign
+            this.context.$ = xpr;
 
-        // If has xpresser extender, run it.
-        if (this.hasXpresserExtender()) {
-            (this.data.xpresserExtender as any)(xpr)
-        }
+            // Log Welcome Message
+            console.log(chalk.gray('>>>>>>>>>> >>>>>>>>>> >>>>>>>>>> >>>>>>>>>> >>>>>>>>>>'))
+            console.log(chalk.white(`Xpresser Repl Session.`));
+            console.log()
+            console.log(`Env: ${chalk.yellow(xpr.config.get('env'))}`)
+            console.log(`Name: ${chalk.yellow(xpr.config.get('name'))}`)
+            console.log()
+            console.log(chalk.white(`Use ${chalk.whiteBright('.end')} to end repl session.`))
+            console.log(chalk.gray('<<<<<<<<<< <<<<<<<<<< <<<<<<<<<< <<<<<<<<<< <<<<<<<<<<'))
+
+            // If has before start, run it.
+            if (this.hasBeforeStartFn()) {
+                await (this.data.beforeStart as any)(xpr)
+            }
+
+            return next();
+        })
 
         // Start Repl on boot
-        xpr.on.boot(() => {
+        xpr.on.boot(async () => {
+
             // Start Repl
             this.server = repl.start({
                 prompt: chalk.cyanBright(`${this.data.commandPrefix.trim()} `),
@@ -211,6 +221,7 @@ class XpresserRepl {
                 terminal: true,
             });
 
+            // Set Repl history
             const replHistory = xpr.path.storage('framework/.repl_history');
             if (!fs.existsSync(replHistory)) {
                 xpr.file.makeDirIfNotExist(replHistory, true);
@@ -223,28 +234,59 @@ class XpresserRepl {
                 }
             );
 
-            // Add DollarSign
-            this.server.context.$ = xpr;
-
             // Add End helper
-            this.server.defineCommand('end', () => {
-                xpr.log("Goodbye! See you later...");
-                xpr.exit();
+            this.server.defineCommand('end', {
+                help: 'End repl session.',
+                action() {
+                    xpr.log("Goodbye! See you later...");
+                    xpr.exit();
+                }
             });
 
-            this.server.defineCommand('clearHistory', () => {
-                try {
-                    fs.unlinkSync(replHistory);
-                    xpr.log("History cleared, restart repl!");
-                    xpr.exit();
-                } catch (e) {
-                    console.log(e.stack)
+            this.server.defineCommand('clearHistory', {
+                help: 'Clear repl history.',
+                action() {
+                    try {
+                        fs.unlinkSync(replHistory);
+                        xpr.log("History cleared, restart repl!");
+                        xpr.exit();
+                    } catch (e) {
+                        console.log(e.stack)
+                    }
                 }
             })
 
+            this.server.defineCommand('ls', {
+                help: 'List context in current session.',
+                action: (context) => {
+
+                    if (context) {
+                        if (!_.has(this.context, context)) {
+                            xpr.logError(`No context with name: ${context}`)
+                            return this.server.displayPrompt();
+                        }
+
+                        const contextValue = _.get(this.context, context);
+
+                        if (typeof contextValue === "object") {
+                            mapAndLogContext(chalk, xpr, contextValue);
+                            return this.server.displayPrompt();
+                        }
+
+                        console.log(`${chalk.yellowBright(context)}:`, typeof (contextValue));
+                        return this.server.displayPrompt();
+                    }
+
+                    // Map through  context entries and log them
+                    mapAndLogContext(chalk, xpr, this.context);
+                    this.server.displayPrompt();
+                }
+            });
+
             if (typeof onReplStart === "function") {
-                onReplStart(xpr);
+                await onReplStart(xpr);
             }
+
 
             // Merge with this context
             Object.assign(this.server.context, this.context);
@@ -255,6 +297,8 @@ class XpresserRepl {
 
         // Boot Xpresser
         xpr.boot();
+
+        return this;
     }
 
     /**
@@ -284,7 +328,16 @@ class XpresserRepl {
         return as ? this.addContext(as, context) : this.addContext(context);
     }
 
-    addContextFromFolder(folder: string, as?: string | null, extensions?: string[] | null, interceptor?: (context: any) => any) {
+    /**
+     * Requires Files and adds then to context.
+     * @example
+     * repl.addContextFromFiles('backend/models')
+     * @param folder
+     * @param as
+     * @param extensions
+     * @param interceptor
+     */
+    addContextFromFolder(folder: string, as?: string | null, extensions?: string[] | null, interceptor?: (context: any) => any): this {
         /**
          * Import get all files helper
          */
@@ -321,9 +374,45 @@ class XpresserRepl {
     }
 }
 
+/**
+ * Capitalize Text
+ * @param s
+ */
 const capitalize = (s) => {
     if (typeof s !== 'string') return ''
     return s.charAt(0).toUpperCase() + s.slice(1)
+}
+
+/**
+ * Get Type of context
+ * @param context
+ */
+const getTypeOfContext = (context) => {
+    if (context) {
+        if (typeof context === 'object' && context.constructor && context.constructor.name) {
+            return context.constructor.name;
+        } else if (typeof context === 'function' && context.name) {
+            return context.name;
+        }
+    }
+
+    return typeof context;
+}
+
+/**
+ * Map and log context.
+ * @param chalk
+ * @param xpr
+ * @param entries
+ */
+const mapAndLogContext = (chalk, xpr, entries) => {
+    Object.entries(entries).forEach(([entry, value]) => {
+        if (value === xpr) {
+            console.log(`${chalk.yellowBright(entry)}:`, 'XpresserInstance ($)');
+        } else {
+            console.log(`${chalk.yellowBright(entry)}:`, getTypeOfContext(value));
+        }
+    })
 }
 
 export = XpresserRepl;
