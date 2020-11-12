@@ -284,7 +284,7 @@ function init(AppConfig: StringToAnyKeyObject | string, AppOptions: Options = {}
     require("./src/global");
 
     // Get OnEvents Loader.
-    const loadOnEvents = require("./src/Events/OnEventsLoader");
+    const {runBootEvent} = require("./src/Events/OnEventsLoader");
 
     async function afterStartEvents() {
         // Require Plugin Engine and load plugins
@@ -293,14 +293,18 @@ function init(AppConfig: StringToAnyKeyObject | string, AppOptions: Options = {}
 
         $.engineData.set("PluginEngineData", PluginData);
 
-        const $useDotJson = $.objectCollection();
-        const $useDotJsonPath = $.path.jsonConfigs("use.json");
+        /**
+         * Load `use.json`
+         * This is after plugins have loaded
+         */
+        const useDotJson = $.objectCollection();
+        const useDotJsonPath = $.path.jsonConfigs("use.json");
 
-        if ($.file.exists($useDotJsonPath)) {
-            $useDotJson.merge(require($useDotJsonPath));
-
+        if ($.file.exists(useDotJsonPath)) {
+            // Import Use.json
+            useDotJson.merge(require(useDotJsonPath));
             // Save to EngineData
-            $.engineData.set("UseDotJson", $useDotJson);
+            $.engineData.set("UseDotJson", useDotJson);
         }
 
         /**
@@ -333,14 +337,14 @@ function init(AppConfig: StringToAnyKeyObject | string, AppOptions: Options = {}
         /**
          * Load on.start Events
          */
-        return loadOnEvents("start", () => {
+        return runBootEvent("start", () => {
             afterStartEvents().then(() => {
                 /**
                  * Load on.boot Events
                  */
-                loadOnEvents("boot", () => {
+                runBootEvent("boot", () => {
                     /**
-                     * XjsCliConfig.require_only
+                     * AppOptions.require_only
                      * This config is only used by xpresser cron.
                      * Used to load your main file without booting it
                      */

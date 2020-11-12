@@ -2,13 +2,17 @@ import {getInstance} from "../../index";
 
 const $ = getInstance();
 
-const loadOnEvents = (name: string, done?: () => void) => {
+/**
+ * Get on events loader
+ * @param name
+ * @param done
+ */
+export const runBootEvent = (name: string, done?: () => void) => {
     const key = `on.${name}`;
     const onEvents: any[] = $.on.events()[name];
 
     if (onEvents.length) {
         onEvents.push(done);
-
         $.engineData.set(key, 0);
 
         const next = () => {
@@ -26,5 +30,3 @@ const loadOnEvents = (name: string, done?: () => void) => {
         return done ? done() : false;
     }
 };
-
-export = loadOnEvents;

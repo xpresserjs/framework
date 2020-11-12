@@ -314,7 +314,7 @@ class XpresserRepl {
      */
     addContextFromFiles(files: { [contextName: string]: string }, as?: string | null, interceptor?: (context: any) => any): this {
         const contentNames = Object.keys(files);
-        const context = {};
+        const context: StringToAnyKeyObject = {};
 
         for (const contextName of contentNames) {
             try {
@@ -352,7 +352,7 @@ class XpresserRepl {
             allowedExtensions = allowedExtensions.concat(extensions);
 
         const files = getAllFiles(folder);
-        const context = {};
+        const context: StringToAnyKeyObject = {};
 
         for (const file of files) {
             const extension = file.split('.').pop();
@@ -378,8 +378,7 @@ class XpresserRepl {
  * Capitalize Text
  * @param s
  */
-const capitalize = (s) => {
-    if (typeof s !== 'string') return ''
+const capitalize = (s: string) => {
     return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
@@ -387,7 +386,7 @@ const capitalize = (s) => {
  * Get Type of context
  * @param context
  */
-const getTypeOfContext = (context) => {
+const getTypeOfContext = (context: any) => {
     if (context) {
         if (typeof context === 'object' && context.constructor && context.constructor.name) {
             return context.constructor.name;
@@ -405,7 +404,7 @@ const getTypeOfContext = (context) => {
  * @param xpr
  * @param entries
  */
-const mapAndLogContext = (chalk, xpr, entries) => {
+const mapAndLogContext = (chalk: any, xpr: DollarSign, entries: any) => {
     Object.entries(entries).forEach(([entry, value]) => {
         if (value === xpr) {
             console.log(`${chalk.yellowBright(entry)}:`, 'XpresserInstance ($)');

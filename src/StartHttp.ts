@@ -1,7 +1,8 @@
 import {resolve} from "path";
 import lodash from "lodash";
 import PathHelper = require("./Helpers/Path");
-import loadOnEvents = require("./Events/OnEventsLoader");
+import OnEventsLoader = require("./Events/OnEventsLoader");
+const {runBootEvent} = OnEventsLoader;
 
 import express = require("express");
 
@@ -386,7 +387,7 @@ const startHttpServer = (onSuccess?: () => any, onError?: () => any) => {
      * Load $.on.http Events
      * Listen to port after running events
      */
-    loadOnEvents("http", () => {
+    runBootEvent("http", () => {
         $.http.listen(port, () => {
             const domain = $.config.get('server.domain');
             const baseUrl = $.helpers.url()
@@ -420,7 +421,7 @@ const startHttpServer = (onSuccess?: () => any, onError?: () => any) => {
             if (hasSslEnabled) {
                 startHttpsServer();
             } else {
-                loadOnEvents('serverBooted')
+                runBootEvent('serverBooted')
             }
 
             if (typeof onSuccess === "function") {
@@ -472,10 +473,10 @@ const startHttpsServer = () => {
      * Load $.on.https Events
      * Listen to port after running events
      */
-    loadOnEvents("https", () => {
+    runBootEvent("https", () => {
         $.https.listen(httpsPort, () => {
             $.logSuccess("Ssl Enabled.");
-            loadOnEvents('serverBooted')
+            runBootEvent('serverBooted')
         });
     });
 };
@@ -483,9 +484,9 @@ const startHttpsServer = () => {
 /**
  * Load on.expressInit Events.
  */
-loadOnEvents("expressInit", () => afterExpressInit(() => {
+runBootEvent("expressInit", () => afterExpressInit(() => {
     /**
      * Load on.startHttp Events.
      */
-    return loadOnEvents("bootServer", startHttpServer);
+    return runBootEvent("bootServer", startHttpServer);
 }));

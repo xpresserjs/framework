@@ -80,8 +80,8 @@ class PluginEngine {
 
             if (Array.isArray(plugins) && plugins.length) {
 
-                const pluginPaths = {};
-                const pluginData = {};
+                const pluginPaths: StringToAnyKeyObject = {};
+                const pluginData: StringToAnyKeyObject = {};
 
                 /**
                  * We want to log all plugin names before loading them.
@@ -153,7 +153,6 @@ class PluginEngine {
 
     /**
      * Read plugins use.json
-     * @param plugin
      * @param pluginPath
      */
     public static loadPluginUseData(pluginPath: string) {

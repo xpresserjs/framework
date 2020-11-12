@@ -35,7 +35,7 @@ const LoadServicesInDirectory = ($folder: string, $files?: string[]) => {
         ServicesFolderFiles = $.file.readDirectory($folder) as any[];
     }
 
-    for (const ServiceFile of ServicesFolderFiles as any) {
+    for (const ServiceFile of ServicesFolderFiles) {
         const fullPath = `${$folder}/${ServiceFile}`;
 
         if ($.file.isDirectory(fullPath)) {
