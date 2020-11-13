@@ -1,4 +1,5 @@
 import {getInstance} from "../../index";
+import {DollarSign} from "../../types";
 
 const $ = getInstance();
 
@@ -7,6 +8,10 @@ class JobHelper {
 
     constructor(name: string) {
         if (name) this.name = name;
+    }
+
+    public xpresserInstance(): DollarSign {
+        return $;
     }
 
     public end(silent: boolean = false) {
