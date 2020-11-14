@@ -11,6 +11,7 @@ import {Http} from "../types/http";
 import {StringToAnyKeyObject} from "./CustomTypes";
 
 import {getInstance} from "../index";
+import {DollarSign} from "../types";
 
 const $ = getInstance();
 
@@ -66,6 +67,13 @@ class RequestEngine {
      * If User has customRenderer then use it.
      */
     public customRenderer!: (...args: any[]) => string
+
+    /**
+     * Returns Current Xpresser Instance.
+     */
+    xpresserInstance(): DollarSign {
+        return $;
+    }
 
 
     /**
