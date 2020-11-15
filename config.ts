@@ -165,6 +165,12 @@ const Config = {
         },
         resave: true,
         saveUninitialized: true,
+
+        requestEngine: {
+            dataKey: 'data',
+            proceedKey: 'proceed',
+            messageKey: '_say'
+        }
     },
 
     // Template Configurations
@@ -210,7 +216,7 @@ const Config = {
     packages: {},
 
     // Plugins Configurations
-    plugins: {}
+    plugins: {},
 };
 
 const Options = {

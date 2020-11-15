@@ -18,6 +18,19 @@ const $ = getInstance();
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
 const useFlash = $.config.get("server.use.flash", false);
 
+/**
+ * Get Request Engine Config
+ */
+const requestEngineConfig: {
+    dataKey: string,
+    proceedKey: string,
+    messageKey: string
+} = $.config.get('server.requestEngine', {
+    dataKey: "data",
+    proceedKey: 'proceed',
+    messageKey: '_say'
+});
+
 class RequestEngine {
     public req: Http.Request;
     public res: Http.Response;
@@ -179,17 +192,19 @@ class RequestEngine {
      * @param {boolean} proceed
      * @param {number} status
      */
-    public toApi(data: any = {}, proceed = true, status = 200): Http.Response {
-        const d = {proceed} as any;
+    public toApi(data: any = {}, proceed = true, status?: number): Http.Response {
+        const d = {[requestEngineConfig.proceedKey]: proceed} as any;
 
-        if (data.hasOwnProperty("__say")) {
-            d.__say = data.__say;
-            delete data.__say;
+        if (data.hasOwnProperty(requestEngineConfig.messageKey)) {
+            d[requestEngineConfig.messageKey] = data[requestEngineConfig.messageKey];
+            delete data[requestEngineConfig.messageKey];
         }
 
         d.data = data;
 
-        return this.res.status(status).json(d);
+        if (status !== undefined) this.res.status(status);
+
+        return this.res.json(d);
     }
 
     /**
@@ -209,7 +224,7 @@ class RequestEngine {
      */
     public sayToApi(message: string, proceed = true, status = 200): Http.Response {
         return this.toApi({
-            __say: message,
+            [requestEngineConfig.messageKey]: message,
         }, proceed, status);
     }
 
@@ -221,7 +236,7 @@ class RequestEngine {
      */
     public sayToApiFalse(message: string, proceed = false, status = 200): Http.Response {
         return this.toApi({
-            __say: message,
+            [requestEngineConfig.messageKey]: message,
         }, proceed, status);
     }
 
