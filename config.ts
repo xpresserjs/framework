@@ -85,6 +85,12 @@ const ServerConfig = {
         // Enable Flash
         flash: false,
     },
+
+    requestEngine: {
+        dataKey: 'data',
+        proceedKey: 'proceed',
+        messageKey: '_say'
+    }
 };
 
 const Config = {
@@ -165,12 +171,6 @@ const Config = {
         },
         resave: true,
         saveUninitialized: true,
-
-        requestEngine: {
-            dataKey: 'data',
-            proceedKey: 'proceed',
-            messageKey: '_say'
-        }
     },
 
     // Template Configurations
