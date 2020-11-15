@@ -16,6 +16,7 @@ class XpresserRepl {
         configProvider: (() => any),
         xpresserProvider?: FnReturnsDollarSign,
         beforeStart?: FnWithDollarSignArgument,
+        historyFile?: string
     } = {
         commandPrefix: 'xpresser>',
         configProvider() {
@@ -222,7 +223,7 @@ class XpresserRepl {
             });
 
             // Set Repl history
-            const replHistory = xpr.path.storage('framework/.repl_history');
+            const replHistory = this.data.historyFile || xpr.path.storage('framework/.repl_history');
             if (!fs.existsSync(replHistory)) {
                 xpr.file.makeDirIfNotExist(replHistory, true);
             }
