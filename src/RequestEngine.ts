@@ -84,10 +84,15 @@ class RequestEngine {
     /**
      * Returns Current Xpresser Instance.
      */
-    xpresserInstance(): DollarSign {
-        return $;
-    }
+    $instance(): DollarSign {return $;}
 
+    /**
+     * Xpresser Instance Getter
+     * @param key
+     */
+    $<K extends keyof DollarSign>(key: K): DollarSign[K] {
+        return $[key];
+    }
 
     /**
      * Returns an getInstance of ErrorEngine
