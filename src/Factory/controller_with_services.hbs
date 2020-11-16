@@ -1,15 +1,19 @@
+const {getInstance} = require('xpresser');
+const $ = getInstance();
+
 /**
  * {{name}}
- * @type {Xpresser.Controller.Handler}
  */
 const {{name}} = $.handler({
+
     // Controller Name
     name: "{{name}}",
+
     // Controller Middlewares
     middlewares: {},
+
     // Controller Default Service Error Handler.
     e: (http, error) => http.send({error}),
-
 
     /**
      * Example Method.
