@@ -10,7 +10,15 @@ class JobHelper {
         if (name) this.name = name;
     }
 
+    /**
+     * Use $instance() instead
+     * @deprecated
+     */
     public xpresserInstance(): DollarSign {
+        return $;
+    }
+
+    public $instance(): DollarSign {
         return $;
     }
 

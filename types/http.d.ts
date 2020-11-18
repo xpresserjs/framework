@@ -2,6 +2,7 @@ import express = require("express");
 import RequestEngine = require("../src/RequestEngine");
 import ControllerServiceError = require("../src/Controllers/ControllerServiceError");
 import ControllerService = require("../src/Controllers/ControllerService");
+import {StringToAnyKeyObject} from "../src/CustomTypes";
 
 declare namespace Xpresser {
     // tslint:disable-next-line:no-empty-interface
@@ -41,19 +42,25 @@ declare namespace Xpresser {
         type BootMethod = (http: Http, error: () => (any | void)) => object;
         type MethodWithBoot = (http: Http, boot: any, error: () => (any | void)) => (any | void);
         type InlineServiceMethod = (context: ServiceContext) => (any | void);
+        type MiddlewareWithHelper = (helpers: {
+            use: MethodWithHttp,
+        }) => StringToAnyKeyObject;
+        type ErrorHandler = (http: Http, ...args: any[]) => (any | void);
 
         interface MethodWithServices {
             // Controller Service
             [name: string]: InlineServiceMethod | any;
         }
 
-        type Object = {
+        interface Object {
             // Name of Controller.
-            name?: string;
+            name: string;
+
             /**
              * Default controller error handler.
              * Available to all service functions,
              *
+             * @example
              * const service: (option, {error}) => {
              *     error("arg1", "arg2")
              * }
@@ -64,20 +71,19 @@ declare namespace Xpresser {
              * @param http
              * @param args
              */
-            e?: (http: Http, ...args: any[]) => (any | void);
+            e?: ErrorHandler;
 
             /**
              * Register Middlewares
              * @param helpers
              */
-            middleware?: (helpers?: {
-                use: MethodWithHttp,
-            }) => object;
+            middleware?: MiddlewareWithHelper;
 
             /**
              * Register middlewares using object
              */
-            middlewares?: object;
+            middlewares?: StringToAnyKeyObject;
+
             /**
              * Boot method.
              * Any value returned in this function is passed to your
@@ -90,7 +96,10 @@ declare namespace Xpresser {
              * inlineService({boot});
              */
             boot?: BootMethod;
-        } | { [name: string]: MethodWithHttp | MethodWithServices }
+
+
+            [name: string]: MethodWithBoot | ErrorHandler | MiddlewareWithHelper | StringToAnyKeyObject | string | undefined;
+        }
 
         // tslint:disable-next-line:no-empty-interface
         interface Handler extends ControllerService {
