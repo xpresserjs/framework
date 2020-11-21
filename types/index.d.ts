@@ -427,6 +427,16 @@ declare namespace Xpresser {
         log(...args: any[]): void;
 
         /**
+         * Log Calmly
+         */
+        logCalmly(...args: any[]): void;
+
+        /**
+         * Log Deprecation Message
+         */
+        logDeprecated(since: string, removedAt: string, message: string, stack?: boolean): void;
+
+        /**
          * Log Info
          */
         logInfo(...args: any[]): void;

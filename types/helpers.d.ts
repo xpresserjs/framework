@@ -94,15 +94,6 @@ declare namespace Xpresser {
             /**
              * Decode To Json Object
              * @param str
-             * @deprecated
-             * Use decodeToObject instead.
-             * ToBeRemoved:v2.0
-             */
-            decodeToJson(str: string): object;
-
-            /**
-             * Decode To Json Object
-             * @param str
              */
             decodeToObject(str: string): object;
         }

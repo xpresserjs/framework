@@ -134,11 +134,22 @@ class RequestEngine {
      */
     public query(key?: string | undefined, $default?: any): ObjectCollection | any {
         if (key === undefined) {
+            $.logDeprecated(
+                '0.3.22', '1.0.0',
+                'http.query() without arguments to get body collection is deprecated, use {{http.queryAsCollection()}} instead.'
+            );
             return $.objectCollection(this.req.query);
         } else if (this.req.query.hasOwnProperty(key)) {
             return this.req.query[key];
         }
         return $default;
+    }
+
+    /**
+     * Return current query as a collection.
+     */
+    public queryAsCollection(): ObjectCollection {
+        return $.objectCollection(this.req.body);
     }
 
     /**
@@ -152,6 +163,11 @@ class RequestEngine {
      */
     public body(key?: string | undefined, $default?: any): ObjectCollection | any {
         if (key === undefined) {
+            $.logDeprecated(
+                '0.3.22', '1.0.0',
+                'http.body() without keys to get body collection is deprecated, use http.bodyAsCollection() instead.'
+            );
+
             return $.objectCollection(this.req.body);
         } else if (this.req.body.hasOwnProperty(key)) {
             return this.req.body[key];
@@ -161,22 +177,36 @@ class RequestEngine {
 
 
     /**
-     * Return any request engine path as collection.
-     * @example
-     * const body = http.toCollection('req.body');
-     * const query = http.toCollection('req.query');
-     * const session = http.toCollection('session');
-     * @param path
+     * Return current body as a collection.
      */
-    public toCollection(path: string): ObjectCollection {
-        // @ts-ignore
-        const data: Record<string, any> | undefined = this[path];
+    public bodyAsCollection(): ObjectCollection {
+        return $.objectCollection(this.req.body);
+    }
 
-        if (data === undefined || typeof data !== 'object') {
-            throw TypeError(`${path} not found in request engine or not an object.`);
+    /**
+     * Check if param exists in current request.
+     * @param param
+     */
+    public hasParam(param: string): boolean {
+        return this.params.hasOwnProperty(param);
+    }
+
+    /**
+     * Check if params exists in current request.
+     * @param params
+     */
+    public hasParams(params: string[]): boolean {
+        if (!Array.isArray(params)) {
+            throw new Error(`hasParams: Expects argument params to be an array of params.`)
         }
 
-        return $.objectCollection();
+        for (const param of params) {
+            if (!this.hasParam(param)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

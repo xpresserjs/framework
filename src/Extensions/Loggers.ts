@@ -1,8 +1,13 @@
-const chalk = require("chalk");
+import chalk = require("chalk");
+import os = require("os");
 import lodash from "lodash";
 import {getInstance} from "../../index";
 
 const $ = getInstance();
+
+const debugEnabled = $.config.get('debug.enabled', true);
+const isDebugEnabled = $.config.sync<boolean>('debug.enabled', true);
+const depWarnings = $.config.sync<{ enabled: boolean, showStack: boolean }>('debug.deprecationWarnings');
 
 $.log = (...args) => {
     if (!args.length) {
@@ -31,6 +36,30 @@ $.logCalmly = (...args) => {
 
     return console.log(...args);
 };
+
+$.logDeprecated = (since: string, removedAt: string, message: string) => {
+    const config = depWarnings.sync;
+    if (isDebugEnabled.sync && config.enabled) {
+
+        console.log(chalk.gray('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'))
+        console.log(chalk.whiteBright(`!! DEPRECATED ALERT !!`));
+
+        if (config.showStack) {
+            console.log(chalk.white(os.EOL + message));
+            console.trace()
+            console.log();
+        } else {
+            console.log(chalk.white(os.EOL + message + os.EOL));
+        }
+
+        console.log(
+            chalk.whiteBright(`Since: `) + chalk.white(since) + `, ` +
+            chalk.whiteBright(`To be removed: `) + chalk.white(removedAt)
+        );
+        console.log(chalk.gray('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'))
+    }
+};
+
 
 $.logInfo = (...args) => {
     if (!args.length) {

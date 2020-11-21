@@ -102,11 +102,18 @@ const Config = {
 
     // Enable Debugging
     debug: {
-        // If set to false all debuggers are disabled
+        // If set to false all debugging && debug logs are disabled
+        // While if set to true all debug settings are set to their configuration values.
         enabled: true,
 
         // Enable showing controller action on every request.
         controllerAction: true,
+
+        // Deprecated warnings
+        deprecationWarnings: {
+            enabled: true,
+            showStack: false
+        },
     },
 
     // Log Configurations
