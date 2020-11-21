@@ -5,7 +5,6 @@ import Pluralise = require("pluralize");
 import colors = require("../Objects/consoleColors.obj");
 import lodash from "lodash";
 import PathHelper = require("../Helpers/Path");
-import {StringToAnyKeyObject} from "../CustomTypes";
 import {getInstance} from "../../index";
 
 const $ = getInstance();
@@ -66,7 +65,7 @@ export = {
         return template($data);
     },
 
-    copyFromFactoryToApp($for: string | string[], $name: string, $to: string, $data: StringToAnyKeyObject = {}, addPrefix = true) {
+    copyFromFactoryToApp($for: string | string[], $name: string, $to: string, $data: Record<string, any> = {}, addPrefix = true) {
         let $factory;
 
         if (Array.isArray($for)) {

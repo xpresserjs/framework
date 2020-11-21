@@ -9,7 +9,7 @@ import lodash from "lodash";
 import {ServerResponse} from "http";
 
 import {Http} from "../types/http";
-import {StringToAnyKeyObject} from "./CustomTypes";
+
 import {parseControllerString} from "./Functions/internals.fn";
 import PathHelper from "./Helpers/Path";
 
@@ -94,7 +94,7 @@ class ControllerEngine {
      * @param {string} method
      * @param {object} route
      */
-    public static getMiddlewares($middleware: StringToAnyKeyObject, method: string, route: any) {
+    public static getMiddlewares($middleware: Record<string, any>, method: string, route: any) {
 
         const middlewareKeys = Object.keys($middleware);
         const middlewares: any[] = [];
@@ -204,7 +204,7 @@ class ControllerEngine {
 
                 const DefinedServices = config.services || {};
                 const serviceKeys = Object.keys(actions);
-                const services: StringToAnyKeyObject = {};
+                const services: Record<string, any> = {};
 
                 for (const service of serviceKeys) {
                     const serviceIsDefined = DefinedServices.hasOwnProperty(service);

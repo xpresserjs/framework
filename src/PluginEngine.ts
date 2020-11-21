@@ -1,5 +1,5 @@
 import PathHelper = require("./Helpers/Path");
-import {StringToAnyKeyObject} from "./CustomTypes";
+
 import {getInstance} from "../index";
 
 const $ = getInstance();
@@ -12,7 +12,7 @@ const pluginRoutes = [] as any[];
 /**
  * PluginNamespaceToData - Holds plugin data using namespaces as keys.
  */
-const PluginNamespaceToData: StringToAnyKeyObject = {};
+const PluginNamespaceToData: Record<string, any> = {};
 
 /**
  * Check if plugin file exists or throw error.
@@ -80,8 +80,8 @@ class PluginEngine {
 
             if (Array.isArray(plugins) && plugins.length) {
 
-                const pluginPaths: StringToAnyKeyObject = {};
-                const pluginData: StringToAnyKeyObject = {};
+                const pluginPaths: Record<string, any> = {};
+                const pluginData: Record<string, any> = {};
 
                 /**
                  * We want to log all plugin names before loading them.
@@ -215,7 +215,7 @@ class PluginEngine {
 
             // check if plugin use.json has extends
             if ($data.has("extends")) {
-                const extensionData: StringToAnyKeyObject = {};
+                const extensionData: Record<string, any> = {};
                 if ($data.has("extends.RequestEngine")) {
                     const extenderPath = $data.get("extends.RequestEngine");
                     extensionData["RequestEngine"] = pluginPathExistOrExit(plugin, path, extenderPath);

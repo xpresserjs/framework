@@ -7,7 +7,7 @@
 import PathHelper = require("./Helpers/Path");
 import StringHelper = require("./Helpers/String");
 import {JsonSettings} from "../types";
-import {StringToAnyKeyObject} from "./CustomTypes";
+
 import {getInstance} from "../index";
 
 const $ = getInstance();
@@ -77,7 +77,7 @@ $.engineData.set(
 );
 
 // Functions
-function parsePath(path: string, data: StringToAnyKeyObject = {}) {
+function parsePath(path: string, data: Record<string, any> = {}) {
     const dataKeys = Object.keys(data);
 
     if (dataKeys.length) {

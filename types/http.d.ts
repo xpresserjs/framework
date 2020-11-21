@@ -2,7 +2,6 @@ import express = require("express");
 import RequestEngine = require("../src/RequestEngine");
 import ControllerServiceError = require("../src/Controllers/ControllerServiceError");
 import ControllerService = require("../src/Controllers/ControllerService");
-import {StringToAnyKeyObject} from "../src/CustomTypes";
 
 declare namespace Xpresser {
     // tslint:disable-next-line:no-empty-interface
@@ -44,7 +43,7 @@ declare namespace Xpresser {
         type InlineServiceMethod = (context: ServiceContext) => (any | void);
         type MiddlewareWithHelper = (helpers: {
             use: MethodWithHttp,
-        }) => StringToAnyKeyObject;
+        }) => Record<string, any>;
         type ErrorHandler = (http: Http, ...args: any[]) => (any | void);
 
         interface MethodWithServices {
@@ -82,7 +81,7 @@ declare namespace Xpresser {
             /**
              * Register middlewares using object
              */
-            middlewares?: StringToAnyKeyObject;
+            middlewares?: Record<string, any>;
 
             /**
              * Boot method.
@@ -98,7 +97,7 @@ declare namespace Xpresser {
             boot?: BootMethod;
 
 
-            [name: string]: MethodWithBoot | ErrorHandler | MiddlewareWithHelper | StringToAnyKeyObject | string | undefined;
+            [name: string]: MethodWithBoot | ErrorHandler | MiddlewareWithHelper | Record<string, any> | string | undefined;
         }
 
         // tslint:disable-next-line:no-empty-interface

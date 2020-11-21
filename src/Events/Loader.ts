@@ -1,4 +1,3 @@
-import {StringToAnyKeyObject} from "../CustomTypes";
 import fs = require("fs");
 import Path = require("../Helpers/Path");
 
@@ -6,7 +5,7 @@ import ObjectCollection = require("object-collection/index");
 import {getInstance} from "../../index";
 
 const $ = getInstance();
-const DefinedEvents: StringToAnyKeyObject = {};
+const DefinedEvents: Record<string, any> = {};
 const EventsPath = $.path.events();
 
 if (fs.existsSync(EventsPath)) {

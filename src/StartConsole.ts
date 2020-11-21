@@ -4,10 +4,10 @@ import PathHelper = require("./Helpers/Path");
 import JobHelper = require("./Console/JobHelper");
 
 import {getInstance} from "../index";
-import {StringToAnyKeyObject} from "./CustomTypes";
 
-const {Commands, Artisan}: { Commands: StringToAnyKeyObject, Artisan: StringToAnyKeyObject } = Console;
-const DefinedCommands: StringToAnyKeyObject = {};
+
+const {Commands, Artisan}: { Commands: Record<string, any>, Artisan: Record<string, any> } = Console;
+const DefinedCommands: Record<string, any> = {};
 
 
 const $ = getInstance();
@@ -46,10 +46,10 @@ if (!Commands.hasOwnProperty(argCommand)) {
     const plugins = Object.keys(PluginData);
 
     for (const plugin of plugins) {
-        const $plugin: StringToAnyKeyObject = PluginData[plugin];
+        const $plugin: Record<string, any> = PluginData[plugin];
 
         if ($plugin.hasOwnProperty("commands")) {
-            const commands: StringToAnyKeyObject = $plugin["commands"];
+            const commands: Record<string, any> = $plugin["commands"];
             const commandKeys = Object.keys(commands);
 
             for (const command of commandKeys) {

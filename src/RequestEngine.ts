@@ -8,7 +8,6 @@ import ErrorEngine = require("./ErrorEngine");
 import lodash from "lodash";
 
 import {Http} from "../types/http";
-import {StringToAnyKeyObject} from "./CustomTypes";
 
 import {getInstance} from "../index";
 import {DollarSign} from "../types";
@@ -35,10 +34,10 @@ class RequestEngine {
     public req: Http.Request;
     public res: Http.Response;
 
-    public params: StringToAnyKeyObject;
+    public params: Record<string, any>;
     public store: ObjectCollection;
 
-    public session: StringToAnyKeyObject;
+    public session: Record<string, any>;
     public route: {
         name: string,
         method: string,
@@ -84,7 +83,9 @@ class RequestEngine {
     /**
      * Returns Current Xpresser Instance.
      */
-    $instance(): DollarSign {return $;}
+    $instance(): DollarSign {
+        return $;
+    }
 
     /**
      * Xpresser Instance Getter
@@ -169,7 +170,7 @@ class RequestEngine {
      */
     public toCollection(path: string): ObjectCollection {
         // @ts-ignore
-        const data: StringToAnyKeyObject | undefined = this[path];
+        const data: Record<string, any> | undefined = this[path];
 
         if (data === undefined || typeof data !== 'object') {
             throw TypeError(`${path} not found in request engine or not an object.`);

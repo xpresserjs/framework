@@ -1,11 +1,10 @@
 // Imported Immediately after events are registered.
 import events = require("events");
-import {StringToAnyKeyObject} from "../CustomTypes";
 import {getInstance} from "../../index";
 
 const $ = getInstance();
 
-export = (DefinedEvents: StringToAnyKeyObject) => {
+export = (DefinedEvents: Record<string, any>) => {
     const EventEmitter = new events.EventEmitter();
 
     EventEmitter.on("runEvent", async ($payload: {

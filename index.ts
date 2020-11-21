@@ -1,11 +1,10 @@
 import {DollarSign, Options} from "./types";
-import {StringToAnyKeyObject} from "./src/CustomTypes";
 import ControllerClass from "./src/Classes/ControllerClass";
 import XpresserRepl from "./src/XpresserRepl";
 import XpresserRouter from "@xpresser/router";
 
 // Xpresser Instance Holder
-const instanceHolder: StringToAnyKeyObject = {};
+const instanceHolder: Record<string, any> = {};
 
 
 /**
@@ -61,7 +60,7 @@ function getInstanceRouter(instanceId?: string): XpresserRouter {
  * @param {Options} AppOptions
  * @constructor
  */
-function init(AppConfig: StringToAnyKeyObject | string, AppOptions: Options = {}): DollarSign {
+function init(AppConfig: Record<string, any> | string, AppOptions: Options = {}): DollarSign {
 
     // Expose xpresserInstance as global function
     if (!global.xpresserInstance) global.xpresserInstance = getInstance;
@@ -163,7 +162,7 @@ function init(AppConfig: StringToAnyKeyObject | string, AppOptions: Options = {}
     }
 
     // Merge Config with DefaultConfig to replace missing values.
-    AppConfig = lodash.merge(lodash.clone(Config), AppConfig) as StringToAnyKeyObject;
+    AppConfig = lodash.merge(lodash.clone(Config), AppConfig) as Record<string, any>;
     AppOptions = lodash.merge(lodash.clone(Options), AppOptions) as Options;
 
 

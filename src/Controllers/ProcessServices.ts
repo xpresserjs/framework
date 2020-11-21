@@ -2,7 +2,6 @@ import ControllerServiceError = require("./ControllerServiceError");
 // Import Types
 import {Http} from "../../types/http";
 import {ServerResponse} from "http";
-import {StringToAnyKeyObject} from "../CustomTypes";
 
 
 /**
@@ -22,9 +21,9 @@ export = async (
 ) => {
 
     // List of services defined in this controller
-    const DefinedServices: StringToAnyKeyObject = config.services || {};
+    const DefinedServices: Record<string, any> = config.services || {};
     // Holds data of each completed service
-    const completedServices: StringToAnyKeyObject = {};
+    const completedServices: Record<string, any> = {};
     const serviceKeys = Object.keys(requestServices);
 
     // Each service error handler.

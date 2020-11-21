@@ -18,7 +18,6 @@ import Controller = require("../src/Classes/ControllerClass");
 import {Controller as HttpController} from "./http";
 
 type TodoFunction = (next?: any) => any;
-type StringToAnyKeyObject = { [key: string]: any }
 type NumberToAnyKeyObject = { [key: number]: any }
 
 declare namespace Xpresser {
@@ -238,7 +237,7 @@ declare namespace Xpresser {
              * Requires a json file by reading file and parsing to json.
              * Throws error if file does not exists
              */
-            readJson($path: string): StringToAnyKeyObject | NumberToAnyKeyObject | any[];
+            readJson($path: string): Record<string, any> | NumberToAnyKeyObject | any[];
 
             /**
              * Save content to a json file.
@@ -247,7 +246,7 @@ declare namespace Xpresser {
              * @param $content - Content to save to file
              * @param $options
              */
-            saveToJson($path: string, $content: StringToAnyKeyObject | NumberToAnyKeyObject | any[], $options?: {
+            saveToJson($path: string, $content: Record<string, any> | NumberToAnyKeyObject | any[], $options?: {
                 checkIfFileExists?: boolean,
                 replacer?: (this: any, key: string, value: any) => any,
                 space?: number
@@ -266,7 +265,7 @@ declare namespace Xpresser {
             /**
              * Returns events object.
              */
-            events(): StringToAnyKeyObject;
+            events(): Record<string, any>;
 
             /**
              * Add `on.start` middleware.
@@ -498,7 +497,7 @@ declare namespace Xpresser {
      */
     export namespace JsonSettings {
         interface Use {
-            middlewares?: StringToAnyKeyObject;
+            middlewares?: Record<string, any>;
         }
     }
 

@@ -2,7 +2,7 @@ import path = require("path");
 import fs = require("fs")
 import {REPLServer} from "repl";
 import {DollarSign} from "../types";
-import {StringToAnyKeyObject} from "./CustomTypes";
+
 
 type FnWithDollarSignArgument = (xpresserInstance: DollarSign) => (void | any);
 type FnReturnsDollarSign = () => DollarSign;
@@ -24,7 +24,7 @@ class XpresserRepl {
         },
     }
 
-    context: StringToAnyKeyObject = {};
+    context: Record<string, any> = {};
     server!: REPLServer;
 
     constructor(config?: string) {
@@ -137,7 +137,7 @@ class XpresserRepl {
      * @param key
      * @param value
      */
-    addContext(key: string | StringToAnyKeyObject, value?: any): this {
+    addContext(key: string | Record<string, any>, value?: any): this {
         if (this.started) {
             throw Error(`addContext(): cannot be used after repl server has started, use replServer.context instead`);
         }
@@ -315,7 +315,7 @@ class XpresserRepl {
      */
     addContextFromFiles(files: { [contextName: string]: string }, as?: string | null, interceptor?: (context: any) => any): this {
         const contentNames = Object.keys(files);
-        const context: StringToAnyKeyObject = {};
+        const context: Record<string, any> = {};
 
         for (const contextName of contentNames) {
             try {
@@ -353,7 +353,7 @@ class XpresserRepl {
             allowedExtensions = allowedExtensions.concat(extensions);
 
         const files = getAllFiles(folder);
-        const context: StringToAnyKeyObject = {};
+        const context: Record<string, any> = {};
 
         for (const file of files) {
             const extension = file.split('.').pop();

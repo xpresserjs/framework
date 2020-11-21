@@ -2,7 +2,7 @@ import MiddlewareEngine = require("./MiddlewareEngine");
 import XpresserRouter = require("@xpresser/router");
 import {getInstance} from "../index";
 import lodash from "lodash";
-import {StringToAnyKeyObject} from "./CustomTypes";
+
 import {parseControllerString} from "./Functions/internals.fn";
 import PathHelper from "./Helpers/Path";
 
@@ -11,9 +11,9 @@ const AllRoutesKey = "RouterEngine:allRoutes";
 
 const $ = getInstance();
 
-const NameToRoute: StringToAnyKeyObject = {};
+const NameToRoute: Record<string, any> = {};
 const ProcessedRoutes: any[] = [];
-const ControllerStringCache: StringToAnyKeyObject = {};
+const ControllerStringCache: Record<string, any> = {};
 
 class RouterEngine {
     /**
@@ -80,7 +80,7 @@ class RouterEngine {
     public static namedRoutes(format = false) {
         if (format !== false) {
             const names = Object.keys(NameToRoute);
-            const newFormat: StringToAnyKeyObject = {};
+            const newFormat: Record<string, any> = {};
 
             for (let i = 0; i < names.length; i++) {
                 const name = names[i];
@@ -113,7 +113,7 @@ class RouterEngine {
         }
 
         const names = Object.keys(NameToRoute);
-        const newRoutes: StringToAnyKeyObject = {};
+        const newRoutes: Record<string, any> = {};
 
         for (let i = 0; i < names.length; i++) {
             const name = names[i];
@@ -141,7 +141,7 @@ class RouterEngine {
 
         const routes = RouterEngine.nameToPath();
         const names = Object.keys(routes);
-        const newRoutes: StringToAnyKeyObject = {};
+        const newRoutes: Record<string, any> = {};
 
         for (let i = 0; i < names.length; i++) {
             const name = names[i];
