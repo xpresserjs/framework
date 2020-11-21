@@ -18,6 +18,20 @@ $.log = (...args) => {
     return console.log(...args);
 };
 
+$.logCalmly = (...args) => {
+    if (!args.length) {
+        return console.log("");
+    }
+
+    args.unshift(chalk.white("=>"));
+
+    if (args.length === 2 && typeof args[1] === "string") {
+        return console.log(chalk.white(...args));
+    }
+
+    return console.log(...args);
+};
+
 $.logInfo = (...args) => {
     if (!args.length) {
         return console.log("");
