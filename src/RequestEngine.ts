@@ -34,6 +34,9 @@ class RequestEngine {
     public req: Http.Request;
     public res: Http.Response;
 
+    public $query: ObjectCollection;
+    public $body: ObjectCollection;
+
     public params: Record<string, any>;
     public store: ObjectCollection;
 
@@ -73,6 +76,10 @@ class RequestEngine {
 
         if (!res.locals) res.locals = {};
         this.store = $.objectCollection(res.locals);
+
+        // Set $body and $query
+        this.$body = $.objectCollection(req.body || {});
+        this.$query = $.objectCollection(req.query || {});
     }
 
     /**
@@ -136,20 +143,12 @@ class RequestEngine {
         if (key === undefined) {
             $.logDeprecated(
                 '0.3.22', '1.0.0',
-                'http.query() without arguments to get body collection is deprecated, use {{http.queryAsCollection()}} instead.'
+                'http.query() without arguments to get query collection is deprecated, use `http.$query` instead.'
             );
-            return $.objectCollection(this.req.query);
-        } else if (this.req.query.hasOwnProperty(key)) {
-            return this.req.query[key];
+            return this.$query;
+        } else {
+            return this.$query.get(key, $default);
         }
-        return $default;
-    }
-
-    /**
-     * Return current query as a collection.
-     */
-    public queryAsCollection(): ObjectCollection {
-        return $.objectCollection(this.req.body);
     }
 
     /**
@@ -165,22 +164,13 @@ class RequestEngine {
         if (key === undefined) {
             $.logDeprecated(
                 '0.3.22', '1.0.0',
-                'http.body() without keys to get body collection is deprecated, use http.bodyAsCollection() instead.'
+                'http.body() without keys to get body collection is deprecated, use `http.$body` instead.'
             );
 
-            return $.objectCollection(this.req.body);
-        } else if (this.req.body.hasOwnProperty(key)) {
-            return this.req.body[key];
+            return this.$body;
+        } else {
+            return this.$body.get(key, $default);
         }
-        return $default;
-    }
-
-
-    /**
-     * Return current body as a collection.
-     */
-    public bodyAsCollection(): ObjectCollection {
-        return $.objectCollection(this.req.body);
     }
 
     /**
