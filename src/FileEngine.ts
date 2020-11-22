@@ -251,7 +251,7 @@ $.file = {
             try {
                 fs.mkdirSync($path, {recursive: true});
             } catch (e) {
-                $.logErrorAndExit(e.message);
+                $.logErrorAndExit(e.stack);
             }
         }
 

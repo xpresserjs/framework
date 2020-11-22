@@ -136,7 +136,7 @@ export = ($plugin: string) => {
             UpdatePluginLockData = true;
         } catch (e) {
             $.logError($plugin);
-            $.logErrorAndExit(e.message);
+            $.logErrorAndExit(e.stack);
         }
     }
 

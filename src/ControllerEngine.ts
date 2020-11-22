@@ -65,7 +65,7 @@ const LoadServicesInDirectory = ($folder: string, $files?: string[]) => {
                     ServicesInMemory.merge(services);
                 }
             } catch (e) {
-                $.logErrorAndExit(e.message);
+                $.logErrorAndExit(e.stack);
             }
         }
 

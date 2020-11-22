@@ -330,10 +330,9 @@ const afterExpressInit = (next: () => void) => {
                 $.app.use($globalMiddleware);
 
             } catch (e) {
-
                 $.logPerLine([
                     {error: "Error in use.json"},
-                    {error: e.message},
+                    {error: e.stack},
                     {errorAndExit: ""},
                 ]);
 

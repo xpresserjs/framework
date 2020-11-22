@@ -126,7 +126,7 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
                     throw new Error(`CONFIG: No exported object found in config file: (${configFile})`);
                 }
             } catch (e) {
-                console.error(e.message);
+                console.error(e.stack);
                 $.exit();
             }
 
