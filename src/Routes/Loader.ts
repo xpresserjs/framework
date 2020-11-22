@@ -15,7 +15,7 @@ if (fs.existsSync(RouteFile)) {
     } catch (e) {
         $.logPerLine([
             {error: "Router Error:"},
-            {errorAndExit: e.stack},
+            {errorAndExit: e},
         ]);
     }
 }

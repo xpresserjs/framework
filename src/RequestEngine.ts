@@ -411,7 +411,7 @@ class RequestEngine {
                 // @ts-ignore
                 return Render(...arguments);
             } catch (e) {
-                $.logError(e.stack);
+                $.logError(e);
             }
 
         }

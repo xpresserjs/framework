@@ -116,22 +116,23 @@ $.logAndExit = (...args) => {
     return $.exit();
 };
 
-$.logError = (...args) => {
-    let end = false;
-    if (args[args.length - 1] === true) {
-        args.splice(args.length - 1, 1);
-        end = true;
+$.logError = (error: any, exit: boolean = false) => {
+
+    if (error instanceof Error) {
+        console.log(chalk.redBright(error.stack ? error.stack : error));
+    } else if (typeof error === "string") {
+        console.log(chalk.redBright(error));
+    } else {
+        console.error(error);
     }
 
-    console.log(chalk.redBright(...args));
-
-    if (end) {
+    if (exit) {
         return $.exit();
     }
 };
 
-$.logErrorAndExit = (...args) => {
-    return $.logError(...args, true);
+$.logErrorAndExit = (error: any) => {
+    return $.logError(error, true);
 };
 
 $.logPerLine = ($logs = [], $spacePerLine = false) => {

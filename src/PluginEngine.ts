@@ -103,7 +103,7 @@ class PluginEngine {
                                 // Throw any error from processing and stop xpresser.
                                 $.logPerLine([
                                     {error: plugin},
-                                    {error: e.stack},
+                                    {error: e},
                                     {errorAndExit: ""},
                                 ], true);
                             }
@@ -138,7 +138,7 @@ class PluginEngine {
                             // Throw any error from processing and stop xpresser.
                             $.logPerLine([
                                 {error: plugin},
-                                {error: e.stack},
+                                {error: e},
                                 {errorAndExit: ""},
                             ], true);
                         }

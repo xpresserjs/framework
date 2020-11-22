@@ -252,7 +252,7 @@ class XpresserRepl {
                         xpr.log("History cleared, restart repl!");
                         xpr.exit();
                     } catch (e) {
-                        console.log(e.stack)
+                        xpr.logError(e)
                     }
                 }
             })

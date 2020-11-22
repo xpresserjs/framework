@@ -332,7 +332,7 @@ const afterExpressInit = (next: () => void) => {
             } catch (e) {
                 $.logPerLine([
                     {error: "Error in use.json"},
-                    {error: e.stack},
+                    {error: e},
                     {errorAndExit: ""},
                 ]);
 

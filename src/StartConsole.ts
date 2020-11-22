@@ -153,7 +153,7 @@ if (typeof Commands[argCommand] === "undefined" && typeof DefinedCommands[argCom
         } catch (e) {
             $.logPerLine([
                 {error: `Error in command: {${argCommand}}`},
-                {errorAndExit: e.stack},
+                {errorAndExit: e},
             ]);
         }
 
