@@ -8,7 +8,12 @@ const paths = $.config.get('paths');
 const baseFiles = paths.base + "/";
 const backendFiles = Path.resolve(paths.backend);
 
+// DollarSign `path` property
 $.path = {
+    resolve: (path: string | string[], resolve: boolean): string => {
+        return Path.resolve(path, resolve)
+    },
+
     base: (path = "", returnRequire = false) => {
         if (path[0] === "/") {
             path = path.substr(1);
@@ -32,11 +37,17 @@ $.path = {
         return $.path.base(paths.storage + "/" + path);
     },
 
-    /**
-     * @param {string} path
-     * @param {boolean} returnRequire
-     * @param refresh
-     */
+    frameworkStorageFolder: (path?: string): string => {
+        if (path === undefined) {
+            path = "";
+        }
+
+        if (path[0] === "/") {
+            path = path.substr(1);
+        }
+        return $.path.storage("framework/" + path);
+    },
+
     engine: (path: string = "", returnRequire = false, refresh = false): string | any => {
         const dataKey = "XpresserPath";
         let EnginePath: string;

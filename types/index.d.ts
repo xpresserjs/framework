@@ -327,6 +327,13 @@ declare namespace Xpresser {
         /*----------------- PATH FUNCTIONS ------------------- */
         path: {
             /**
+             * Resolve smart paths
+             * @param path
+             * @param resolve
+             */
+            resolve(path: string | string[], resolve: boolean): string;
+
+            /**
              * Get path in base folder.
              */
             base(path?: string, returnRequire?: boolean): string | any;
@@ -340,6 +347,12 @@ declare namespace Xpresser {
              * Get path in storage folder
              */
             storage(path?: string, returnRequire?: boolean): string | any;
+
+            /**
+             * Get framework storage folder
+             * @param path
+             */
+            frameworkStorageFolder(path?: string): string;
 
             /**
              * Get path in Framework src folder
