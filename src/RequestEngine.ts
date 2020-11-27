@@ -337,10 +337,10 @@ class RequestEngine {
      * @param {string} file
      * @param {Object} data
      * @param {boolean} fullPath
-     * @param useEjs
+     * @param useInternalEjs
      * @returns {*}
      */
-    public view(file: string, data = {}, fullPath: boolean = false, useEjs: boolean = false): any {
+    public view(file: string, data = {}, fullPath: boolean = false, useInternalEjs: boolean = false): any {
 
         /**
          * Express Default Renderer
@@ -387,7 +387,7 @@ class RequestEngine {
         /**
          * Set file extension.
          */
-        const path = file + "." + (useEjs ? "ejs" : $.config.get('template.extension'));
+        const path = file + "." + (useInternalEjs ? "ejs" : $.config.get('template.extension'));
 
         // Get xpresser view data
         this.viewData($filePath);
@@ -397,9 +397,9 @@ class RequestEngine {
         }
 
         /**
-         * UseEjs if useEjs is == true.
+         * UseEjs if useInternalEjs is == true.
          */
-        if (useEjs === true) {
+        if (useInternalEjs === true) {
             data = Object.assign(this.res.locals, data);
             return this.res.send(ejs.render(
                 fs.readFileSync(path).toString(),

@@ -32,7 +32,6 @@ $.app = express();
  * Set Express View Engine from config
  */
 const template = $.config.get('template');
-
 if (typeof template.engine === "function") {
 
     $.app.engine(template.extension, template.engine);
