@@ -331,7 +331,7 @@ declare namespace Xpresser {
              * @param path
              * @param resolve
              */
-            resolve(path: string | string[], resolve: boolean): string;
+            resolve(path: string | string[], resolve?: boolean): string;
 
             /**
              * Get path in base folder.

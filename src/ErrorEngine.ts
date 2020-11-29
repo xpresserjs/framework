@@ -7,7 +7,7 @@ class ErrorEngine {
         this.http = http;
     }
 
-    public view(data: any, status = 500) {
+    public view(data: { error?: {title?: string, message?: string, log?: string} }, status = 500) {
         return this.http.status(status).renderViewFromEngine("__errors/index", data);
     }
 

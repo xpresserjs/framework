@@ -2,6 +2,7 @@ declare namespace NodeJS {
     interface Global {
         $: any;
         xpresserInstance(instanceId?: string): any;
+        InXpresserError: typeof Error;
     }
 }
 

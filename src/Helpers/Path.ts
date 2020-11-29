@@ -9,7 +9,6 @@ const pathHelpers = {
     backend: "backend://",
     frontend: "frontend://",
     npm: "npm://",
-    migrations: "migrations://",
     public: "public://",
 };
 
@@ -19,7 +18,6 @@ class PathHelper {
     }
 
     static resolve($path: string | string[], $resolve: boolean = true): string {
-
         if (Array.isArray($path)) {
             for (let i = 0; i < $path.length; i++) {
                 const $pathElement = $path[i];
@@ -49,7 +47,7 @@ class PathHelper {
         }
 
         if ($path.indexOf("://") >= 0) {
-            const $splitPath: any[] = $path.split("://");
+            const $splitPath: string[] = $path.split("://");
 
             if (pathHelpers.hasOwnProperty($splitPath[0])) {
                 if (!$splitPath[1]) {

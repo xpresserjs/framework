@@ -96,6 +96,18 @@ const Commands = {
                 e.controller = `${controller}.${method}`;
             }
 
+            if (typeof e.controller === "function") {
+                if(e.controller.name){
+                    e.controller = e.controller.name;
+                    if (e.controller.indexOf("getFile(") !== 0) {
+                        e.controller += '()'
+                    } else {
+                        e.controller = e.controller.replace($.path.base(), '')
+                    }
+                } else {
+                    e.controller = "annonymous()"
+                }
+            }
 
             if (!e.controller) e.controller = '';
 

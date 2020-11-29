@@ -9,6 +9,7 @@ import StringHelper = require("./Helpers/String");
 import {JsonSettings} from "../types";
 
 import {getInstance} from "../index";
+import InXpresserError from "./Errors/InXpresserError";
 
 const $ = getInstance();
 
@@ -159,7 +160,7 @@ class UseEngine {
             if (!handleError) {
                 return false
             } else {
-                throw new Error(`Model ${realPath} does not exists`);
+                throw new InXpresserError(`Model ${realPath} does not exists`);
             }
         }
         return require(realPath);

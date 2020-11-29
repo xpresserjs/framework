@@ -11,6 +11,7 @@ import {Http} from "../types/http";
 
 import {getInstance} from "../index";
 import {DollarSign} from "../types";
+import InXpresserError from "./Errors/InXpresserError";
 
 const $ = getInstance();
 
@@ -187,7 +188,7 @@ class RequestEngine {
      */
     public hasParams(params: string[]): boolean {
         if (!Array.isArray(params)) {
-            throw new Error(`hasParams: Expects argument params to be an array of params.`)
+            throw new InXpresserError(`hasParams: Expects argument params to be an array of params.`)
         }
 
         for (const param of params) {

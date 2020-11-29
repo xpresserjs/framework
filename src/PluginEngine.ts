@@ -1,6 +1,7 @@
 import PathHelper = require("./Helpers/Path");
 
 import {getInstance} from "../index";
+import InXpresserError from "./Errors/InXpresserError";
 
 const $ = getInstance();
 
@@ -158,7 +159,7 @@ class PluginEngine {
     public static loadPluginUseData(pluginPath: string) {
         const data = require(pluginPath + "/use.json");
         if (!data.namespace) {
-            throw new Error(`Cannot read property 'namespace'`);
+            throw new InXpresserError(`Cannot read property 'namespace'`);
         }
         return data;
     }

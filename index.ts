@@ -1,7 +1,8 @@
 import {DollarSign, Options} from "./types";
-import ControllerClass from "./src/Classes/ControllerClass";
-import XpresserRepl from "./src/XpresserRepl";
-import XpresserRouter from "@xpresser/router";
+import ControllerClass = require("./src/Classes/ControllerClass");
+import XpresserRepl = require("./src/XpresserRepl");
+import XpresserRouter = require("@xpresser/router");
+import InXpresserError = require("./src/Errors/InXpresserError");
 
 // Xpresser Instance Holder
 const instanceHolder: Record<string, any> = {};
@@ -14,12 +15,12 @@ const instanceHolder: Record<string, any> = {};
  * @param instanceId
  */
 function getInstance(instanceId?: string): DollarSign {
-    if (instanceId === ':keys') return Object.keys(instanceHolder) as any;
-    if (instanceId === ':id') return require('./truth').instanceId;
-
     if (instanceId) {
+        if (instanceId === ':keys') return Object.keys(instanceHolder) as any;
+        if (instanceId === ':id') return require('./truth')?.instanceId;
+
         if (!instanceHolder.hasOwnProperty(instanceId))
-            throw new Error(`Xpresser instanceId: ${instanceId} not found!`);
+            throw new InXpresserError(`Xpresser instanceId: ${instanceId} not found!`);
 
         return instanceHolder[instanceId];
     } else {
@@ -37,7 +38,7 @@ function getInstance(instanceId?: string): DollarSign {
 
         const instances = Object.keys(instanceHolder);
         if (!instances.length)
-            throw new Error(`No Xpresser instance defined found!`);
+            throw new InXpresserError(`No Xpresser instance defined found!`);
 
         return instanceHolder[instances[0]];
     }
@@ -63,7 +64,10 @@ function getInstanceRouter(instanceId?: string): XpresserRouter {
 function init(AppConfig: Record<string, any> | string, AppOptions: Options = {}): DollarSign {
 
     // Expose xpresserInstance as global function
+    // @ts-ignore
     if (!global.xpresserInstance) global.xpresserInstance = getInstance;
+    // @ts-ignore
+    if (!global.InXpresserError) global.InXpresserError = InXpresserError;
 
     /**
      * Require Modules only when this function is called.
@@ -123,7 +127,7 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
                 // tslint:disable-next-line:max-line-length
                 if (typeof AppConfig !== "object" || (typeof AppConfig === "object" && !Object.keys(AppConfig).length)) {
                     // noinspection ExceptionCaughtLocallyJS
-                    throw new Error(`CONFIG: No exported object found in config file: (${configFile})`);
+                    throw new InXpresserError(`CONFIG: No exported object found in config file: (${configFile})`);
                 }
             } catch (e) {
                 console.error(e.stack);
@@ -265,8 +269,8 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
 
     // Log if not console
     $.ifNotConsole(() => {
-        $.log(`${PackageDotJson.name} version ${PackageDotJson.version}`);
-        $.log(`Starting ${$.config.get('name')}...`);
+        $.logCalmly(`${PackageDotJson.name} version ${PackageDotJson.version}`);
+        $.log(`${$.config.get('name')}`);
     });
 
     /**
@@ -315,7 +319,7 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
          * Add Router
          * @type {XpresserRouter}
          */
-        $.router = new XpresserRouter();
+        $.router = new XpresserRouter(undefined, () => $);
 
         $.ifNotConsole(() => {
             /**
@@ -369,6 +373,6 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
     return $;
 }
 
-export {init, getInstance, getInstanceRouter, ControllerClass, XpresserRepl}
+export {init, getInstance, getInstanceRouter, ControllerClass, XpresserRepl, InXpresserError}
 
 

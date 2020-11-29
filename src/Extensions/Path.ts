@@ -10,7 +10,7 @@ const backendFiles = Path.resolve(paths.backend);
 
 // DollarSign `path` property
 $.path = {
-    resolve: (path: string | string[], resolve: boolean): string => {
+    resolve: (path: string | string[], resolve?: boolean): string => {
         return Path.resolve(path, resolve)
     },
 
