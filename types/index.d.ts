@@ -19,6 +19,9 @@ import {Controller as HttpController} from "./http";
 
 type TodoFunction = (next?: any) => any;
 type NumberToAnyKeyObject = { [key: number]: any }
+type isNode = false | {
+    ts: { baseFolder: string }
+};
 
 declare namespace Xpresser {
     export type Router = XpresserRouter;
@@ -409,7 +412,7 @@ declare namespace Xpresser {
         /**
          * Configure project for typescript.
          */
-        initializeTypescript(filename: string, run?: (isNode: boolean) => void): DollarSign;
+        initializeTypescript(filename: string, run?: (isNode: isNode) => void): DollarSign;
 
         /**
          * Check if project is typescript

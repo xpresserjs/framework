@@ -302,7 +302,7 @@ class RequestEngine {
      * @param file
      * @private
      */
-    private viewData(file: string) {
+    protected viewData(file: string): any {
         const localsConfig = $.config.get('template.locals');
         const all = localsConfig.all;
 
@@ -331,6 +331,8 @@ class RequestEngine {
             if (localsConfig.body) ctx.$body = this.req.body;
         }
         this.res.locals["ctx"] = ctx;
+
+        return ctx;
     }
 
     /**

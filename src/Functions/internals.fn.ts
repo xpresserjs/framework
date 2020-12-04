@@ -1,6 +1,8 @@
-import PathHelper from "../Helpers/Path";
 import {getInstance} from "../../index";
-import {DollarSign} from "../../types";
+import type {DollarSign} from "../../types";
+
+import PathHelper = require("../Helpers/Path");
+import path = require("path");
 
 const $ = getInstance();
 
@@ -16,7 +18,7 @@ export function parseControllerString(controllerString: string) {
     }
 }
 
-export function initializeTypescriptFn(filename: string, run?: (isNode: boolean) => void): DollarSign {
+export function initializeTypescriptFn(filename: string, run?: (isNode: any) => void): DollarSign {
 
     if (!filename) throw Error(`isTypescript: requires __filename as argument.`);
 
@@ -50,7 +52,13 @@ export function initializeTypescriptFn(filename: string, run?: (isNode: boolean)
      * If run is a function,  we pass `isNode` i.e `!isTypeScriptFile` to it.
      */
     if (typeof run === "function") {
-        run(!isTypeScriptFile);
+        run(isTypeScriptFile ? false : {
+            ts: {
+                baseFolder: (() => {
+                    return path.resolve($.path.resolve(`base://../`))
+                })()
+            }
+        });
     }
 
     return $;

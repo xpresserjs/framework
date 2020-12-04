@@ -63,7 +63,7 @@ class PathHelper {
             $path = $path.substr(0, $path.length - 1);
         }
 
-        return $resolve ? PATH.resolve($path) : $path;
+        return $resolve ? (p => PATH.resolve(p))($path) : $path;
     }
 
     static helperToPath([$helper, $path]: string[]): string {
