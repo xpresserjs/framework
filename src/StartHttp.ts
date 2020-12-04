@@ -2,6 +2,7 @@ import {resolve} from "path";
 import lodash from "lodash";
 import PathHelper = require("./Helpers/Path");
 import OnEventsLoader = require("./Events/OnEventsLoader");
+
 const {runBootEvent} = OnEventsLoader;
 
 import express = require("express");
@@ -160,7 +161,6 @@ if (useBodyParser) {
 }
 
 const useSession = $.config.get("server.use.session", false);
-
 if (useSession) {
     const session = require("express-session");
     const useDefault = $.config.get("session.useDefault", false);
@@ -275,8 +275,6 @@ if (isUnderMaintenance) {
 }
 
 
-// Set local AppData
-$.app.locals.appData = {};
 $.app.use(async (req: any, _res: any, next: () => void) => {
 
     // Convert Empty Strings to Null
@@ -480,11 +478,12 @@ const startHttpsServer = () => {
 };
 
 /**
- * Load on.expressInit Events.
+ * RunBootEvent on.expressInit Events.
+ * then
+ * RunBootEvent on.bootServer Events.
  */
-runBootEvent("expressInit", () => afterExpressInit(() => {
-    /**
-     * Load on.startHttp Events.
-     */
-    return runBootEvent("bootServer", startHttpServer);
-}));
+runBootEvent(
+    "expressInit",
+    // Run AfterExpressInit
+    () => afterExpressInit(() => runBootEvent("bootServer", startHttpServer))
+);

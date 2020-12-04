@@ -7,6 +7,7 @@ import ControllerClass from "./src/Classes/ControllerClass";
 import XpresserRepl from "./src/XpresserRepl";
 import {DollarSign, Options} from "./types";
 import XpresserRouter from "@xpresser/router";
+import InXpresserError from "./src/Errors/InXpresserError";
 
 /**
  * Initialize Xpresser
@@ -33,4 +34,4 @@ declare function getInstance(instanceId?: string): DollarSign;
  */
 declare function getInstanceRouter(instanceId?: string): XpresserRouter;
 
-export {init, getInstance, getInstanceRouter, ControllerClass, XpresserRepl}
+export {init, getInstance, getInstanceRouter, ControllerClass, XpresserRepl, InXpresserError}

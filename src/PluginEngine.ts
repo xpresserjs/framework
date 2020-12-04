@@ -281,7 +281,7 @@ class PluginEngine {
             if (indexFilePath) {
                 const {run} = require(indexFilePath);
                 if (run) {
-                    await run(pluginData);
+                    await run(pluginData, $);
                 }
             }
         }
