@@ -41,7 +41,7 @@ class RequestEngine {
     public params: Record<string, any>;
     public store: ObjectCollection;
 
-    public session: Record<string, any>;
+    public session?: any;
     public route: {
         name: string,
         method: string,
