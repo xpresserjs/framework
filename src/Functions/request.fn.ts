@@ -1,6 +1,6 @@
-import {Http} from "../../types/http";
+import type RequestEngine from "../RequestEngine";
 
-export =  (http: Http) => {
+export =  (http: RequestEngine) => {
     return {
         currentViewIs(path: string, ifTrue = undefined, ifFalse = undefined) {
             const currentView = http.res.locals.ctx.$currentView;
