@@ -5,17 +5,19 @@ import ControllerService = require("../src/Controllers/ControllerService");
 
 declare namespace Xpresser {
 
-    type Http = RequestEngine;
+    interface Http extends RequestEngine {
+        __NO_EMPTY_INTERFACE_ERROR?: true
+    }
 
     namespace Http {
         interface Request extends express.Request {
-            // Turned any since session became standalone
-            session: any;
-            flash: (key?: string, value?: any) => void;
+            session?: Record<string, any>
+
+            flash?(key?: string, value?: any): void
         }
 
         interface Response extends express.Response {
-            [name: string]: any;
+            __NO_EMPTY_INTERFACE_ERROR?: true
         }
     }
 

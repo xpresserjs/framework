@@ -313,7 +313,7 @@ class RequestEngine {
         ctx.$route = this.route;
         ctx.$currentView = file;
 
-        if (useFlash) {
+        if (useFlash && this.req.flash) {
             ctx.$flash = this.req.flash();
         }
 
@@ -462,13 +462,15 @@ class RequestEngine {
      * @returns {RequestEngine}
      */
     public with(data: any, value = null): this {
-        if (typeof data === "string") {
-            this.req.flash(data, value);
-        } else {
-            const dataKeys = Object.keys(data);
+        if (this.req.flash) {
+            if (typeof data === "string") {
+                this.req.flash(data, value);
+            } else {
+                const dataKeys = Object.keys(data);
 
-            for (let i = 0; i < dataKeys.length; i++) {
-                this.req.flash(dataKeys[i], data[dataKeys[i]]);
+                for (let i = 0; i < dataKeys.length; i++) {
+                    this.req.flash(dataKeys[i], data[dataKeys[i]]);
+                }
             }
         }
 
@@ -480,11 +482,14 @@ class RequestEngine {
      * @returns {RequestEngine}
      */
     public withOld(): this {
-        const data = this.all();
-        const dataKeys = Object.keys(data);
 
-        for (let i = 0; i < dataKeys.length; i++) {
-            this.req.flash("old:" + dataKeys[i], data[dataKeys[i]]);
+        if (this.req.flash) {
+            const data = this.all();
+            const dataKeys = Object.keys(data);
+
+            for (let i = 0; i < dataKeys.length; i++) {
+                this.req.flash("old:" + dataKeys[i], data[dataKeys[i]]);
+            }
         }
 
         return this;

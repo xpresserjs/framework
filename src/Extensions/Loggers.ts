@@ -5,7 +5,6 @@ import {getInstance} from "../../index";
 
 const $ = getInstance();
 
-const debugEnabled = $.config.get('debug.enabled', true);
 const isDebugEnabled = $.config.sync<boolean>('debug.enabled', true);
 const depWarnings = $.config.sync<{ enabled: boolean, showStack: boolean }>('debug.deprecationWarnings');
 
