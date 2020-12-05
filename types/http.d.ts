@@ -10,7 +10,8 @@ declare namespace Xpresser {
 
     namespace Http {
         interface Request extends express.Request {
-            session: object;
+            // Turned any since session became standalone
+            session: any;
             flash: (key?: string, value?: any) => void;
         }
 
