@@ -1,22 +1,17 @@
-import lodash from "lodash";
 import {getInstance} from "../../index";
+import {parseControllerString} from "../Functions/internals.fn";
 
-const $ = getInstance();
-
+import lodash = require("lodash");
 import os = require("os");
 import fs = require("fs");
 import fse = require("fs-extra");
-
 import Artisan = require("../Functions/artisan.fn");
-
-const artisanConfig = $.config.get('artisan', {});
 import colors = require("../Objects/consoleColors.obj");
 import PathHelper = require("../Helpers/Path");
-import {parseControllerString} from "../Functions/internals.fn";
 
-const logThis = Artisan.logThis;
-// const logSuccess = $.logSuccess;
-const logThisAndExit = Artisan.logThisAndExit;
+const $ = getInstance();
+const artisanConfig = $.config.get('artisan', {});
+const {logThis, logThisAndExit} = Artisan;
 
 /**
  * Remove slash at the end of str passed
@@ -37,6 +32,9 @@ const maintenanceFile = $.path.base('.maintenance');
 
 
 const Commands = {
+    /**
+     * Enable Maintenance Mood
+     */
     up() {
         if (!fs.existsSync(maintenanceFile)) {
             return $.logAndExit('App is already up')
@@ -48,6 +46,9 @@ const Commands = {
         $.logAndExit('Reload your server if you have an active getInstance already running.')
     },
 
+    /**
+     * Disabled Maintenance Mood
+     */
     down() {
         if (fs.existsSync(maintenanceFile)) {
             return $.logAndExit('App is already down.')
@@ -62,6 +63,10 @@ const Commands = {
 
     },
 
+    /**
+     * @deprecated
+     * @param $plugin
+     */
     install([$plugin]: string[]) {
         if ($plugin === "undefined") {
             return logThis("Plugin not specified!");
@@ -97,7 +102,7 @@ const Commands = {
             }
 
             if (typeof e.controller === "function") {
-                if(e.controller.name){
+                if (e.controller.name) {
                     e.controller = e.controller.name;
                     if (e.controller.indexOf("getFile(") !== 0) {
                         e.controller += '()'
@@ -105,7 +110,7 @@ const Commands = {
                         e.controller = e.controller.replace($.path.base(), '')
                     }
                 } else {
-                    e.controller = "annonymous()"
+                    e.controller = "anonymous()"
                 }
             }
 
@@ -143,6 +148,11 @@ const Commands = {
         console.log()
 
     },
+
+    /**
+     * Make Job
+     * @param args
+     */
     "make:job"(args: string[]) {
         const job = args[0];
         let command = args[1];
@@ -161,6 +171,10 @@ const Commands = {
         return $.exit();
     },
 
+    /**
+     * Generate Events File.
+     * @param args
+     */
     "make:event"(args: string[]) {
         const name = args[0];
         const namespace = args[1];
@@ -171,6 +185,10 @@ const Commands = {
         return $.exit();
     },
 
+    /**
+     * Generate Controller file.
+     * @param args
+     */
     "make:controller"(args: string[]) {
         const controller = args[0];
 
@@ -184,6 +202,10 @@ const Commands = {
         return $.exit();
     },
 
+    /**
+     * Generate Controller Object
+     * @param args
+     */
     "make:controller_object"(args: string[]) {
         const controller = args[0];
         if (typeof controller === "undefined") {
@@ -196,6 +218,10 @@ const Commands = {
         return $.exit();
     },
 
+    /**
+     * Generate Controller with Services
+     * @param args
+     */
     "make:controller_services"(args: string[]) {
         const controller = args[0];
         if (typeof controller === "undefined") {
@@ -208,6 +234,10 @@ const Commands = {
         return $.exit();
     },
 
+    /**
+     * Generate Controller Service.
+     * @param args
+     */
     "make:controllerService"(args: string[]) {
         const service = args[0];
 
@@ -221,6 +251,10 @@ const Commands = {
         return $.exit();
     },
 
+    /**
+     * Generate Middleware file.
+     * @param args
+     */
     "make:middleware"(args: string[]) {
         const middleware = args[0];
         if (typeof middleware === "undefined") {
@@ -233,6 +267,11 @@ const Commands = {
         return $.exit();
     },
 
+
+    /**
+     * Make Model File.
+     * @param args
+     */
     "make:model"(args: string[]) {
         let name: string = args[0];
         let table: string = args[1];
@@ -259,6 +298,10 @@ const Commands = {
         $.exit();
     },
 
+    /**
+     * Make View File.
+     * @param args
+     */
     "make:view"(args: string[]) {
         const config = $.config.get('template');
         let name = args[0];
@@ -298,32 +341,50 @@ const Commands = {
         return $.exit();
     },
 
+    /**
+     * Import importable files
+     * @param plugin
+     * @param folder
+     * @param overwrite
+     */
     import([plugin, folder, overwrite]: string[]) {
+        const allowedImportables = [
+            "configs",
+            "models",
+            "views",
+            "events",
+            "controllers",
+            "middlewares",
+        ]
+
+        folder = folder.toLowerCase();
+        // @ts-ignore
+        if (!allowedImportables.includes(folder))
+            return $.logErrorAndExit(`Import does not support any importable folder named (${folder})`);
+
+        // Get config
         const config = $.engineData.get(`PluginEngine:namespaces[${plugin}]`);
 
         if (!config)
             return $.logErrorAndExit(`No plugin namespaced {${plugin}} registered in your project`);
-
 
         const importable = config.importable || config.publishable;
         if (!importable)
             return $.logErrorAndExit(`Plugin: {${plugin}} does not have any importables`);
 
 
-        const importableFactory = importable[folder];
+        let importableFactory = importable[folder];
         if (!importableFactory)
-            return $.logErrorAndExit(`Plugin: {${plugin}} does not have any importable folder named (${folder})`);
+            return $.logErrorAndExit(`Plugin: {${plugin}} does not have any importable item named (${folder})`);
 
-
-        folder = folder.toLowerCase();
-        // @ts-ignore
-        if (typeof $.path[folder] !== "function")
-            return $.logErrorAndExit(`Import does not support any importable folder named (${folder})`);
-
+        if (importable.hasOwnProperty(folder + '.ts') && $.isTypescript()) {
+            importableFactory = importable[folder + '.ts'];
+        }
 
         const from = config.path + '/' + importableFactory;
         if (!fs.existsSync(from))
-            $.logErrorAndExit(`File/Folder {${importableFactory}} does not exists in plugin (${plugin}) directory.`)
+            return $.logErrorAndExit(`File/Folder {${importableFactory}} does not exists in plugin (${plugin}) directory.`)
+
 
         // @ts-ignore
         let to: string = $.path[folder](lodash.kebabCase(config.namespace))

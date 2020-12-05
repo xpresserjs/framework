@@ -4,9 +4,7 @@ import PathHelper = require("./Helpers/Path");
 import OnEventsLoader = require("./Events/OnEventsLoader");
 
 const {runBootEvent} = OnEventsLoader;
-
 import express = require("express");
-
 import {createServer as createHttpServer} from "http";
 import {createServer as createHttpsServer} from "https";
 
@@ -22,7 +20,7 @@ const paths = $.config.get("paths");
 
 /////////////
 // Load Use.json Data
-const $useDotJson = $.engineData.get("UseDotJson");
+const useDotJson = $.engineData.get("UseDotJson");
 // Check if under maintenance
 const isUnderMaintenance = $.file.exists($.path.base('.maintenance'))
 
@@ -308,9 +306,9 @@ const afterExpressInit = (next: () => void) => {
         };
     };
 
-    if ($useDotJson.has("globalMiddlewares")) {
+    if (useDotJson.has("globalMiddlewares")) {
         const projectFileExtension = $.config.get('project.fileExtension');
-        const $middlewares = $useDotJson.get("globalMiddlewares");
+        const $middlewares = useDotJson.get("globalMiddlewares");
 
         for (let i = 0; i < $middlewares.length; i++) {
             let $middleware = $middlewares[i];
@@ -472,7 +470,7 @@ const startHttpsServer = () => {
     runBootEvent("https", () => {
         $.https.listen(httpsPort, () => {
             $.logSuccess("Ssl Enabled.");
-            runBootEvent('serverBooted')
+            runBootEvent('serverBooted');
         });
     });
 };
