@@ -4,9 +4,8 @@ import ControllerServiceError = require("../src/Controllers/ControllerServiceErr
 import ControllerService = require("../src/Controllers/ControllerService");
 
 declare namespace Xpresser {
-    // tslint:disable-next-line:no-empty-interface
-    interface Http extends RequestEngine {
-    }
+
+    type Http = RequestEngine;
 
     namespace Http {
         interface Request extends express.Request {
