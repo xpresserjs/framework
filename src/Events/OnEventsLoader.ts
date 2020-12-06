@@ -25,7 +25,8 @@ export const runBootEvent = (name: string, done?: () => void) => {
             }
         };
 
-        return onEvents[0](next);
+        // Pass next and current xpresser instance
+        return onEvents[0](next, $);
     } else {
         return done ? done() : false;
     }
