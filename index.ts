@@ -26,7 +26,8 @@ function getInstance(instanceId?: string): DollarSign {
     } else {
 
         // If $ is defined then return.
-        if (global.$) {
+        if (global.hasOwnProperty('$')) {
+            // @ts-ignore
             return global.$;
         }
 
@@ -184,6 +185,7 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
 
 
     // Expose {$}(DollarSign) to globals.
+    // @ts-ignore
     if (AppOptions.exposeDollarSign) global.$ = $;
 
     /**
