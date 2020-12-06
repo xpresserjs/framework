@@ -5,20 +5,17 @@ import ControllerService = require("../src/Controllers/ControllerService");
 
 declare namespace Xpresser {
 
-    interface Http extends RequestEngine {
-        __NO_EMPTY_INTERFACE_ERROR?: true
-    }
+    // tslint:disable-next-line:no-empty-interface
+    interface Http extends RequestEngine {}
 
     namespace Http {
         interface Request extends express.Request {
             session: any
-
             flash?(key?: string, value?: any): void
         }
 
-        interface Response extends express.Response {
-            __NO_EMPTY_INTERFACE_ERROR?: true
-        }
+        // tslint:disable-next-line:no-empty-interface
+        interface Response extends express.Response {}
     }
 
     namespace Controller {
