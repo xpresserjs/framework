@@ -9,7 +9,6 @@ import ObjectCollection from "object-collection";
 import XpresserRouter from "@xpresser/router";
 import {Controller as HttpController} from "./http";
 
-type TodoFunction = (next?: any) => any;
 type NumberToAnyKeyObject = Record<number, any>;
 
 declare namespace Xpresser {
@@ -77,6 +76,8 @@ declare namespace Xpresser {
          */
         define(event: string, run: (...args: any[]) => void | any): void;
     }
+
+    export type TodoFunction = (next: () => void, $: DollarSign) => any;
 
     export interface DollarSign {
         config: ObjectCollection;

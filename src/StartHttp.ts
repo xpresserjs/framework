@@ -259,7 +259,7 @@ import ControllerService = require("./Controllers/ControllerService");
  * Maintenance Middleware
  */
 if (isUnderMaintenance) {
-    $.logError(`App is under Maintenance!`);
+    $.logError(`${$.config.get("name")}, is under Maintenance!`);
 
     /**
      * Get maintenance middleware

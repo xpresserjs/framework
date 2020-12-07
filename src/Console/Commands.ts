@@ -347,7 +347,13 @@ const Commands = {
      * @param folder
      * @param overwrite
      */
-    import([plugin, folder, overwrite]: string[]) {
+    import([plugin, folder, shouldOverwrite]: string[]) {
+        const overwrite = shouldOverwrite === 'overwrite';
+
+        if (plugin.toLowerCase() === 'xpresser') {
+            return this.importFiles(folder, overwrite);
+        }
+
         const allowedImportables = [
             "configs",
             "models",
@@ -399,7 +405,7 @@ const Commands = {
         }
 
         // Copy Folders
-        fse.copy(from, to, {overwrite: overwrite === 'overwrite', recursive: true})
+        fse.copy(from, to, {overwrite, recursive: true})
             .then(() => {
                 const base = $.path.base();
 
@@ -412,6 +418,55 @@ const Commands = {
                 $.logError('An error occurred while publishing the folder.')
                 return $.logAndExit(err)
             })
+    },
+
+
+    /**
+     * Import Factory files like e.g typescript types.
+     */
+    async importFiles(folder: string, overwrite: boolean) {
+        if (folder !== 'types') {
+            return $.logErrorAndExit(`Xpresser does not have any importable item named (${folder})`);
+        }
+
+        const base = $.path.base();
+        const typesDestination = $.path.backend('types');
+        const factoryTypesFolder = $.path.engine('Factory/types');
+
+        /**
+         * If typesDestination exits, make
+         */
+        if (fs.existsSync(typesDestination)) {
+            try {
+                for (const type of ['index', 'modules', 'xpresser']) {
+                    const from = `${factoryTypesFolder}/${type}.d.ts`;
+                    const to = `${typesDestination}/${type}.d.ts`;
+
+                    await fse.copy(from, to, {overwrite});
+
+                    $.logInfo(`From: (${from.replace(base, '')})`);
+                    $.logInfo(`To: (${to.replace(base, '')})`);
+                }
+
+                $.logAndExit('Import completed!')
+            } catch (e) {
+                return $.logAndExit(e);
+            }
+        } else {
+            $.file.makeDirIfNotExist(typesDestination);
+
+            fse.copy(factoryTypesFolder, typesDestination, {overwrite})
+                .then(() => {
+
+                    $.logInfo(`From: (${factoryTypesFolder.replace(base, '')})`)
+                    $.logInfo(`To: (${typesDestination.replace(base, '')})`)
+
+                })
+                .catch(err => {
+                    $.logError('An error occurred while publishing the folder.')
+                    return $.logAndExit(err)
+                })
+        }
     }
 };
 
