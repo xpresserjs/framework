@@ -200,7 +200,10 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
      */
     global._ = new Proxy(lodash, {
         get: (_target, prop) => {
+
+            // Log Deprecation Message.
             $.logDeprecated('0.2.98', '1.0.0', 'Using global xpresser (_) i.e lodash is deprecated. Please use $.modules.lodash() instead.');
+
             return lodash[prop];
         }
     });

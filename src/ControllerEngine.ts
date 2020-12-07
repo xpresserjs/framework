@@ -419,11 +419,7 @@ const Controller = (route: any, method: any = null) => {
         return $.logErrorAndExit("Controller not found!");
     }
 
-    const use = (middlewareFn: any) => {
-        return async (req: any, res: any, next: any) => {
-            return middlewareFn(new RequestEngine(req, res, next, route));
-        };
-    };
+    const use = RequestEngine.expressify;
 
     let controllerMiddleware: any;
     if ($controller && route !== undefined) {

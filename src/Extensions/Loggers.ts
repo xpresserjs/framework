@@ -2,6 +2,7 @@ import chalk = require("chalk");
 import os = require("os");
 import lodash from "lodash";
 import {getInstance} from "../../index";
+import {touchMyMustache} from "../Functions/inbuilt.fn";
 
 const $ = getInstance();
 
@@ -36,14 +37,39 @@ $.logCalmly = (...args) => {
     return console.log(...args);
 };
 
-$.logDeprecated = (since: string, removedAt: string, message: string) => {
+$.logDeprecated = (since: string, removedAt: string, message: string | string[], hasStack = true) => {
+
+    // Check if messages.
+    if (Array.isArray(message)) {
+        const m: (string | null)[] = message;
+
+        for (const i in m) {
+            if (m[i] === null) {
+                m[i] = os.EOL;
+            } else {
+                m[i] += ' ';
+            }
+        }
+
+        message = message.join('').trim();
+    }
+
+    const mustaches = touchMyMustache(message);
+    if (mustaches.length) {
+        mustaches.forEach(m => {
+            // remove mustache
+            const withoutMustache = m.replace('{{', '').replace('}}', '');
+            message = (message as string).replace(m, chalk.cyan(withoutMustache))
+        });
+    }
+
     const config = depWarnings.sync;
     if (isDebugEnabled.sync && config.enabled) {
 
         console.log(chalk.gray('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'))
         console.log(chalk.whiteBright(`!! DEPRECATED ALERT !!`));
 
-        if (config.showStack) {
+        if (hasStack && config.showStack) {
             console.log(chalk.white(os.EOL + message));
             console.trace()
             console.log();

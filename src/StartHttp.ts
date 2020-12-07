@@ -160,6 +160,23 @@ if (useBodyParser) {
 
 const useSession = $.config.get("server.use.session", false);
 if (useSession) {
+
+    /**
+     * Log End of sessions deprecation message.
+     */
+    $.logDeprecated(
+        '0.3.37',
+        '1.0.0',
+        [
+            'At version 1.0.0, xpresser will {{STOP}} shipping with {{SESSION}} support out of the box', null,
+            'Install the new {{@xpresser/session}} plugin instead!', null,
+            'This plugin re-enables the old session system and is simply Plug & Play.',
+            null, null,
+            'See: https://xpresserjs.com/http/sessions.html'
+        ],
+        false
+    );
+
     const session = require("express-session");
     const useDefault = $.config.get("session.useDefault", false);
 
@@ -221,17 +238,20 @@ if (useSession) {
 
         $.app.use(handler(session));
     }
-
-    /**
-     * Express Flash
-     */
-    const useFlash = $.config.get('server.use.flash', false);
-    if (useFlash) {
-        const flash = require("express-flash");
-        $.app.use(flash());
-    }
 }
 
+/**
+ * Express Flash
+ */
+const useFlash = $.config.get('server.use.flash', false);
+if (useFlash) {
+    const flash = require("express-flash");
+    $.app.use(flash());
+}
+
+/**
+ * Import Files needed after above middlewares
+ */
 import RequestEngine = require("./Plugins/ExtendedRequestEngine");
 import ControllerService = require("./Controllers/ControllerService");
 
@@ -254,9 +274,10 @@ if (isUnderMaintenance) {
     const maintenanceMiddlewareExists = $.file.exists(maintenanceMiddleware);
     if (maintenanceMiddlewareExists) maintenanceMiddleware = require(maintenanceMiddleware);
 
-    $.app.use((req: any, res: any, next: any) => {
-        // Get RequestEngine getInstance
-        const http = new RequestEngine(req, res, next);
+    /**
+     * Register Maintenance Middleware
+     */
+    $.app.use(RequestEngine.expressify(http => {
 
         // Use maintenanceMiddleware if it exists
         if (maintenanceMiddlewareExists) return maintenanceMiddleware(http);
@@ -265,11 +286,10 @@ if (isUnderMaintenance) {
         return http.newError().view({
             error: {
                 title: 'Maintenance Mood!',
-                // message: `App is under maintenance`,
                 log: 'We will be right back shortly!',
             },
         }, 200);
-    });
+    }));
 }
 
 
@@ -285,7 +305,7 @@ $.app.use(async (req: any, _res: any, next: () => void) => {
         );
     }
 
-    next();
+    return next();
 });
 
 /**
@@ -299,12 +319,12 @@ const afterExpressInit = (next: () => void) => {
         $.handler = (controller: XpresserController.Object) => new ControllerService(controller);
     }
 
-    const $globalMiddlewareWrapper = ($middlewareFn: any) => {
-        return async (res: any, req: any, next: any) => {
-            const x = new RequestEngine(res, req, next);
-            return $middlewareFn(x);
-        };
-    };
+    // Replaced with RequestEngine.expressify()
+    // const $globalMiddlewareWrapper = ($middlewareFn: any) => {
+    //     return (res: any, req: any, next: any) => {
+    //         return $middlewareFn(new RequestEngine(res, req, next));
+    //     };
+    // };
 
     if (useDotJson.has("globalMiddlewares")) {
         const projectFileExtension = $.config.get('project.fileExtension');
@@ -320,10 +340,9 @@ const afterExpressInit = (next: () => void) => {
             $middleware = PathHelper.resolve($middleware);
 
             try {
-
-                const $globalMiddleware = $globalMiddlewareWrapper(require($middleware));
-                $.app.use($globalMiddleware);
-
+                $.app.use(
+                    RequestEngine.expressify(require($middleware))
+                );
             } catch (e) {
                 $.logPerLine([
                     {error: "Error in use.json"},
@@ -341,7 +360,7 @@ const afterExpressInit = (next: () => void) => {
     // Process routes
     $.routerEngine.processRoutes($.router.routes);
 
-    next();
+    return next();
 };
 
 /**
@@ -352,16 +371,16 @@ const startHttpServer = (onSuccess?: () => any, onError?: () => any) => {
     /**
      * Add 404 error
      */
-    $.app.use((req: any, res: any, next: () => void) => {
-        res.status(404);
+    $.app.use(RequestEngine.expressify(http => {
+        http.res.status(404);
 
         // respond with json
-        if (req.xhr) {
-            return res.send({error: "Not found"});
+        if (http.req.xhr) {
+            return http.send({error: "Not found"});
         } else {
-            return (new RequestEngine(req, res, next)).newError().pageNotFound();
+            return http.newError().pageNotFound();
         }
-    });
+    }))
 
     $.http = createHttpServer($.app);
     const port = $.config.get("server.port", 80);

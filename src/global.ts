@@ -12,11 +12,7 @@ declare const global: any;
  * @remove at (1.0.0)
  */
 global['moment'] = (...args: any[]) => {
-    $.logDeprecated(
-        '0.3.22', '1.0.0',
-        'Using global xpresser (moment) is deprecated. Please use $.modules.moment() instead.',
-        true
-    );
+    $.logDeprecated('0.3.22', '1.0.0', 'Using global xpresser (moment) is deprecated. Please use $.modules.moment() instead.');
     return moment(...args);
 };
 

@@ -57,14 +57,13 @@ const MiddlewareEngine = (middlewarePath: any, action?: any, route?: any): any =
     /**
      * Return Parsed Middleware
      */
-    return async (req: any, res: any, next: any) => {
-        const request = new RequestEngine(req, res, next, route);
+    return RequestEngine.expressify(http => {
         if (typeof middleware === "function") {
-            return middleware(request);
+            return middleware(http);
         } else {
-            return middleware[action](request);
+            return middleware[action](http);
         }
-    };
+    });
 };
 
 export = MiddlewareEngine;

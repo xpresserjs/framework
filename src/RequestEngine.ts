@@ -12,6 +12,7 @@ import {Http} from "../types/http";
 import {getInstance} from "../index";
 import {DollarSign} from "../types";
 import InXpresserError from "./Errors/InXpresserError";
+import express = require("express");
 
 const $ = getInstance();
 
@@ -83,6 +84,18 @@ class RequestEngine {
         this.$query = $.objectCollection(req.query || {});
     }
 
+
+    /**
+     * Takes in an xpresser middleware and returns an express middleware.
+     *
+     * Useful when dealing with express middlewares but want to use xpresser's RequestEngine.
+     */
+    public static expressify(fn: (http: RequestEngine) => ((req: express.Request, res: express.Response, next: express.NextFunction) => any)) {
+        return (req: express.Request, res: express.Response, next: express.NextFunction) => {
+            return fn(new RequestEngine(req, res, next));
+        }
+    }
+
     /**
      * If User has customRenderer then use it.
      */
@@ -142,10 +155,7 @@ class RequestEngine {
      */
     public query(key?: string | undefined, $default?: any): ObjectCollection | any {
         if (key === undefined) {
-            $.logDeprecated(
-                '0.3.22', '1.0.0',
-                'http.query() without arguments to get query collection is deprecated, use `http.$query` instead.'
-            );
+            $.logDeprecated('0.3.22', '1.0.0', 'http.query() without arguments to get query collection is deprecated, use `http.$query` instead.');
             return this.$query;
         } else {
             return this.$query.get(key, $default);
@@ -163,10 +173,7 @@ class RequestEngine {
      */
     public body(key?: string | undefined, $default?: any): ObjectCollection | any {
         if (key === undefined) {
-            $.logDeprecated(
-                '0.3.22', '1.0.0',
-                'http.body() without keys to get body collection is deprecated, use `http.$body` instead.'
-            );
+            $.logDeprecated('0.3.22', '1.0.0', 'http.body() without keys to get body collection is deprecated, use `http.$body` instead.');
 
             return this.$body;
         } else {

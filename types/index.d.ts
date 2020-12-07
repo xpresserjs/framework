@@ -446,7 +446,7 @@ declare namespace Xpresser {
         /**
          * Log Deprecation Message
          */
-        logDeprecated(since: string, removedAt: string, message: string, stack?: boolean): void;
+        logDeprecated(since: string, removedAt: string, message: string | (string | null)[], hasStack?: boolean): void;
 
         /**
          * Log Info
