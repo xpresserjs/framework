@@ -1,25 +1,23 @@
 // Type definitions for [Xpresser] [*]
 // Project: Xpresser
-// Definitions by: TrapCode <https://xpresserjs.com>
+// Definitions by: TrapCodeIO <https://xpresserjs.com>
 
 import {Helpers} from "./helpers";
-import Net = require("net");
-import express = require("express");
-import ObjectCollection = require("object-collection");
-import UseEngine = require("../src/UseEngine");
-import XpresserRouter = require("@xpresser/router");
-import RouterEngine = require("../src/RouterEngine");
-import Controller = require("../src/Classes/ControllerClass");
-
+import Net from "net";
+import express from "express";
+import ObjectCollection from "object-collection";
+import XpresserRouter from "@xpresser/router";
 import {Controller as HttpController} from "./http";
 
 type TodoFunction = (next?: any) => any;
-type NumberToAnyKeyObject = { [key: number]: any }
-type isNode = false | {
-    ts: { baseFolder: string }
-};
+type NumberToAnyKeyObject = Record<number, any>;
 
 declare namespace Xpresser {
+
+    export type isNode = false | {
+        ts: { baseFolder: string }
+    }
+
     export type Router = XpresserRouter;
 
     /**
@@ -93,7 +91,7 @@ declare namespace Xpresser {
         base64: Helpers.Base64;
 
         // Use Engine
-        use: typeof UseEngine;
+        use: typeof import("../src/UseEngine");
 
         // Set XpresserHelpers
         helpers: Helpers.Main;
@@ -130,10 +128,14 @@ declare namespace Xpresser {
         https: Net.Server;
 
         // Router Engine
-        routerEngine: typeof RouterEngine;
+        routerEngine: typeof import("../src/RouterEngine");
 
         // Controller
-        controller: typeof Controller;
+        /**
+         * Import ControllerClass from "xpresser" instead.
+         * @deprecated
+         */
+        controller: typeof import("../src/Classes/ControllerClass");
 
         // Events
         events: EventEmitter;
