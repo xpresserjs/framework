@@ -92,7 +92,7 @@ class RequestEngine {
      */
     public static expressify(fn: (http: RequestEngine) => ((req: express.Request, res: express.Response, next: express.NextFunction) => any)) {
         return (req: express.Request, res: express.Response, next: express.NextFunction) => {
-            return fn(new RequestEngine(req, res, next));
+            return fn(new this(req, res, next));
         }
     }
 
