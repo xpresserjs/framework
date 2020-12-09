@@ -74,7 +74,7 @@ class RequestEngine {
         };
 
         this.params = req.params || {};
-        this.session = req.session || {};
+        this.session = (req as any).session || {};
 
         if (!res.locals) res.locals = {};
         this.store = $.objectCollection(res.locals);
