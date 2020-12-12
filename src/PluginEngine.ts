@@ -114,9 +114,8 @@ class PluginEngine {
                         }
                     } else {
                         const pluginsLength = plugins.length
-                        $.ifNotConsole(
-                            () => $.logSuccess(`Using (${pluginsLength}) ${pluginsLength === 1 ? 'plugin' : 'plugins'}`)
-                        );
+
+                        $.logSuccess(`Using (${pluginsLength}) ${pluginsLength === 1 ? 'plugin' : 'plugins'}`)
                     }
                 });
 
@@ -177,7 +176,6 @@ class PluginEngine {
     public static async usePlugin(plugin: string, path: string, data: object) {
         const $data = $.objectCollection(data);
         let pluginData: any;
-        console.log(plugin)
 
         // Set plugin Data
         pluginData = {
