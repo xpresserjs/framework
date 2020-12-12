@@ -80,7 +80,7 @@ class PluginEngine {
             }
 
             if (Array.isArray(plugins) && plugins.length) {
-
+                const env = $.config.get('env');
                 const pluginPaths: Record<string, any> = {};
                 const pluginData: Record<string, any> = {};
 
@@ -96,6 +96,9 @@ class PluginEngine {
 
                             try {
                                 const $data = pluginData[plugin] = PluginEngine.loadPluginUseData($pluginPath);
+                                if ($data.env && $data.env !== env) {
+                                    continue;
+                                }
                                 /**
                                  * If {log.plugins===true} then display log
                                  */
@@ -117,7 +120,6 @@ class PluginEngine {
                     }
                 });
 
-
                 /**
                  * Loop through plugins found and process them using PluginEngine.loadPluginUseData
                  */
@@ -128,8 +130,10 @@ class PluginEngine {
 
                         // Try processing plugin use.json
                         try {
-
                             const $data = pluginData[plugin] || PluginEngine.loadPluginUseData($pluginPath);
+                            if ($data.env && $data.env !== env) {
+                                continue;
+                            }
                             // tslint:disable-next-line:max-line-length
                             PluginNamespaceToData[$data.namespace] = await PluginEngine.usePlugin(plugin, $pluginPath, $data);
 
@@ -173,6 +177,7 @@ class PluginEngine {
     public static async usePlugin(plugin: string, path: string, data: object) {
         const $data = $.objectCollection(data);
         let pluginData: any;
+        console.log(plugin)
 
         // Set plugin Data
         pluginData = {
