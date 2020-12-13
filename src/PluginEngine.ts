@@ -2,6 +2,7 @@ import PathHelper = require("./Helpers/Path");
 
 import {getInstance} from "../index";
 import InXpresserError from "./Errors/InXpresserError";
+import {convertPluginArrayToObject, pluginPathExistOrExit} from "./Functions/plugins.fn";
 
 const $ = getInstance();
 
@@ -15,39 +16,6 @@ const pluginRoutes = [] as any[];
  */
 const PluginNamespaceToData: Record<string, any> = {};
 
-/**
- * Check if plugin file exists or throw error.
- * @param plugin
- * @param pluginPath
- * @param file
- */
-const pluginPathExistOrExit = (plugin: string, pluginPath: string, file: string) => {
-    /**
-     * ResolvedRoutePath - get file real path,
-     * Just in any case smartPaths are used.
-     */
-    const ResolvedRoutePath = PathHelper.resolve(file, false);
-
-    if (file === ResolvedRoutePath) {
-        // Merge plugin base path to file.
-        file = pluginPath + "/" + file;
-    } else {
-        // file is ResolvedPath
-        file = ResolvedRoutePath;
-    }
-
-    // If file or folder does not exists throw error.
-    if (!$.file.exists(file)) {
-        return $.logPerLine([
-            {error: plugin},
-            {error: `REQUIRED FILE or DIR MISSING: ${file}`},
-            {errorAndExit: ""},
-        ], true);
-    }
-
-    // return real path.
-    return file;
-};
 
 /**
  * @class PluginEngine
@@ -61,7 +29,7 @@ class PluginEngine {
         // get logs.plugins config.
         const logPlugins = $.config.get("log.plugins", true);
         // Hold Plugins
-        let plugins = [] as any[];
+        let plugins!: Record<string, (boolean | Record<string, any>)>;
         // Get plugins.json path.
         const PluginsPath = $.path.jsonConfigs("plugins.json");
 
@@ -80,61 +48,110 @@ class PluginEngine {
             }
 
             if (Array.isArray(plugins) && plugins.length) {
+                $.logDeprecated(
+                    "0.5.0",
+                    "0.5.0",
+                    [
+                        'Using {{array in plugins.json}} is deprecated, change your plugin.jsons contents to this generated object below.',
+                        null, null,
+                        JSON.stringify(convertPluginArrayToObject(plugins), null, 2)
+                    ],
+                    false
+                );
+
+                $.logErrorAndExit('Fix plugins.json and reload server.');
+            }
+
+            /**
+             * Load plugins if plugins is an object.
+             */
+            if (typeof plugins === "object") {
+                // Holds all defined plugin keys
+                const pluginKeys = Object.keys(plugins);
+
+                // Holds current app env.
                 const env = $.config.get('env');
+
+                // Caches plugin paths.
                 const pluginPaths: Record<string, any> = {};
+
+                // Caches plugin Data
                 const pluginData: Record<string, any> = {};
 
+
                 /**
+                 * Loop through and process plugins.
+                 *
                  * We want to log all plugin names before loading them.
                  * Just in any case plugins have logs it does not interfere with the plugin names list.
+                 *
+                 * Also check if a particular plugin is meant for the environment your project is in.
                  */
-                $.ifNotConsole(() => {
-                    if (logPlugins) {
-                        for (const plugin of plugins) {
-                            // get plugin real path.
-                            const $pluginPath: string = pluginPaths[plugin] = PathHelper.resolve(plugin);
+                const loadedPlugins: typeof plugins = {};
+                for (const plugin of pluginKeys) {
+                    const pluginUseDotJsonOptions = plugins[plugin]
+                    if (typeof pluginUseDotJsonOptions === "boolean" && !pluginUseDotJsonOptions)
+                        continue;
 
-                            try {
-                                const $data = pluginData[plugin] = PluginEngine.loadPluginUseData($pluginPath);
-                                if ($data.env && $data.env !== env) {
-                                    continue;
-                                }
-                                /**
-                                 * If {log.plugins===true} then display log
-                                 */
-                                $.logSuccess(`Using Plugin --> {${$data.namespace}}`);
-                            } catch (e) {
-                                // Throw any error from processing and stop xpresser.
-                                $.logPerLine([
-                                    {error: plugin},
-                                    {error: e},
-                                    {errorAndExit: ""},
-                                ], true);
-                            }
+                    if (typeof pluginUseDotJsonOptions === "object") {
+
+                        if (pluginUseDotJsonOptions.hasOwnProperty('load') &&
+                            pluginUseDotJsonOptions.load === false) {
+                            continue;
                         }
-                    } else {
-                        const pluginsLength = plugins.length
 
-                        $.logSuccess(`Using (${pluginsLength}) ${pluginsLength === 1 ? 'plugin' : 'plugins'}`)
+                        if (pluginUseDotJsonOptions.hasOwnProperty('env') &&
+                            env !== pluginUseDotJsonOptions.env) {
+                            continue;
+                        }
                     }
-                });
+
+                    loadedPlugins[plugin] = pluginUseDotJsonOptions;
+                }
+
 
                 /**
-                 * Loop through plugins found and process them using PluginEngine.loadPluginUseData
+                 * Start Processing loaded plugins
                  */
-                for (const plugin of plugins) {
+                const listOfPluginNamespaces: string[] = [];
+                for (const plugin of Object.keys(loadedPlugins)) {
+                    // get plugin real path.
+                    const $pluginPath: string = pluginPaths[plugin] = PathHelper.resolve(plugin);
+
+                    try {
+                        const $data = pluginData[plugin] = PluginEngine.loadPluginUseData($pluginPath);
+                        listOfPluginNamespaces.push($data.namespace);
+                    } catch (e) {
+                        // Throw any error from processing and stop xpresser.
+                        $.logPerLine([
+                            {error: plugin},
+                            {error: e},
+                            {errorAndExit: ""},
+                        ], true);
+                    }
+                }
+
+                $.ifNotConsole(() => {
+                    if (logPlugins) {
+                        $.logSuccess(`Using plugins: [${listOfPluginNamespaces.join(', ')}]`)
+                    } else {
+                        const pluginsLength = listOfPluginNamespaces.length;
+                        $.logSuccess(`Using (${pluginsLength}) ${pluginsLength === 1 ? 'plugin' : 'plugins'}`)
+                    }
+                })
+
+
+                for (const plugin of Object.keys(loadedPlugins)) {
                     if (plugin.length) {
                         // get plugin real path.
-                        const $pluginPath: string = pluginPaths[plugin] || PathHelper.resolve(plugin);
+                        const $pluginPath: string = pluginPaths[plugin];
 
                         // Try processing plugin use.json
                         try {
-                            const $data = pluginData[plugin] || PluginEngine.loadPluginUseData($pluginPath);
-                            if ($data.env && $data.env !== env) {
-                                continue;
-                            }
-                            // tslint:disable-next-line:max-line-length
-                            PluginNamespaceToData[$data.namespace] = await PluginEngine.usePlugin(plugin, $pluginPath, $data);
+                            const $data = pluginData[plugin];
+                            PluginNamespaceToData[$data.namespace] = await PluginEngine.usePlugin(
+                                plugin, $pluginPath, $data
+                            );
 
                             // Save to engineData
                             $.engineData.set("PluginEngine:namespaces", PluginNamespaceToData);
@@ -148,6 +165,8 @@ class PluginEngine {
                         }
                     }
                 }
+            } else {
+                $.logWarning('Plugins not loaded! Typeof plugins is expected to be an object.')
             }
         }
 

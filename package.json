@@ -7,7 +7,7 @@
   "scripts": {
     "prod": "tsc -p tsconfig.json",
     "watch": "tsc --watch",
-    "dev": "ts-node-dev --respawn --transpileOnly ./test.ts"
+    "dev": "ts-node-dev --respawn --transpile-only ./test.ts"
   },
   "repository": "https://github.com/xpresserjs/framework.git",
   "homepage": "https://xpresserjs.com",
