@@ -21,7 +21,7 @@ export const runBootEvent = (name: string, done?: () => void) => {
             $.engineData.set(key, nextIndex);
 
             if (typeof onEvents[nextIndex] === "function") {
-                return onEvents[nextIndex](next);
+                return onEvents[nextIndex](next, $);
             }
         };
 
