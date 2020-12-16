@@ -75,13 +75,11 @@ const ServerConfig = {
     /**
      * Xpresser comes with a few packages for security,
      * You can enable or disable them here.
-     * ['bodyParser', 'session', 'helmet']
+     * ['bodyParser', 'flash' 'helmet']
      */
     use: {
         // Use BodyParser,
         bodyParser: true,
-        // Enable Session
-        session: false,
         // Enable Flash
         flash: false,
     },
@@ -165,21 +163,6 @@ const Config = {
         configs: "backend://configs"
     },
 
-    // Session Configurations
-    session: {
-        useDefault: false,
-        // Path custom handler or false
-        useCustomHandler: false,
-        secret: "!XpresserSecretKey!",
-        cookie: {
-            path: ServerConfig.root,
-            domain: ServerConfig.domain,
-            maxAge: 5000 * 60 * 24,
-        },
-        resave: true,
-        saveUninitialized: true,
-    },
-
     // Template Configurations
     template: {
         use: false,
@@ -190,7 +173,6 @@ const Config = {
             all: true,
             query: false,
             body: false,
-            session: false,
             stackedScripts: false,
         },
     },

@@ -77,10 +77,10 @@ if ($.config.get('server.poweredBy')) {
  */
 const servePublicFolder = $.config.get("server.servePublicFolder", false);
 if (!isUnderMaintenance && servePublicFolder) {
+    const responseConfig = $.config.get('response');
     $.app.use(
         express.static(paths.public, {
             setHeaders(res, path) {
-                const responseConfig = $.config.get('response');
                 if (responseConfig.cacheFiles) {
                     if (responseConfig.cacheIfMatch.length) {
                         const match = $.utils.findWordsInString(
@@ -166,9 +166,9 @@ if (useSession) {
      */
     $.logDeprecated(
         '0.3.37',
-        '1.0.0',
+        '0.6.0',
         [
-            'At version 1.0.0, xpresser will {{STOP}} shipping with {{SESSION}} support out of the box', null,
+            'At version 0.6.0, xpresser {{STOPPED}} shipping with {{SESSION}} support out of the box', null,
             'Install the new {{@xpresser/session}} plugin instead!', null,
             'This plugin re-enables the old session system and is simply Plug & Play.',
             null, null,
@@ -176,68 +176,7 @@ if (useSession) {
         ],
         false
     );
-
-    const session = require("express-session");
-    const useDefault = $.config.get("session.useDefault", false);
-
-    if ($.config.has("session.startOnBoot")) {
-        $.logError('Config Warning: {session.startOnBoot} is deprecated, use {session.useDefault} instead.')
-    }
-
-    /**
-     * Session handled by Knex
-     * Disabled on default
-     */
-    if (useDefault) {
-        const connectSessionKnex = require("connect-session-knex");
-
-        const KnexSessionStore = connectSessionKnex(session);
-        const knexSessionConfig = {
-            client: "sqlite3",
-            connection: {
-                filename: $.path.base("sessions.sqlite"),
-            },
-            useNullAsDefault: true,
-        };
-
-        const sessionFilePath = knexSessionConfig.connection.filename;
-        if (!$.file.exists(sessionFilePath)) {
-            PathHelper.makeDirIfNotExist(sessionFilePath, true);
-        }
-
-        const store = new KnexSessionStore({
-            knex: require("knex")(knexSessionConfig),
-            tablename: "sessions",
-        });
-
-        const sessionConfig = lodash.extend({}, $.config.get('session'), {
-            store,
-        });
-
-        $.app.use(session(sessionConfig));
-    }
-
-    /**
-     * Check for custom session handler
-     */
-    let useCustomHandler = $.config.get('session.useCustomHandler', false)
-    if (useCustomHandler !== false) {
-        if (typeof useCustomHandler !== 'string') {
-            $.logErrorAndExit(`Config: {session.useCustomHandler} only accepts false or path to session handler file.`)
-        }
-
-        useCustomHandler = PathHelper.resolve(useCustomHandler);
-        if (!$.file.exists(useCustomHandler)) {
-            $.logErrorAndExit(`useCustomHandler File not found: {${useCustomHandler}}`)
-        }
-
-        const handler = require(useCustomHandler);
-        if (typeof handler !== "function") {
-            $.logErrorAndExit(`useCustomHandler File must return a function: {${useCustomHandler}}`);
-        }
-
-        $.app.use(handler(session));
-    }
+    $.logErrorAndExit("Use new session plugin and set config {server.use.session} to {false} to hide this error message.");
 }
 
 /**
