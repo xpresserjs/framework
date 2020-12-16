@@ -89,24 +89,27 @@ class PluginEngine {
                  */
                 const loadedPlugins: typeof plugins = {};
                 for (const plugin of pluginKeys) {
-                    const pluginUseDotJsonOptions = plugins[plugin]
-                    if (typeof pluginUseDotJsonOptions === "boolean" && !pluginUseDotJsonOptions)
+                    const pluginUseDotJson = plugins[plugin]
+                    if (typeof pluginUseDotJson === "boolean" && !pluginUseDotJson)
                         continue;
 
-                    if (typeof pluginUseDotJsonOptions === "object") {
+                    if (typeof pluginUseDotJson === "object") {
 
-                        if (pluginUseDotJsonOptions.hasOwnProperty('load') &&
-                            pluginUseDotJsonOptions.load === false) {
+                        if (pluginUseDotJson.hasOwnProperty('load') &&
+                            pluginUseDotJson.load === false) {
                             continue;
                         }
 
-                        if (pluginUseDotJsonOptions.hasOwnProperty('env') &&
-                            env !== pluginUseDotJsonOptions.env) {
-                            continue;
+                        if (pluginUseDotJson.hasOwnProperty('env')) {
+                            if(typeof pluginUseDotJson.env === "string" && pluginUseDotJson.env !== env)
+                                continue;
+
+                            if(Array.isArray(pluginUseDotJson.env) && !pluginUseDotJson.env.includes(env))
+                                continue;
                         }
                     }
 
-                    loadedPlugins[plugin] = pluginUseDotJsonOptions;
+                    loadedPlugins[plugin] = pluginUseDotJson;
                 }
 
 

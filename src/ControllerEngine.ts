@@ -27,7 +27,7 @@ const ServicesInMemory = $.objectCollection();
 
 // If use.json has autoload config and services folder exists in controllers folder.
 const LoadServicesInDirectory = ($folder: string, $files?: string[]) => {
-    let ServicesFolderFiles: any[] = [];
+    let ServicesFolderFiles: any[];
 
     if (Array.isArray($files)) {
         ServicesFolderFiles = $files;
