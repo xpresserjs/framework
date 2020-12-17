@@ -1,5 +1,4 @@
 import {resolve} from "path";
-import lodash from "lodash";
 import PathHelper = require("./Helpers/Path");
 import OnEventsLoader = require("./Events/OnEventsLoader");
 
@@ -26,6 +25,26 @@ const isUnderMaintenance = $.file.exists($.path.base('.maintenance'))
 
 
 $.app = express();
+
+/**
+ * HttpToHttps Enforcer.
+ * This has to be the first middleware because we need the redirect to run before every other request does.
+ */
+const forceHttpToHttps = $.config.get("server.ssl.forceHttpToHttps", false);
+if (forceHttpToHttps) {
+    $.app.use((req, res, next) => {
+        const isSecure =
+            req.headers["x-forwarded-proto"] === "https" || req.secure;
+
+        if (!isSecure) {
+            let newUrl = `${req.protocol}://${req.hostname}${req.url}`;
+            newUrl = newUrl.replace("http://", "https://");
+            return res.redirect(newUrl);
+        }
+
+        next();
+    });
+}
 
 /**
  * Set Express View Engine from config
