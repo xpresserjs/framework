@@ -36,13 +36,11 @@ if (forceHttpToHttps) {
         const isSecure =
             req.headers["x-forwarded-proto"] === "https" || req.secure;
 
-        if (!isSecure) {
-            let newUrl = `${req.protocol}://${req.hostname}${req.url}`;
-            newUrl = newUrl.replace("http://", "https://");
-            return res.redirect(newUrl);
-        }
+        if (isSecure) next();
 
-        next();
+        let newUrl = `${req.protocol}://${req.hostname}${req.url}`;
+        newUrl = newUrl.replace("http://", "https://");
+        return res.redirect(newUrl);
     });
 }
 
