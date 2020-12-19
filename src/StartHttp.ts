@@ -45,33 +45,6 @@ if (forceHttpToHttps) {
 }
 
 /**
- * Set Express View Engine from config
- */
-const template = $.config.get('template');
-if (typeof template.engine === "function") {
-
-    $.app.engine(template.extension, template.engine);
-    $.app.set("view engine", template.extension);
-
-} else {
-    if (typeof template.use === "string") {
-
-        $.app.use($.use.package(template.use));
-
-    } else if (typeof template.use === "function") {
-
-        $.app.use(template.use);
-
-    } else {
-
-        $.app.set("view engine", template.engine);
-
-    }
-}
-
-$.app.set("views", $.path.views());
-
-/**
  * If {server.poweredBy=true}
  * Set X-Powered-By to Xpresser.
  * Else
@@ -204,6 +177,33 @@ if (useFlash) {
     const flash = require("express-flash");
     $.app.use(flash());
 }
+
+/**
+ * Set Express View Engine from config
+ */
+const template = $.config.get('template');
+if (typeof template.engine === "function") {
+
+    $.app.engine(template.extension, template.engine);
+    $.app.set("view engine", template.extension);
+
+} else {
+    if (typeof template.use === "string") {
+
+        $.app.use($.use.package(template.use));
+
+    } else if (typeof template.use === "function") {
+
+        $.app.use(template.use);
+
+    } else {
+
+        $.app.set("view engine", template.engine);
+
+    }
+}
+
+$.app.set("views", $.path.views());
 
 /**
  * Import Files needed after above middlewares

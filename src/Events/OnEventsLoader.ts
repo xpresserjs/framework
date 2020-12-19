@@ -1,4 +1,4 @@
-import {getInstance} from "../../index";
+import {getInstance, InXpresserError} from "../../index";
 
 const $ = getInstance();
 
@@ -21,12 +21,12 @@ export const runBootEvent = (name: string, done?: () => void) => {
             $.engineData.set(key, nextIndex);
 
             if (typeof onEvents[nextIndex] === "function") {
-                return onEvents[nextIndex](next, $);
+                return InXpresserError.tryOrCatch(() => onEvents[nextIndex](next, $));
             }
         };
 
         // Pass next and current xpresser instance
-        return onEvents[0](next, $);
+        return InXpresserError.tryOrCatch(() => onEvents[0](next, $));
     } else {
         return done ? done() : false;
     }
