@@ -117,7 +117,8 @@ const Config = {
     // Log Configurations
     log: {
         // Log enabled Plugins on boot
-        plugins: true
+        plugins: true,
+        serverDomainAndPort: false,
     },
 
     /**

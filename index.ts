@@ -75,8 +75,8 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
      * This is to avoid requiring un-needed packages when ever we run
      * const {getInstance} = require('xpresser')
      */
-    const Deprecated = require("./src/Errors/Deprecated");
     const fs = require("fs");
+    const chalk = require("chalk");
     const XpresserRouter = require("@xpresser/router");
     // Import default config.
     const {Config, Options} = require("./config");
@@ -275,7 +275,13 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
     // Log if not console
     $.ifNotConsole(() => {
         $.logCalmly(`${PackageDotJson.name} version ${PackageDotJson.version}`);
-        $.log(`${$.config.get('name')}`);
+        let {name, env}: { name: string, env: string } = $.config.all();
+        if (env) {
+            env = env[0].toUpperCase() + env.substr(1);
+            env = env.toLowerCase() === "development" ? chalk.yellow(`(${env})`) : chalk.greenBright(`(${env})`);
+            env = chalk.yellow(env);
+        }
+        $.log(`${name} ${env}`.trim());
     });
 
     /**

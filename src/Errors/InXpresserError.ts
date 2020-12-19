@@ -1,7 +1,16 @@
-import * as os from "os";
+import os = require("os");
+import colors = require("../Objects/consoleColors.obj");
 
+/**
+ * InXpresserError
+ *
+ * This is xpresser's default Error handler.
+ * It defers from the default node Error handler because it has the time of error in its data.
+ */
 class InXpresserError extends Error {
+    // Holds Date
     public date: Date;
+    // Holds human readable DateString
     public dateString: string;
 
     constructor(message?: string | undefined) {
@@ -18,8 +27,8 @@ class InXpresserError extends Error {
             second: 'numeric',
         });
 
-        console.log()
-        console.log(`---------------Occurred: ${dateString}---------------`)
+        console.log(colors.fgRed)
+        console.log(`>>>>>>>>> Occurred: ${dateString} <<<<<<<<<<`, colors.reset)
 
         // Ensure the name of this error is the same as the class name
         this.name = 'Error';
@@ -37,7 +46,7 @@ class InXpresserError extends Error {
         }
     }
 
-    static use(e: Error){
+    static use(e: Error) {
         const error = new this(e.message)
         const stack: string[] = e.stack!.split(os.EOL);
         stack.splice(0, 1);

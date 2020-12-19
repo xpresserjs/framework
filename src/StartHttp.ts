@@ -358,14 +358,21 @@ const startHttpServer = (onSuccess?: () => any, onError?: () => any) => {
      */
     runBootEvent("http", () => {
         $.http.listen(port, () => {
+            const serverDomainAndPort = $.config.get("log.serverDomainAndPort");
             const domain = $.config.get('server.domain');
-            const baseUrl = $.helpers.url()
+            const baseUrl = $.helpers.url().trim();
             const lanIp = $.engineData.get("lanIp");
 
             // $.engineData
             const ServerStarted = new Date();
             const getServerUptime = () => global.moment(ServerStarted).fromNow();
-            $.log(`Domain: ${domain} | Port: ${port} | BaseUrl: ${baseUrl}`);
+
+            if (serverDomainAndPort || (baseUrl === '' || baseUrl === '/')) {
+                $.log(`Domain: ${domain} | Port: ${port} | BaseUrl: ${baseUrl}`);
+            } else {
+                $.log(`Url: ${baseUrl}`);
+            }
+
 
             /**
              * Show Lan Ip in development mood
