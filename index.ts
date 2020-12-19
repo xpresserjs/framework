@@ -370,6 +370,9 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
                         });
                     }
                 });
+            }).catch(e  => {
+                $.logError(e);
+                $.logErrorAndExit('Error in $.on.boot events');
             })
         });
     };

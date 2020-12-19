@@ -1,5 +1,4 @@
 import os = require("os");
-import colors = require("../Objects/consoleColors.obj");
 
 /**
  * InXpresserError
@@ -17,7 +16,7 @@ class InXpresserError extends Error {
         super(message);
 
         this.date = new Date();
-        const dateString = this.dateString = new Date().toLocaleDateString('en-US', {
+        this.dateString = new Date().toLocaleDateString('en-US', {
             day: 'numeric',
             weekday: 'short',
             year: 'numeric',
@@ -27,9 +26,6 @@ class InXpresserError extends Error {
             second: 'numeric',
         });
 
-        console.log(colors.fgRed)
-        console.log(`>>>>>>>>> Occurred: ${dateString} <<<<<<<<<<`, colors.reset)
-
         // Ensure the name of this error is the same as the class name
         this.name = 'Error';
         // This clips the constructor invocation from the stack trace.
@@ -38,11 +34,37 @@ class InXpresserError extends Error {
         Error.captureStackTrace(this, this.constructor);
     }
 
-    static tryOrCatch<T>(fn: () => T): T | void {
+    /**
+     * TryOrCatch
+     *
+     * this method runs any function passed to it in a try catch.
+     * It also returns the value of the function called or logs error.
+     *
+     * **Note:** It does not throw errors, only console.logs them.
+     * @param fn
+     */
+    static try<T>(fn: () => T): T {
+        return this.tryOrCatch(fn, (e) => {
+            console.log(e);
+        })
+    }
+
+    /**
+     * TryOrCatch
+     *
+     * this method runs any function passed to it in a try catch.
+     * It also returns the value of the function called or logs error.
+     *
+     * **Note:** It does not throw errors, only console.logs them.
+     * @param fn
+     * @param handleError
+     */
+    static tryOrCatch<T>(fn: () => T, handleError?: (error: InXpresserError) => any): T {
         try {
             return fn();
         } catch (e) {
-            console.log(this.use(e));
+            if(handleError) return handleError(this.use(e));
+            throw this.use(e);
         }
     }
 

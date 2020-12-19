@@ -1,96 +1,3 @@
-const DefaultTimestamp = "YYYY-MM-DD H:mm:ss";
-
-/**
- * Server Related configurations.
- */
-const ServerConfig = {
-
-    /**
-     * Middleware to handle server under maintenance mood
-     *
-     * if not found default is used.
-     */
-    maintenanceMiddleware: "MaintenanceMiddleware.js",
-    /**
-     * Server Port for http connections
-     */
-    port: 2000,
-
-    /**
-     * Url protocol (http|https)
-     * Use https if ssl is enabled.
-     */
-    protocol: "http",
-
-    /**
-     * Server domain
-     */
-    domain: "localhost",
-
-    /**
-     * Root Folder
-     * if calling xpresser from another folder not route
-     * specify e.g  root: '/folder/'
-     *
-     * must end with trailing slash
-     */
-    root: "/",
-
-    /**
-     * In most development enviroment this is required to be true.
-     * When true url helpers will append server port after server url
-     *
-     * @example
-     * http://localhost:2000/some/path
-     */
-    includePortInUrl: true,
-
-    /**
-     * Specify Application BaseUrl directly
-     */
-    baseUrl: "",
-
-    /**
-     * SSL Configurations.
-     */
-    ssl: {
-        // Enable ssl
-        enabled: false,
-
-        // Ssl Port
-        port: 443,
-    },
-
-    /**
-     * Enable or disable PoweredBy
-     * For security purposes this is advised to be false.
-     */
-    poweredBy: true,
-
-    /**
-     * Enable if you want public folder to be served
-     */
-    servePublicFolder: true,
-
-    /**
-     * Xpresser comes with a few packages for security,
-     * You can enable or disable them here.
-     * ['bodyParser', 'flash' 'helmet']
-     */
-    use: {
-        // Use BodyParser,
-        bodyParser: true,
-        // Enable Flash
-        flash: false,
-    },
-
-    requestEngine: {
-        dataKey: 'data',
-        proceedKey: 'proceed',
-        messageKey: '_say'
-    }
-};
-
 const Config = {
     // App Name
     name: "Xpresser",
@@ -130,12 +37,98 @@ const Config = {
     },
 
     // Server Configuration
-    server: ServerConfig,
+    server: {
+
+        /**
+         * Middleware to handle server under maintenance mood
+         *
+         * if not found default is used.
+         */
+        maintenanceMiddleware: "MaintenanceMiddleware.js",
+        /**
+         * Server Port for http connections
+         */
+        port: 2000,
+
+        /**
+         * Url protocol (http|https)
+         * Use https if ssl is enabled.
+         */
+        protocol: "http",
+
+        /**
+         * Server domain
+         */
+        domain: "localhost",
+
+        /**
+         * Root Folder
+         * if calling xpresser from another folder not route
+         * specify e.g  root: '/folder/'
+         *
+         * must end with trailing slash
+         */
+        root: "/",
+
+        /**
+         * In most development enviroment this is required to be true.
+         * When true url helpers will append server port after server url
+         *
+         * @example
+         * http://localhost:2000/some/path
+         */
+        includePortInUrl: true,
+
+        /**
+         * Specify Application BaseUrl directly
+         */
+        baseUrl: "",
+
+        /**
+         * SSL Configurations.
+         */
+        ssl: {
+            // Enable ssl
+            enabled: false,
+
+            // Ssl Port
+            port: 443,
+        },
+
+        /**
+         * Enable or disable PoweredBy
+         * For security purposes this is advised to be false.
+         */
+        poweredBy: true,
+
+        /**
+         * Enable if you want public folder to be served
+         */
+        servePublicFolder: true,
+
+        /**
+         * Xpresser comes with a few packages for security,
+         * You can enable or disable them here.
+         * ['bodyParser', 'flash' 'helmet']
+         */
+        use: {
+            // Use BodyParser,
+            bodyParser: true,
+            // Enable Flash
+            flash: false,
+        },
+
+        requestEngine: {
+            dataKey: 'data',
+            proceedKey: 'proceed',
+            messageKey: '_say'
+        }
+    },
 
     // Date Configurations
     date: {
         timezone: null,
-        format: DefaultTimestamp,
+        format: "YYYY-MM-DD H:mm:ss",
     },
 
     // Paths Configurations

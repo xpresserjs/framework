@@ -1,7 +1,7 @@
 import chalk = require("chalk");
 import os = require("os");
 import lodash from "lodash";
-import {getInstance} from "../../index";
+import {getInstance, InXpresserError} from "../../index";
 import {touchMyMustache} from "../Functions/inbuilt.fn";
 
 const $ = getInstance();
@@ -143,7 +143,12 @@ $.logAndExit = (...args) => {
 
 $.logError = (error: any, exit: boolean = false) => {
 
-    if (error instanceof Error) {
+    if (error instanceof InXpresserError) {
+        console.log(chalk.redBright(error.stack));
+        if(error.dateString){
+            $.logWarning('Occurred: ' + error.dateString);
+        }
+    } else if (error instanceof Error) {
         console.log(chalk.redBright(error.stack ? error.stack : error));
     } else if (typeof error === "string") {
         console.log(chalk.redBright(error));
