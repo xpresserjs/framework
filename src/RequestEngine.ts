@@ -11,7 +11,7 @@ import {Http} from "../types/http";
 
 import {getInstance} from "../index";
 import {DollarSign} from "../types";
-import InXpresserError from "./Errors/InXpresserError";
+import InXpresserError = require("./Errors/InXpresserError");
 import express = require("express");
 
 const $ = getInstance();
@@ -97,7 +97,7 @@ class RequestEngine {
     /**
      * If User has customRenderer then use it.
      */
-    public customRenderer!: (...args: any[]) => string
+    customRenderer!: (...args: any[]) => string
 
     /**
      * Returns Current Xpresser Instance.
@@ -115,7 +115,7 @@ class RequestEngine {
     }
 
     /**
-     * Returns an getInstance of ErrorEngine
+     * Returns an instance of ErrorEngine
      */
     newError(): ErrorEngine {
         return new ErrorEngine(this)
@@ -456,6 +456,23 @@ class RequestEngine {
         const view = $.path.engine("backend/views/" + file);
         return this.renderView(view, data, true, true);
 
+    }
+
+    /**
+     * Implement InXpresserError try method
+     * @param fn
+     */
+    public try<T>(fn: () => T): T {
+        return InXpresserError.try(fn);
+    }
+
+    /**
+     * Implement InXpresserError tryOrCatch method
+     * @param fn
+     * @param handleError
+     */
+    public tryOrCatch<T>(fn: () => T, handleError?: (error: InXpresserError) => any): T {
+        return InXpresserError.tryOrCatch(fn, handleError);
     }
 
     /**

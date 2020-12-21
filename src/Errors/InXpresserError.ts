@@ -55,7 +55,7 @@ class InXpresserError extends Error {
      * this method runs any function passed to it in a try catch.
      * It also returns the value of the function called or logs error.
      *
-     * **Note:** It does not throw errors, only console.logs them.
+     * **Note:** It throw errors
      * @param fn
      * @param handleError
      */
