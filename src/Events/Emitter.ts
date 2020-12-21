@@ -13,19 +13,29 @@ export = (DefinedEvents: Record<string, any>) => {
         callback?: (eventResult: any) => any | void,
     }) => {
         if (DefinedEvents.hasOwnProperty($payload.event)) {
-            let eventResult = undefined;
+
             try {
-                eventResult = DefinedEvents[$payload.event](...$payload.payload);
+                if ($payload.callback) {
+                    let eventResult: any;
+
+                    if ($payload.payload) {
+                        eventResult = await DefinedEvents[$payload.event](...$payload.payload);
+                    } else {
+                        eventResult = await DefinedEvents[$payload.event]();
+                    }
+
+                    $payload.callback(eventResult);
+                } else {
+
+                    if ($payload.payload) {
+                        DefinedEvents[$payload.event](...$payload.payload);
+                    } else {
+                        DefinedEvents[$payload.event]();
+                    }
+
+                }
             } catch (e) {
                 $.logError(e);
-            }
-
-            if ($payload["callback"]) {
-                try {
-                    await $payload.callback(eventResult);
-                } catch (e) {
-                    $.logError(e);
-                }
             }
         }
     });
