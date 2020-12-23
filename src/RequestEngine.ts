@@ -27,9 +27,9 @@ const requestEngineConfig: {
     proceedKey: string,
     messageKey: string
 } = $.config.get('server.requestEngine', {
-    dataKey: "data",
+    dataKey: 'data',
     proceedKey: 'proceed',
-    messageKey: '_say'
+    messageKey: 'message'
 });
 
 class RequestEngine {
@@ -131,8 +131,10 @@ class RequestEngine {
     /**
      * Response Send
      * @param body
+     * @param status
      */
-    public send(body: any): Http.Response {
+    public send(body: any, status?: number): Http.Response {
+        if (status) this.status(status);
         return this.res.send(body);
     }
 
@@ -151,12 +153,14 @@ class RequestEngine {
      * @param [$default]
      * @returns {*|ObjectCollection}
      */
-    public query(key?: string | undefined, $default?: any): ObjectCollection | any {
+    public query<T = unknown>(key?: string | undefined, $default?: T): T {
         if (key === undefined) {
             $.logDeprecated('0.3.22', '1.0.0', 'http.query() without arguments to get query collection is deprecated, use `http.$query` instead.');
-            return this.$query;
+
+            // will be remove in version 1.0.0
+            return this.$query as any as T;
         } else {
-            return this.$query.get(key, $default);
+            return this.$query.get(key, $default) as T;
         }
     }
 
@@ -169,13 +173,14 @@ class RequestEngine {
      * const body = http.body(); // collection
      * @returns {*|ObjectCollection}
      */
-    public body(key?: string | undefined, $default?: any): ObjectCollection | any {
+    public body<T = unknown>(key?: string | undefined, $default?: T): T {
         if (key === undefined) {
             $.logDeprecated('0.3.22', '1.0.0', 'http.body() without keys to get body collection is deprecated, use `http.$body` instead.');
 
-            return this.$body;
+            // will be remove in version 1.0.0
+            return this.$body as any as T;
         } else {
-            return this.$body.get(key, $default);
+            return this.$body.get(key, $default) as T;
         }
     }
 
@@ -440,7 +445,7 @@ class RequestEngine {
      * @return {*}
      * @alias
      */
-    public render(...args: any[]): any {
+    private render(...args: any[]): any {
         // @ts-ignore
         return this.view(...args);
     }
@@ -462,7 +467,7 @@ class RequestEngine {
      * Implement InXpresserError try method
      * @param fn
      */
-    public try<T>(fn: () => T): T {
+    public try<T=unknown>(fn: () => T): T {
         return InXpresserError.try(fn);
     }
 
@@ -471,7 +476,7 @@ class RequestEngine {
      * @param fn
      * @param handleError
      */
-    public tryOrCatch<T>(fn: () => T, handleError?: (error: InXpresserError) => any): T {
+    public tryOrCatch<T=unknown>(fn: () => T, handleError?: (error: InXpresserError) => any): T {
         return InXpresserError.tryOrCatch(fn, handleError);
     }
 
