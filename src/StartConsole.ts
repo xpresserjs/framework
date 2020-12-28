@@ -13,11 +13,18 @@ const DefinedCommands: Record<string, any> = {};
 const $ = getInstance();
 
 // Get Command Arguments
-const args: any[] = process.argv.splice(3);
+const cloneArgs = [...process.argv];
+const args: any[] = cloneArgs.splice(3);
 
-if (args[2] === "--from-tinker") {
-    $.options.isTinker = true;
-    args.splice(2, 1);
+// Check if command is from xjs-cli
+if (args[args.length - 1] === "--from-xjs-cli") {
+
+    // if true, set isFromXjsCli to true,
+    $.options.isFromXjsCli = true;
+
+    // remove --from-xjs-cli from args and process.argv
+    args.length = args.length - 1;
+    process.argv.length = process.argv.length - 1;
 }
 
 // Require Artisan helper Functions
@@ -31,16 +38,16 @@ if (typeof argCommand === "undefined") {
 // Trim argCommand
 argCommand = argCommand.trim();
 
-/**
- * If default commands does not have `argCommand`
- * Then assume this command:
- * 1. is a plugin command, so load plugins commands
- * 2. is a job.
+/*
+ If default commands does not have `argCommand`
+ Then assume this command:
+ 1. is a plugin command, so load plugins commands
+ 2. is a job.
  */
 if (!Commands.hasOwnProperty(argCommand)) {
 
-    /**
-     * load plugins commands first since defined jobs may call plugin commands.
+    /*
+    load plugins commands first since defined jobs may call plugin commands.
      */
     const PluginData = $.engineData.get("PluginEngine:namespaces", {});
     const plugins = Object.keys(PluginData);
@@ -70,7 +77,7 @@ if (!Commands.hasOwnProperty(argCommand)) {
             $.logErrorAndExit(`Job: (${argCommand}) does  not exist.`);
         }
 
-        /**
+        /*
          * Require Job and read its configurations.
          */
         const job = require(jobPath);

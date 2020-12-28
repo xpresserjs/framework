@@ -11,13 +11,23 @@ class JobHelper {
     }
 
     /**
-     * Use $instance() instead
-     * @deprecated
+     * Check if job was called from xjs-cli
      */
-    public xpresserInstance(): DollarSign {
+    public isFromXjsCli(){
+        return $.options.isFromXjsCli
+    }
+
+    /**
+     * Get current xpresser instance.
+     */
+    public $(): DollarSign {
         return $;
     }
 
+    /**
+     * Use $() instead
+     * @deprecated
+     */
     public $instance(): DollarSign {
         return $;
     }

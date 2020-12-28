@@ -209,6 +209,7 @@ const Options = {
     isTinker: false,
     exposeDollarSign: true,
     instanceId: undefined,
+    isFromXjsCli: false,
 };
 
 export = {Config, Options};

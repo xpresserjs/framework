@@ -27,6 +27,7 @@ declare namespace Xpresser {
         autoBoot?: boolean;
         isConsole?: boolean;
         isTinker?: boolean;
+        isFromXjsCli?: boolean;
         exposeDollarSign?: boolean;
         instanceId?: string;
     }
