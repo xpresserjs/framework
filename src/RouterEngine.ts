@@ -170,7 +170,7 @@ class RouterEngine {
      * @param routes
      * @param parent
      */
-    public static processRoutes(routes: (XpresserRoute | XpresserPath)[] | null = null, parent: any = {}) {
+    public static processRoutes(routes: (XpresserRoute | XpresserPath)[] | null = null, parent?: RoutePathData) {
         const Controller = require("./ControllerEngine");
 
         if (!Array.isArray(routes)) {
@@ -204,7 +204,7 @@ class RouterEngine {
             */
             if (routeAsPath) {
 
-                if (parent.children !== "undefined") {
+                if (parent) {
                     // tslint:disable-next-line:max-line-length
                     if (typeof routeAsPath.as === "string" && typeof parent.as === "string" && routeAsPath.as.substr(0, 1) === ".") {
                         routeAsPath.as = parent.as + routeAsPath.as;
@@ -215,7 +215,7 @@ class RouterEngine {
             }
 
             if (typeof route.controller === "string") {
-                if (!routeAsPath && parent.useActionsAsName && !route.name) {
+                if (!routeAsPath && parent?.useActionsAsName && !route.name) {
                     let nameFromController = route.controller;
                     if (nameFromController.includes("@")) {
                         let splitName = nameFromController.split("@");
@@ -227,7 +227,7 @@ class RouterEngine {
                 }
             }
 
-            if (parent.as && typeof route.name === "string" && route.name.substr(0, 1) !== "/") {
+            if (parent?.as && typeof route.name === "string" && route.name.substr(0, 1) !== "/") {
                 if (route.path === "" && nameWasGenerated) {
                     route.name = parent.as;
                 } else {
@@ -243,13 +243,13 @@ class RouterEngine {
             }
 
             // tslint:disable-next-line:max-line-length
-            if (!routeAsPath && parent.controller && typeof route.controller === "string" && !route.controller.includes("@")) {
+            if (!routeAsPath && parent?.controller && typeof route.controller === "string" && !route.controller.includes("@")) {
                 route.controller = parent.controller + "@" + route.controller;
             }
 
-            if (parent.path) {
+            if (parent?.path) {
                 const routePath = $.utils.regExpSourceOrString(route.path as string);
-                const parentPath = $.utils.regExpSourceOrString(parent.path);
+                const parentPath = $.utils.regExpSourceOrString(parent.path as string);
 
                 if (route.path instanceof RegExp || parent.path instanceof RegExp) {
 
@@ -261,7 +261,7 @@ class RouterEngine {
                         route.path = "/" + routePath;
                     }
 
-                    route.path = parent.path + route.path;
+                    route.path = parent.path as string + route.path;
                 }
 
             }
@@ -346,7 +346,7 @@ class RouterEngine {
                 }
 
                 if (routeAsPath.children!.length) {
-                    RouterEngine.processRoutes(routeAsPath.children as any, route);
+                    RouterEngine.processRoutes(routeAsPath.children as any, routeAsPath);
                 }
             } else {
                 // Add to all Routes
