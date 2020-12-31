@@ -1,26 +1,39 @@
-import MiddlewareEngine = require("./MiddlewareEngine");
-import XpresserRouter = require("@xpresser/router");
-import {getInstance} from "../index";
 import lodash from "lodash";
-
+import XpresserRouter = require("@xpresser/router");
+import PathHelper = require("./Helpers/Path");
+import MiddlewareEngine = require("./MiddlewareEngine");
+import {getInstance} from "../index";
 import {parseControllerString} from "./Functions/internals.fn";
-import PathHelper from "./Helpers/Path";
-
-const AllRoutesKey = "RouterEngine:allRoutes";
+import XpresserRoute from "@xpresser/router/src/XpresserRoute";
+import XpresserPath from "@xpresser/router/src/XpresserPath";
+import {RouteData, RoutePathData} from "@xpresser/router/src/custom-types";
+import {pathToUrl} from "./Functions/router.fn";
 
 
 const $ = getInstance();
 
+// EngineDate Store Key for all processed routes.
+const AllRoutesKey = "RouterEngine:allRoutes";
+
+// Name to route records memory cache.
 const NameToRoute: Record<string, any> = {};
-const ProcessedRoutes: any[] = [];
+
+// Processed routes records memory cache.
+const ProcessedRoutes: (RouteData & {url: string})[] = [];
+
+// Resolved Controller Names records memory cache.
 const ControllerStringCache: Record<string, any> = {};
 
+/**
+ * RouterEngine Class.
+ * Handles processing of routes.
+ */
 class RouterEngine {
     /**
      * Get All Registered Routes
      * @returns {*}
      */
-    public static allRoutes() {
+    public static allRoutes(): (XpresserRoute | XpresserPath)[] {
         return $.engineData.get(AllRoutesKey);
     }
 
@@ -50,7 +63,7 @@ class RouterEngine {
                 const processedRoute = ProcessedRoutes[i];
 
                 const routeArray = [
-                    processedRoute.method.toUpperCase(),
+                    processedRoute.method!.toUpperCase(),
                     processedRoute.path,
                     processedRoute.name || null,
                 ];
@@ -64,7 +77,7 @@ class RouterEngine {
 
             for (let i = 0; i < ProcessedRoutes.length; i++) {
                 const processedRoute = ProcessedRoutes[i];
-                routesArray.push(processedRoute[$key]);
+                routesArray.push((processedRoute as any)[$key]);
             }
 
             return routesArray;
@@ -77,7 +90,7 @@ class RouterEngine {
      * @param format
      * @returns {string}
      */
-    public static namedRoutes(format = false) {
+    public static namedRoutes(format: boolean | string = false) {
         if (format !== false) {
             const names = Object.keys(NameToRoute);
             const newFormat: Record<string, any> = {};
@@ -157,7 +170,7 @@ class RouterEngine {
      * @param routes
      * @param parent
      */
-    public static processRoutes(routes: any = null, parent: any = {}) {
+    public static processRoutes(routes: (XpresserRoute | XpresserPath)[] | null = null, parent: any = {}) {
         const Controller = require("./ControllerEngine");
 
         if (!Array.isArray(routes)) {
@@ -165,7 +178,8 @@ class RouterEngine {
         }
 
         for (let i = 0; i < routes.length; i++) {
-            let route = routes[i].data;
+            let route = routes[i].data as RouteData;
+            let routeAsPath = Array.isArray((route as RoutePathData).children) ? route as RoutePathData : false;
             let nameWasGenerated = false;
 
             /*
@@ -188,26 +202,26 @@ class RouterEngine {
             *
             * }).controller('Auth').as('auth');
             */
-            if (typeof route.children !== "undefined" && Array.isArray(route.children)) {
+            if (routeAsPath) {
 
                 if (parent.children !== "undefined") {
                     // tslint:disable-next-line:max-line-length
-                    if (typeof route.as === "string" && typeof parent.as === "string" && route.as.substr(0, 1) === ".") {
-                        route.as = parent.as + route.as;
+                    if (typeof routeAsPath.as === "string" && typeof parent.as === "string" && routeAsPath.as.substr(0, 1) === ".") {
+                        routeAsPath.as = parent.as + routeAsPath.as;
                     }
 
-                    route = lodash.extend({}, parent, route);
+                    routeAsPath = lodash.extend({}, parent, routeAsPath)  as RoutePathData;
                 }
-
             }
 
             if (typeof route.controller === "string") {
-                if (!route.children && parent.useActionsAsName && !route.name) {
+                if (!routeAsPath && parent.useActionsAsName && !route.name) {
                     let nameFromController = route.controller;
                     if (nameFromController.includes("@")) {
-                        nameFromController = nameFromController.split("@");
-                        nameFromController = nameFromController[nameFromController.length - 1];
+                        let splitName = nameFromController.split("@");
+                        nameFromController = splitName[splitName.length - 1];
                     }
+
                     route.name = lodash.snakeCase(nameFromController);
                     nameWasGenerated = true;
                 }
@@ -219,7 +233,6 @@ class RouterEngine {
                 } else {
                     route.name = parent.as + "." + route.name;
                 }
-
             }
 
             if (route.name) {
@@ -230,12 +243,12 @@ class RouterEngine {
             }
 
             // tslint:disable-next-line:max-line-length
-            if (!route.children && parent.controller && typeof route.controller === "string" && !route.controller.includes("@")) {
+            if (!routeAsPath && parent.controller && typeof route.controller === "string" && !route.controller.includes("@")) {
                 route.controller = parent.controller + "@" + route.controller;
             }
 
             if (parent.path) {
-                const routePath = $.utils.regExpSourceOrString(route.path);
+                const routePath = $.utils.regExpSourceOrString(route.path as string);
                 const parentPath = $.utils.regExpSourceOrString(parent.path);
 
                 if (route.path instanceof RegExp || parent.path instanceof RegExp) {
@@ -262,7 +275,6 @@ class RouterEngine {
             }
 
             if (typeof route.controller === "string" && route.controller.includes("@")) {
-                // tslint:disable-next-line:prefer-const
                 let {method, controller} = parseControllerString(route.controller);
                 const controllerCacheKey = controller;
 
@@ -315,30 +327,33 @@ class RouterEngine {
 
             const canRegisterRoutes = $.app && (!$.options.isTinker && !$.options.isConsole);
 
-            if (typeof route.children !== "undefined" && Array.isArray(route.children)) {
+            if (routeAsPath) {
                 if (canRegisterRoutes) {
                     const RegisterMiddleware = (middleware: string) => {
                         const PathMiddleware = MiddlewareEngine(middleware);
                         if (PathMiddleware) {
-                            $.app.use(route.path, PathMiddleware);
+                            $.app.use(routeAsPath as any, PathMiddleware);
                         }
                     };
 
-                    if (Array.isArray(route.middleware)) {
-                        route.middleware.forEach((element: any) => {
+                    if (Array.isArray(routeAsPath.middleware)) {
+                        routeAsPath.middleware.forEach((element: any) => {
                             RegisterMiddleware(element);
                         });
-                    } else if (typeof route.middleware === "string") {
-                        RegisterMiddleware(route.middleware);
+                    } else if (typeof routeAsPath.middleware === "string") {
+                        RegisterMiddleware(routeAsPath.middleware);
                     }
                 }
 
-                if (route.children.length) {
-                    RouterEngine.processRoutes(route.children, route);
+                if (routeAsPath.children!.length) {
+                    RouterEngine.processRoutes(routeAsPath.children as any, route);
                 }
             } else {
                 // Add To All Routes
-                ProcessedRoutes.push(route);
+                ProcessedRoutes.push({
+                    url: pathToUrl(route.path as string),
+                    ...route,
+                });
 
                 if (canRegisterRoutes) {
                     const controller = Controller(route);
