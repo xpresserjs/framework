@@ -349,7 +349,7 @@ class RouterEngine {
                     RouterEngine.processRoutes(routeAsPath.children as any, route);
                 }
             } else {
-                // Add To All Routes
+                // Add to all Routes
                 ProcessedRoutes.push({
                     url: pathToUrl(route.path as string),
                     ...route,
