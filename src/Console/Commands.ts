@@ -118,6 +118,8 @@ const Commands = {
 
             if (!e.name) e.name = null;
 
+            // Hide Url since path is showing already
+            delete e.url;
 
         })
 
