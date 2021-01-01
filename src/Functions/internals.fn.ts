@@ -27,6 +27,11 @@ export function initializeTypescriptFn(filename: string, run?: (isNode: any) => 
     // Set Project extension
     if (isTypeScriptFile) {
         $.config.set('project.fileExtension', '.ts');
+
+        // Change Default config file.
+        if ($.config.get("paths.routesFile") === "backend://routes.js") {
+            $.config.set('paths.routesFile', 'backend://routes.ts');
+        }
     }
 
     // Check for presser engine
