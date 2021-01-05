@@ -40,7 +40,11 @@ class RequestEngine {
     public $body: ObjectCollection;
 
     public params: Record<string, any>;
+    /**
+     * @deprecated use "state" instead.
+     */
     public store: ObjectCollection;
+    public state: ObjectCollection;
 
     public route: {
         name: string,
@@ -75,7 +79,8 @@ class RequestEngine {
         this.params = req.params || {};
 
         if (!res.locals) res.locals = {};
-        this.store = $.objectCollection(res.locals);
+
+        this.state = this.store = $.objectCollection(res.locals);
 
         // Set $body and $query
         this.$body = $.objectCollection(req.body || {});
