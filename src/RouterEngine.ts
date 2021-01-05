@@ -333,7 +333,7 @@ class RouterEngine {
                     const RegisterMiddleware = (middleware: string) => {
                         const PathMiddleware = MiddlewareEngine(middleware);
                         if (PathMiddleware) {
-                            $.app.use(routeAsPath as any, PathMiddleware);
+                            $.app.use((routeAsPath as RoutePathData).path as string, PathMiddleware);
                         }
                     };
 
