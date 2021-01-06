@@ -202,16 +202,20 @@ class RouterEngine {
             *
             * }).controller('Auth').as('auth');
             */
-            if (routeAsPath) {
+            if (routeAsPath && parent) {
 
-                if (parent?.children) {
+                if (parent.children) {
                     // tslint:disable-next-line:max-line-length
                     if (typeof routeAsPath.as === "string" && typeof parent.as === "string" && routeAsPath.as.substr(0, 1) === ".") {
                         routeAsPath.as = parent.as + routeAsPath.as;
                     }
 
-                    // ReSync Both variables.
-                    route = routeAsPath = lodash.extend({}, parent, routeAsPath)  as RoutePathData;
+                    // Mutates both route and routeAsPath
+                    lodash.defaults(routeAsPath, {
+                        as: parent.as,
+                        controller: parent.controller,
+                        useActionsAsName: parent.useActionsAsName,
+                    })
                 }
             }
 
