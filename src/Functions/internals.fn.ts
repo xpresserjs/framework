@@ -23,6 +23,9 @@ export function initializeTypescriptFn(filename: string, run?: (isNode: any) => 
     if (!filename) throw Error(`isTypescript: requires __filename as argument.`);
 
     const isTypeScriptFile = filename.substr(-3) === '.ts';
+    const tsBaseFolder = (() => {
+        return path.resolve($.path.resolve(`base://../`))
+    })();
 
     // Set Project extension
     if (isTypeScriptFile) {
@@ -47,9 +50,32 @@ export function initializeTypescriptFn(filename: string, run?: (isNode: any) => 
 
 
     if (!isTypeScriptFile) {
+        /**
+         * Fix route file.
+         */
         const routesFile = $.config.get('paths.routesFile');
         if (routesFile.includes('.ts')) {
             $.config.set('paths.routesFile', routesFile.replace('.ts', '.js'))
+        }
+
+        /**
+         * Fix jsonConfigs
+         */
+        let jsonConfigs: string = $.config.get('paths.jsonConfigs');
+        jsonConfigs = $.path.resolve(jsonConfigs);
+        jsonConfigs = jsonConfigs.replace($.path.base(), tsBaseFolder + '/');
+        $.config.set('paths.jsonConfigs', jsonConfigs);
+
+
+        /**
+         * Fix views folder
+         */
+        let viewsPath: string = $.config.get('paths.views');
+        viewsPath = $.path.resolve(viewsPath);
+        const tsViewsPath = viewsPath.replace($.path.base(), tsBaseFolder + '/')
+
+        if ($.file.exists(tsViewsPath) && !$.file.exists(viewsPath)) {
+            $.config.set('paths.views', tsViewsPath);
         }
     }
 
@@ -59,9 +85,7 @@ export function initializeTypescriptFn(filename: string, run?: (isNode: any) => 
     if (typeof run === "function") {
         run(isTypeScriptFile ? false : {
             ts: {
-                baseFolder: (() => {
-                    return path.resolve($.path.resolve(`base://../`))
-                })()
+                baseFolder: tsBaseFolder
             }
         });
     }
