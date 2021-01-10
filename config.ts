@@ -178,7 +178,6 @@ const Config = {
         cacheIfMatch: [],
         cacheMaxAge: 31536000,
         overrideServerName: true,
-        serverName: "Xpresser",
     },
 
     // Artisan/Console Configurations

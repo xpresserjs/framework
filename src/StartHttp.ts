@@ -50,14 +50,18 @@ if (forceHttpToHttps) {
  * Else
  * Disable poweredBy header.
  */
-if ($.config.get('server.poweredBy')) {
+let poweredBy = $.config.get("server.poweredBy");
+if (poweredBy) {
+    poweredBy = typeof poweredBy === "string" ? poweredBy : "Xpresser";
+
     $.app.use((_req, res, next) => {
-        res.set("X-Powered-By", "Xpresser");
+        res.set("X-Powered-By", poweredBy);
         if ($.config.get('response.overrideServerName')) {
-            res.set("Server", "Xpresser");
+            res.set("Server", poweredBy);
         }
         next();
     });
+
 } else {
     $.app.disable("x-powered-by");
 }
