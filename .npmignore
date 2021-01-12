@@ -1,6 +1,11 @@
-node_modules
 .idea
 .vscode
+node_modules
+
+.gitignore
+tsconfig.json
+index.ts
 yarn.lock
+
 src/*
 !src/Factory

@@ -17,7 +17,7 @@ const instanceHolder: Record<string, any> = {};
 function getInstance(instanceId?: string): DollarSign {
     if (instanceId) {
         if (instanceId === ':keys') return Object.keys(instanceHolder) as any;
-        if (instanceId === ':id') return require('./truth')?.instanceId;
+        if (instanceId === ':id') return require('./src/truth')?.instanceId;
 
         if (!instanceHolder.hasOwnProperty(instanceId))
             throw new InXpresserError(`Xpresser instanceId: ${instanceId} not found!`);
@@ -31,7 +31,7 @@ function getInstance(instanceId?: string): DollarSign {
             return global.$;
         }
 
-        const truth = require("./truth");
+        const truth = require("./src/truth");
 
         if (truth && truth.instanceId) {
             return instanceHolder[truth.instanceId];
@@ -79,11 +79,11 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
     const chalk = require("chalk");
     const XpresserRouter = require("@xpresser/router");
     // Import default config.
-    const {Config, Options} = require("./config");
+    const {Config, Options} = require("./src/config");
     const ObjectCollection = require("object-collection");
     const {randomStr} = require('./src/Functions/inbuilt.fn')
     const lodash = require("lodash");
-    const truth = require("./truth");
+    const truth = require("./src/truth");
 
 
     /**
