@@ -3,7 +3,7 @@
   "version": "0.9.2",
   "description": "Xpresser Framework for building scalable apps.",
   "main": "dist/index.js",
-  "types": "global.d.ts",
+  "types": "decs/index.d.ts",
   "scripts": {
     "prod": "tsc -p tsconfig.json",
     "watch": "tsc --watch",
@@ -14,9 +14,9 @@
   "author": "xpresserjs",
   "license": "ISC",
   "dependencies": {
-    "@types/express": "^4.17.9",
-    "@types/lodash": "^4.14.166",
-    "@types/node": "^14.14.16",
+    "@types/express": "^4.17.10",
+    "@types/lodash": "^4.14.167",
+    "@types/node": "^14.14.20",
     "@xpresser/router": "^1.1.1",
     "body-parser": "^1.19.0",
     "build-url": "^6.0.1",

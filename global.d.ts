@@ -1,7 +1,7 @@
-/// <reference path="./types/node.d.ts" />
-/// <reference path="./types/helpers.d.ts" />
-/// <reference path="./types/http.d.ts" />
-/// <reference path="./types/index.d.ts" />
+/// <reference path="./types/node.ts" />
+/// <reference path="./types/helpers.ts" />
+/// <reference path="./types/http.ts" />
+/// <reference path="./types/index.ts" />
 
 import ControllerClass from "./src/Classes/ControllerClass";
 import XpresserRepl from "./src/XpresserRepl";

@@ -1,6 +1,6 @@
 // Type definitions for [Xpresser] [*]
 // Project: Xpresser
-// Definitions by: TrapCodeIO <https://xpresserjs.com>
+// Definitions by: XpresserJs <https://xpresserjs.com>
 
 import {Helpers} from "./helpers";
 import Net from "net";

@@ -1,6 +1,4 @@
 node_modules
 .idea
 .vscode
-dist
 yarn.lock
-decs

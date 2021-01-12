@@ -20,8 +20,8 @@ global['moment'] = (...args: any[]) => {
 $.base64 = Base64;
 
 // Helpers
-import Helpers from "./helpers";
-import Modules from "./Functions/modules.fn";
+import Helpers = require("./Extensions/Helpers");
+import Modules = require("./Functions/modules.fn");
 
 $.helpers = Helpers;
 $.modules = Modules;

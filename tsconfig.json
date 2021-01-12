@@ -1,14 +1,16 @@
 {
   "compilerOptions": {
-    "removeComments": true,
+    "removeComments": false,
     "module": "commonjs",
     "esModuleInterop": true,
     "target": "ES2019",
     "moduleResolution": "node",
     "sourceMap": false,
     "outDir": "dist",
-    "declaration": false,
+    "declaration": true,
+    "declarationDir": "decs",
     "downlevelIteration": true,
+    "skipLibCheck": true,
 
     /* Strict Type-Checking Options */
     "strict": true,
@@ -25,17 +27,17 @@
     "es2016"
   ],
   "files": [
-    "./global.d.ts",
-    "./types/index.d.ts",
-    "./types/node.d.ts",
-    "./types/helpers.d.ts",
-    "./types/http.d.ts"
+//    "./global.d.ts",
+    "./types/index.ts",
+    "./types/node.ts",
+    "./types/helpers.ts",
+    "./types/http.ts"
   ],
   "include": [
     "./**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "dist"
+    "dist",
+    "decs"
   ]
 }
