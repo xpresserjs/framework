@@ -8,9 +8,9 @@
     "sourceMap": false,
     "outDir": "dist",
     "declaration": true,
-    "declarationDir": "decs",
+//    "declarationDir": "decs",
     "downlevelIteration": true,
-    "skipLibCheck": true,
+    "skipLibCheck": false,
 
     /* Strict Type-Checking Options */
     "strict": true,
@@ -27,7 +27,6 @@
     "es2016"
   ],
   "files": [
-//    "./global.d.ts",
     "./types/index.ts",
     "./types/node.ts",
     "./types/helpers.ts",

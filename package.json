@@ -3,11 +3,12 @@
   "version": "0.9.4",
   "description": "Xpresser Framework for building scalable apps.",
   "main": "dist/index.js",
-  "types": "decs/index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "prod": "tsc -p tsconfig.json",
-    "watch": "tsc --watch",
-    "dev": "ts-node-dev --respawn --transpile-only ./test.ts"
+    "build": "rm -rf dist && tsc -p tsconfig.json",
+    "afterBuild": "cp -r ./src/Errors/views ./dist/src/Errors",
+    "prepublishOnly": "npm run build && npm run afterBuild",
+    "watch": "tsc --watch"
   },
   "repository": "https://github.com/xpresserjs/framework.git",
   "homepage": "https://xpresserjs.com",

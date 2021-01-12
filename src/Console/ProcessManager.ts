@@ -7,7 +7,9 @@ const {spawn} = require('child_process');
 const RootDir = __dirname;
 
 class ProcessManager {
-    constructor(rootDir = undefined) {
+    private rootDir: string = './';
+
+    constructor(rootDir?: string) {
         if (rootDir !== undefined) {
             this.rootDir = rootDir;
         } else {
@@ -19,18 +21,16 @@ class ProcessManager {
         }
     }
 
-    addCommandProcess(file, $command) {
+    addCommandProcess(file: string, $command: string) {
         // const processes = this.currentData();
         const $commands = $command.trim().split(' ');
         const [, ...$afterFirstCommand] = $commands;
         const $process = spawn($commands[0], $afterFirstCommand);
 
-        $process.stdout.on('data', (msg) => {
+        $process.stdout.on('data', (msg: any) => {
             console.log(msg.toString().trim())
         });
     }
 }
-
-ProcessManager.prototype.rootDir = './';
 
 module.exports = ProcessManager;

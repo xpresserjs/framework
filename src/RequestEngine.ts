@@ -464,7 +464,7 @@ class RequestEngine {
      */
     public renderViewFromEngine(file: string, data?: any): any {
 
-        const view = $.path.engine("backend/views/" + file);
+        const view = $.path.resolve(`${__dirname}/Errors/views/${file}`);
         return this.renderView(view, data, true, true);
 
     }
