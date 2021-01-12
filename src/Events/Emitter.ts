@@ -5,6 +5,7 @@ import {getInstance} from "../../index";
 const $ = getInstance();
 
 export = (DefinedEvents: Record<string, any>) => {
+
     const EventEmitter = new events.EventEmitter();
 
     EventEmitter.on("runEvent", async ($payload: {
@@ -40,7 +41,7 @@ export = (DefinedEvents: Record<string, any>) => {
         }
     });
 
-    class EventsEmitter {
+    return class XpresserEventsEmitter {
         public static emit(event: string, ...args: any[]): void {
             EventEmitter.emit("runEvent", {
                 event,
@@ -50,7 +51,7 @@ export = (DefinedEvents: Record<string, any>) => {
 
         public static emitAfter(time: number = 3000, event: string, ...args: any[]): void {
             setTimeout(() => {
-                EventsEmitter.emit(event, ...args);
+                XpresserEventsEmitter.emit(event, ...args);
             }, time);
         }
 
@@ -66,6 +67,4 @@ export = (DefinedEvents: Record<string, any>) => {
             DefinedEvents[event] = run;
         }
     }
-
-    return EventsEmitter;
 };
