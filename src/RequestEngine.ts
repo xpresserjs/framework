@@ -1,11 +1,12 @@
 import fs = require("fs");
+import Path = require("path");
 
 const ejs = require("ejs");
 import ObjectCollection = require("object-collection");
 import requestHelpers = require("./Functions/request.fn");
 import ErrorEngine = require("./ErrorEngine");
 
-import lodash from "lodash";
+import lodash = require("lodash");
 
 import {Http} from "../types/http";
 
@@ -418,7 +419,7 @@ class RequestEngine {
         if (useInternalEjs === true) {
             data = Object.assign(this.res.locals, data);
             return this.res.send(ejs.render(
-                fs.readFileSync(path).toString(),
+                fs.readFileSync(Path.resolve(path)).toString(),
                 data,
                 {filename: path},
             ));
@@ -471,9 +472,10 @@ class RequestEngine {
     /**
      * Implement InXpresserError try method
      * @param fn
+     * @param log
      */
-    public try<T=unknown>(fn: () => T): T {
-        return InXpresserError.try(fn);
+    public try<T = unknown>(fn: () => T, log: boolean = true): T {
+        return InXpresserError.tryOrCatch(fn, e => log ? this.$instance().logError(e) : void 0);
     }
 
     /**
@@ -481,8 +483,19 @@ class RequestEngine {
      * @param fn
      * @param handleError
      */
-    public tryOrCatch<T=unknown>(fn: () => T, handleError?: (error: InXpresserError) => any): T {
+    public tryOrCatch<T = unknown>(fn: () => T, handleError?: (error: InXpresserError) => any): T {
         return InXpresserError.tryOrCatch(fn, handleError);
+    }
+
+    /**
+     * Throw error as type of InXpresserError
+     * @param e
+     * @param log
+     */
+    public throw(e: Error, log: boolean = true): never {
+        e = InXpresserError.use(e);
+        if (log) $.logError(e);
+        throw e;
     }
 
     /**
