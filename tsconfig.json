@@ -27,10 +27,10 @@
     "es2016"
   ],
   "files": [
-    "./types/index.ts",
-    "./types/node.ts",
-    "./types/helpers.ts",
-    "./types/http.ts"
+    "./types/index.d.ts",
+    "./types/node.d.ts",
+    "./types/helpers.d.ts",
+    "./types/http.d.ts"
   ],
   "include": [
     "./**/*.ts"

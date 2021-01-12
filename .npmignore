@@ -9,4 +9,3 @@ yarn.lock
 
 src/*
 !src/Factory
-!types/index.ts
