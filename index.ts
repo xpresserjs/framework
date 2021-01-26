@@ -120,7 +120,8 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
 
     if (typeof AppConfig === "string") {
         const configFile = AppConfig;
-        AppConfig = {};
+        AppConfig = {} as Record<string, any>;
+
         if (fs.existsSync(configFile)) {
 
             try {
@@ -143,6 +144,7 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
         }
     }
 
+    AppConfig = AppConfig as Record<string, any>;
     /**
      * Check if config {paths.base} exists in user defined config.
      */
@@ -161,8 +163,13 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
     /**
      * Check if env exist in config
      */
-    if (!AppConfig.hasOwnProperty('env')) {
+    if (!AppConfig.hasOwnProperty('env') || !AppConfig.env) {
         console.log(`Config {env} is missing, options: (development | production | others)`)
+        $.exit();
+    }
+
+    if (typeof AppConfig.env !== "string") {
+        console.log(`Config {env} must be of type string!`)
         $.exit();
     }
 
@@ -277,7 +284,7 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
         $.logCalmly(`${PackageDotJson.name} version ${PackageDotJson.version}`);
         let {name, env}: { name: string, env: string } = $.config.all();
         if (env) {
-            env = env[0].toUpperCase() + env.substr(1);
+            env = lodash.startCase(env);
             env = env.toLowerCase() === "development" ? chalk.yellow(`(${env})`) : chalk.greenBright(`(${env})`);
             env = chalk.yellow(env);
         }
@@ -370,7 +377,7 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
                         });
                     }
                 });
-            }).catch(e  => {
+            }).catch(e => {
                 $.logError(e);
                 $.logErrorAndExit('Error in $.on.boot events');
             })
