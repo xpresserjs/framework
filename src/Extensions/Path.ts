@@ -35,7 +35,7 @@ $.path = {
         if (path[0] === "/") {
             path = path.substr(1);
         }
-        return $.path.base(paths.storage + "/" + path);
+        return Path.resolve(paths.storage + "/" + path);
     },
 
     frameworkStorageFolder: (path?: string): string => {
