@@ -36,10 +36,11 @@ if (forceHttpToHttps) {
         const isSecure =
             req.headers["x-forwarded-proto"] === "https" || req.secure;
 
-        if (isSecure) next();
+        if (isSecure) return next();
 
         let newUrl = `${req.protocol}://${req.hostname}${req.url}`;
         newUrl = newUrl.replace("http://", "https://");
+
         return res.redirect(newUrl);
     });
 }
@@ -112,7 +113,9 @@ const useHelmet = $.config.get("server.use.helmet", isProduction);
 if (useHelmet) {
     const helmet = require("helmet");
     const helmetConfig = $.config.get("packages.helmet.config", undefined);
-    $.app.use(helmet(helmetConfig));
+
+    // Use Helmet
+    $.app.use(helmetConfig ? helmet(helmetConfig) : helmet());
     $.logSuccess('Using {Helmet}')
 }
 
