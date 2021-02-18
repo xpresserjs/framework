@@ -86,6 +86,7 @@ declare namespace Xpresser {
 
         // Stores Engine Data
         engineData: ObjectCollection;
+
         // Serves as store for user
         store: ObjectCollection;
 

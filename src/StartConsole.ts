@@ -38,13 +38,15 @@ if (typeof argCommand === "undefined") {
 // Trim argCommand
 argCommand = argCommand.trim();
 
+let isJobCommand = argCommand.substr(0, 1) === "@";
+
 /*
  If default commands does not have `argCommand`
  Then assume this command:
  1. is a plugin command, so load plugins commands
  2. is a job.
  */
-if (!Commands.hasOwnProperty(argCommand)) {
+if (isJobCommand || !Commands.hasOwnProperty(argCommand)) {
 
     /*
     load plugins commands first since defined jobs may call plugin commands.
@@ -66,7 +68,7 @@ if (!Commands.hasOwnProperty(argCommand)) {
     }
 
     // Load Job if command has `@` sign before it.
-    if (argCommand.substr(0, 1) === "@") {
+    if (isJobCommand) {
         argCommand = argCommand.substr(1);
         let jobPath = $.path.backend(`jobs/${argCommand}`);
         // Add project extension if not exists.

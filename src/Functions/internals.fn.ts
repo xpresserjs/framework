@@ -27,6 +27,9 @@ export function initializeTypescriptFn(filename: string, run?: (isNode: any) => 
         return path.resolve($.path.resolve(`base://../`))
     })();
 
+    // save tsBaseFolder to xpresser store
+    $.engineData.set('tsBaseFolder', tsBaseFolder);
+
     // Set Project extension
     if (isTypeScriptFile) {
         $.config.set('project.fileExtension', '.ts');
