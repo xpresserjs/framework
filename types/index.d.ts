@@ -124,7 +124,7 @@ declare namespace Xpresser {
         modules: Helpers.Modules;
 
         // Express App
-        app: express.Application;
+        app?: express.Application;
 
         // Server Variables
         http: Net.Server;

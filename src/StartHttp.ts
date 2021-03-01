@@ -303,7 +303,7 @@ const afterExpressInit = (next: () => void) => {
             $middleware = PathHelper.resolve($middleware);
 
             try {
-                $.app.use(
+                $.app!.use(
                     RequestEngine.expressify(require($middleware))
                 );
             } catch (e) {
@@ -334,7 +334,7 @@ const startHttpServer = (onSuccess?: () => any, onError?: () => any) => {
     /**
      * Add 404 error
      */
-    $.app.use(RequestEngine.expressify(http => {
+    $.app!.use(RequestEngine.expressify(http => {
         http.res.status(404);
 
         // respond with json

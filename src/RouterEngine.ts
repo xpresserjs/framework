@@ -330,14 +330,14 @@ class RouterEngine {
                 }
             }
 
-            const canRegisterRoutes = $.app && (!$.options.isTinker && !$.options.isConsole);
+            const canRegisterRoutes = ($.app && (!$.options.isTinker && !$.options.isConsole));
 
             if (routeAsPath) {
                 if (canRegisterRoutes) {
                     const RegisterMiddleware = (middleware: string) => {
                         const PathMiddleware = MiddlewareEngine(middleware);
                         if (PathMiddleware) {
-                            $.app.use((routeAsPath as RoutePathData).path as string, PathMiddleware);
+                            $.app!.use((routeAsPath as RoutePathData).path as string, PathMiddleware);
                         }
                     };
 
