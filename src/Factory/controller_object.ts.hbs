@@ -16,7 +16,7 @@ export = {
     * @param {Http} http - Current Http Instance
     * @returns {*}
     */
-    action(http: Http): Http.Response {
+    action(http: Http) {
         return http.send({
             route: http.route
         });
