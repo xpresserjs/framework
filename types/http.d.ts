@@ -6,7 +6,8 @@ import ControllerService = require("../src/Controllers/ControllerService");
 declare namespace Xpresser {
 
     // tslint:disable-next-line:no-empty-interface
-    interface Http extends RequestEngine {}
+    interface Http extends RequestEngine {
+    }
 
     namespace Http {
         interface Request extends express.Request {
@@ -15,7 +16,8 @@ declare namespace Xpresser {
         }
 
         // tslint:disable-next-line:no-empty-interface
-        interface Response extends express.Response {}
+        interface Response extends express.Response {
+        }
     }
 
     namespace Controller {
@@ -37,20 +39,20 @@ declare namespace Xpresser {
         }
 
         type MethodWithHttp = (http: Http) => (any | void);
-        type BootMethod = (http: Http, error: () => (any | void)) => object;
-        type MethodWithBoot = (http: Http, boot: any, error: () => (any | void)) => (any | void);
         type InlineServiceMethod = (context: ServiceContext) => (any | void);
         type MiddlewareWithHelper = (helpers: {
             use: MethodWithHttp,
         }) => Record<string, any>;
-        type ErrorHandler = (http: Http, ...args: any[]) => (any | void);
 
         interface MethodWithServices {
             // Controller Service
             [name: string]: InlineServiceMethod | any;
         }
 
-        interface Object {
+        type ErrorHandler = (...args: any[]) => any;
+        type MethodWithBoot = (http: Http, boot: any, error: ErrorHandler) => (any | void);
+
+        type Object<Boot = any> = {
             // Name of Controller.
             name: string;
 
@@ -69,7 +71,7 @@ declare namespace Xpresser {
              * @param http
              * @param args
              */
-            e?: ErrorHandler;
+            e: (http: Http, ...args: any[]) => Http.Response | void
 
             /**
              * Register Middlewares
@@ -93,11 +95,21 @@ declare namespace Xpresser {
              *
              * inlineService({boot});
              */
-            boot?: BootMethod;
-
-
-            [name: string]: MethodWithBoot | ErrorHandler | MiddlewareWithHelper | Record<string, any> | string | undefined;
+            boot?: (http: Http, error: ErrorHandler) => any | void;
+        } | {
+            [action: string]: (http: Http, boot: Boot, error: ErrorHandler) => Http.Response | void;
         }
+
+        // interface Object {
+        //     // Name of Controller.
+        //     name: string;
+        //
+        //
+        //     e?: (http: Http, ...args: any[]) => Http.Response | void;
+        //
+        //
+        //     [name: string]: MethodWithBoot | ErrorHandler | MiddlewareWithHelper | Record<string, any> | string | undefined;
+        // }
 
         // tslint:disable-next-line:no-empty-interface
         interface Handler extends ControllerService {
