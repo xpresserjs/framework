@@ -13,13 +13,11 @@ export = <Controller.Object>{
 
     /**
     * Example Action.
-    * @param {Http} http - Current Http Instance
-    * @returns {*}
+    * @param http - Current Http Instance
     */
-    action(http: Http) {
+    action(http) {
         return http.send({
             route: http.route
         });
-    },
-
+    }
 };
