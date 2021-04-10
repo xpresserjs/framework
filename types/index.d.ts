@@ -3,11 +3,12 @@
 // Definitions by: TrapCodeIO <https://xpresserjs.com>
 
 import {Helpers} from "./helpers";
-import Net from "net";
 import express from "express";
 import ObjectCollection from "object-collection";
 import XpresserRouter from "@xpresser/router";
 import {Controller as HttpController} from "./http";
+import { Server } from "http";
+import {Server as HttpsServer} from "https"
 
 type NumberToAnyKeyObject = Record<number, any>;
 
@@ -127,8 +128,8 @@ declare namespace Xpresser {
         app?: express.Application;
 
         // Server Variables
-        http: Net.Server;
-        https: Net.Server;
+        http: Server;
+        https: HttpsServer;
 
         // Router Engine
         routerEngine: typeof import("../src/RouterEngine");
