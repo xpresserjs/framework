@@ -71,7 +71,7 @@ declare namespace Xpresser {
              * @param http
              * @param args
              */
-            e: (http: Http, ...args: any[]) => Http.Response | void
+            e?: (http: Http, ...args: any[]) => Http.Response | void
 
             /**
              * Register Middlewares
