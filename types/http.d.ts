@@ -51,6 +51,7 @@ declare namespace Xpresser {
 
         type ErrorHandler = (...args: any[]) => any;
         type MethodWithBoot = (http: Http, boot: any, error: ErrorHandler) => (any | void);
+        type ActionResponse = Http.Response | void
 
         type Object<Boot = any> = {
             // Name of Controller.
@@ -71,7 +72,7 @@ declare namespace Xpresser {
              * @param http
              * @param args
              */
-            e?: (http: Http, ...args: any[]) => Http.Response | void
+            e?: (http: Http, ...args: any[]) => ActionResponse | Promise<ActionResponse>;
 
             /**
              * Register Middlewares
@@ -95,9 +96,9 @@ declare namespace Xpresser {
              *
              * inlineService({boot});
              */
-            boot?: (http: Http, error: ErrorHandler) => any | void;
+            boot?: (http: Http, error: ErrorHandler) => (any | void) | Promise<any | void>;
         } | {
-            [action: string]: (http: Http, boot: Boot, error: ErrorHandler) => Http.Response | void;
+            [action: string]: (http: Http, boot: Boot, error: ErrorHandler) => ActionResponse | Promise<ActionResponse>;
         }
 
         // interface Object {
