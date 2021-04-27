@@ -7,7 +7,6 @@ import requestHelpers = require("./Functions/request.fn");
 import ErrorEngine = require("./ErrorEngine");
 
 import lodash = require("lodash");
-
 import {Http} from "../types/http";
 
 import {getInstance} from "../index";
