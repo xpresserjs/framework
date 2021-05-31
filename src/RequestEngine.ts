@@ -134,13 +134,23 @@ class RequestEngine {
     }
 
     /**
-     * Response Send
+     * Send Body
      * @param body
      * @param status
      */
     public send(body: any, status?: number): Http.Response {
         if (status) this.status(status);
         return this.res.send(body);
+    }
+
+    /**
+     * Send Json Response
+     * @param body
+     * @param status
+     */
+    public json(body: any, status?: number): Http.Response {
+        if (status) this.status(status);
+        return this.res.json(body);
     }
 
     /**
@@ -246,7 +256,7 @@ class RequestEngine {
 
         if (status !== undefined) this.res.status(status);
 
-        return this.res.json(d);
+        return this.json(d, status);
     }
 
     /**
