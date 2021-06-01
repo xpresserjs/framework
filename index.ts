@@ -369,7 +369,7 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
                      * This config is only used by xpresser cron.
                      * Used to load your main file without booting it
                      */
-                    if (!AppOptions.requireOnly) {
+                    if (!$.options.requireOnly) {
                         $.ifConsole(() => {
                             require("./src/StartConsole");
                         }, () => {

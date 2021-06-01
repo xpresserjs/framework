@@ -181,6 +181,13 @@ class XpresserRepl {
          */
         if (this.hasXpresserProvider()) {
             xpr = await (this.data.xpresserProvider as FnReturnsDollarSign)();
+
+            // Set Required options for repl
+            if (!xpr.options.requireOnly)
+                xpr.options.requireOnly = true;
+
+            if (!xpr.options.isConsole)
+                xpr.options.isConsole = true;
         } else {
             xpr = await this.buildInstance();
         }
