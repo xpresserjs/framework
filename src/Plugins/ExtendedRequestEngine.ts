@@ -6,6 +6,10 @@ import ObjectCollection = require("object-collection");
 const $ = getInstance();
 
 let ExtendedRequestEngine = RequestEngine;
+
+// Set Request Engine Getter
+$.engineData.set("ExtendedRequestEngine", () => ExtendedRequestEngine);
+
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
 const useDotJson: ObjectCollection = $.engineData.get("UseDotJson");
 
@@ -31,30 +35,32 @@ const RequireOrFail = ($RequestEngine: any, plugin?: any) => {
     }
 };
 
-if ($.engineData.has("ExtendedRequestEngine")) {
-    ExtendedRequestEngine = $.engineData.get("ExtendedRequestEngine");
-} else {
-    const pluginNamespaceKeys = Object.keys(PluginNameSpaces);
+/**
+ * Load Plugin Request Engines
+ */
+const pluginNamespaceKeys = Object.keys(PluginNameSpaces);
 
-    for (let k = 0; k < pluginNamespaceKeys.length; k++) {
-        const pluginNamespaceKey = pluginNamespaceKeys[k];
-        const plugin = $.objectCollection(PluginNameSpaces[pluginNamespaceKey]);
+for (let k = 0; k < pluginNamespaceKeys.length; k++) {
+    const pluginNamespaceKey = pluginNamespaceKeys[k];
+    const plugin = $.objectCollection(PluginNameSpaces[pluginNamespaceKey]);
 
-        if (plugin.has("extends.RequestEngine")) {
-            const requestEngineExtender = plugin.get("extends.RequestEngine");
-            RequireOrFail(requestEngineExtender, pluginNamespaceKey);
-        }
+    if (plugin.has("extends.RequestEngine")) {
+        const requestEngineExtender = plugin.get("extends.RequestEngine");
+        RequireOrFail(requestEngineExtender, pluginNamespaceKey);
     }
+}
 
-    const userRequestExtension = useDotJson.get("extends.RequestEngine", false);
-    if (userRequestExtension) {
-        if (Array.isArray(userRequestExtension)) {
-            for (const extension of userRequestExtension) {
-                RequireOrFail(extension);
-            }
-        } else {
-            RequireOrFail(userRequestExtension);
+/**
+ * Load User defined request Engine
+ */
+const userRequestExtension = useDotJson.get("extends.RequestEngine", false);
+if (userRequestExtension) {
+    if (Array.isArray(userRequestExtension)) {
+        for (const extension of userRequestExtension) {
+            RequireOrFail(extension);
         }
+    } else {
+        RequireOrFail(userRequestExtension);
     }
 }
 
