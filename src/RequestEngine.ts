@@ -554,8 +554,9 @@ class RequestEngine {
     /**
      * Shorthand function for adding data to the `boot.*` state
      */
-    addToBoot(name: string, value: any){
-        return this.state.set(`boot.${name}`, value);
+    addToBoot(name: string, value: any) {
+        this.state.set(`boot.${name}`, value);
+        return this;
     }
 }
 
