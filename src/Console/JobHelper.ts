@@ -1,13 +1,14 @@
 import {getInstance} from "../../index";
 import {DollarSign} from "../../types";
-
 const $ = getInstance();
 
 class JobHelper {
     public name: string | null = null;
+    public $: typeof $;
 
     constructor(name: string) {
         if (name) this.name = name;
+        this.$ = $;
     }
 
     /**
@@ -15,21 +16,6 @@ class JobHelper {
      */
     public isFromXjsCli(){
         return $.options.isFromXjsCli
-    }
-
-    /**
-     * Get current xpresser instance.
-     */
-    public $(): DollarSign {
-        return $;
-    }
-
-    /**
-     * Use $() instead
-     * @deprecated
-     */
-    public $instance(): DollarSign {
-        return $;
     }
 
     public end(silent: boolean = false) {

@@ -299,7 +299,7 @@ class ControllerEngine {
 
             try {
                 // Run static boot method if found in controller
-                let boot = {};
+                let boot = http.state.get("boot", {});
 
                 if (typeof controller.boot === "function") {
                     try {

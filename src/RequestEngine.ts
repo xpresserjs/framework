@@ -1,7 +1,5 @@
 import fs = require("fs");
 import Path = require("path");
-
-const ejs = require("ejs");
 import ObjectCollection = require("object-collection");
 import requestHelpers = require("./Functions/request.fn");
 import ErrorEngine = require("./ErrorEngine");
@@ -14,6 +12,7 @@ import {DollarSign} from "../types";
 import InXpresserError = require("./Errors/InXpresserError");
 import express = require("express");
 
+const ejs = require("ejs");
 const $ = getInstance();
 
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
@@ -40,10 +39,6 @@ class RequestEngine {
     public $body: ObjectCollection;
 
     public params: Record<string, any>;
-    /**
-     * @deprecated use "state" instead.
-     */
-    public store: ObjectCollection;
     public state: ObjectCollection;
 
     public route: {
@@ -78,13 +73,15 @@ class RequestEngine {
 
         this.params = req.params || {};
 
+        // Set Default locals
         if (!res.locals) res.locals = {};
 
-        this.state = this.store = $.objectCollection(res.locals);
+        // Set State
+        this.state = new ObjectCollection(res.locals);
 
         // Set $body and $query
-        this.$body = $.objectCollection(req.body || {});
-        this.$query = $.objectCollection(req.query || {});
+        this.$body = new ObjectCollection(req.body || {});
+        this.$query = new ObjectCollection(req.query || {});
     }
 
 
@@ -93,7 +90,7 @@ class RequestEngine {
      *
      * Useful when dealing with express middlewares but want to use xpresser's RequestEngine.
      */
-    public static expressify(fn: (http: RequestEngine) => ((req: express.Request, res: express.Response, next: express.NextFunction) => any)) {
+    public static expressify(fn: (http: RequestEngine) => any) {
         return (req: express.Request, res: express.Response, next: express.NextFunction) => {
             return fn(new this(req, res, next));
         }
@@ -552,6 +549,13 @@ class RequestEngine {
      */
     public end() {
         return "EndCurrentRequest";
+    }
+
+    /**
+     * Shorthand function for adding data to the `boot.*` state
+     */
+    addToBoot(name: string, value: any){
+        return this.state.set(`boot.${name}`, value);
     }
 }
 
