@@ -153,6 +153,18 @@ if (useBodyParser) {
 
     $.app.use(bodyParser.json(bodyParserJsonConfig));
     $.app.use(bodyParser.urlencoded(bodyParserUrlEncodedConfig));
+
+    /**
+     * Skip Bad Json Error
+     */
+    $.app.use((err: any, req: any, res: any, next: any) => {
+        if (err && err["type"] && err["type"] === "entity.parse.failed") {
+            // Skip Entity Errors
+            return next();
+        }
+
+        return next(err);
+    });
 }
 
 const useSession = $.config.get("server.use.session", false);
