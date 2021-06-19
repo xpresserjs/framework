@@ -8,7 +8,7 @@ export = <Controller.Object>{
     name: "{{name}}",
 
     // Controller Default Error Handler.
-    e: (http: Http, error: string) => http.send({ error }),
+    e: (http: Http, error: string) => http.status(401).json({ error }),
 
 
     /**

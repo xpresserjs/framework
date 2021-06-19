@@ -6,7 +6,7 @@ module.exports = {
     name: "{{name}}",
 
     // Controller Default Service Error Handler.
-    e: (http, error) => http.status(401).send({error}),
+    e: (http, error) => http.status(401).json({error}),
 
 
     /**

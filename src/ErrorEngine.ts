@@ -1,5 +1,12 @@
 import RequestEngine = require("./RequestEngine");
 
+const statusCodes = {
+    400: "Bad Request",
+    401: "Unauthorized",
+    404: "Not Found",
+    500: "Server Error",
+}
+
 class ErrorEngine {
     public http: RequestEngine;
 
@@ -8,31 +15,18 @@ class ErrorEngine {
     }
 
     public view(data: { error?: {title?: string, message?: string, log?: string} }, status = 500) {
-        return this.http.status(status).renderViewFromEngine("__errors/index", data);
-    }
-
-    public controllerMethodNotFound(e: any, method = "", controller = "") {
-        method = `<code> {${method}} </code>`;
-        if (controller.length) {
-            controller = `<code>{${controller}}</code>`;
-        }
-
-        const error = {
-            message: `Controller ${controller} does not have method ${method}`,
-            log: e,
-        };
-
-        return this.view({error});
+        return this.http.status(status).renderViewFromEngine("__errors/index", {...data, statusCode: status, statusCodes});
     }
 
     public pageNotFound() {
         const req = this.http.req;
+
         const error = {
             title: `404 Error!`,
             message: `<code>${req.method}: ${req.url}</code> <br><br> Route not found!`,
         };
 
-        return this.view({error}, 400);
+        return this.view({error}, 404);
     }
 }
 
