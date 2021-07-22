@@ -212,7 +212,7 @@ $.file = {
             const pathsDeleted = [] as string[];
 
             for (const path of paths) {
-                const deleted = $.file.deleteDirectory(path);
+                const deleted = $.file.deleteDirectory(path, options);
 
                 // If we are not returning lists then we should stop once a path is not found.
                 if (!(returnList) && !deleted) {
