@@ -226,11 +226,14 @@ $.file = {
         } else {
             // to check data passed.
             try {
-                if (options) {
-                    const {returnList, ...rmDirOptions} = options;
-                    fs.rmdirSync($path, rmDirOptions);
-                } else fs.rmdirSync($path);
+                let rmDirOptions: any = undefined;
 
+                if (options) {
+                    const {returnList, ...others} = options;
+                    rmDirOptions = others;
+                }
+
+                fs.rmdirSync($path, rmDirOptions);
                 return true;
             } catch (e) {
                 return false;
