@@ -227,15 +227,24 @@ declare namespace Xpresser {
             exists($path: string | string[], $returnList?: boolean): boolean | string[];
 
             /**
-             * Check if a path or an array of paths exists.
+             *  Delete File or  Files if an array is provided..
              *
              * if $returnList is true and $path is an array,
-             * the list of files found will be returned.
+             * the list of files deleted will be returned.
              * @param {string|string[]} $path - Path or Paths to find.
              * @param {boolean} $returnList - Return list of found files in array.
              * @param $deleteDirectories
              */
             delete($path: string | string[], $returnList?: boolean, $deleteDirectories?: boolean): boolean | string[];
+
+            /**
+             * Delete directory or  directories if an array is provided..
+             * if $returnList is true and $path is an array,
+             * the list of files found will be returned.
+             * @param {string|string[]} $path - Path or Paths to find.
+             * @param options
+             */
+            deleteDirectory($path: string | string[], options?: fs.RmDirOptions & {returnList: boolean}): boolean | string[];
 
 
             /**

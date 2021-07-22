@@ -1,4 +1,4 @@
-import fs = require("fs");
+import fs from "fs";
 import PATH = require("path");
 import fse = require("fs-extra");
 import {getInstance} from "../index";
@@ -164,6 +164,13 @@ $.file = {
     },
 
     delete($path: string | string[], $returnList = false, $deleteDirectories = false) {
+        if ($deleteDirectories) {
+            $.logDeprecated("0.18.1", "0.18.1", [
+                `The $deleteDirectories option (i.e 3rd Argument) of {{"$.file.delete()"}} is deprecated.`,
+                `Use {{"$.file.deleteDirectory()"}} instead.`
+            ])
+        }
+
         // If Array, loop and check if each files exists
         if (Array.isArray($path)) {
             const paths = $path as string[];
@@ -187,11 +194,43 @@ $.file = {
         } else {
             // to check data passed.
             try {
-                if ($deleteDirectories && $.file.isDirectory($path)) {
-                    fse.removeSync($path);
-                } else {
-                    fs.unlinkSync($path);
+                fs.unlinkSync($path);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+    },
+
+
+    deleteDirectory($path: string | string[], options?: fs.RmDirOptions & { returnList: boolean }) {
+        // If Array, loop and check if each files exists
+        if (Array.isArray($path)) {
+            const paths = $path as string[];
+            const returnList = options && options.returnList;
+            // Holds files found
+            const pathsDeleted = [] as string[];
+
+            for (const path of paths) {
+                const deleted = $.file.deleteDirectory(path);
+
+                // If we are not returning lists then we should stop once a path is not found.
+                if (!(returnList) && !deleted) {
+                    return false;
                 }
+
+                if (deleted) pathsDeleted.push(path);
+            }
+
+            return returnList ? pathsDeleted : true;
+        } else {
+            // to check data passed.
+            try {
+                if (options) {
+                    const {returnList, ...rmDirOptions} = options;
+                    fs.rmdirSync($path, rmDirOptions);
+                } else fs.rmdirSync($path);
+
                 return true;
             } catch (e) {
                 return false;

@@ -14,6 +14,7 @@ import {parseControllerString} from "./Functions/internals.fn";
 import PathHelper from "./Helpers/Path";
 
 import {getInstance} from "../index";
+
 const $ = getInstance();
 
 
@@ -124,8 +125,7 @@ class ControllerEngine {
             if (
                 middlewareMethod === "*"
                 || middlewareMethod === method
-                || (Array.isArray(middlewareMethod)
-                && middlewareMethod.includes(method))
+                || (Array.isArray(middlewareMethod) && middlewareMethod.includes(method))
             ) {
                 let path = route.path;
 
