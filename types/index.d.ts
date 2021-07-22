@@ -2,6 +2,7 @@
 // Project: Xpresser
 // Definitions by: TrapCodeIO <https://xpresserjs.com>
 
+import fs from "fs"
 import {Helpers} from "./helpers";
 import express from "express";
 import ObjectCollection from "object-collection";
