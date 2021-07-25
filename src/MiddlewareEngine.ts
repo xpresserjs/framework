@@ -10,8 +10,9 @@ const projectFileExtension = $.config.get('project.fileExtension', '').substr(1)
  * @param {string} middlewarePath
  * @param {*} action
  * @param route
+ * @param processOnly
  */
-const MiddlewareEngine = (middlewarePath: any, action?: any, route?: any): any => {
+const MiddlewareEngine = (middlewarePath: any, action?: any, route?: any, processOnly = false): any => {
 
     /**
      * if middleware has a dot sing we check if it is project extension file
@@ -54,6 +55,9 @@ const MiddlewareEngine = (middlewarePath: any, action?: any, route?: any): any =
         }
     }
 
+    if(processOnly) {
+        return middleware
+    }
     /**
      * Return Parsed Middleware
      */

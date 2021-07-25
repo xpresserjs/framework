@@ -7,7 +7,7 @@
   "scripts": {
     "prepublishOnly": "tsc -p tsconfig.json",
     "watch": "tsc --watch",
-    "dev": "npx ts-node-dev ./test.ts --respawn"
+    "dev": "npx ts-node-dev  --respawn ./test.ts"
   },
   "repository": "https://github.com/xpresserjs/framework.git",
   "homepage": "https://xpresserjs.com",

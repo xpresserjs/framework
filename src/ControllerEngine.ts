@@ -94,8 +94,9 @@ class ControllerEngine {
      * @param {object} $middleware
      * @param {string} method
      * @param {object} route
+     * @param processOnly
      */
-    public static getMiddlewares($middleware: Record<string, any>, method: string, route: any) {
+    public static getMiddlewares($middleware: Record<string, any>, method: string, route: any, processOnly = false) {
 
         const middlewareKeys = Object.keys($middleware);
         const middlewares: any[] = [];
@@ -146,7 +147,7 @@ class ControllerEngine {
                 } else if (typeof middleware === "function") {
                     middlewares.push(middleware);
                 } else {
-                    middlewares.push(MiddlewareEngine(middlewareFile[0], middlewareFile[1], route));
+                    middlewares.push(MiddlewareEngine(middlewareFile[0], middlewareFile[1], route, processOnly));
                 }
             }
         }
@@ -249,7 +250,7 @@ class ControllerEngine {
             * Else it will be a request handler.
             * */
             if (isPath) {
-                return controller(express.Router());
+                return controller(express.Router({mergeParams: true}));
             } else if (typeof controller.extendsMainController !== "boolean") {
                 method = controller;
             }
@@ -376,8 +377,9 @@ class ControllerEngine {
 /**
  * @param {string | Object | Function} route
  * @param {string |null} method
+ * @param processOnly
  */
-const Controller = (route: any, method: any = null) => {
+const Controller = (route: any, method: any = null, processOnly=false) => {
 
     let $controller: any = undefined;
     let controllerPath: string | null = null;
@@ -439,7 +441,11 @@ const Controller = (route: any, method: any = null) => {
 
     let middlewares: any[] = [];
     if (controllerMiddleware) {
-        middlewares = ControllerEngine.getMiddlewares(controllerMiddleware, method, route);
+        middlewares = ControllerEngine.getMiddlewares(controllerMiddleware, method, route, processOnly);
+    }
+
+    if(processOnly){
+        return {middlewares, $controller, method}
     }
 
     const $method = new ControllerEngine(route, $controller, method, isPath);
