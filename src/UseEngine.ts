@@ -196,7 +196,7 @@ class UseEngine {
 
     public static controller(controller: string) {
 
-        if (controller.indexOf("::") > 2) {
+        if (controller.indexOf("::") > 0) {
             const $splitController = controller.split("::");
             const $pluginNamespace = $splitController[0];
 
