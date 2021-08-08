@@ -392,7 +392,7 @@ class RequestEngine {
 
             } else {
                 const $splitFile = file.split("::");
-                const $pluginNamespace = lodash.upperFirst($splitFile[0]);
+                const $pluginNamespace = $splitFile[0];
 
                 if (PluginNameSpaces.hasOwnProperty($pluginNamespace)) {
                     const pluginNamespaceData = new ObjectCollection(PluginNameSpaces[$pluginNamespace])
