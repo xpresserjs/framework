@@ -63,7 +63,6 @@ function getInstanceRouter(instanceId?: string): XpresserRouter {
  * @constructor
  */
 function init(AppConfig: Record<string, any> | string, AppOptions: Options = {}): DollarSign {
-
     // Expose xpresserInstance as global function
     // @ts-ignore
     if (!global.xpresserInstance) global.xpresserInstance = getInstance;
@@ -132,7 +131,7 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
                     throw new InXpresserError(`CONFIG: No exported object found in config file: (${configFile})`);
                 }
             } catch (e) {
-                console.error(e.stack);
+                console.error((e as InXpresserError).stack);
                 $.exit();
             }
 

@@ -309,7 +309,7 @@ class ControllerEngine {
                         return http.newError().view({
                             error: {
                                 message: `Error in Controller Boot Method:  <code>${controllerName}</code>`,
-                                log: e.stack,
+                                log: (e as Error).stack,
                             },
                         });
                     }
@@ -362,7 +362,7 @@ class ControllerEngine {
                             error: {
                                 // tslint:disable-next-line:max-line-length
                                 message: `Error in Controller:  <code>${controllerName}</code>, Method: <code>${m}</code>`,
-                                log: e.stack,
+                                log: (e as Error).stack,
                             },
                         });
                     }

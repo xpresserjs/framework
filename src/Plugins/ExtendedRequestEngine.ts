@@ -29,7 +29,7 @@ const RequireOrFail = ($RequestEngine: any, plugin?: any) => {
     } catch (e) {
         $.logPerLine([
             plugin === undefined ? {} : {error: `Error in plugin: ${plugin}`},
-            {error: e.stack},
+            {error: (e as Error).stack},
             {errorAndExit: ""},
         ]);
     }

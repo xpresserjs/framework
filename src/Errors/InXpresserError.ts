@@ -63,8 +63,8 @@ class InXpresserError extends Error {
         try {
             return fn();
         } catch (e) {
-            if(handleError) return handleError(this.use(e));
-            throw this.use(e);
+            if(handleError) return handleError(this.use(e as Error));
+            throw this.use(e as Error);
         }
     }
 
