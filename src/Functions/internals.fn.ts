@@ -23,9 +23,9 @@ export function initializeTypescriptFn(filename: string, run?: (isNode: any) => 
     if (!filename) throw Error(`isTypescript: requires __filename as argument.`);
 
     const isTypeScriptFile = filename.substr(-3) === '.ts';
-    const tsBaseFolder = (() => {
-        return path.resolve($.path.resolve(`base://../`))
-    })();
+    const tsBaseFolder =
+        isTypeScriptFile ? $.path.base() : path.resolve($.path.resolve(`base://../`))
+
 
     // save tsBaseFolder to xpresser store
     $.engineData.set('tsBaseFolder', tsBaseFolder);
@@ -40,9 +40,8 @@ export function initializeTypescriptFn(filename: string, run?: (isNode: any) => 
         }
     }
 
-    // Check for presser engine
+    // Check for xpresser engine
     if (!isTypeScriptFile && !$.file.exists(PathHelper.resolve($.config.get('paths.npm')))) {
-        // $.logError('Path to xpresser engine files maybe missing, point {config.paths.npm} to your node_modules folder.')
         try {
             $.config.set('paths.npm', $.path.node_modules());
             $.path.engine('', false, true);
