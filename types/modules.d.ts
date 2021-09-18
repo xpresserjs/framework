@@ -3,5 +3,5 @@
  */
 declare module "xpresser/dist/src/Console/JobHelper" {
     import JobHelper from "../src/Console/JobHelper";
-    export default JobHelper;
+    export = JobHelper;
 }
