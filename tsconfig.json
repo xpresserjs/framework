@@ -30,7 +30,8 @@
     "./types/index.d.ts",
     "./types/node.d.ts",
     "./types/helpers.d.ts",
-    "./types/http.d.ts"
+    "./types/http.d.ts",
+    "./types/modules.d.ts"
   ],
   "include": [
     "./**/*.ts"

@@ -1,6 +1,7 @@
 /// <reference path="./types/node.d.ts" />
 /// <reference path="./types/helpers.d.ts" />
 /// <reference path="./types/http.d.ts" />
+/// <reference path="./types/modules.d.ts" />
 /// <reference path="./types/index.d.ts" />
 
 import ControllerClass from "./src/Classes/ControllerClass";
