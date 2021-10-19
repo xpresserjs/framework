@@ -2,7 +2,7 @@ import PathHelper = require("./Helpers/Path");
 
 import {getInstance} from "../index";
 import InXpresserError from "./Errors/InXpresserError";
-import {convertPluginArrayToObject, pluginPathExistOrExit} from "./Functions/plugins.fn";
+import {compareVersion, convertPluginArrayToObject, pluginPathExistOrExit} from "./Functions/plugins.fn";
 
 const $ = getInstance();
 
@@ -192,17 +192,23 @@ class PluginEngine {
          * Version checker
          */
         if (data.xpresser) {
-            const version = data.xpresser;
-            if (version.substr(0, 2) === ">=" && !(PackageDotJson.version >= version.substr(2))) {
+            let version = data.xpresser;
+            const xpresserVersion = PackageDotJson.version;
+
+            const compareWith = version.substr(0, 2);
+            version = data.xpresser.substr(2);
+
+
+            if (compareWith === ">=" && compareVersion(xpresserVersion, version) === -1) {
                 $.logErrorAndExit(
-                    `Plugin: [${data.namespace}] requires xpresser version [${version}], upgrade xpresser to continue.`
+                    `Plugin: [${data.namespace}] requires xpresser version [${compareWith + version}],\nUpgrade xpresser to continue.`
                 );
             } else if (
-                version.substr(0, 2) === "<=" &&
-                !(PackageDotJson.version <= version.substr(2))
+                compareWith === "<=" &&
+                compareVersion(version, xpresserVersion) === -1
             ) {
                 $.logErrorAndExit(
-                    `Plugin: [${data.namespace}] requires xpresser version [${version}], upgrade xpresser to continue.`
+                    `Plugin: [${data.namespace}] requires xpresser version [${compareWith + version}],\nDowngrade xpresser to continue.`
                 );
             }
         }
