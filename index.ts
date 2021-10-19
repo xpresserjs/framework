@@ -316,7 +316,7 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
     async function afterStartEvents() {
         // Require Plugin Engine and load plugins
         const PluginEngine = require("./src/PluginEngine");
-        const PluginData = await PluginEngine.loadPlugins();
+        const PluginData = await PluginEngine.loadPlugins(PackageDotJson);
 
         $.engineData.set("PluginEngineData", PluginData);
 

@@ -25,7 +25,7 @@ class PluginEngine {
     /**
      * Load plugins and process their use.json,
      */
-    public static async loadPlugins() {
+    public static async loadPlugins(PackageDotJson: Record<string, any>) {
         // get logs.plugins config.
         const logPlugins = $.config.get("log.plugins", true);
         // Hold Plugins
@@ -101,10 +101,10 @@ class PluginEngine {
                         }
 
                         if (pluginUseDotJson.hasOwnProperty('env')) {
-                            if(typeof pluginUseDotJson.env === "string" && pluginUseDotJson.env !== env)
+                            if (typeof pluginUseDotJson.env === "string" && pluginUseDotJson.env !== env)
                                 continue;
 
-                            if(Array.isArray(pluginUseDotJson.env) && !pluginUseDotJson.env.includes(env))
+                            if (Array.isArray(pluginUseDotJson.env) && !pluginUseDotJson.env.includes(env))
                                 continue;
                         }
                     }
@@ -122,7 +122,7 @@ class PluginEngine {
                     const $pluginPath: string = pluginPaths[plugin] = PathHelper.resolve(plugin);
 
                     try {
-                        const $data = pluginData[plugin] = PluginEngine.loadPluginUseData($pluginPath);
+                        const $data = pluginData[plugin] = PluginEngine.loadPluginUseData($pluginPath, PackageDotJson);
                         listOfPluginNamespaces.push($data.namespace);
                     } catch (e) {
                         // Throw any error from processing and stop xpresser.
@@ -180,12 +180,33 @@ class PluginEngine {
     /**
      * Read plugins use.json
      * @param pluginPath
+     * @param PackageDotJson
      */
-    public static loadPluginUseData(pluginPath: string) {
+    public static loadPluginUseData(pluginPath: string, PackageDotJson: Record<string, any>) {
         const data = require(pluginPath + "/use.json");
         if (!data.namespace) {
             throw new InXpresserError(`Cannot read property 'namespace'`);
         }
+
+        /**
+         * Version checker
+         */
+        if (data.xpresser) {
+            const version = data.xpresser;
+            if (version.substr(0, 2) === ">=" && !(PackageDotJson.version >= version.substr(2))) {
+                $.logErrorAndExit(
+                    `Plugin: [${data.namespace}] requires xpresser version [${version}], upgrade xpresser to continue.`
+                );
+            } else if (
+                version.substr(0, 2) === "<=" &&
+                !(PackageDotJson.version <= version.substr(2))
+            ) {
+                $.logErrorAndExit(
+                    `Plugin: [${data.namespace}] requires xpresser version [${version}], upgrade xpresser to continue.`
+                );
+            }
+        }
+
         return data;
     }
 
