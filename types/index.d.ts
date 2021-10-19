@@ -432,6 +432,14 @@ declare namespace Xpresser {
         isTypescript(): boolean;
 
         /**
+         * Check if is native cli command.
+         * Native cli commands
+         *
+         * e.g make:controller, make:jobs e.t.c
+         */
+        isNativeCliCommand(): boolean;
+
+        /**
          * Same as `process.exit`
          */
         exit(...args: any): void;

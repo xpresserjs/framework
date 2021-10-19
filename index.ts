@@ -254,6 +254,13 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
     }
 
 
+    $.isNativeCliCommand = () => {
+        return LaunchType === "cli" &&
+            (process.argv[3] &&
+                process.argv[3].substr(0, 5) === "make:") as boolean
+    }
+
+
     // Set Engine Path
     const enginePath = $.config.get('paths.engine');
     if (!enginePath) {
