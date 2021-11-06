@@ -59,7 +59,7 @@ export const getAllFiles = (path: string): string[] => {
  *
  * @example
  * const mustaches = "I ate {{2}} {{cakes}} today";
- * // ['ate', 'cakes']
+ * // ['2', 'cakes']
  */
 export function touchMyMustache(str: string) {
     // Stop if {{ is not found in string.

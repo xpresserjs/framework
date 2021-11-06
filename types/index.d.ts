@@ -8,7 +8,7 @@ import express from "express";
 import ObjectCollection from "object-collection";
 import XpresserRouter from "@xpresser/router";
 import {Controller as HttpController} from "./http";
-import { Server } from "http";
+import {Server} from "http";
 import {Server as HttpsServer} from "https"
 
 type NumberToAnyKeyObject = Record<number, any>;
@@ -245,7 +245,7 @@ declare namespace Xpresser {
              * @param {string|string[]} $path - Path or Paths to find.
              * @param options
              */
-            deleteDirectory($path: string | string[], options?: fs.RmDirOptions & {returnList: boolean}): boolean | string[];
+            deleteDirectory($path: string | string[], options?: fs.RmDirOptions & { returnList: boolean }): boolean | string[];
 
 
             /**
@@ -551,6 +551,17 @@ declare namespace Xpresser {
      * Export global xpresserInstance function as type
      */
     export type InstanceGetter = (instanceId?: string) => DollarSign;
+
+
+    /**
+     * Plugin data type for plugin index files.
+     */
+    export interface PluginData {
+        namespace: string,
+        plugin: string,
+        path: string,
+        paths: Record<string, any>
+    }
 }
 
 export = Xpresser;

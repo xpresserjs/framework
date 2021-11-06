@@ -1,5 +1,5 @@
 import PathHelper = require("./Helpers/Path");
-
+import {isPackageExists} from "local-pkg";
 import {getInstance} from "../index";
 import InXpresserError from "./Errors/InXpresserError";
 import {compareVersion, convertPluginArrayToObject, pluginPathExistOrExit} from "./Functions/plugins.fn";
@@ -331,10 +331,52 @@ class PluginEngine {
             const indexFilePath: void | string = pluginPathExistOrExit(plugin, path, pluginIndexFile);
 
             if (indexFilePath) {
-                const {run} = require(indexFilePath);
-                if (run) {
-                    await run(pluginData, $);
+                /**
+                 * Run plugin indexFile.
+                 */
+                const {run, dependsOn} = require(indexFilePath);
+
+                // check for packages plugin dependsOn
+                if (dependsOn && typeof dependsOn === "function") {
+                    let pluginDependsOn: string[] | undefined = await dependsOn(pluginData, $);
+
+                    // Validate function return type.
+                    if (!pluginDependsOn || !Array.isArray(pluginDependsOn))
+                        return $.logErrorAndExit(`dependsOn() function for plugin {${pluginData.namespace}} must return an array of packages.`)
+
+
+                    // Log warning for missing required packages.
+                    if (pluginDependsOn.length) {
+                        let missingPkgs = 0;
+
+                        // Loop through and check packages.
+                        pluginDependsOn.forEach(pkg => {
+
+                            // Show warning for every missing package.
+                            if (!isPackageExists(pkg)) {
+
+                                // Intro log.
+                                if (missingPkgs === 0)
+                                    $.logError(`Plugin: (${pluginData.namespace}) requires the following dependencies:`)
+
+                                console.log(`- ${pkg}`);
+
+                                missingPkgs++;
+                            }
+                        })
+
+                        // Stop if missing package
+                        if (missingPkgs)
+                            return $.logErrorAndExit(`Install required ${missingPkgs > 1 ? 'dependencies' : 'dependency'} and restart server.`)
+                    }
+
                 }
+
+
+                /**
+                 * Call Run function.
+                 */
+                if (run && typeof run === "function") await run(pluginData, $);
             }
         }
 
