@@ -26,8 +26,8 @@
     "express-flash": "^0.0.2",
     "fs-extra": "^10.0.0",
     "handlebars": "^4.7.7",
+    "has-pkg": "^0.0.1",
     "helmet": "^4.6.0",
-    "local-pkg": "^0.4.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "object-collection": "^2.0.0",
@@ -42,6 +42,9 @@
     "@types/pluralize": "^0.0.29",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.4.2"
+  },
+  "engines": {
+    "node": ">=12.0.0"
   },
   "keywords": [
     "xpresser",

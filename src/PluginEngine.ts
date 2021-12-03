@@ -1,5 +1,5 @@
 import PathHelper = require("./Helpers/Path");
-import {isPackageExists} from "local-pkg";
+import hasPkg from "has-pkg";
 import {getInstance} from "../index";
 import InXpresserError from "./Errors/InXpresserError";
 import {compareVersion, convertPluginArrayToObject, pluginPathExistOrExit} from "./Functions/plugins.fn";
@@ -353,7 +353,7 @@ class PluginEngine {
                         pluginDependsOn.forEach(pkg => {
 
                             // Show warning for every missing package.
-                            if (!isPackageExists(pkg)) {
+                            if (!hasPkg(pkg)) {
 
                                 // Intro log.
                                 if (missingPkgs === 0)
