@@ -2,14 +2,15 @@
 // Project: Xpresser
 // Definitions by: TrapCodeIO <https://xpresserjs.com>
 
-import fs from "fs"
-import {Helpers} from "./helpers";
-import express from "express";
-import ObjectCollection from "object-collection";
-import XpresserRouter from "@xpresser/router";
-import {Controller as HttpController} from "./http";
-import {Server} from "http";
-import {Server as HttpsServer} from "https"
+import type fs from "fs"
+import type {Helpers} from "./helpers";
+import type express from "express";
+import type ObjectCollection from "object-collection";
+import type XpresserRouter from "@xpresser/router";
+import type {Controller as HttpController} from "./http";
+import type {Server} from "http";
+import type {Server as HttpsServer} from "https"
+import type RequestEngine from "../src/RequestEngine";
 
 type NumberToAnyKeyObject = Record<number, any>;
 
@@ -134,6 +135,9 @@ declare namespace Xpresser {
 
         // Router Engine
         routerEngine: typeof import("../src/RouterEngine");
+
+        // Extended Request Engine
+        extendedRequestEngine: () => typeof RequestEngine;
 
         // Controller
         /**

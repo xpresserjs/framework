@@ -85,7 +85,6 @@ $.logDeprecated = (since: string, removedAt: string, message: string | string[],
     }
 };
 
-
 $.logInfo = (...args) => {
     if (!args.length) {
         return console.log("");

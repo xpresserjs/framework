@@ -39,10 +39,8 @@ $.utils = Utils;
 $.initializeTypescript = initializeTypescriptFn;
 
 // Get Lan Ip
-/**
- * Get lan Ip
- */
 import {getLocalExternalIp} from "./Functions/inbuilt.fn";
 
+// Set Lan Ip
 $.engineData.set('lanIp', getLocalExternalIp());
 

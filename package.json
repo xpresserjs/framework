@@ -8,7 +8,7 @@
     "prepublishOnly": "npx tsc -p tsconfig.json",
     "watch": "npx tsc --watch",
     "build": "npx tsc",
-    "test": "npx ts-node-dev  --respawn ./test.ts"
+    "test": "npx ts-node-dev  --respawn tests/server.ts"
   },
   "repository": "https://github.com/xpresserjs/framework.git",
   "homepage": "https://xpresserjs.com",

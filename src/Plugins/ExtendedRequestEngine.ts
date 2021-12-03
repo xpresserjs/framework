@@ -1,7 +1,8 @@
 import RequestEngine = require("../RequestEngine");
 import {getInstance} from "../../index";
 import PathHelper = require("../Helpers/Path");
-import ObjectCollection = require("object-collection");
+import type ObjectCollection = require("object-collection");
+import type { Http } from "../../types/http";
 
 const $ = getInstance();
 
@@ -9,6 +10,11 @@ let ExtendedRequestEngine = RequestEngine;
 
 // Set Request Engine Getter
 $.engineData.set("ExtendedRequestEngine", () => ExtendedRequestEngine);
+
+// Set extended request engine getter.
+$.extendedRequestEngine = () => {
+    return $.engineData.get("ExtendedRequestEngine")();
+}
 
 const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
 const useDotJson: ObjectCollection = $.engineData.get("UseDotJson");
@@ -19,6 +25,8 @@ const useDotJson: ObjectCollection = $.engineData.get("UseDotJson");
 const ExtendRequestEngineUsing = (extender: ($class: any) => any) => {
     if (typeof extender === "function") {
         ExtendedRequestEngine = extender(ExtendedRequestEngine);
+    } else {
+        throw new Error("Custom RequestEngine Extender must be a function.");
     }
 };
 

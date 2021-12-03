@@ -1,7 +1,6 @@
 node_modules
 .idea
 .env
-test.ts
 tests/*
 dist
 storage
