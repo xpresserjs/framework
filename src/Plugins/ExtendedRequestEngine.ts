@@ -2,7 +2,7 @@ import RequestEngine = require("../RequestEngine");
 import {getInstance} from "../../index";
 import PathHelper = require("../Helpers/Path");
 import type ObjectCollection = require("object-collection");
-import type { Http } from "../../types/http";
+
 
 const $ = getInstance();
 
@@ -24,9 +24,22 @@ const useDotJson: ObjectCollection = $.engineData.get("UseDotJson");
  */
 const ExtendRequestEngineUsing = (extender: ($class: any) => any) => {
     if (typeof extender === "function") {
-        ExtendedRequestEngine = extender(ExtendedRequestEngine);
+        /**
+         * Since we can't differentiate between a class and a function
+         * we need to check if the extender has a static function called `expressify`
+         * which exists on the default RequestEngine.
+         */
+        if (typeof (extender as unknown as typeof RequestEngine).expressify === "function") {
+            ExtendedRequestEngine = extender as unknown as typeof RequestEngine;
+        } else {
+            /**
+             * The case of Extenders returning a function that returns a class
+             * Maybe deprecated in future since the introduction of $.extendedRequestEngine()
+             */
+            ExtendedRequestEngine = extender(ExtendedRequestEngine);
+        }
     } else {
-        throw new Error("Custom RequestEngine Extender must be a function.");
+        throw new Error("Custom RequestEngine extender must be a function or an extended RequestEngine class.");
     }
 };
 
