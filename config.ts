@@ -36,11 +36,6 @@ const Config = {
         fileExtension: ".js",
     },
 
-
-    router: {
-        pathCase: "snake" // snake or kebab
-    },
-
     // Server Configuration
     server: {
 
@@ -127,7 +122,14 @@ const Config = {
             dataKey: 'data',
             proceedKey: 'proceed',
             messageKey: '_say'
-        }
+        },
+
+        /**
+         * Xpresser Router Config
+         */
+        router: {
+            pathCase: "snake" // snake or kebab
+        },
     },
 
     // Date Configurations
