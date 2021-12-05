@@ -36,6 +36,11 @@ const Config = {
         fileExtension: ".js",
     },
 
+
+    router: {
+        pathCase: "snake" // snake or kebab
+    },
+
     // Server Configuration
     server: {
 
