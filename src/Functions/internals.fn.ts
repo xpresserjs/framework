@@ -55,7 +55,8 @@ export function initializeTypescriptFn(filename: string, run?: (isNode: any) => 
         /**
          * Fix route file.
          */
-        const routesFile = $.config.get('paths.routesFile');
+        const routesFile: string = $.config.get('paths.routesFile');
+
         if (routesFile.includes('.ts')) {
             $.config.set('paths.routesFile', routesFile.replace('.ts', '.js'))
         }

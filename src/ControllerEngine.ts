@@ -84,7 +84,7 @@ if (AutoLoadPaths && $.file.isDirectory(ServicesFolder)) {
 }
 
 const isProduction = $.config.get("env") === "production";
-const debug = $.config.get('debug', {})
+const debug: Record<string, any> = $.config.get('debug', {})
 const DebugControllerAction = !isProduction && debug.enabled && debug.controllerAction;
 
 // @ts-check
@@ -379,7 +379,7 @@ class ControllerEngine {
  * @param {string |null} method
  * @param processOnly
  */
-const Controller = (route: any, method: any = null, processOnly=false) => {
+const Controller = (route: any, method: any = null, processOnly = false) => {
 
     let $controller: any = undefined;
     let controllerPath: string | null = null;
@@ -444,7 +444,7 @@ const Controller = (route: any, method: any = null, processOnly=false) => {
         middlewares = ControllerEngine.getMiddlewares(controllerMiddleware, method, route, processOnly);
     }
 
-    if(processOnly){
+    if (processOnly) {
         return {middlewares, $controller, method}
     }
 

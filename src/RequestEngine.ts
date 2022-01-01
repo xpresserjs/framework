@@ -15,7 +15,7 @@ import express = require("express");
 const ejs = require("ejs");
 const $ = getInstance();
 
-const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
+const PluginNameSpaces: any = $.engineData.get("PluginEngine:namespaces", {});
 const useFlash = $.config.get("server.use.flash", false);
 
 /**

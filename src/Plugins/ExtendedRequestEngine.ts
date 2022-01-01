@@ -16,7 +16,7 @@ $.extendedRequestEngine = () => {
     return $.engineData.get("ExtendedRequestEngine")();
 }
 
-const PluginNameSpaces = $.engineData.get("PluginEngine:namespaces", {});
+const PluginNameSpaces: Record<string, any> = $.engineData.get("PluginEngine:namespaces", {});
 const useDotJson: ObjectCollection = $.engineData.get("UseDotJson");
 
 /**
@@ -74,7 +74,7 @@ for (let k = 0; k < pluginNamespaceKeys.length; k++) {
 /**
  * Load User defined request Engine
  */
-const userRequestExtension = useDotJson.get("extends.RequestEngine", false);
+const userRequestExtension = useDotJson.get<boolean | any[]>("extends.RequestEngine", false);
 if (userRequestExtension) {
     if (Array.isArray(userRequestExtension)) {
         for (const extension of userRequestExtension) {

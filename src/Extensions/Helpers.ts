@@ -15,7 +15,7 @@ const helpers = {
      */
     url($path: string = "", $query: any = {}) {
         let url = "";
-        const server = $.config.get('server');
+        const server: Record<string, any> = $.config.get('server');
 
         if ($path.substr(0, 1) === "/") {
             $path = $path.substr(1);

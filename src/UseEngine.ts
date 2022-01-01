@@ -14,7 +14,7 @@ import InXpresserError from "./Errors/InXpresserError";
 const $ = getInstance();
 
 let Use: JsonSettings.Use;
-const PluginNamespaces = $.engineData.get("PluginEngine:namespaces", {});
+const PluginNamespaces: any = $.engineData.get("PluginEngine:namespaces", {});
 const projectFileExtension = $.config.get('project.fileExtension');
 
 /**

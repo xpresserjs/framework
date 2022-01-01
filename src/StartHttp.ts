@@ -437,8 +437,12 @@ const startHttpsServer = () => {
         $.logErrorAndExit("Ssl enabled but has no {server.ssl.files} config found.");
     }
 
-    const files = $.config.get("server.ssl.files");
+    const files = $.config.get<{
+        key: string,
+        cert: string
+    }>("server.ssl.files");
 
+    // noinspection SuspiciousTypeOfGuard
     if (typeof files.key !== "string" || typeof files.cert !== "string") {
         $.logErrorAndExit("Config {server.ssl.files} not configured properly!");
     }
@@ -458,8 +462,8 @@ const startHttpsServer = () => {
         $.logErrorAndExit("Cert file {" + files.key + "} not found!");
     }
 
-    files.key = $.file.read(files.key);
-    files.cert = $.file.read(files.cert);
+    files.key = $.file.read(files.key).toString();
+    files.cert = $.file.read(files.cert).toString();
 
     $.https = createHttpsServer(files, $.app);
     $.https.on("error", $.logError);

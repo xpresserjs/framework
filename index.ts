@@ -300,7 +300,7 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
     /**
      * Change timezone if timezone is defined.
      */
-    const timezone = $.config.get('date.timezone');
+    const timezone: string | undefined = $.config.get('date.timezone');
     if (timezone) {
         process.env.TZ = timezone;
     }

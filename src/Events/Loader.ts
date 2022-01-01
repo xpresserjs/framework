@@ -9,8 +9,8 @@ const DefinedEvents: Record<string, any> = {};
 const EventsPath = $.path.events();
 // Load all event files
 const $useDotJson: ObjectCollection = $.engineData.get("UseDotJson");
-const excludedFiles = $useDotJson.get("exclude.events.files", []);
-const excludedFolders = $useDotJson.get("exclude.events.folders", []);
+const excludedFiles: string[] = $useDotJson.get("exclude.events.files", []);
+const excludedFolders: string[] = $useDotJson.get("exclude.events.folders", []);
 Path.addProjectFileExtension(excludedFiles);
 
 function readEventsDirectory (parent: string) {

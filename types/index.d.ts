@@ -452,7 +452,7 @@ declare namespace Xpresser {
          * Return new getInstance of object collection.
          * @param [obj]
          */
-        objectCollection(obj?: object | any[]): ObjectCollection;
+        objectCollection<T extends Record<string, any>>(obj?: T): ObjectCollection<T>;
 
         /**
          * .Env File Reader Helper

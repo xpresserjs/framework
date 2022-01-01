@@ -194,7 +194,7 @@ class PathHelper {
 
             return array;
         } else {
-            return files.substr(0, files.length - $.config.get('project.fileExtension').length);
+            return files.substr(0, files.length - $.config.get<string>('project.fileExtension').length);
         }
     }
 

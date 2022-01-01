@@ -19,7 +19,7 @@ const AllRoutesKey = "RouterEngine:allRoutes";
 const NameToRoute: Record<string, any> = {};
 
 // Processed routes records memory cache.
-const ProcessedRoutes: (RouteData & {url: string})[] = [];
+const ProcessedRoutes: (RouteData & { url: string })[] = [];
 
 // Resolved Controller Names records memory cache.
 const ControllerStringCache: Record<string, any> = {};
@@ -122,7 +122,7 @@ class RouterEngine {
         const localVariableName = "RouterEngine:nameToPath";
 
         if ($.engineData.has(localVariableName)) {
-            return $.engineData.get(localVariableName);
+            return $.engineData.get<Record<string, any>>(localVariableName);
         }
 
         const names = Object.keys(NameToRoute);
@@ -138,6 +138,7 @@ class RouterEngine {
         }
 
         $.engineData.set(localVariableName, newRoutes);
+
         return newRoutes;
     }
 

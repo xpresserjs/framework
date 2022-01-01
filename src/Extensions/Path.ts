@@ -5,7 +5,7 @@ import {getInstance} from "../../index";
 const packageName: string = "xpresser";
 const $ = getInstance();
 
-const paths = $.config.get('paths');
+const paths: Record<string, any> = $.config.get('paths');
 const baseFiles = paths.base + "/";
 const backendFiles = PathHelper.resolve(paths.backend);
 

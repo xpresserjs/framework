@@ -236,7 +236,7 @@ class PluginEngine {
 
         // check if plugin has routesFile
         if ($data.has("paths.routesFile")) {
-            let RoutePath = $data.get("paths.routesFile");
+            let RoutePath: any = $data.get("paths.routesFile");
 
             RoutePath = pluginPathExistOrExit(plugin, path, RoutePath);
 
@@ -245,7 +245,7 @@ class PluginEngine {
 
         // check if plugin use.json has paths.controllers
         if ($data.has("paths.controllers")) {
-            let controllerPath = $data.get("paths.controllers");
+            let controllerPath: any = $data.get("paths.controllers");
             controllerPath = pluginPathExistOrExit(plugin, path, controllerPath);
             pluginData.paths.controllers = controllerPath;
         }
@@ -254,14 +254,14 @@ class PluginEngine {
         $.ifNotConsole(() => {
             // check if plugin use.json has paths.views
             if ($data.has("paths.views")) {
-                let viewsPath = $data.get("paths.views");
+                let viewsPath: any = $data.get("paths.views");
                 viewsPath = pluginPathExistOrExit(plugin, path, viewsPath);
                 pluginData.paths.views = viewsPath;
             }
 
             // check if plugin use.json has paths.middlewares
             if ($data.has("paths.middlewares")) {
-                let middlewarePath = $data.get("paths.middlewares");
+                let middlewarePath: any = $data.get("paths.middlewares");
                 middlewarePath = pluginPathExistOrExit(plugin, path, middlewarePath);
                 pluginData.paths.middlewares = middlewarePath;
             }
@@ -270,7 +270,7 @@ class PluginEngine {
             if ($data.has("extends")) {
                 const extensionData: Record<string, any> = {};
                 if ($data.has("extends.RequestEngine")) {
-                    const extenderPath = $data.get("extends.RequestEngine");
+                    const extenderPath = $data.get<any>("extends.RequestEngine");
                     extensionData["RequestEngine"] = pluginPathExistOrExit(plugin, path, extenderPath);
                 }
 
@@ -291,7 +291,7 @@ class PluginEngine {
 
             // check if plugin use.json has paths.Commands only if console
             if ($data.has("paths.commands")) {
-                let commandPath = $data.get("paths.commands");
+                let commandPath: any = $data.get("paths.commands");
                 commandPath = pluginPathExistOrExit(plugin, path, commandPath);
                 pluginData.paths.commands = commandPath;
 
