@@ -10,7 +10,7 @@ import colors = require("../Objects/consoleColors.obj");
 import PathHelper = require("../Helpers/Path");
 
 const $ = getInstance();
-const artisanConfig = $.config.get('artisan', {});
+const artisanConfig: any = $.config.get('artisan', {});
 const {logThis, logThisAndExit} = Artisan;
 
 /**

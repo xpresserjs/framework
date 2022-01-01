@@ -51,7 +51,7 @@ if (isJobCommand || !Commands.hasOwnProperty(argCommand)) {
     /*
     load plugins commands first since defined jobs may call plugin commands.
      */
-    const PluginData = $.engineData.get("PluginEngine:namespaces", {});
+    const PluginData: any = $.engineData.get("PluginEngine:namespaces", {});
     const plugins = Object.keys(PluginData);
 
     for (const plugin of plugins) {
