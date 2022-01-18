@@ -1,0 +1,7 @@
+{
+  "extends": {
+    "RequestEngine": [
+      "./tests/CustomRequestEngine.ts"
+    ]
+  }
+}

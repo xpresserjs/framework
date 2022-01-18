@@ -1,0 +1,7 @@
+{
+  "xpresser": ">=0.24.0",
+  "namespace": "Test Plugin",
+  "use_index": "./plugin-index.ts"
+}
+
+
