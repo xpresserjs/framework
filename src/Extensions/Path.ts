@@ -143,7 +143,9 @@ $.path = {
         let currentNodeModules: string;
 
         try {
-            currentNodeModules = require.resolve('xpresser').replace('xpresser/dist/index.js', '');
+            currentNodeModules = require.resolve('xpresser')
+                .replace('xpresser\\dist\\index.js', '')
+                .replace('xpresser/dist/index.js', '');
         } catch (e) {
             currentNodeModules = PathHelper.resolve([paths.npm, path])
         }

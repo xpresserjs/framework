@@ -22,7 +22,7 @@ export function initializeTypescriptFn(filename: string, run?: (isNode: any) => 
 
     if (!filename) throw Error(`isTypescript: requires __filename as argument.`);
 
-    const isTypeScriptFile = filename.substr(-3) === '.ts';
+    const isTypeScriptFile = filename.slice(-3) === '.ts';
     const tsBaseFolder =
         isTypeScriptFile ? $.path.base() : path.resolve($.path.resolve(`base://../`))
 
