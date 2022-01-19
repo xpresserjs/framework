@@ -257,7 +257,7 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
     $.isNativeCliCommand = () => {
         return LaunchType === "cli" &&
             (process.argv[3] &&
-                process.argv[3].substr(0, 5) === "make:") as boolean
+                process.argv[3].slice(0, 5) === "make:") as boolean
     }
 
 
@@ -268,9 +268,10 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
 
         /**
          * Check if xpresser dist folder if being used
+         * "\\ is for windows"
          */
-        if (dirName.substr(-5) === '/dist') {
-            dirName = dirName.substr(0, dirName.length - 5)
+        if (["/dist", "\\dist"].includes(dirName.slice(-5))) {
+            dirName = dirName.slice(0, dirName.length - 5)
         }
 
         $.config.set('paths.engine', `${dirName}/src/`);
