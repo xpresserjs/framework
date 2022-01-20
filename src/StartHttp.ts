@@ -28,14 +28,15 @@ const isUnderMaintenance = $.file.exists($.path.base('.maintenance'))
 
 $.app = express();
 
-if (!isProduction) {
-    //////////////
+//////////////
 // Add Request Logger
+if (!isProduction) {
+
     type RequestLogger = {
         enabled: boolean;
         colored: boolean | "mute";
         show: { time: boolean; statusCode: boolean; statusMessage: boolean };
-        ignore?: (string | RegExp)[];
+        ignore?: (string | number | RegExp)[];
         ignoreFn?: (http: Http) => boolean;
     };
 
@@ -85,7 +86,10 @@ if (!isProduction) {
             // check if we should skip logging
             if (debugRequest.ignore && Array.isArray(debugRequest.ignore)) {
                 for (const pattern of debugRequest.ignore) {
-                    if (typeof pattern === "string") {
+                    if (typeof pattern === "number") {
+                        // Exclude if status code is equal to pattern
+                        if (pattern === res.statusCode) return next();
+                    } else if (typeof pattern === "string") {
                         if (originalUrl.startsWith(pattern) || originalUrl.includes(pattern))
                             return next();
                     } else {
@@ -167,12 +171,13 @@ if (forceHttpToHttps) {
 let poweredBy = $.config.get("server.poweredBy");
 if (poweredBy) {
     poweredBy = typeof poweredBy === "string" ? poweredBy : "Xpresser";
+    const overrideServerName = $.config.get("response.overrideServerName");
 
     $.app.use((_req, res, next) => {
         res.set("X-Powered-By", poweredBy);
-        if ($.config.get('response.overrideServerName')) {
-            res.set("Server", poweredBy);
-        }
+
+        if (overrideServerName) res.set("Server", poweredBy);
+
         next();
     });
 
@@ -186,6 +191,7 @@ if (poweredBy) {
 const servePublicFolder = $.config.get("server.servePublicFolder", false);
 if (!isUnderMaintenance && servePublicFolder) {
     const responseConfig = $.config.get('response');
+
     $.app.use(
         express.static(paths.public, {
             setHeaders(res, path) {
