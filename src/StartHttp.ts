@@ -97,7 +97,7 @@ if (!isProduction) {
                     for (const pattern of debugRequest.ignore) {
                         if (typeof pattern === "number") {
                             // Exclude if status code is equal to pattern
-                            if (pattern === res.statusCode) return next();
+                            if (pattern === res.statusCode) return;
                         } else if (typeof pattern === "string") {
                             if (originalUrl.startsWith(pattern) || originalUrl.includes(pattern))
                                 return
