@@ -81,37 +81,41 @@ if (!isProduction) {
         // Register middleware
         $.app!.use((req, res, next) => {
             const start = process.hrtime();
-            const {originalUrl} = req;
-
-            // check if we should skip logging
-            if (debugRequest.ignore && Array.isArray(debugRequest.ignore)) {
-                for (const pattern of debugRequest.ignore) {
-                    if (typeof pattern === "number") {
-                        // Exclude if status code is equal to pattern
-                        if (pattern === res.statusCode) return next();
-                    } else if (typeof pattern === "string") {
-                        if (originalUrl.startsWith(pattern) || originalUrl.includes(pattern))
-                            return next();
-                    } else {
-                        if (pattern.test(originalUrl)) {
-                            return next();
-                        }
-                    }
-                }
-            }
-
-            if (debugRequest.ignoreFn && typeof debugRequest.ignoreFn === "function") {
-                const RequestEngine = $.extendedRequestEngine();
-                if (debugRequest.ignoreFn(new RequestEngine(req, res) as unknown as Http))
-                    return next();
-            }
 
             // using close event instead of finish event
             // because close calls after finish
             res.on("close", () => {
-                const {method} = req;
+
+                const {method, originalUrl} = req;
                 const {statusCode, statusMessage} = res;
 
+                // check if we should skip logging
+                // This is done inside the close event because
+                // statusCode can change after the finish event
+
+                if (debugRequest.ignore && Array.isArray(debugRequest.ignore)) {
+                    for (const pattern of debugRequest.ignore) {
+                        if (typeof pattern === "number") {
+                            // Exclude if status code is equal to pattern
+                            if (pattern === res.statusCode) return next();
+                        } else if (typeof pattern === "string") {
+                            if (originalUrl.startsWith(pattern) || originalUrl.includes(pattern))
+                                return
+                        } else {
+                            if (pattern.test(originalUrl)) {
+                                return
+                            }
+                        }
+                    }
+                }
+
+                if (debugRequest.ignoreFn && typeof debugRequest.ignoreFn === "function") {
+                    const RequestEngine = $.extendedRequestEngine();
+                    if (debugRequest.ignoreFn(new RequestEngine(req, res) as unknown as Http))
+                        return
+                }
+
+                // Make log message
                 const duration = getDurationInMilliseconds(start).toLocaleString() + "ms";
                 const time = new Date().toLocaleTimeString();
 
