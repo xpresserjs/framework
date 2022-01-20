@@ -1,6 +1,8 @@
 import {resolve} from "path";
+import chalk = require("chalk");
 import PathHelper = require("./Helpers/Path");
 import OnEventsLoader = require("./Events/OnEventsLoader");
+
 
 const {runBootEvent} = OnEventsLoader;
 import express = require("express");
@@ -8,7 +10,7 @@ import {createServer as createHttpServer} from "http";
 import {createServer as createHttpsServer} from "https";
 
 // Types
-import {Controller as XpresserController} from "../types/http";
+import {Controller as XpresserController, Http} from "../types/http";
 import {getInstance} from "../index";
 
 const $ = getInstance();
@@ -25,6 +27,117 @@ const isUnderMaintenance = $.file.exists($.path.base('.maintenance'))
 
 
 $.app = express();
+
+if (!isProduction) {
+    //////////////
+// Add Request Logger
+    type RequestLogger = {
+        enabled: boolean;
+        colored: boolean | "mute";
+        show: { time: boolean; statusCode: boolean; statusMessage: boolean };
+        ignore?: (string | RegExp)[];
+        ignoreFn?: (http: Http) => boolean;
+    };
+
+// Get debug request config
+    const debugRequest = $.config
+        .newInstanceFrom<RequestLogger>("debug.requests")
+        .removeNullOrUndefined()
+        .defaults(<RequestLogger>{
+            enabled: true,
+            colored: "mute",
+            show: {
+                time: false,
+                statusCode: true,
+                statusMessage: false
+            }
+        })
+        .all();
+
+    if (debugRequest.enabled) {
+
+        /**
+         * Get duration in milliseconds
+         * @param start
+         */
+        function getDurationInMilliseconds(start: [number, number]) {
+            const NS_PER_SEC = 1e9;
+            const NS_TO_MS = 1e6;
+            const diff = process.hrtime(start);
+
+            return (diff[0] * NS_PER_SEC + diff[1]) / NS_TO_MS;
+        }
+
+        // Function that takes http response status code and return chalk color
+        function getStatusColor(message: string, statusCode: number) {
+            if (statusCode >= 200 && statusCode < 300) return chalk.green(message);
+            if (statusCode >= 300 && statusCode < 400) return chalk.dim(message);
+            if (statusCode >= 400 && statusCode < 500) return chalk.red(message);
+            if (statusCode >= 500 && statusCode < 600) return chalk.blue(message);
+            return chalk.dim(message);
+        }
+
+        // Register middleware
+        $.app!.use((req, res, next) => {
+            const start = process.hrtime();
+            const {originalUrl} = req;
+
+            // check if we should skip logging
+            if (debugRequest.ignore && Array.isArray(debugRequest.ignore)) {
+                for (const pattern of debugRequest.ignore) {
+                    if (typeof pattern === "string") {
+                        if (originalUrl.startsWith(pattern) || originalUrl.includes(pattern))
+                            return next();
+                    } else {
+                        if (pattern.test(originalUrl)) {
+                            return next();
+                        }
+                    }
+                }
+            }
+
+            if (debugRequest.ignoreFn && typeof debugRequest.ignoreFn === "function") {
+                const RequestEngine = $.extendedRequestEngine();
+                if (debugRequest.ignoreFn(new RequestEngine(req, res) as unknown as Http))
+                    return next();
+            }
+
+            // using close event instead of finish event
+            // because close calls after finish
+            res.on("close", () => {
+                const {method} = req;
+                const {statusCode, statusMessage} = res;
+
+                const duration = getDurationInMilliseconds(start).toLocaleString() + "ms";
+                const time = new Date().toLocaleTimeString();
+
+                let log = "";
+
+                if (debugRequest.show.time) log += `${time} - `;
+                if (debugRequest.show.statusCode) log += `${statusCode} - `;
+
+                // log request
+                log += `${method} -- ${originalUrl} -- ${duration}`;
+
+                // Append status message if enabled
+                if (debugRequest.show.statusMessage) log += ` [${statusMessage}]`;
+
+                // Manage colors
+                if (debugRequest.colored) {
+                    if (debugRequest.colored === "mute") {
+                        console.log(chalk.dim(log));
+                    } else {
+                        console.log(getStatusColor(log, statusCode));
+                    }
+                } else {
+                    console.log(log);
+                }
+            });
+
+            next();
+        });
+    }
+}
 
 /**
  * HttpToHttps Enforcer.

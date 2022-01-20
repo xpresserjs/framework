@@ -5,7 +5,7 @@ export = {
 
     start(http: any) {
         // JobHelper.dispatch("play")
-        throw new Error("I would like to see an error!")
+        return ("I would like to see an error!")
     },
 
     url_case(http: Http){

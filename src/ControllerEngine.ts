@@ -26,7 +26,7 @@ const AutoLoadPaths = $useDotJson.get("autoload.controllerServices", undefined);
 const ServicesFolder = $.path.controllers("services");
 const ServicesInMemory = $.objectCollection();
 
-// If use.json has autoload config and services folder exists in controllers folder.
+// If use.json has autoloaded config and services folder exists in controllers folder.
 const LoadServicesInDirectory = ($folder: string, $files?: string[]) => {
     let ServicesFolderFiles: any[];
 
@@ -82,10 +82,6 @@ if (AutoLoadPaths && $.file.isDirectory(ServicesFolder)) {
         LoadServicesInDirectory(ServicesFolder, AutoLoadPaths);
     }
 }
-
-const isProduction = $.config.get("env") === "production";
-const debug: Record<string, any> = $.config.get('debug', {})
-const DebugControllerAction = !isProduction && debug.enabled && debug.controllerAction;
 
 // @ts-check
 class ControllerEngine {
@@ -293,11 +289,6 @@ class ControllerEngine {
                 return errorHandler(http, ...args);
             };
 
-            if (DebugControllerAction) {
-                timeLogKey = req.method.toUpperCase() + " - " + req.url;
-                console.time(timeLogKey);
-            }
-
             try {
                 // Run static boot method if found in controller
                 let boot = http.state.get("boot", {});
@@ -315,11 +306,7 @@ class ControllerEngine {
                     }
                 }
 
-                if (boot instanceof ServerResponse) {
-                    if (DebugControllerAction) {
-                        console.timeEnd(timeLogKey);
-                    }
-                } else {
+                if (!(boot instanceof ServerResponse)) {
                     try {
                         let $return;
                         const typeOfControllerMethod = typeof useController[method];
@@ -343,10 +330,6 @@ class ControllerEngine {
                                 $return = await ProcessServices(...processArgs);
 
                             }
-                        }
-
-                        if (DebugControllerAction) {
-                            console.timeEnd(timeLogKey);
                         }
 
                         // tslint:disable-next-line:max-line-length

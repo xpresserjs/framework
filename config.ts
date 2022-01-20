@@ -11,8 +11,26 @@ const Config = {
         // While if set to true all debug settings are set to their configuration values.
         enabled: true,
 
-        // Enable showing controller action on every request.
         controllerAction: true,
+
+        // Enable showing controller action on every request.
+        requests: {
+            // Enable Request Debugging
+            enabled: true,
+
+            // Enable color in logs
+            colored: "mute",
+
+            // Items to show in the request debug log
+            show: {
+                time: false,
+                statusCode: true,
+                statusMessage: false
+            },
+
+            // Ignore specific urls
+            ignore: []
+        },
 
         // Deprecated warnings
         deprecationWarnings: {
