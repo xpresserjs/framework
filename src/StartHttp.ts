@@ -47,8 +47,8 @@ if (!isProduction) {
         .removeNullOrUndefined()
         .defaults(<RequestLogger>{
             enabled: true,
-            colored: "mute",
-            showAll: false,
+            colored: true,
+            showAll: true,
             show: {
                 time: false,
                 statusCode: true,
