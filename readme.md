@@ -1,4 +1,4 @@
-# Xpresser Js (Beta)
+# Xpresser NodeJs Framework
 
 ![Alt text](https://cdn.jsdelivr.net/npm/xpresser/xpresser-logo-black.png "Xpresser Logo")
 
