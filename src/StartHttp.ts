@@ -35,7 +35,7 @@ if (!isProduction) {
     type RequestLogger = {
         enabled: boolean;
         colored: boolean | "mute";
-        show: { time: boolean; statusCode: boolean; statusMessage: boolean };
+        show: { all: boolean; time: boolean; statusCode: boolean; statusMessage: boolean };
         ignore?: (string | number | RegExp)[];
         ignoreFn?: (http: Http) => boolean;
     };
@@ -48,6 +48,7 @@ if (!isProduction) {
             enabled: true,
             colored: "mute",
             show: {
+                all: false,
                 time: false,
                 statusCode: true,
                 statusMessage: false
@@ -55,7 +56,9 @@ if (!isProduction) {
         })
         .all();
 
+
     if (debugRequest.enabled) {
+        const showAll = debugRequest.show.all;
 
         /**
          * Get duration in milliseconds
@@ -85,7 +88,7 @@ if (!isProduction) {
             // using close event instead of finish event
             // because close calls after finish
             res.on("close", () => {
-
+                const duration = getDurationInMilliseconds(start).toLocaleString() + "ms";
                 const {method, originalUrl} = req;
                 const {statusCode, statusMessage} = res;
 
@@ -116,19 +119,18 @@ if (!isProduction) {
                 }
 
                 // Make log message
-                const duration = getDurationInMilliseconds(start).toLocaleString() + "ms";
                 const time = new Date().toLocaleTimeString();
 
                 let log = "";
 
-                if (debugRequest.show.time) log += `${time} - `;
-                if (debugRequest.show.statusCode) log += `${statusCode} - `;
+                if (showAll || debugRequest.show.time) log += `${time} - `;
+                if (showAll || debugRequest.show.statusCode) log += `${statusCode} - `;
 
                 // log request
                 log += `${method} -- ${originalUrl} -- ${duration}`;
 
                 // Append status message if enabled
-                if (debugRequest.show.statusMessage) log += ` [${statusMessage}]`;
+                if (showAll || debugRequest.show.statusMessage) log += ` [${statusMessage}]`;
 
                 // Manage colors
                 if (debugRequest.colored) {
