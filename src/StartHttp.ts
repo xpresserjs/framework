@@ -35,7 +35,8 @@ if (!isProduction) {
     type RequestLogger = {
         enabled: boolean;
         colored: boolean | "mute";
-        show: { all: boolean; time: boolean; statusCode: boolean; statusMessage: boolean };
+        show: { time: boolean; statusCode: boolean; statusMessage: boolean };
+        showAll?: boolean;
         ignore?: (string | number | RegExp)[];
         ignoreFn?: (http: Http) => boolean;
     };
@@ -47,8 +48,8 @@ if (!isProduction) {
         .defaults(<RequestLogger>{
             enabled: true,
             colored: "mute",
+            showAll: false,
             show: {
-                all: false,
                 time: false,
                 statusCode: true,
                 statusMessage: false
@@ -58,7 +59,7 @@ if (!isProduction) {
 
 
     if (debugRequest.enabled) {
-        const showAll = debugRequest.show.all;
+        const showAll = debugRequest.showAll === true;
 
         /**
          * Get duration in milliseconds

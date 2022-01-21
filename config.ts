@@ -21,6 +21,9 @@ const Config = {
             // Enable color in logs
             colored: "mute",
 
+            // Show all request log data
+            showAll: false,
+
             // Items to show in the request debug log
             show: {
                 time: false,
