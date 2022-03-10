@@ -1,7 +1,7 @@
 import fs from "fs";
-import PATH = require("path");
-import fse = require("fs-extra");
+import PATH from "path";
 import {getInstance} from "../index";
+import fse from "fs-extra";
 
 const $ = getInstance()
 

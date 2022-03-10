@@ -1,11 +1,11 @@
-import fs = require("fs");
-import fse = require("fs-extra");
-import Handlebars = require("handlebars");
-import Pluralise = require("pluralize");
-import colors = require("../Objects/consoleColors.obj");
+import fs from "fs";
 import lodash from "lodash";
-import PathHelper = require("../Helpers/Path");
 import {getInstance} from "../../index";
+import Handlebars from "handlebars";
+import fse from "fs-extra";
+import Pluralise from "pluralize";
+import colors from "../Objects/consoleColors.obj";
+import PathHelper from "../Helpers/Path";
 
 const $ = getInstance();
 

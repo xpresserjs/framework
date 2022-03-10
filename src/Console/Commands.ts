@@ -1,13 +1,13 @@
 import {getInstance} from "../../index";
 import {parseControllerString} from "../Functions/internals.fn";
 
-import lodash = require("lodash");
-import os = require("os");
-import fs = require("fs");
-import fse = require("fs-extra");
-import Artisan = require("../Functions/artisan.fn");
-import colors = require("../Objects/consoleColors.obj");
-import PathHelper = require("../Helpers/Path");
+import lodash from "lodash";
+import os from "os";
+import fs from "fs";
+import fse from "fs-extra";
+import Artisan from "../Functions/artisan.fn";
+import colors from "../Objects/consoleColors.obj";
+import PathHelper from "../Helpers/Path";
 
 const $ = getInstance();
 const artisanConfig: any = $.config.get('artisan', {});
