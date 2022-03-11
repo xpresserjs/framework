@@ -2,7 +2,7 @@
 // Project: Xpresser
 // Definitions by: TrapCodeIO <https://xpresserjs.com>
 
-import type fs from "fs"
+
 import type {Helpers} from "./helpers";
 import type express from "express";
 import type ObjectCollection from "object-collection";
@@ -11,7 +11,6 @@ import type {Controller as HttpController} from "./http";
 import type {Server} from "http";
 import type {Server as HttpsServer} from "https"
 import type RequestEngine from "../src/RequestEngine";
-import type fse from "@types/fs-extra";
 
 type NumberToAnyKeyObject = Record<number, any>;
 
@@ -156,13 +155,13 @@ declare namespace Xpresser {
              * Return Node fs getInstance
              * @return {*}
              */
-            fs(): fs;
+            fs(): typeof  import("fs");
 
             /**
              * Return Node fs-extra getInstance
              * @return {*}
              */
-            fsExtra(): fse;
+            fsExtra(): typeof  import("@types/fs-extra");
 
             /**
              * Check file size.
