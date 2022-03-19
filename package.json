@@ -31,13 +31,13 @@
     "helmet": "^4.6.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
-    "object-collection": "^3.0.0",
+    "object-collection": "^3.0.1",
     "path-to-regexp": "^6.2.0",
     "pluralize": "^8.0.0",
     "shelljs": "^0.8.5"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.179",
+    "@types/lodash": "^4.14.180",
     "@types/node": "^17.0.21",
     "@types/pluralize": "^0.0.29",
     "ts-node-dev": "^1.1.8",
