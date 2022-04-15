@@ -11,6 +11,7 @@ import type {Controller as HttpController} from "./http";
 import type {Server} from "http";
 import type {Server as HttpsServer} from "https"
 import type RequestEngine from "../src/RequestEngine";
+import type fs from "fs";
 
 type NumberToAnyKeyObject = Record<number, any>;
 
@@ -161,7 +162,7 @@ declare namespace Xpresser {
              * Return Node fs-extra getInstance
              * @return {*}
              */
-            fsExtra(): typeof  import("@types/fs-extra");
+            fsExtra(): typeof  import("fs-extra");
 
             /**
              * Check file size.
