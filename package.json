@@ -31,6 +31,7 @@
     "helmet": "^4.6.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
+    "moment-timezone": "^0.5.34",
     "object-collection": "^3.0.1",
     "path-to-regexp": "^6.2.0",
     "pluralize": "^8.0.0",
