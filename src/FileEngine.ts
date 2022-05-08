@@ -2,6 +2,7 @@ import fs from "fs";
 import PATH from "path";
 import {getInstance} from "../index";
 import fse from "fs-extra";
+import {encodingType} from "../types";
 
 const $ = getInstance()
 
@@ -75,7 +76,7 @@ $.file = {
      * @param $path
      * @param $options
      */
-    get($path: string, $options?: { encoding?: null, flag?: string } | null): string | Buffer | false {
+    get($path: string, $options?: { encoding?: encodingType, flag?: string } | null): string | Buffer | false {
         const fileExists = $.file.exists($path);
 
         if (!fileExists) {
@@ -89,7 +90,7 @@ $.file = {
      * @param $path
      * @param $options
      */
-    read($path: string, $options?: { encoding?: null, flag?: string }): string | Buffer | false {
+    read($path: string, $options?: { encoding?: encodingType, flag?: string }): string | Buffer | false {
         return $.file.get($path, $options);
     },
 
@@ -99,7 +100,7 @@ $.file = {
      * @param $options
      */
     readDirectory($path: string, $options?: {
-        encoding?: null,
+        encoding?: encodingType,
         writeFileTypes?: string,
     }): string[] | Buffer[] | false {
         return this.getDirectory($path, $options);
@@ -111,7 +112,7 @@ $.file = {
      * @param $options
      */
     getDirectory($path: string, $options?: {
-        encoding?: null,
+        encoding?: encodingType,
         writeFileTypes?: string,
     }): string[] | Buffer[] | false {
         const fileExists = $.file.exists($path);
@@ -285,7 +286,7 @@ $.file = {
      * @param $isFile
      */
     makeDirIfNotExist($path: string, $isFile = false) {
-        if ($isFile === true) {
+        if ($isFile) {
             $path = PATH.dirname($path);
         }
 

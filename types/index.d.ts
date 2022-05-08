@@ -84,6 +84,11 @@ declare namespace Xpresser {
 
     export type TodoFunction = (next: () => void, $: DollarSign) => any;
 
+    /**
+     * supported character encoding
+     */
+    export type encodingType = 'ascii' | 'utf8' | 'utf-8' | 'utf16le' | 'ucs2' | 'ucs-2' | 'base64' | 'base64url' | 'latin1' | 'binary' | 'hex';
+
     export interface DollarSign {
         config: ObjectCollection;
         options: Options;
@@ -193,14 +198,14 @@ declare namespace Xpresser {
              * @param $path
              * @param $options
              */
-            get($path: string, $options?: { encoding?: null, flag?: string }): string | Buffer | false;
+            get($path: string, $options?: { encoding?: encodingType, flag?: string }): string | Buffer | false;
 
             /**
              * Get/Read File
              * @param $path
              * @param $options
              */
-            read($path: string, $options?: { encoding?: null, flag?: string }): string | Buffer | false;
+            read($path: string, $options?: { encoding?: encodingType, flag?: string }): string | Buffer | false;
 
             /**
              * Get Directory
@@ -208,7 +213,7 @@ declare namespace Xpresser {
              * @param $options
              */
             getDirectory($path: string, $options?: {
-                encoding?: null,
+                encoding?: encodingType,
                 writeFileTypes?: string,
             }): string[] | Buffer[] | false;
 
@@ -218,7 +223,7 @@ declare namespace Xpresser {
              * @param $options
              */
             readDirectory($path: string, $options?: {
-                encoding?: null,
+                encoding?: encodingType,
                 writeFileTypes?: string,
             }): string[] | Buffer[] | false;
 
