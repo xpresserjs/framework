@@ -55,18 +55,29 @@ const MiddlewareEngine = (middlewarePath: any, action?: any, route?: any, proces
         }
     }
 
-    if(processOnly) {
+    if (processOnly) {
         return middleware
     }
     /**
      * Return Parsed Middleware
      */
     return RequestEngine.expressify(http => {
-        if (typeof middleware === "function") {
-            return middleware(http);
-        } else {
-            return middleware[action](http);
+        try {
+            if (typeof middleware === "function") {
+                return middleware(http);
+            } else {
+                return middleware[action](http);
+            }
+        } catch (e) {
+            return http.newError(e).view({
+                error: {
+                    in: `Middleware: [${middlewarePath}]`,
+                    html: `Error in Middleware <code>${middlewarePath}</code>`,
+                    log: (e as Error).stack,
+                },
+            });
         }
+
     });
 };
 

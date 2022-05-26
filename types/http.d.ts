@@ -12,7 +12,7 @@ declare namespace Xpresser {
     namespace Http {
         interface Request extends express.Request {
             // session: any
-            flash?(key?: string, value?: any): void
+            flash?(key?: string, value?: any): any
         }
 
         // tslint:disable-next-line:no-empty-interface
@@ -122,6 +122,11 @@ declare namespace Xpresser {
 
             public static boot(http: Http, error?: () => (any | void)): object;
         }
+    }
+
+    namespace HttpError {
+        type Data = { error?: { in?: string, title?: string, html?: string, log?: string } };
+        type onError = { onError: (e: any, data: ErrorData) => void }
     }
 }
 

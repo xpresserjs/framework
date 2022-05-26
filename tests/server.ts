@@ -8,8 +8,7 @@ function main(port: number) {
 
         paths: {
             base: __dirname,
-            backend: "base://",
-            controllers: "base://",
+            backend: "base://backend/",
         },
         server: {port, router: {pathCase: 'kebab'}}
     })

@@ -1,4 +1,5 @@
-import RequestEngine = require("./RequestEngine");
+import type {HttpError} from "../types/http";
+import type RequestEngine from "./RequestEngine";
 
 const statusCodes = {
     400: "Bad Request",
@@ -7,16 +8,32 @@ const statusCodes = {
     500: "Server Error",
 }
 
+
 class ErrorEngine {
     public http: RequestEngine;
+    public error?: any;
 
-    constructor(http: RequestEngine) {
+    constructor(http: RequestEngine, e?: any) {
         this.http = http;
+        this.error = e;
     }
 
-    public view(data: { error?: {title?: string, message?: string, log?: string} }, status = 500) {
-        return this.http.status(status).renderViewFromEngine("__errors/index", {...data, statusCode: status, statusCodes});
+    hasCustomErrorHandler() {
+        return typeof (this.http as any)["onError"] === "function";
+    };
+
+    public view(data: HttpError.Data, status = 500) {
+        if (this.hasCustomErrorHandler()) {
+            return (this.http as unknown as HttpError.onError)["onError"](this.error, data);
+        }
+
+        return this.http.status(status).renderViewFromEngine("__errors/index", {
+            ...data,
+            statusCode: status,
+            statusCodes
+        });
     }
+
 
     public pageNotFound() {
         const req = this.http.req;

@@ -92,7 +92,7 @@ const Config = {
         root: "/",
 
         /**
-         * In most development enviroment this is required to be true.
+         * In most development environment this is required to be true.
          * When true url helpers will append server port after server url
          *
          * @example

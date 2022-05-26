@@ -119,8 +119,8 @@ class RequestEngine {
     /**
      * Returns an instance of ErrorEngine
      */
-    newError(): ErrorEngine {
-        return new ErrorEngine(this)
+    newError(e?: any): ErrorEngine {
+        return new ErrorEngine(this, e)
     }
 
     /**

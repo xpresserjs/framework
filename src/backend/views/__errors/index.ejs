@@ -33,9 +33,9 @@ const isProduction = ctx.config('env') === "production";
                         <div class="card-body">
                             <h3 class="text-muted"><%- error.title || 'Oops!' %></h3>
                             <hr class="mt-0">
-                            <% if(error.message) { %>
+                            <% if(error.html) { %>
                                 <div style="color: antiquewhite; font-size: large" class="mb-3">
-                                    <%- error.message %>
+                                    <%- error.html %>
                                 </div>
                                 <hr class="mt-0">
                             <% } %>

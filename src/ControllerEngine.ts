@@ -26,7 +26,7 @@ const AutoLoadPaths = $useDotJson.get("autoload.controllerServices", undefined);
 const ServicesFolder = $.path.controllers("services");
 const ServicesInMemory = $.objectCollection();
 
-// If use.json has autoloaded config and services folder exists in controllers folder.
+// If you use.json has autoloader config and services folder exists in controllers folder.
 const LoadServicesInDirectory = ($folder: string, $files?: string[]) => {
     let ServicesFolderFiles: any[];
 
@@ -284,7 +284,6 @@ class ControllerEngine {
         return async (req: Http.Request, res: Http.Response, next: any) => {
             const http = new RequestEngine(req, res, next, route);
             // Log Time if `DebugControllerAction` is true
-            let timeLogKey = "";
             const mockErrorHandler = (...args: any[]) => {
                 return errorHandler(http, ...args);
             };
@@ -297,9 +296,10 @@ class ControllerEngine {
                     try {
                         boot = await controller.boot(http, mockErrorHandler);
                     } catch (e) {
-                        return http.newError().view({
+                        return http.newError(e).view({
                             error: {
-                                message: `Error in Controller Boot Method:  <code>${controllerName}</code>`,
+                                in: `Controller Boot Method: [${controllerName}]`,
+                                html: `Error in Controller Boot Method:  <code>${controllerName}</code>`,
                                 log: (e as Error).stack,
                             },
                         });
@@ -341,10 +341,10 @@ class ControllerEngine {
                             }
                         }
                     } catch (e) {
-                        return http.newError().view({
+                        return http.newError(e).view({
                             error: {
-                                // tslint:disable-next-line:max-line-length
-                                message: `Error in Controller:  <code>${controllerName}</code>, Method: <code>${m}</code>`,
+                                in: `Controller: [${controllerName}], Method: [${m}]`,
+                                html: `Error in Controller:  <code>${controllerName}</code>, Method: <code>${m}</code>`,
                                 log: (e as Error).stack,
                             },
                         });

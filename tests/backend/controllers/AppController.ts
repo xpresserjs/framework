@@ -1,7 +1,11 @@
-import {Http} from "../types/http";
+import {Controller, Http} from "../../../types/http";
 
-export = {
+export = <Controller.Object>{
     name: "AppController",
+
+    middlewares: {
+      "test": "*"
+    },
 
     start(http: any) {
         // JobHelper.dispatch("play")
