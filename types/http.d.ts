@@ -125,8 +125,8 @@ declare namespace Xpresser {
     }
 
     namespace HttpError {
-        type Data = { error?: { in?: string, title?: string, html?: string, log?: string } };
-        type onError = { onError: (e: any, data: ErrorData) => void }
+        type Data = { in?: string, title?: string, html?: string, log?: string };
+        type onError = { onError: (e: any, data: HttpError.Data) => void }
     }
 }
 

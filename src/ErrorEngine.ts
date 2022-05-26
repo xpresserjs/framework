@@ -22,9 +22,9 @@ class ErrorEngine {
         return typeof (this.http as any)["onError"] === "function";
     };
 
-    public view(data: HttpError.Data, status = 500) {
+    public view(data: {error: HttpError.Data}, status = 500) {
         if (this.hasCustomErrorHandler()) {
-            return (this.http as unknown as HttpError.onError)["onError"](this.error, data);
+            return (this.http as unknown as HttpError.onError)["onError"](this.error, data.error);
         }
 
         return this.http.status(status).renderViewFromEngine("__errors/index", {
