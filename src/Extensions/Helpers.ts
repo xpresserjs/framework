@@ -1,12 +1,15 @@
 import BuildUrl = require("build-url");
 import moment = require("moment");
-import {getInstance} from "../../index";
+import { getInstance } from "../../index";
+import slugify from "slugify";
 
 const $ = getInstance();
 
 /* HELPER FUNCTIONS */
 const helpers = {
     urlBuilder: BuildUrl,
+
+    slugify: slugify,
 
     /**
      * Get full url of path
@@ -15,7 +18,7 @@ const helpers = {
      */
     url($path: string = "", $query: any = {}) {
         let url = "";
-        const server: Record<string, any> = $.config.get('server');
+        const server: Record<string, any> = $.config.get("server");
 
         if ($path.substr(0, 1) === "/") {
             $path = $path.substr(1);
@@ -27,7 +30,7 @@ const helpers = {
             let d = server.domain;
             let p = server.protocol;
 
-            if (server.includePortInUrl && (server.port !== 80 && server.port !== 443)) {
+            if (server.includePortInUrl && server.port !== 80 && server.port !== 443) {
                 d = d + ":" + server.port;
             }
 
@@ -40,7 +43,7 @@ const helpers = {
 
         if (Object.keys($query).length) {
             url = BuildUrl(url, {
-                queryParams: $query,
+                queryParams: $query
             });
         }
 
@@ -54,8 +57,12 @@ const helpers = {
      * @param {Object|boolean} $query
      * @param {boolean} $includeUrl
      */
-    route($route: string, $keys: string | string[] = [], $query: object | boolean = {}, $includeUrl = true) {
-
+    route(
+        $route: string,
+        $keys: string | string[] = [],
+        $query: object | boolean = {},
+        $includeUrl = true
+    ) {
         if (typeof $query === "boolean") {
             $includeUrl = $query;
             $query = {};
@@ -187,11 +194,11 @@ const helpers = {
     // ---------------------------
 
     now(): string {
-        return moment().format($.config.get('date.format'));
+        return moment().format($.config.get("date.format"));
     },
 
     today(): string {
-        return moment().format($.config.get('date.format'));
+        return moment().format($.config.get("date.format"));
     },
 
     /**
@@ -199,7 +206,7 @@ const helpers = {
      */
     toDate(date?: any, format?: string): moment.Moment {
         if (!format) {
-            format = $.config.get('date.format');
+            format = $.config.get("date.format");
         }
 
         if (!date) {
@@ -213,7 +220,7 @@ const helpers = {
      */
     timeAgo(date: any, format?: string): string {
         return helpers.toDate(date, format).fromNow();
-    },
+    }
 };
 
 export = helpers;

@@ -1,14 +1,22 @@
-import {LoDashStatic} from "lodash";
+import { LoDashStatic } from "lodash";
 import moment from "moment";
+import slugify from "slugify";
 
 declare namespace Xpresser {
     namespace Helpers {
         interface Main {
             urlBuilder: any;
 
+            slugify: typeof slugify;
+
             url($path?: string, $query?: object): string;
 
-            route($route: string, $keys?: any[], $query?: object | boolean, $includeUrl?: boolean): string;
+            route(
+                $route: string,
+                $keys?: any[],
+                $query?: object | boolean,
+                $includeUrl?: boolean
+            ): string;
 
             config($config: string, $default?: any): any;
 
@@ -41,7 +49,7 @@ declare namespace Xpresser {
         }
 
         interface Util {
-            extArrayRegex(arr: any[]): (RegExp | string);
+            extArrayRegex(arr: any[]): RegExp | string;
 
             /**
              * Find words in string
@@ -112,7 +120,7 @@ declare namespace Xpresser {
             /**
              * BuildUrl Package
              */
-            buildUrl(): any
+            buildUrl(): any;
         }
     }
 }
