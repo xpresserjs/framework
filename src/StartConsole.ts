@@ -38,7 +38,7 @@ if (typeof argCommand === "undefined") {
 // Trim argCommand
 argCommand = argCommand.trim();
 
-let isJobCommand = argCommand.substr(0, 1) === "@";
+let isJobCommand = argCommand.substring(0, 1) === "@";
 
 /*
  If default commands does not have `argCommand`
@@ -69,7 +69,7 @@ if (isJobCommand || !Commands.hasOwnProperty(argCommand)) {
 
     // Load Job if command has `@` sign before it.
     if (isJobCommand) {
-        argCommand = argCommand.substr(1);
+        argCommand = argCommand.substring(1);
         let jobPath = $.path.backend(`jobs/${argCommand}`);
         // Add project extension if not exists.
         jobPath = PathHelper.addProjectFileExtension(jobPath);

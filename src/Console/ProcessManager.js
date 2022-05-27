@@ -14,8 +14,8 @@ class ProcessManager {
             this.rootDir = RootDir;
         }
 
-        if (this.rootDir.substr(-1) === '/') {
-            this.rootDir = this.rootDir.substr(0, this.rootDir.length - 1)
+        if (this.rootDir.slice(-1) === '/') {
+            this.rootDir = this.rootDir.substring(0, this.rootDir.length - 1)
         }
     }
 

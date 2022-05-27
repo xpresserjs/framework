@@ -37,10 +37,10 @@ if (typeof Use.middlewares === "object") {
     for (let i = 0; i < middlewareKeys.length; i++) {
         const middlewareKey: string = middlewareKeys[i];
 
-        let middleware = useMiddlewares[middlewareKey];
+        let middleware: string = useMiddlewares[middlewareKey];
 
-        if (middleware.substr(-3) === projectFileExtension) {
-            middleware = middleware.substr(0, middleware.length - 3);
+        if (middleware.slice(-3) === projectFileExtension) {
+            middleware = middleware.slice(0, -3);
         }
 
         let middlewareRealPath = PathHelper.resolve(middleware);
@@ -94,7 +94,7 @@ function parsePath(path: string, data: Record<string, any> = {}) {
 function fileExistsInPath(file: string, path: string, suffix = ""): [boolean, string] {
 
     if (suffix.length) {
-        const hasSuffix = file.substr(-suffix.length) === suffix;
+        const hasSuffix = file.slice(-suffix.length) === suffix;
 
         if (!hasSuffix) {
             file += suffix;

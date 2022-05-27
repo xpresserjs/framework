@@ -102,9 +102,9 @@ class ControllerEngine {
             let middlewareFile: any[] = [];
             let middlewareMethod: string = $middleware[middleware];
 
-            if (middleware.substr(0, 1) === "@") {
+            if (middleware.substring(0, 1) === "@") {
                 const oldMiddlewareMethod = middlewareMethod;
-                middlewareMethod = middleware.substr(1);
+                middlewareMethod = middleware.substring(1);
                 middleware = oldMiddlewareMethod;
             }
 

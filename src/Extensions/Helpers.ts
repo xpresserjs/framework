@@ -20,9 +20,8 @@ const helpers = {
         let url = "";
         const server: Record<string, any> = $.config.get("server");
 
-        if ($path.substr(0, 1) === "/") {
-            $path = $path.substr(1);
-        }
+        if ($path.substring(0, 1) === "/")
+            $path = $path.substring(1);
 
         if (server.baseUrl.length) {
             url = server.baseUrl + $path;
@@ -76,8 +75,8 @@ const helpers = {
 
         if (typeof routes[$route] !== "undefined") {
             let path = routes[$route];
-            if (path.substr(-1) === "*" && !$keys.length) {
-                return path.substr(0, path.length - 1);
+            if (path.slice(-1) === "*" && !$keys.length) {
+                return path.slice(0, path.length - 1);
             }
             const hasRegex = path.match(new RegExp('[|&;$%@"<>()+:,*]'));
             if (Array.isArray(hasRegex) && hasRegex.length) {
@@ -122,7 +121,7 @@ const helpers = {
     mix(file: string) {
         let mix;
         const localVariableName = "laravelMixManifest";
-        if (file.substr(0, 1) !== "/") {
+        if (file.substring(0, 1) !== "/") {
             file = "/" + file;
         }
 

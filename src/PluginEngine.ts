@@ -195,8 +195,8 @@ class PluginEngine {
             let version = data.xpresser;
             const xpresserVersion = PackageDotJson.version;
 
-            const compareWith = version.substr(0, 2);
-            version = data.xpresser.substr(2);
+            const compareWith = version.substring(0, 2);
+            version = data.xpresser.substring(2);
 
 
             if (compareWith === ">=" && compareVersion(xpresserVersion, version) === -1) {

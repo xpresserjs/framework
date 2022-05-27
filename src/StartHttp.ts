@@ -434,7 +434,7 @@ const afterExpressInit = (next: () => void) => {
         for (let i = 0; i < $middlewares.length; i++) {
             let $middleware = $middlewares[i];
 
-            if ($middleware.substr(-3) !== projectFileExtension) {
+            if ($middleware.slice(-3) !== projectFileExtension) {
                 $middleware += projectFileExtension;
             }
 

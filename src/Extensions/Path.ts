@@ -17,7 +17,7 @@ $.path = {
 
     base: (path = "", returnRequire = false) => {
         if (path[0] === "/") {
-            path = path.substr(1);
+            path = path.substring(1);
         }
         const base = Path.resolve(baseFiles + path);
         return returnRequire ? require(base) : base;
@@ -25,7 +25,7 @@ $.path = {
 
     backend: (path = "", returnRequire = false) => {
         if (path[0] === "/") {
-            path = path.substr(1);
+            path = path.substring(1);
         }
         const backend = Path.resolve(backendFiles + "/" + path);
         return returnRequire ? require(backend) : backend;
@@ -33,7 +33,7 @@ $.path = {
 
     storage: (path = "") => {
         if (path[0] === "/") {
-            path = path.substr(1);
+            path = path.substring(1);
         }
         return Path.resolve(paths.storage + "/" + path);
     },
@@ -44,7 +44,7 @@ $.path = {
         }
 
         if (path[0] === "/") {
-            path = path.substr(1);
+            path = path.substring(1);
         }
         return $.path.storage("framework/" + path);
     },
@@ -66,7 +66,7 @@ $.path = {
         }
 
         if (path[0] === "/") {
-            path = path.substr(1);
+            path = path.substring(1);
         }
 
         const engine = EnginePath + path;
@@ -75,7 +75,7 @@ $.path = {
 
     events: (path: string = "", returnRequire: boolean = false): string | any => {
         if (path[0] === "/") {
-            path = path.substr(1);
+            path = path.substring(1);
         }
 
         const event = PathHelper.resolve([paths.events, path]);
@@ -85,7 +85,7 @@ $.path = {
 
     controllers: (path: string = "", returnRequire: boolean = false): string | any => {
         if (path[0] === "/") {
-            path = path.substr(1);
+            path = path.substring(1);
         }
 
         const controller = PathHelper.resolve([paths.controllers, path]);
@@ -95,7 +95,7 @@ $.path = {
 
     middlewares: (path: string = "", returnRequire: boolean = false): string | any => {
         if (path[0] === "/") {
-            path = path.substr(1);
+            path = path.substring(1);
         }
 
         const middleware = PathHelper.resolve([paths.middlewares, path]);
@@ -105,7 +105,7 @@ $.path = {
 
     models: (path: string = "", returnRequire: boolean = false): string | any => {
         if (path[0] === "/") {
-            path = path.substr(1);
+            path = path.substring(1);
         }
 
         const model = PathHelper.resolve([paths.models, path]);
@@ -115,7 +115,7 @@ $.path = {
 
     views: (path: string = "") => {
         if (path[0] === "/") {
-            path = path.substr(1);
+            path = path.substring(1);
         }
 
         return PathHelper.resolve([paths.views, path]);
@@ -123,7 +123,7 @@ $.path = {
 
     jsonConfigs: (path: string = "") => {
         if (path[0] === "/") {
-            path = path.substr(1);
+            path = path.substring(1);
         }
         return PathHelper.resolve([paths.jsonConfigs, path]);
     },
@@ -131,7 +131,7 @@ $.path = {
 
     configs: (path: string = "", returnRequire: boolean = false): string | any => {
         if (path[0] === "/") {
-            path = path.substr(1);
+            path = path.substring(1);
         }
 
         const config = PathHelper.resolve([paths.configs, path]);
