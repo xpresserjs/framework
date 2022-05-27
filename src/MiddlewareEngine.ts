@@ -4,7 +4,8 @@ import {getInstance} from "../index";
 
 const $ = getInstance()
 
-const projectFileExtension = $.config.get('project.fileExtension', '').substr(1)
+const projectFileExtension = $.config.get('project.fileExtension', '').substring(1);
+
 
 /**
  * @param {string} middlewarePath

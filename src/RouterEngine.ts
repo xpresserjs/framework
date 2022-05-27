@@ -207,7 +207,7 @@ class RouterEngine {
 
                 if (parent.children) {
                     // tslint:disable-next-line:max-line-length
-                    if (typeof routeAsPath.as === "string" && typeof parent.as === "string" && routeAsPath.as.substr(0, 1) === ".") {
+                    if (typeof routeAsPath.as === "string" && typeof parent.as === "string" && routeAsPath.as.substring(0, 1) === ".") {
                         routeAsPath.as = parent.as + routeAsPath.as;
                     }
 
@@ -233,7 +233,7 @@ class RouterEngine {
                 }
             }
 
-            if ((parent?.as) && typeof route.name === "string" && route.name.substr(0, 1) !== "/") {
+            if ((parent?.as) && typeof route.name === "string" && route.name.substring(0, 1) !== "/") {
                 if (route.path === "" && nameWasGenerated) {
                     route.name = parent.as;
                 } else {
@@ -242,8 +242,8 @@ class RouterEngine {
             }
 
             if (route.name) {
-                if (route.name.substr(0, 1) === "/") {
-                    route.name = route.name.substr(1);
+                if (route.name.substring(0, 1) === "/") {
+                    route.name = route.name.substring(1);
                 }
                 route.name = route.name.toLowerCase();
             }
@@ -263,7 +263,7 @@ class RouterEngine {
 
                 } else {
 
-                    if (routePath.length && parentPath.substr(-1) !== "/" && routePath.substr(0, 1) !== "/") {
+                    if (routePath.length && parentPath.slice(-1) !== "/" && routePath.substring(0, 1) !== "/") {
                         route.path = "/" + routePath;
                     }
 
@@ -272,8 +272,8 @@ class RouterEngine {
 
             }
 
-            if (typeof route.path === "string" && route.path.substr(0, 2) === "//") {
-                route.path = route.path.substr(1);
+            if (typeof route.path === "string" && route.path.substring(0, 2) === "//") {
+                route.path = route.path.substring(1);
             }
 
             if (typeof route.name !== "undefined") {

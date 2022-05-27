@@ -15,7 +15,7 @@ export = {
             regex = regex + arr[i] + "|";
         }
 
-        regex = regex.substr(0, regex.length - 1);
+        regex = regex.slice(0, regex.length - 1);
         regex = regex + regexEnd;
 
         return new RegExp(regex, "g");
@@ -32,7 +32,7 @@ export = {
             regex = regex + "\\b" + keywords[i] + "|";
         }
 
-        regex = regex.substr(0, regex.length - 1);
+        regex = regex.slice(0, regex.length - 1);
         const pattern = new RegExp(regex, "g");
         return str.match(pattern);
     },

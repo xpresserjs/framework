@@ -1,29 +1,29 @@
-const self = {
+const StringHelper = {
     upperFirst: (str: string) => {
-        return str[0].toUpperCase() + str.substr(1);
+        return str[0].toUpperCase() + str.substring(1);
     },
 
     lowerFirst: (str: string) => {
-        return str[0].toLowerCase() + str.substr(1);
+        return str[0].toLowerCase() + str.substring(1);
     },
 
     hasSuffix: (str: string, suffix: string) => {
-        return str.substr(-suffix.length) === suffix;
+        return str.slice(-suffix.length) === suffix;
     },
 
     withSuffix: (str: string, suffix: string) => {
-        if (!self.hasSuffix(str, suffix)) {
+        if (!StringHelper.hasSuffix(str, suffix)) {
             str += suffix;
         }
         return str;
     },
 
     withoutSuffix: (str: string, suffix: string) => {
-        if (self.hasSuffix(str, suffix)) {
-            str = str.substr(0, str.length - suffix.length);
+        if (StringHelper.hasSuffix(str, suffix)) {
+            str = str.substring(0, str.length - suffix.length);
         }
         return str;
     },
 };
 
-export = self;
+export = StringHelper;

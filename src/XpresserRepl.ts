@@ -366,7 +366,7 @@ class XpresserRepl {
             const extension = file.split('.').pop();
             if (allowedExtensions.includes(extension)) {
                 let shortFilePath = file.replace(folder, '');
-                shortFilePath = shortFilePath.substr(0, shortFilePath.length - `.${extension}`.length)
+                shortFilePath = shortFilePath.substring(0, shortFilePath.length - `.${extension}`.length)
 
                 const contextName = capitalize(camelCase(shortFilePath));
 

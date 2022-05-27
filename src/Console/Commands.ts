@@ -18,8 +18,8 @@ const {logThis, logThisAndExit} = Artisan;
  * @param str
  */
 const removeSlashAtEnd = (str: string) => {
-    if (str.substr(-1) === "/") {
-        return str.substr(0, str.length - 1);
+    if (str.slice(-1) === "/") {
+        return str.slice(0, str.length - 1);
     }
 
     return str;
@@ -325,7 +325,7 @@ const Commands = {
         const fullPath = $.path.views(name);
         PathHelper.makeDirIfNotExist(fullPath, true);
 
-        if (name.substr(0, 2) !== "__" && fs.existsSync(fullPath)) {
+        if (name.substring(0, 2) !== "__" && fs.existsSync(fullPath)) {
             return logThisAndExit("view {" + colors.fgYellow + name + colors.fgCyan + "} already exits!");
         }
 

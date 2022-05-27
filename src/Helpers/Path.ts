@@ -21,8 +21,8 @@ class PathHelper {
         if (Array.isArray($path)) {
             for (let i = 0; i < $path.length; i++) {
                 const $pathElement = $path[i];
-                if ($pathElement.substr(-1) === "/") {
-                    $path[i] = $pathElement.substr(0, $pathElement.length - 1);
+                if ($pathElement.slice(-1) === "/") {
+                    $path[i] = $pathElement.substring(0, $pathElement.length - 1);
                 }
             }
 
@@ -59,8 +59,8 @@ class PathHelper {
 
         }
 
-        if ($path.substr(-1) === "/") {
-            $path = $path.substr(0, $path.length - 1);
+        if ($path.slice(-1) === "/") {
+            $path = $path.slice(0, -1);
         }
 
         return $resolve ? (p => PATH.resolve(p))($path) : $path;
@@ -90,7 +90,7 @@ class PathHelper {
         }
 
         if (path[0] === "/") {
-            path = path.substr(1);
+            path = path.substring(1);
         }
         return $.path.storage("framework/" + path);
     }
@@ -150,7 +150,7 @@ class PathHelper {
             // if not useExtension use jsExt
             const ext = useExtension ? useExtension : jsExt;
             // check and store if path has extension
-            const hasExtInName = files.substr(-ext.length) === ext;
+            const hasExtInName = files.slice(-ext.length) === ext;
 
             if (
                 // ext is not same with jsExt (i.e maybe .ts)
@@ -158,7 +158,7 @@ class PathHelper {
                 // And ext was not found in name
                 !hasExtInName &&
                 // And ext is .js
-                files.substr(-jsExt.length) === jsExt
+                files.slice(-jsExt.length) === jsExt
             ) {
                 // return path un-modified.
                 return files;
@@ -194,7 +194,7 @@ class PathHelper {
 
             return array;
         } else {
-            return files.substr(0, files.length - $.config.get<string>('project.fileExtension').length);
+            return files.substring(0, files.length - $.config.get<string>('project.fileExtension').length);
         }
     }
 
