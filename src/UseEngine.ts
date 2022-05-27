@@ -37,10 +37,10 @@ if (typeof Use.middlewares === "object") {
     for (let i = 0; i < middlewareKeys.length; i++) {
         const middlewareKey: string = middlewareKeys[i];
 
-        let middleware = useMiddlewares[middlewareKey];
+        let middleware: string = useMiddlewares[middlewareKey];
 
-        if (middleware.splice(-3) === projectFileExtension) {
-            middleware = middleware.splice(0, -3);
+        if (middleware.slice(-3) === projectFileExtension) {
+            middleware = middleware.slice(0, -3);
         }
 
         let middlewareRealPath = PathHelper.resolve(middleware);
