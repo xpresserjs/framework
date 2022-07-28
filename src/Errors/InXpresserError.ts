@@ -9,7 +9,7 @@ import os = require("os");
 class InXpresserError extends Error {
     // Holds Date
     public date: Date;
-    // Holds human readable DateString
+    // Holds human-readable DateString
     public dateString: string;
 
     constructor(message?: string | undefined) {

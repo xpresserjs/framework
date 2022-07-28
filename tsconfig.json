@@ -10,6 +10,7 @@
     "declaration": false,
     "downlevelIteration": true,
     "skipLibCheck": true,
+    "resolveJsonModule": true,
 
     /* Strict Type-Checking Options */
     "strict": true,

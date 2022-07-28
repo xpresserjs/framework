@@ -252,7 +252,7 @@ if (useHelmet) {
  *
  * Read more https://expressjs.com/en/resources/middleware/cors.html
  *
- * By default Cors is disabled,
+ * By default, Cors is disabled,
  * if you don't define a config @ {server.use.cors}
  */
 const useCors = $.config.get("server.use.cors", false);
@@ -484,6 +484,7 @@ const startHttpServer = (onSuccess?: () => any, onError?: () => any) => {
     }))
 
     $.http = createHttpServer($.app);
+
     const port = $.config.get("server.port", 80);
 
     $.http.on("error", (err: any) => {

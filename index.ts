@@ -200,7 +200,7 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
      * This practice was considered a bad practice and also interferes
      * with node repl _ variable.
      *
-     * For now it will be proxied to show a warning anywhere used
+     * For now, it will be proxied to show a warning anywhere used
      * @deprecated since (v 0.2.98)
      * @remove at (1.0.0)
      */
@@ -235,6 +235,7 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
      * for all data stored by Xpresser files/components
      */
     $.engineData = $.objectCollection({});
+
     /**
      * Store serves as the store
      * for the application
@@ -308,6 +309,7 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
 
     // Include PathHelper Extensions
     require("./src/Extensions/Path");
+
     // Require Global
     require("./src/global");
 

@@ -11,8 +11,6 @@ const Config = {
         // While if set to true all debug settings are set to their configuration values.
         enabled: true,
 
-        controllerAction: true,
-
         // Enable showing controller action on every request.
         requests: {
             // Enable Request Debugging
