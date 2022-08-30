@@ -420,13 +420,6 @@ const afterExpressInit = (next: () => void) => {
         $.handler = (controller: XpresserController.Object) => new ControllerService(controller);
     }
 
-    // Replaced with RequestEngine.expressify()
-    // const $globalMiddlewareWrapper = ($middlewareFn: any) => {
-    //     return (res: any, req: any, next: any) => {
-    //         return $middlewareFn(new RequestEngine(res, req, next));
-    //     };
-    // };
-
     if (useDotJson.has("globalMiddlewares")) {
         const projectFileExtension = $.config.get('project.fileExtension');
         const $middlewares = useDotJson.get("globalMiddlewares");
