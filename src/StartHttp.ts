@@ -394,16 +394,16 @@ if (isUnderMaintenance) {
 }
 
 
-$.app.use(async (req: any, _res: any, next: () => void) => {
+$.app.use((req: any, _res: any, next: () => void) => {
 
     // Convert Empty Strings to Null
     if (req.body && Object.keys(req.body).length) {
-        req.body = Object.assign(
-            // @ts-ignore
-            ...Object.keys(req.body).map((key) => ({
-                [key]: typeof req.body[key] === "string" && req.body[key].trim() === "" ? null : req.body[key],
-            })),
-        );
+        // rewrite above using Object.entries
+        for (const [key, value] of Object.entries(req.body)) {
+            if (typeof value === "string" && value.trim() === "") {
+                req.body[key] = null;
+            }
+        }
     }
 
     return next();
