@@ -394,11 +394,12 @@ if (isUnderMaintenance) {
 }
 
 
-$.app.use((req: any, _res: any, next: () => void) => {
-
-    // Convert Empty Strings to Null
+/**
+ * Convert Empty String to Null
+ */
+$.app.use((req, _res, next) => {
     if (req.body && Object.keys(req.body).length) {
-        // rewrite above using Object.entries
+        // loop through body and convert empty strings to null
         for (const [key, value] of Object.entries(req.body)) {
             if (typeof value === "string" && value.trim() === "") {
                 req.body[key] = null;
