@@ -398,7 +398,6 @@ if (isUnderMaintenance) {
  * Convert Empty String to Null
  */
 const convertBodyEmptyStringToNull = $.config.get('server.convertBodyEmptyStringToNull', true);
-
 if (convertBodyEmptyStringToNull) {
     $.app.use((req, _res, next) => {
         if (req.body && Object.keys(req.body).length) {
