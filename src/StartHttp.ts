@@ -397,18 +397,22 @@ if (isUnderMaintenance) {
 /**
  * Convert Empty String to Null
  */
-$.app.use((req, _res, next) => {
-    if (req.body && Object.keys(req.body).length) {
-        // loop through body and convert empty strings to null
-        for (const [key, value] of Object.entries(req.body)) {
-            if (typeof value === "string" && value.trim() === "") {
-                req.body[key] = null;
+const convertBodyEmptyStringToNull = $.config.get('server.convertBodyEmptyStringToNull', true);
+
+if (convertBodyEmptyStringToNull) {
+    $.app.use((req, _res, next) => {
+        if (req.body && Object.keys(req.body).length) {
+            // loop through body and convert empty strings to null
+            for (const [key, value] of Object.entries(req.body)) {
+                if (typeof value === "string" && value.trim() === "") {
+                    req.body[key] = null;
+                }
             }
         }
-    }
 
-    return next();
-});
+        return next();
+    });
+}
 
 /**
  *  AfterExpressInit Function
