@@ -41,7 +41,7 @@ if (!isProduction) {
         ignoreFn?: (http: Http) => boolean;
     };
 
-// Get debug request config
+    // Get debug request config
     const debugRequest = $.config
         .newInstanceFrom<RequestLogger>("debug.requests")
         .removeNullOrUndefined()
