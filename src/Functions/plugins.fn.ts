@@ -23,7 +23,7 @@ export function pluginPathExistOrExit(plugin: string, pluginPath: string, file: 
         file = ResolvedRoutePath;
     }
 
-    // If file or folder does not exists throw error.
+    // If file or folder does not exist throw error.
     if (!$.file.exists(file)) {
         return $.logPerLine([
             {error: plugin},
