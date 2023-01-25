@@ -407,7 +407,7 @@ const Commands = {
         }
 
         // Copy Folders
-        fse.copy(from, to, {overwrite, recursive: true})
+        fse.copy(from, to, {overwrite})
             .then(() => {
                 const base = $.path.base();
 
