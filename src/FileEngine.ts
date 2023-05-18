@@ -3,8 +3,10 @@ import PATH from "path";
 import {getInstance} from "../index";
 import fse from "fs-extra";
 import {encodingType} from "../types";
+import {DeleteDirOptions} from "./types";
 
 const $ = getInstance()
+
 
 $.file = {
     /**
@@ -83,7 +85,7 @@ $.file = {
             return false;
         }
 
-        return fs.readFileSync($path, $options);
+        return fs.readFileSync($path, $options as any);
     },
 
     /**
@@ -121,7 +123,7 @@ $.file = {
             return false;
         }
 
-        return fs.readdirSync($path, $options);
+        return fs.readdirSync($path, $options as any);
     },
 
     /**
@@ -204,8 +206,8 @@ $.file = {
     },
 
 
-    deleteDirectory($path: string | string[], options?: fs.RmDirOptions & { returnList: boolean }) {
-        // If Array, loop and check if each files exists
+    deleteDirectory($path: string | string[], options?: DeleteDirOptions) {
+        // If Array, loop and check if each file exists
         if (Array.isArray($path)) {
             const paths = $path as string[];
             const returnList = options && options.returnList;
@@ -234,7 +236,7 @@ $.file = {
                     rmDirOptions = others;
                 }
 
-                fs.rmdirSync($path, rmDirOptions);
+                fs.rmSync($path, rmDirOptions);
                 return true;
             } catch (e) {
                 return false;

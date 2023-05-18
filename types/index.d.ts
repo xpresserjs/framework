@@ -12,8 +12,10 @@ import type {Server} from "http";
 import type {Server as HttpsServer} from "https"
 import type RequestEngine from "../src/RequestEngine";
 import type fs from "fs";
+import {DeleteDirOptions} from "../src/types";
 
 type NumberToAnyKeyObject = Record<number, any>;
+
 
 declare namespace Xpresser {
 
@@ -255,7 +257,7 @@ declare namespace Xpresser {
              * @param {string|string[]} $path - Path or Paths to find.
              * @param options
              */
-            deleteDirectory($path: string | string[], options?: fs.RmDirOptions & { returnList: boolean }): boolean | string[];
+            deleteDirectory($path: string | string[], options?: DeleteDirOptions): boolean | string[];
 
 
             /**
