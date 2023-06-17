@@ -35,8 +35,7 @@
     "moment-timezone": "^0.5.40",
     "object-collection": "^3.0.1",
     "path-to-regexp": "^6.2.1",
-    "pluralize": "^8.0.0",
-    "shelljs": "^0.8.5"
+    "pluralize": "^8.0.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191",
