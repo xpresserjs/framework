@@ -1,11 +1,10 @@
-import RequestEngine = require("../RequestEngine");
+import RequestEngine from "../RequestEngine";
 import {getInstance} from "../../index";
-import PathHelper = require("../Helpers/Path");
-import type ObjectCollection = require("object-collection");
+import PathHelper from "../Helpers/Path";
+import type ObjectCollection from "object-collection";
 
 
 const $ = getInstance();
-
 let ExtendedRequestEngine = RequestEngine;
 
 // Set Request Engine Getter

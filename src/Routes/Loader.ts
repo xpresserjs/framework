@@ -1,8 +1,7 @@
-import fs = require("fs");
-import RouterEngine = require("../RouterEngine");
-
-import Path = require("../Helpers/Path");
+import fs from "fs";
 import {getInstance} from "../../index";
+import RouterEngine from "../RouterEngine";
+import Path from "../Helpers/Path";
 
 const $ = getInstance();
 

@@ -1,6 +1,6 @@
-import PathHelper = require("../Helpers/Path");
-import Path = require("path");
+import PathHelper from "../Helpers/Path";
 import {getInstance} from "../../index";
+import Path from "path";
 
 const packageName: string = "xpresser";
 const $ = getInstance();
@@ -153,15 +153,3 @@ $.path = {
         return currentNodeModules + path;
     }
 };
-
-/**
- * Checks if xpresser exists in node_modules folder.
- * but has been removed for some reasons related to npm and yarn folders symlink
- */
-/*const XpresserEngine = $.path.engine(".engine");
-if (!FS.existsSync(XpresserEngine)) {
-
-    $.logError("Xpresser Engine not found in folder:");
-    $.logErrorAndExit(XpresserEngine);
-
-}*/

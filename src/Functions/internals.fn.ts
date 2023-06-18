@@ -1,8 +1,7 @@
 import {getInstance} from "../../index";
 import type {DollarSign} from "../../types";
-
-import PathHelper = require("../Helpers/Path");
-import path = require("path");
+import PathHelper from "../Helpers/Path";
+import  path from "path";
 
 const $ = getInstance();
 

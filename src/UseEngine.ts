@@ -4,12 +4,11 @@
  *
  * UseEngine is later exposed to the framework as $.use
  */
-import PathHelper = require("./Helpers/Path");
-import StringHelper = require("./Helpers/String");
+import PathHelper from "./Helpers/Path";
 import {JsonSettings} from "../types";
-
 import {getInstance} from "../index";
 import InXpresserError from "./Errors/InXpresserError";
+import StringHelper from "./Helpers/String";
 
 const $ = getInstance();
 

@@ -34,7 +34,6 @@ export =  (http: RequestEngine) => {
         },
 
         showStackedScripts() {
-
             let scripts = "";
 
             for (let i = 0; i < http.res.locals.ctx.$stackedScripts.length; i++) {

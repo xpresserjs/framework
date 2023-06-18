@@ -1,5 +1,5 @@
-import os = require('os');
-import fs = require('fs');
+import os from "os";
+import fs from "fs";
 
 /**
  * Get LanIp

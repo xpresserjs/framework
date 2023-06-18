@@ -1,8 +1,8 @@
-import chalk = require("chalk");
-import os = require("os");
+import chalk from "chalk";
 import lodash from "lodash";
 import {getInstance, InXpresserError} from "../../index";
 import {touchMyMustache} from "../Functions/inbuilt.fn";
+import os from "os";
 
 const $ = getInstance();
 

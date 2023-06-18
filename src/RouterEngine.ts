@@ -1,13 +1,13 @@
 import lodash from "lodash";
-import XpresserRouter = require("@xpresser/router");
-import PathHelper = require("./Helpers/Path");
-import MiddlewareEngine = require("./MiddlewareEngine");
+import XpresserRouter from "@xpresser/router";
 import {getInstance} from "../index";
 import {parseControllerString} from "./Functions/internals.fn";
 import XpresserRoute from "@xpresser/router/src/XpresserRoute";
 import XpresserPath from "@xpresser/router/src/XpresserPath";
 import {RouteData, RoutePathData} from "@xpresser/router/src/custom-types";
 import {pathToUrl} from "./Functions/router.fn";
+import PathHelper from "./Helpers/Path";
+import MiddlewareEngine from "./MiddlewareEngine";
 
 
 const $ = getInstance();

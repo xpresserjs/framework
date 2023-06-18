@@ -1,13 +1,13 @@
 import {getInstance, InXpresserError} from "../../index";
 
-const $ = getInstance();
-
 /**
  * Get on events loader
  * @param name
  * @param done
  */
 export const runBootEvent = (name: string, done?: () => void) => {
+    const $ = getInstance();
+
     const key = `on.${name}`;
     const onEvents: any[] = $.on.events()[name];
 

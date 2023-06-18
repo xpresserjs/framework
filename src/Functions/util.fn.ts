@@ -2,7 +2,7 @@
  * Xpresser Util Functions
  * @type Xpresser.Helpers.Util
  */
-export = {
+export default {
     extArrayRegex(arr: []): RegExp | string {
         let regex = "\\.+(";
         const regexEnd = ")";

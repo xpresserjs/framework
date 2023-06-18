@@ -1,6 +1,6 @@
-import PATH = require("path");
-import fs = require("fs");
+import PATH from "path";
 import {getInstance} from "../../index";
+import fs from "fs";
 
 const $ = getInstance();
 

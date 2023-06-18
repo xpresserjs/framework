@@ -1,29 +1,29 @@
-const StringHelper = {
-    upperFirst: (str: string) => {
+class  StringHelper {
+    static upperFirst(str: string) {
         return str[0].toUpperCase() + str.substring(1);
-    },
+    }
 
-    lowerFirst: (str: string) => {
+    static lowerFirst(str: string) {
         return str[0].toLowerCase() + str.substring(1);
-    },
+    }
 
-    hasSuffix: (str: string, suffix: string) => {
+    static hasSuffix(str: string, suffix: string)  {
         return str.slice(-suffix.length) === suffix;
-    },
+    }
 
-    withSuffix: (str: string, suffix: string) => {
-        if (!StringHelper.hasSuffix(str, suffix)) {
+    static withSuffix(str: string, suffix: string)  {
+        if (!this.hasSuffix(str, suffix)) {
             str += suffix;
         }
         return str;
-    },
+    }
 
-    withoutSuffix: (str: string, suffix: string) => {
-        if (StringHelper.hasSuffix(str, suffix)) {
+    static withoutSuffix(str: string, suffix: string)  {
+        if (this.hasSuffix(str, suffix)) {
             str = str.substring(0, str.length - suffix.length);
         }
         return str;
-    },
-};
+    }
+}
 
-export = StringHelper;
+export default StringHelper;

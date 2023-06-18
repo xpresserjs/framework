@@ -1,6 +1,5 @@
 import {getInstance} from "../../index";
 import {parseControllerString} from "../Functions/internals.fn";
-
 import lodash from "lodash";
 import os from "os";
 import fs from "fs";

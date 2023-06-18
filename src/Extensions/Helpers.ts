@@ -1,6 +1,6 @@
-import BuildUrl = require("build-url");
-import moment = require("moment");
+import BuildUrl from "build-url";
 import {getInstance} from "../../index";
+import moment from "moment";
 
 const $ = getInstance();
 

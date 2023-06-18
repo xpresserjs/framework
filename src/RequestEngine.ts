@@ -166,14 +166,7 @@ class RequestEngine {
      * @returns {*|ObjectCollection}
      */
     public query<T = unknown>(key?: string | undefined, $default?: T): T {
-        if (key === undefined) {
-            $.logDeprecated('0.3.22', '1.0.0', 'http.query() without arguments to get query collection is deprecated, use `http.$query` instead.');
-
-            // will be remove in version 1.0.0
-            return this.$query as any as T;
-        } else {
-            return this.$query.get(key, $default) as T;
-        }
+         return this.$query.get<T>(key, $default)
     }
 
     /**
@@ -186,14 +179,7 @@ class RequestEngine {
      * @returns {*|ObjectCollection}
      */
     public body<T = unknown>(key?: string | undefined, $default?: T): T {
-        if (key === undefined) {
-            $.logDeprecated('0.3.22', '1.0.0', 'http.body() without keys to get body collection is deprecated, use `http.$body` instead.');
-
-            // will be remove in version 1.0.0
-            return this.$body as any as T;
-        } else {
-            return this.$body.get(key, $default) as T;
-        }
+        return this.$body.get<T>(key, $default)
     }
 
     /**

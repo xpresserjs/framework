@@ -48,18 +48,7 @@ class PluginEngine {
             }
 
             if (Array.isArray(plugins) && plugins.length) {
-                $.logDeprecated(
-                    "0.5.0",
-                    "0.5.0",
-                    [
-                        'Using {{array in plugins.json}} is deprecated, change your plugin.jsons contents to this generated object below.',
-                        null, null,
-                        JSON.stringify(convertPluginArrayToObject(plugins), null, 2)
-                    ],
-                    false
-                );
-
-                $.logErrorAndExit('Fix plugins.json and reload server.');
+                $.logErrorAndExit('plugins.json should be an object.');
             }
 
             /**

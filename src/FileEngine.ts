@@ -166,13 +166,8 @@ $.file = {
 
     },
 
-    delete($path: string | string[], $returnList = false, $deleteDirectories = false) {
-        if ($deleteDirectories) {
-            $.logDeprecated("0.18.1", "0.18.1", [
-                `The $deleteDirectories option (i.e 3rd Argument) of {{"$.file.delete()"}} is deprecated.`,
-                `Use {{"$.file.deleteDirectory()"}} instead.`
-            ])
-        }
+    delete($path: string | string[], $returnList = false) {
+
 
         // If Array, loop and check if each files exists
         if (Array.isArray($path)) {

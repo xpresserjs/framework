@@ -1,5 +1,4 @@
-// Imported Immediately after events are registered.
-import events = require("events");
+import events from "events";
 import {getInstance} from "../../index";
 
 const $ = getInstance();

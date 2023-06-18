@@ -1,4 +1,4 @@
-import os = require("os");
+import os from "os";
 
 /**
  * InXpresserError

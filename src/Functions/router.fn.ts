@@ -1,9 +1,8 @@
 import {parse} from "path-to-regexp";
 
 
-export function pathToUrl(path: string) {
-    // noinspection SuspiciousTypeOfGuard
-    if (typeof path !== "string") return path;
+export function pathToUrl(path: string | any) {
+    if (typeof path !== "string") return path as string;
 
     try {
         const segments = parse(path);

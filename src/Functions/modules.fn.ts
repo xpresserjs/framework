@@ -1,4 +1,4 @@
-import BuildUrl = require("build-url");
+import BuildUrl from "build-url";
 import lodash, {LoDashStatic} from "lodash";
 import moment from "moment";
 import momentT from "moment-timezone";

@@ -195,26 +195,6 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
     if (AppOptions.exposeDollarSign) global.$ = $;
 
     /**
-     * Expose {_}(lodash) to globals. (Stopped!!)
-     * Use $.modules.lodash() instead
-     * This practice was considered a bad practice and also interferes
-     * with node repl _ variable.
-     *
-     * For now, it will be proxied to show a warning anywhere used
-     * @deprecated since (v 0.2.98)
-     * @remove at (1.0.0)
-     */
-    global._ = new Proxy(lodash, {
-        get: (_target, prop) => {
-
-            // Log Deprecation Message.
-            $.logDeprecated('0.2.98', '1.0.0', 'Using global xpresser (_) i.e lodash is deprecated. Please use $.modules.lodash() instead.');
-
-            return lodash[prop];
-        }
-    });
-
-    /**
      * Get Xjs Cli Config
      */
     const CliConfig: any = (global as any)["XjsCliConfig"];
