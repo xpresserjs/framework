@@ -1,5 +1,5 @@
 import lodash from "lodash";
-import RequestEngine = require("./Plugins/ExtendedRequestEngine");
+import RequestEngine from "./Plugins/ExtendedRequestEngine";
 import {getInstance} from "../index";
 
 const $ = getInstance()

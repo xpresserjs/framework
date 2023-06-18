@@ -1,7 +1,7 @@
-import express = require("express");
-import RequestEngine = require("../src/RequestEngine");
-import ControllerServiceError = require("../src/Controllers/ControllerServiceError");
-import ControllerService = require("../src/Controllers/ControllerService");
+import * as express from "express";
+import RequestEngine from "../src/RequestEngine";
+import ControllerServiceError from "../src/Controllers/ControllerServiceError";
+import ControllerService from "../src/Controllers/ControllerService";
 
 declare namespace Xpresser {
 

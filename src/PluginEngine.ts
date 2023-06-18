@@ -1,8 +1,8 @@
-import PathHelper = require("./Helpers/Path");
+import PathHelper from "./Helpers/Path";
 import hasPkg from "has-pkg";
 import {getInstance} from "../index";
 import InXpresserError from "./Errors/InXpresserError";
-import {compareVersion, convertPluginArrayToObject, pluginPathExistOrExit} from "./Functions/plugins.fn";
+import {compareVersion, pluginPathExistOrExit} from "./Functions/plugins.fn";
 
 const $ = getInstance();
 

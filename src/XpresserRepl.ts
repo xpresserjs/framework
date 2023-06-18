@@ -1,7 +1,7 @@
-import path = require("path");
-import fs = require("fs")
+import path from "path";
 import {REPLServer} from "repl";
 import {DollarSign} from "../types";
+import fs from "fs";
 
 
 type FnWithDollarSignArgument = (xpresserInstance: DollarSign) => (void | any);

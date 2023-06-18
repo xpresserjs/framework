@@ -1,16 +1,15 @@
-import fs = require("fs");
-import Path = require("path");
-import ObjectCollection = require("object-collection");
-import requestHelpers = require("./Functions/request.fn");
-import ErrorEngine = require("./ErrorEngine");
-
-import lodash = require("lodash");
+import fs from "fs";
 import {Http} from "../types/http";
 
 import {getInstance} from "../index";
 import {DollarSign} from "../types";
-import InXpresserError = require("./Errors/InXpresserError");
-import express = require("express");
+import Path from "path";
+import ObjectCollection from "object-collection";
+import requestHelpers from "./Functions/request.fn";
+import ErrorEngine from "./ErrorEngine";
+import lodash from "lodash";
+import InXpresserError from "./Errors/InXpresserError";
+import express from "express";
 
 const ejs = require("ejs");
 const $ = getInstance();
@@ -166,7 +165,7 @@ class RequestEngine {
      * @returns {*|ObjectCollection}
      */
     public query<T = unknown>(key?: string | undefined, $default?: T): T {
-         return this.$query.get<T>(key, $default)
+        return this.$query.get<T>(key, $default)
     }
 
     /**

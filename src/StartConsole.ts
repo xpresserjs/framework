@@ -1,15 +1,13 @@
-import fs = require("fs");
-import Console = require("./Console/Commands");
-import PathHelper = require("./Helpers/Path");
-import JobHelper = require("./Console/JobHelper");
+import fs from "fs";
 
 import {getInstance} from "../index";
+import PathHelper from "./Helpers/Path";
+import JobHelper from "./Console/JobHelper";
+import Console from "./Console/Commands";
 
 
 const {Commands, Artisan}: { Commands: Record<string, any>, Artisan: Record<string, any> } = Console;
 const DefinedCommands: Record<string, any> = {};
-
-
 const $ = getInstance();
 
 // Get Command Arguments

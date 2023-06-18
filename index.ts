@@ -1,8 +1,8 @@
 import {DollarSign, Options} from "./types";
-import ControllerClass = require("./src/Classes/ControllerClass");
-import XpresserRepl = require("./src/XpresserRepl");
-import XpresserRouter = require("@xpresser/router");
-import InXpresserError = require("./src/Errors/InXpresserError");
+import ControllerClass from "./src/Classes/ControllerClass";
+import XpresserRepl from "./src/XpresserRepl";
+import XpresserRouter from "@xpresser/router";
+import InXpresserError from "./src/Errors/InXpresserError";
 
 // Xpresser Instance Holder
 const instanceHolder: Record<string, any> = {};
