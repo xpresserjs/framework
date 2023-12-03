@@ -436,16 +436,6 @@ class RequestEngine {
         return this.view(...args);
     }
 
-    /**
-     * @type RequestEngine.prototype.view
-     * @param args
-     * @return {*}
-     * @alias
-     */
-    private render(...args: any[]): any {
-        // @ts-ignore
-        return this.view(...args);
-    }
 
     /**
      * Render View From Engine
