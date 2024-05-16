@@ -79,7 +79,6 @@ if (AutoLoadPaths && $.file.isDirectory(ServicesFolder)) {
     }
 }
 
-// @ts-check
 class ControllerEngine {
 
     /**

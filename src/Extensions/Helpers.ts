@@ -1,4 +1,4 @@
-import BuildUrl from "build-url";
+import BuildUrl from "build-url-ts";
 import {getInstance} from "../../index";
 import moment from "moment";
 
@@ -40,7 +40,7 @@ const helpers = {
         if (Object.keys($query).length) {
             url = BuildUrl(url, {
                 queryParams: $query,
-            });
+            })!;
         }
 
         return url;
