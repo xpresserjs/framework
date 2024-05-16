@@ -1,4 +1,4 @@
-import {Controller} from "../../types/http";
+import type {Controller} from "../../types/http";
 import lodash from "lodash";
 
 const $defaultController = {

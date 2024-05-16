@@ -1,12 +1,10 @@
 import lodash from "lodash";
-import RequestEngine = require("./Plugins/ExtendedRequestEngine");
+import RequestEngine from "./Plugins/ExtendedRequestEngine";
 import {getInstance} from "../index";
 
 const $ = getInstance()
 
 const projectFileExtension = $.config.get('project.fileExtension', '').substring(1);
-
-
 /**
  * @param {string} middlewarePath
  * @param {*} action

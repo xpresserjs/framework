@@ -1,8 +1,8 @@
-import fs = require("fs");
-import moment = require("moment");
-import PathHelper = require("../Helpers/Path");
+import fs from "fs";
 import lodash from "lodash";
 import {getInstance} from "../../index";
+import moment from "moment";
+import PathHelper from "../Helpers/Path";
 
 const $ = getInstance();
 
@@ -11,7 +11,6 @@ let PluginLockData = $.objectCollection();
 let UpdatePluginLockData = false;
 
 PathHelper.makeDirIfNotExist(PluginLockDataPath, true);
-
 if (fs.existsSync(PluginLockDataPath)) {
     const lockData = require(PluginLockDataPath);
     PluginLockData = $.objectCollection(lockData);
@@ -26,7 +25,6 @@ export = ($plugin: string) => {
     // Loop Through all to find exact plugin to install
     for (let i = 0; i < $pluginNamespaceKeys.length; i++) {
         const $pluginNamespace = $pluginNamespaces[$pluginNamespaceKeys[i]];
-
         if ($pluginNamespace.plugin === $plugin) {
             $pluginData = $pluginNamespace;
             break;
@@ -42,7 +40,6 @@ export = ($plugin: string) => {
     }
 
     const $thisPluginLockData = PluginLockData.newInstanceFrom($plugin);
-
     if ($thisPluginLockData.get("installed", false)) {
         return $.logPerLine([
             {info: `Plugin: ${$plugin} is already installed!`},
@@ -51,7 +48,6 @@ export = ($plugin: string) => {
     }
 
     $.logInfo(`Installing ${$plugin}...`);
-
     if ($pluginData.hasOwnProperty("migrations")) {
 
         const $migrationLockData = $thisPluginLockData.newInstanceFrom("migrations");

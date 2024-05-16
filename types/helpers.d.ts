@@ -108,11 +108,6 @@ declare namespace Xpresser {
              * Moment Package
              */
             moment(): typeof moment;
-
-            /**
-             * BuildUrl Package
-             */
-            buildUrl(): any
         }
     }
 }

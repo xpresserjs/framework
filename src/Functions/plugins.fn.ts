@@ -34,7 +34,7 @@ export function pluginPathExistOrExit(plugin: string, pluginPath: string, file: 
 
     // return real path.
     return file;
-};
+}
 
 
 /**

@@ -1,7 +1,7 @@
-import ControllerServiceError = require("./ControllerServiceError");
-// Import Types
-import {Http} from "../../types/http";
+import type {Http} from "../../types/http";
 import {ServerResponse} from "http";
+import ControllerServiceError from "./ControllerServiceError";
+
 
 
 /**

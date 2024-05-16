@@ -1,6 +1,6 @@
-import BuildUrl = require("build-url");
-import moment = require("moment");
+import BuildUrl from "build-url-ts";
 import {getInstance} from "../../index";
+import moment from "moment";
 
 const $ = getInstance();
 
@@ -40,7 +40,7 @@ const helpers = {
         if (Object.keys($query).length) {
             url = BuildUrl(url, {
                 queryParams: $query,
-            });
+            })!;
         }
 
         return url;

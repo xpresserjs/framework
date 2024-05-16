@@ -1,8 +1,8 @@
 import {DollarSign, Options} from "./types";
-import ControllerClass = require("./src/Classes/ControllerClass");
-import XpresserRepl = require("./src/XpresserRepl");
-import XpresserRouter = require("@xpresser/router");
-import InXpresserError = require("./src/Errors/InXpresserError");
+import ControllerClass from "./src/Classes/ControllerClass";
+import XpresserRepl from "./src/XpresserRepl";
+import XpresserRouter from "@xpresser/router";
+import InXpresserError from "./src/Errors/InXpresserError";
 
 // Xpresser Instance Holder
 const instanceHolder: Record<string, any> = {};
@@ -193,26 +193,6 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
     // Expose {$}(DollarSign) to globals.
     // @ts-ignore
     if (AppOptions.exposeDollarSign) global.$ = $;
-
-    /**
-     * Expose {_}(lodash) to globals. (Stopped!!)
-     * Use $.modules.lodash() instead
-     * This practice was considered a bad practice and also interferes
-     * with node repl _ variable.
-     *
-     * For now, it will be proxied to show a warning anywhere used
-     * @deprecated since (v 0.2.98)
-     * @remove at (1.0.0)
-     */
-    global._ = new Proxy(lodash, {
-        get: (_target, prop) => {
-
-            // Log Deprecation Message.
-            $.logDeprecated('0.2.98', '1.0.0', 'Using global xpresser (_) i.e lodash is deprecated. Please use $.modules.lodash() instead.');
-
-            return lodash[prop];
-        }
-    });
 
     /**
      * Get Xjs Cli Config

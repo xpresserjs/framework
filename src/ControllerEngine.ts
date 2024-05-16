@@ -1,19 +1,15 @@
-import express = require("express");
-import RequestEngine = require("./Plugins/ExtendedRequestEngine");
-import MiddlewareEngine = require("./MiddlewareEngine");
-import ControllerService = require("./Controllers/ControllerService");
-import ProcessServices = require("./Controllers/ProcessServices");
-
+import express from "express";
 import ObjectCollection from "object-collection";
 import lodash from "lodash";
 import {ServerResponse} from "http";
-
-import {Http} from "../types/http";
-
+import type {Http} from "../types/http";
 import {parseControllerString} from "./Functions/internals.fn";
 import PathHelper from "./Helpers/Path";
-
 import {getInstance} from "../index";
+import RequestEngine from "./Plugins/ExtendedRequestEngine";
+import MiddlewareEngine from "./MiddlewareEngine";
+import ControllerService from "./Controllers/ControllerService";
+import ProcessServices from "./Controllers/ProcessServices";
 
 const $ = getInstance();
 
@@ -83,7 +79,6 @@ if (AutoLoadPaths && $.file.isDirectory(ServicesFolder)) {
     }
 }
 
-// @ts-check
 class ControllerEngine {
 
     /**

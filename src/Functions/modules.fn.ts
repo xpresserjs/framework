@@ -1,4 +1,3 @@
-import BuildUrl = require("build-url");
 import lodash, {LoDashStatic} from "lodash";
 import moment from "moment";
 import momentT from "moment-timezone";
@@ -9,10 +8,6 @@ const modules = {
      */
     lodash(): LoDashStatic {
         return lodash;
-    },
-
-    buildUrl(): any {
-        return BuildUrl;
     },
 
     moment(): typeof moment {

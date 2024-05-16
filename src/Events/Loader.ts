@@ -1,12 +1,13 @@
-import fs = require("fs");
-import Path = require("../Helpers/Path");
-
-import ObjectCollection = require("object-collection/index");
+import fs from "fs";
 import {getInstance} from "../../index";
+import Path from "../Helpers/Path";
+import ObjectCollection from "object-collection/index";
+import EventsEmitter from "./Emitter";
 
 const $ = getInstance();
 const DefinedEvents: Record<string, any> = {};
 const EventsPath = $.path.events();
+
 // Load all event files
 const $useDotJson: ObjectCollection = $.engineData.get("UseDotJson");
 const excludedFiles: string[] = $useDotJson.get("exclude.events.files", []);
@@ -72,7 +73,5 @@ if (fs.existsSync(EventsPath)) {
     });
 }
 
-// Import Emitter
-import EventsEmitter = require("./Emitter");
 // Set global $.events to Emitter
 $.events = EventsEmitter(DefinedEvents);

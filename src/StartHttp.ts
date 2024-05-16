@@ -1,17 +1,15 @@
 import {resolve} from "path";
-import chalk = require("chalk");
-import PathHelper = require("./Helpers/Path");
-import OnEventsLoader = require("./Events/OnEventsLoader");
-
-
-const {runBootEvent} = OnEventsLoader;
-import express = require("express");
 import {createServer as createHttpServer} from "http";
 import {createServer as createHttpsServer} from "https";
-
-// Types
-import {Controller as XpresserController, Http} from "../types/http";
+import type {Controller as XpresserController, Http} from "../types/http";
 import {getInstance} from "../index";
+import chalk from "chalk";
+import PathHelper from "./Helpers/Path";
+import {runBootEvent} from "./Events/OnEventsLoader";
+import express from "express";
+import RequestEngine from "./Plugins/ExtendedRequestEngine";
+import ControllerService from "./Controllers/ControllerService";
+
 
 const $ = getInstance();
 
@@ -293,27 +291,6 @@ if (useBodyParser) {
     });
 }
 
-const useSession = $.config.get("server.use.session", false);
-if (useSession) {
-
-    /**
-     * Log End of sessions deprecation message.
-     */
-    $.logDeprecated(
-        '0.3.37',
-        '0.6.0',
-        [
-            'At version 0.6.0, xpresser {{STOPPED}} shipping with {{SESSION}} support out of the box', null,
-            'Install the new {{@xpresser/session}} plugin instead!', null,
-            'This plugin re-enables the old session system and is simply Plug & Play.',
-            null, null,
-            'See: https://xpresserjs.com/http/sessions.html'
-        ],
-        false
-    );
-    $.logErrorAndExit("Use new session plugin and set config {server.use.session} to {false} to hide this error message.");
-}
-
 /**
  * Express Flash
  */
@@ -350,11 +327,6 @@ if (typeof template.engine === "function") {
 
 $.app.set("views", $.path.views());
 
-/**
- * Import Files needed after above middlewares
- */
-import RequestEngine = require("./Plugins/ExtendedRequestEngine");
-import ControllerService = require("./Controllers/ControllerService");
 
 /**
  * Maintenance Middleware
