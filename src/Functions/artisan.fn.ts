@@ -65,17 +65,15 @@ export = {
         return template($data);
     },
 
-    copyFromFactoryToApp($for: string | string[], $name: string, $to: string, $data: Record<string, any> = {}, addPrefix = true) {
+    copyFromFactoryToApp(For: "job" | "event" | "controller" | "middleware" | "model" | string[], $name: string, $to: string, $data: Record<string, any> = {}, addPrefix = true) {
         let $factory;
+        let $for: string
 
-        if (Array.isArray($for)) {
-            $factory = $for[1] as string;
-            $for = $for[0];
-        }
 
-        if (!fs.existsSync($to)) {
-            PathHelper.makeDirIfNotExist($to);
-        }
+        if (Array.isArray(For)) [$for, $factory] = For;
+        else $for = For;
+
+        PathHelper.makeDirIfNotExist($to);
 
         if (!$name.toLowerCase().includes($for)) {
             if (addPrefix && $for !== "model") {
@@ -83,13 +81,16 @@ export = {
             }
         }
 
-        if ($name.includes('/')) {
-            const names = $name.split('/');
-            const lastPath = lodash.upperFirst(names.pop());
-            names.push(lastPath);
-            $name = names.join('/');
-        } else {
-            $name = lodash.upperFirst($name);
+        // make last path upper case
+        if ($for !== "job") {
+            if ($name.includes('/')) {
+                const names = $name.split('/');
+                const lastPath = lodash.upperFirst(names.pop());
+                names.push(lastPath);
+                $name = names.join('/');
+            } else {
+                $name = lodash.upperFirst($name);
+            }
         }
 
         $to = $to + "/" + $name + FILE_EXTENSION;
