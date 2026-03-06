@@ -144,19 +144,7 @@ const helpers = {
      * @param {number} length - length of string.
      */
     randomStr(length = 10): string {
-        let i: number;
-        let possible: string;
-        let text: string;
-
-        text = "";
-        possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        i = 0;
-
-        while (i < length) {
-            text += possible.charAt(Math.floor(Math.random() * possible.length));
-            i++;
-        }
-        return text;
+        return $.utils.randomStr(length);
     },
 
     /**

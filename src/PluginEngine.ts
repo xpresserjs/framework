@@ -84,12 +84,12 @@ class PluginEngine {
 
                     if (typeof pluginUseDotJson === "object") {
 
-                        if (pluginUseDotJson.hasOwnProperty('load') &&
+                        if (Object.prototype.hasOwnProperty.call(pluginUseDotJson, 'load') &&
                             pluginUseDotJson.load === false) {
                             continue;
                         }
 
-                        if (pluginUseDotJson.hasOwnProperty('env')) {
+                        if (Object.prototype.hasOwnProperty.call(pluginUseDotJson, 'env')) {
                             if (typeof pluginUseDotJson.env === "string" && pluginUseDotJson.env !== env)
                                 continue;
 

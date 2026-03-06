@@ -284,7 +284,7 @@ class RouterEngine {
                 let {method, controller} = parseControllerString(route.controller);
                 const controllerCacheKey = controller;
 
-                if (ControllerStringCache.hasOwnProperty(controllerCacheKey)) {
+                if (Object.prototype.hasOwnProperty.call(ControllerStringCache, controllerCacheKey)) {
                     route.controller = ControllerStringCache[controllerCacheKey] + "@" + method;
                 } else {
                     let isTypescriptButUsingJsExtension = false;

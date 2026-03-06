@@ -42,7 +42,7 @@ class PathHelper {
 
             // Replace .ts.js to .ts
             if ($path.includes('.ts.js')) {
-                $path = $path.replace('.js.js', '.ts');
+                $path = $path.replace('.ts.js', '.ts');
             }
         }
 
