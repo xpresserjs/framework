@@ -186,7 +186,7 @@ class RequestEngine {
      * @param param
      */
     public hasParam(param: string): boolean {
-        return this.params.hasOwnProperty(param);
+        return Object.prototype.hasOwnProperty.call(this.params, param);
     }
 
     /**
@@ -229,14 +229,12 @@ class RequestEngine {
     public toApi(data: any = {}, proceed = true, status?: number): Http.Response {
         const d = {[requestEngineConfig.proceedKey]: proceed} as any;
 
-        if (data.hasOwnProperty(requestEngineConfig.messageKey)) {
+        if (Object.prototype.hasOwnProperty.call(data, requestEngineConfig.messageKey)) {
             d[requestEngineConfig.messageKey] = data[requestEngineConfig.messageKey];
             delete data[requestEngineConfig.messageKey];
         }
 
         d.data = data;
-
-        if (status !== undefined) this.res.status(status);
 
         return this.json(d, status);
     }
@@ -379,7 +377,7 @@ class RequestEngine {
                 const $splitFile = file.split("::");
                 const $pluginNamespace = $splitFile[0];
 
-                if (PluginNameSpaces.hasOwnProperty($pluginNamespace)) {
+                if (Object.prototype.hasOwnProperty.call(PluginNameSpaces, $pluginNamespace)) {
                     const pluginNamespaceData = new ObjectCollection(PluginNameSpaces[$pluginNamespace])
                     const pluginViewsPath: any = pluginNamespaceData.get('paths.views', undefined);
 

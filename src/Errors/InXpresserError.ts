@@ -16,7 +16,7 @@ class InXpresserError extends Error {
         super(message);
 
         this.date = new Date();
-        this.dateString = new Date().toLocaleDateString('en-US', {
+        this.dateString = this.date.toLocaleDateString('en-US', {
             day: 'numeric',
             weekday: 'short',
             year: 'numeric',

@@ -19,14 +19,14 @@ function getInstance(instanceId?: string): DollarSign {
         if (instanceId === ':keys') return Object.keys(instanceHolder) as any;
         if (instanceId === ':id') return require('./truth')?.instanceId;
 
-        if (!instanceHolder.hasOwnProperty(instanceId))
+        if (!Object.prototype.hasOwnProperty.call(instanceHolder, instanceId))
             throw new InXpresserError(`Xpresser instanceId: ${instanceId} not found!`);
 
         return instanceHolder[instanceId];
     } else {
 
         // If $ is defined then return.
-        if (global.hasOwnProperty('$')) {
+        if (Object.prototype.hasOwnProperty.call(global, '$')) {
             // @ts-ignore
             return global.$;
         }
@@ -148,12 +148,12 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
      * Check if config {paths.base} exists in user defined config.
      */
     const noBaseFolderDefinedError = `No base folder defined in config {paths.base}`;
-    if (!AppConfig.hasOwnProperty('paths')) {
+    if (!Object.prototype.hasOwnProperty.call(AppConfig, 'paths')) {
         console.log(noBaseFolderDefinedError);
         $.exit()
     } else {
         // @ts-ignore
-        if (!AppConfig['paths'].hasOwnProperty('base')) {
+        if (!Object.prototype.hasOwnProperty.call(AppConfig['paths'], 'base')) {
             console.log(noBaseFolderDefinedError);
             $.exit()
         }
@@ -162,7 +162,7 @@ function init(AppConfig: Record<string, any> | string, AppOptions: Options = {})
     /**
      * Check if env exist in config
      */
-    if (!AppConfig.hasOwnProperty('env') || !AppConfig.env) {
+    if (!Object.prototype.hasOwnProperty.call(AppConfig, 'env') || !AppConfig.env) {
         console.log(`Config {env} is missing, options: (development | production | others)`)
         $.exit();
     }
